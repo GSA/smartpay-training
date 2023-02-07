@@ -2,6 +2,8 @@ import json
 from uuid import uuid4
 from typing import Optional
 from redis import Redis
+
+from training.config import settings
 from ..models import TempUser
 
 
@@ -14,7 +16,7 @@ class UserCache:
     with users.
     '''
 
-    CACHE_TTL = 60 * 60 * 2  # is 2 hours good?
+    CACHE_TTL = settings.EMAIL_TOKEN_TTL
 
     def get(self, token: str) -> Optional[TempUser]:
         user = redis.get(token)
@@ -24,7 +26,7 @@ class UserCache:
 
     def set(self, user: TempUser) -> str:
         token = str(uuid4())
-        user_str = json.dumps(user.to_dict())
+        user_str = json.dumps(user.dict())
         # try/except here
         redis.set(token, user_str)
         redis.expire(token, self.CACHE_TTL)
