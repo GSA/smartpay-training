@@ -1,12 +1,8 @@
-from dataclasses import dataclass, asdict
+from pydantic import BaseModel
 
 
-@dataclass
-class TempUser:
+class TempUser(BaseModel):
     email: str
     first_name: str
     last_name: str
     agency: str  # maybe an id?
-
-    def to_dict(self):
-        return asdict(self)
