@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
     const base_url = import.meta.env.VITE_API_BASE_URL
 
-    const first_name = ref('')
-    const last_name = ref('')
-    const email = ref('')
-    const agency = ref('')
+    const user = reactive({
+        first_name: '',
+        last_name: '',
+        email: '',
+        agency: ''
+    })
     const token = ref('')
     const loading = ref(false)
     const error = ref('')
@@ -13,19 +15,13 @@ import { ref } from 'vue'
     function start_email_flow() {
         loading.value = true
         error.value = ''
-        
-        const data = {
-            first_name: first_name.value,
-            last_name: last_name.value,
-            email: email.value,
-            agency: agency.value
-        }
+ 
         const url = new URL(`${base_url}/api/v1/get-link`);
 
         fetch(url,  {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
+            body: JSON.stringify(user)
         })
         .then(res => {
             if (res.ok) {
@@ -57,7 +53,7 @@ import { ref } from 'vue'
                 id="given-name"
                 name="first-name"
                 aria-describedby="gnHint"
-                v-model="first_name"
+                v-model="user.first_name"
             />
             <label class="usa-label" for="family-name">Last or family name</label>
             <div class="usa-hint" id="lnHint">
@@ -68,21 +64,21 @@ import { ref } from 'vue'
                 id="family-name"
                 name="last-name"
                 aria-describedby="lnHint"
-                v-model="last_name"
+                v-model="user.last_name"
             />
             <label class="usa-label" for="middle-name">Email Address</label>
             <input
                 class="usa-input usa-input--xl"
                 id="email-address"
                 name="email-address"
-                v-model="email"
+                v-model="user.email"
             />
             <label class="usa-label" for="middle-name">Agency</label>
             <input
                 class="usa-input usa-input--xl"
                 id="agency"
                 name="agency"
-                v-model="agency"
+                v-model="user.agency"
             />
            
             <input class="usa-button" type="submit" value="Email Quiz Link" />
