@@ -1,7 +1,10 @@
 import logging
+import jwt
+
 from fastapi import APIRouter, status, HTTPException
 from training.models import TempUser
 from training.data import UserCache
+from training.config import settings
 
 router = APIRouter()
 u = UserCache()
@@ -39,5 +42,6 @@ async def get_user(token: str):
 
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
-    return user
-    # what next? redirect? Set JWT?
+    encoded_jwt = jwt.encode(user.dict(), settings.JWT_SECRET, algorithm="HS256")
+
+    return {'user': user, 'jwt': encoded_jwt}
