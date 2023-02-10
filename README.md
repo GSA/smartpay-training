@@ -23,12 +23,15 @@ JWT_SECRET="some_super_secret"
 To run the API locally:
 
 Create venv to isolate dependencies and install dependencies
- ``` sh
- python -m venv .venv
- source .venv/bin/activate
- pip install -r requirements.txt
- pip install -r requirements.dev.txt
- ```
+``` sh
+# Create and activate a Python venv
+python -m venv .venv
+source .venv/bin/activate
+# Install dependencies
+pip install -r requirements.dev.txt -r requirements.txt
+# Run the local dev server
+uvicorn training.main:app --reload
+```
 
 Run app with uvicorn or similar:
 ``` sh
