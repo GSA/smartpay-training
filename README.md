@@ -33,11 +33,6 @@ pip install -r requirements.dev.txt -r requirements.txt
 uvicorn training.main:app --reload
 ```
 
-Run app with uvicorn or similar:
-``` sh
-uvicorn training.main:app
-```
-
 if it's working you should see life-affirming messages like:
 >  Uvicorn running on http://127.0.0.1:8000 
 
