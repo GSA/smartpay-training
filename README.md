@@ -25,6 +25,7 @@ To run the API locally:
 Create venv to isolate dependencies and install dependencies
  ``` sh
  python -m venv .venv
+ source .venv/bin/activate
  pip install -r requirements.txt
  pip install -r requirements.dev.txt
  ```
