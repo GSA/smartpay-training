@@ -5,6 +5,7 @@ from fastapi import APIRouter, status, HTTPException
 from training.models import TempUser
 from training.data import UserCache
 from training.config import settings
+from training.api.email import send_email
 
 router = APIRouter()
 u = UserCache()
@@ -23,10 +24,21 @@ async def send_link(user: TempUser, status_code=status.HTTP_201_CREATED):
 
     # the token is the temp key in the Redis Cache
     # this it what will be needed to creat an email link such as
-    # http://localhost:8000/api/v1/get-user/b8a8bb0d-a9af-4e1b-b813-b230b018363f
+    # http://127.0.0.1:5173/start-quiz/99e554ad-7e28-4429-914d-e725dbade3c7
     # which would hit the endpoint below
 
-    return {"token": token}
+    url = f"{settings.BASE_URL}/start-quiz/{token}"
+    try:
+        res = await send_email(to_email=user.email, name=user.first_name, link=url)
+
+    except Exception as e:
+        logging.error("Error sending mail", e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Server Error"
+        )
+
+    return {"token": url, "response": res}
 
 
 @router.get("/get-user/{token}")
