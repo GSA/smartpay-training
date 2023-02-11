@@ -1,5 +1,6 @@
 <script setup>
-import { ref, reactive } from 'vue'
+    import { ref, reactive } from 'vue'
+    import Alert from './Alert.vue'
     const base_url = import.meta.env.VITE_API_BASE_URL
 
     const user = reactive({
@@ -9,12 +10,12 @@ import { ref, reactive } from 'vue'
         agency: ''
     })
     const token = ref('')
-    const loading = ref(false)
+    const isLoading = ref(false)
     const error = ref('')
-    const form_submitted = ref(false)
+    const isSubmitted = ref(false)
 
     function start_email_flow() {
-        loading.value = true
+        isLoading.value = true
         error.value = ''
  
         const url = new URL(`${base_url}/api/v1/get-link`);
@@ -32,12 +33,12 @@ import { ref, reactive } from 'vue'
         })
         .then(json => {
             token.value =  json.token
-            loading.value = false
-            form_submitted.value = true
+            isLoading.value = false
+            isSubmitted.value = true
         })
         .catch((err) => {
-            loading.value = false
-            form_submitted.value = true
+            isLoading.value = false
+            error.value = err
         })
     }
 
@@ -45,7 +46,8 @@ import { ref, reactive } from 'vue'
 
 <template>
     
-    <div v-if="form_submitted">
+    <Alert v-if="error" heading="Error">There was an error with input</Alert> <!-- This happens on server error -->
+    <div v-if="isSubmitted">
         <h3>Check your email</h3>
         <p>We just send an email to the address you provided. Check you email and click the link to begin you quiz</p>
         link: {{ token }}
@@ -90,7 +92,7 @@ import { ref, reactive } from 'vue'
                     v-model="user.agency"
                 />
             
-                <input class="usa-button" type="submit" value="Email Quiz Link" />
+                <input class="usa-button" type="submit" value="Email Quiz Link" :disabled='isLoading'/>
 
             </fieldset>
         </form>

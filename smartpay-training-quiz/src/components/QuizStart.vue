@@ -1,5 +1,6 @@
 <script setup>
     import { onMounted } from 'vue'
+    import Alert from "./Alert.vue"
     import { userFlowStore } from '@/stores/userFlow'
 
     const props = defineProps({
@@ -17,8 +18,11 @@
         [Link To start the quiz goes here]
     </div>
     <div v-else>
-        <h3>Not Found</h3>
-        We were not able to locate this link. Some helpful user instructions go here.
+        <Alert heading="Not Found" status="warning">
+            <span>
+                We were not able to locate this link. Some helpful user instructions go here.
+            </span>
+        </Alert>
     </div>
 
 </template>
