@@ -6,6 +6,9 @@ This will the quiz platform for GSA SmartPay training for card holders and AOs.
 
 ## Environment Settings
 
+## SMTP Settings
+There are several configuration settings that are needed for setting emails. See .env_example for what we will (probably) need.
+
 ## JWT Secret
 The backend uses a JWT (JSON Web Token) to allow the browser to tell the backend who is taking a quiz. This requires a secret key to sign the token. The settings object in `training/api/config` will try to read this from a .env file (which should not be checked into github). To make this work in development, create a file in the main directory called `.env` and add the line:
 
