@@ -1,10 +1,10 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import Banner from "./components/Banner.vue";
-import PrototypeAlert from "./components/PrototypeAlert.vue";
-import GSAFooter from "./components/GSAFooter.vue"
-import USAIdentifier from "./components/USAIdentifier.vue";
-import GSAHeader from "./components/GSAHeader.vue"
+import Banner from "@/components/uswds/Banner.vue";
+import PrototypeAlert from "@/components/uswds/PrototypeAlert.vue";
+import GSAFooter from "@/components/uswds/GSAFooter.vue"
+import USAIdentifier from "@/components/uswds/USAIdentifier.vue";
+import GSAHeader from "@/components/uswds/GSAHeader.vue"
 
 
 </script>

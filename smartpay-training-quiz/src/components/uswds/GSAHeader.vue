@@ -1,8 +1,5 @@
 <script setup>
     const props = defineProps({
-        /**
-         * Total number of pages to show
-         */
         'linkHome': {
             type: Boolean,
             default: true,

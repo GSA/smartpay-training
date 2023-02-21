@@ -1,6 +1,6 @@
 <script setup>
     import { ref, reactive } from 'vue'
-    import Alert from './Alert.vue'
+    import Alert from '@/components/uswds/Alert.vue'
     const base_url = import.meta.env.VITE_API_BASE_URL
 
     const user = reactive({
@@ -65,6 +65,7 @@
                     name="first-name"
                     aria-describedby="gnHint"
                     v-model="user.first_name"
+                    required
                 />
                 <label class="usa-label" for="family-name">Last or family name</label>
                 <div class="usa-hint" id="lnHint">
@@ -76,13 +77,18 @@
                     name="last-name"
                     aria-describedby="lnHint"
                     v-model="user.last_name"
+                    required
                 />
                 <label class="usa-label" for="middle-name">Email Address</label>
                 <input
                     class="usa-input usa-input--xl"
                     id="email-address"
                     name="email-address"
+                    type="email" 
+                    oninvalid="setCustomValidity('Please provide a valid email address')"
+                    pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$"
                     v-model="user.email"
+                    required
                 />
                 <label class="usa-label" for="middle-name">Agency</label>
                 <input
@@ -90,6 +96,7 @@
                     id="agency"
                     name="agency"
                     v-model="user.agency"
+                    required
                 />
             
                 <input class="usa-button" type="submit" value="Email Quiz Link" :disabled='isLoading'/>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import QuizStart from '../components/QuizStart.vue'
-import StartInput from '../components/StartInput.vue'
-import NotFound from '../views/NotFound.vue'
+import UserHome from '@/views/UserHome.vue'
+import Loginless from '@/components/loginless/Loginless.vue'
+import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,12 +9,12 @@ const router = createRouter({
     {
         path: '/',
         name: 'home',
-        component: StartInput
+        component: Loginless
     },
     {
         path: '/start-quiz/:token',
-        name: "quizstart",
-        component: QuizStart,
+        name: "userhome",
+        component: UserHome,
         props: true
     },
     { 

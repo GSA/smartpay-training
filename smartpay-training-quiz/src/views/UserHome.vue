@@ -1,6 +1,6 @@
 <script setup>
     import { onMounted } from 'vue'
-    import Alert from "./Alert.vue"
+    import Alert from "@/components/uswds/Alert.vue"
     import { userFlowStore } from '@/stores/userFlow'
 
     const props = defineProps({
