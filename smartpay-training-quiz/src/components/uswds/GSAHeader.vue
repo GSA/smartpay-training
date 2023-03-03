@@ -17,8 +17,8 @@
     <div v-else class="usa-logo" id="header-logo">
         <img class="usa-logo-img" src="@/assets/images/gsa-smartpay-training-logo.svg" alt="GSA SmartPay Logo" title="U.S. General Services Administration">
     </div>
+    <button type="button" class="usa-menu-btn">Menu</button>
   </div>
-  <button type="button" class="usa-menu-btn">Menu</button>
   <nav aria-label="Primary navigation" class="usa-nav">
     <div class="usa-nav__inner">
       <button type="button" class="usa-nav__close">
