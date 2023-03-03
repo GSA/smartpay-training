@@ -32,7 +32,7 @@
             aria-expanded="false"
             aria-controls="extended-nav-section-one"
           >
-            <span>Account Holders & Approving Officials</span>
+            <span>Account Holders &amp; Approving Officials</span>
           </button>
           <ul id="extended-nav-section-one" class="usa-nav__submenu">
             <li class="usa-nav__submenu-item">
