@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     EMAIL_FROM: EmailStr
     EMAIL_FROM_NAME: str
     EMAIL_SUBJECT: str
+    SMTP_STARTTLS: bool
+    SMTP_SSL_TLS: bool
 
     class Config:
         env_file = '.env'
