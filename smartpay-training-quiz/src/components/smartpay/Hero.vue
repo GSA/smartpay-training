@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <section class="usa-hero padding-y-6" :style="{backgroundImage: `url(${hero_image}`}">
+  <section class="usa-hero padding-y-4" :style="{backgroundImage: `url(${hero_image}`}">
     <div class="grid-container">
       <div class="grid-row">
         <h1 class="usa-hero__heading grid-col-6">
