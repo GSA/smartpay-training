@@ -7,19 +7,15 @@
     })
 </script>
 <template>
-    <header class="usa-header usa-header--extended " role="banner">
-        <div class="usa-navbar border-bottom-1px">
+    <header class="usa-header usa-header--extended  border-bottom-1px border-base-light" role="banner">
+        <div class="usa-navbar">
             <div v-if="linkHome" class="usa-logo" id="header-logo">
                 <router-link to="/">
-                    <img class="usa-logo-img" src="@/assets/images/gsa-smartpay-logo.svg" alt="GSA SmartPay Logo" title="U.S. General Services Administration">
-                </router-link>
-                <router-link to="/">
-                    <em class="usa-logo__text">GSA SmartPay Training</em>
+                    <img class="usa-logo-img" src="@/assets/images/gsa-smartpay-training-logo.svg" alt="GSA SmartPay Logo" title="U.S. General Services Administration">
                 </router-link>
             </div>
             <div v-else class="usa-logo" id="header-logo">
-                <img class="usa-logo-img" src="@/assets/images/gsa-smartpay-logo.svg" alt="GSA SmartPay Logo" title="U.S. General Services Administration">
-                <em class="usa-logo__text" >GSA SmartPay Training</em>
+                <img class="usa-logo-img" src="@/assets/images/gsa-smartpay-training-logo.svg" alt="GSA SmartPay Logo" title="U.S. General Services Administration">
             </div>
         </div>
     </header>

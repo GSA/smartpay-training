@@ -11,14 +11,11 @@ import GSAHeader from "@/components/uswds/GSAHeader.vue"
 
 <template>
     <Banner />
-    <PrototypeAlert />
     <div  class="background flex-fill">
         <GSAHeader :linkHome="false" />
         <div id="main-container" class="wide-layout">
             <main>
-                <div class="grid-container">
-                    <RouterView />
-                </div>
+                <RouterView />
             </main>
         </div>
 
