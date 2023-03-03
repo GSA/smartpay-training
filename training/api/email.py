@@ -22,8 +22,8 @@ conf = ConnectionConfig(
     MAIL_PORT=settings.SMTP_PORT,
     MAIL_FROM_NAME=settings.EMAIL_FROM_NAME,
     MAIL_SERVER=settings.SMTP_SERVER,
-    MAIL_STARTTLS=False,
-    MAIL_SSL_TLS=True,
+    MAIL_STARTTLS=settings.SMTP_STARTTLS,
+    MAIL_SSL_TLS=settings.SMTP_SSL_TLS,
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True
 )
