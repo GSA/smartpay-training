@@ -2,7 +2,7 @@
     import { ref, reactive } from 'vue'
     import Alert from '@/components/uswds/Alert.vue'
     import Hero from '@/components/smartpay/Hero.vue'
-    import hero_image from '@/assets/images/hero_smarttax.jpg'
+    import hero_image from '@/assets/images/Training_TravelAH_Hero.jpg'
 
     const base_url = import.meta.env.VITE_API_BASE_URL
 

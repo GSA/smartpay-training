@@ -3,7 +3,7 @@
   import Alert from "@/components/uswds/Alert.vue"
   import { userFlowStore } from '@/stores/userFlow'
   import Hero from '@/components/smartpay/Hero.vue'
-  import hero_image from '@/assets/images/hero_smarttax.jpg'
+  import hero_image from '@/assets/images/Training_TravelAH_Hero.jpg'
 
   const props = defineProps({
     'token': String
