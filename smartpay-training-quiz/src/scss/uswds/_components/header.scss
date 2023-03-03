@@ -31,7 +31,7 @@
   
     &.usa-header--extended .usa-logo-img {
       @include at-media($theme-header-min-width) {
-        height: units(9);
+        height: 6rem;
       }
     }
   }

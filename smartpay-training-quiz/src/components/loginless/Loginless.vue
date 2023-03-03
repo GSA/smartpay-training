@@ -1,6 +1,9 @@
 <script setup>
     import { ref, reactive } from 'vue'
     import Alert from '@/components/uswds/Alert.vue'
+    import Hero from '@/components/smartpay/Hero.vue'
+    import hero_image from '@/assets/images/hero_smarttax.jpg'
+
     const base_url = import.meta.env.VITE_API_BASE_URL
 
     const user = reactive({
@@ -45,20 +48,33 @@
 </script>
 
 <template>
-    
+    <Hero :hero_image="hero_image">
+        <template #default>
+        Travel Training for Card / Account Holders and Approving officials
+        </template>
+    </Hero>
+
     <Alert v-if="error" heading="Error">There was an error with input</Alert> <!-- This happens on server error -->
-    <div v-if="isSubmitted">
+    <div v-if="isSubmitted" class="grid-container" >
         <h3>Check your email</h3>
-        <p>We just send an email to the address you provided. Check you email and click the link to begin you quiz</p>
-        link: {{ token }}
+        <p>We just send an email to:</p>
+        <p><b>{{user.email}}</b></p>
+        
+        <p>Check you email and click the link to begin you quiz</p>
+        
+        
+        <p><b>Temp for development</b></p>
+        <p>
+            URL that was emailed: {{ token }}
+        </p>
     </div>
 
-    <div v-else>
+    <div v-else class="grid-container" >
+        <h2>Getting access to training</h2>
+        <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
         <form class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
             <fieldset class="usa-fieldset">
-                <legend class="usa-legend usa-legend--large">Tell us about yourself</legend>
-                <label class="usa-label" for="given-name">First or given name</label>
-                <div class="usa-hint" id="gnHint">For example, Jose, Darren, or Mai</div>
+                <label class="usa-label" for="given-name">First name (*Required)</label>
                 <input
                     class="usa-input usa-input--xl"
                     id="given-name"
@@ -67,10 +83,7 @@
                     v-model="user.first_name"
                     required
                 />
-                <label class="usa-label" for="family-name">Last or family name</label>
-                <div class="usa-hint" id="lnHint">
-                    For example, Martinez Gonzalez, Gu, or Smith
-                </div>
+                <label class="usa-label" for="family-name">Last name (*Required)</label>
                 <input
                     class="usa-input usa-input--xl"
                     id="family-name"
@@ -79,7 +92,7 @@
                     v-model="user.last_name"
                     required
                 />
-                <label class="usa-label" for="middle-name">Email Address</label>
+                <label class="usa-label" for="middle-name">Email Address (*Required)</label>
                 <input
                     class="usa-input usa-input--xl"
                     id="email-address"
@@ -90,7 +103,7 @@
                     v-model="user.email"
                     required
                 />
-                <label class="usa-label" for="middle-name">Agency</label>
+                <label class="usa-label" for="middle-name">Agency / organization(*Required)</label>
                 <input
                     class="usa-input usa-input--xl"
                     id="agency"
@@ -99,8 +112,9 @@
                     required
                 />
             
-                <input class="usa-button" type="submit" value="Email Quiz Link" :disabled='isLoading'/>
+                <input class="usa-button" type="submit" value="Submit" :disabled='isLoading'/>
 
+                <p>Didn’t receive the access email?</p>
             </fieldset>
         </form>
     </div>
