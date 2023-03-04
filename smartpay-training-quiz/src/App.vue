@@ -20,7 +20,7 @@ import GSAHeader from "@/components/uswds/GSAHeader.vue"
         </div>
 
     </div>
-    <footer class="flex-shrink-0">
+    <footer class="usa-footer flex-shrink-0">
         <GSAFooter />
         <USAIdentifier />
     </footer>

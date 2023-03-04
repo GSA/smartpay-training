@@ -54,15 +54,13 @@
         </template>
     </Hero>
 
-    <Alert v-if="error" heading="Error">There was an error with input</Alert> <!-- This happens on server error -->
     <div v-if="isSubmitted" class="grid-container" >
         <h3>Check your email</h3>
         <p>We just send an email to:</p>
         <p><b>{{user.email}}</b></p>
         
         <p>Check you email and click the link to begin you quiz</p>
-        
-        
+             
         <p><b>Temp for development</b></p>
         <p>
             URL that was emailed: {{ token }}
@@ -70,6 +68,8 @@
     </div>
 
     <div v-else class="grid-container" >
+        <Alert v-if="error" heading="Error" status="error">There was an error with input.</Alert> <!-- This happens on server error -->
+
         <h2>Getting access to training</h2>
         <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
         <form class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
@@ -92,14 +92,12 @@
                     v-model="user.last_name"
                     required
                 />
-                <label class="usa-label" for="middle-name">Email Address (*Required)</label>
+                <label class="usa-label" for="middle-name">{{user.email}} Email Address (*Required)</label>
                 <input
                     class="usa-input usa-input--xl"
                     id="email-address"
                     name="email-address"
                     type="email" 
-                    oninvalid="setCustomValidity('Please provide a valid email address')"
-                    pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$"
                     v-model="user.email"
                     required
                 />
