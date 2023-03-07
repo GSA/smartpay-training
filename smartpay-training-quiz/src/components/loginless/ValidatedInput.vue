@@ -2,7 +2,7 @@
   import {computed} from 'vue'
   const props = defineProps({
     'modelValue': String,
-    'isValid': Boolean,
+    'isInvalid': Boolean,
     'name': String,
     'label': String,
     'error_message': String
@@ -12,14 +12,14 @@
 </script>
 
 <template>
-  <div class="usa-form-group" :class="{ 'usa-form-group--error':isValid}">
+  <div class="usa-form-group" :class="{ 'usa-form-group--error':isInvalid}">
     <label class="usa-label" :for="name">{{label}}</label>
-    <span v-if="isValid" class="usa-error-message" :id="error_id" role="alert">
+    <span v-if="isInvalid" class="usa-error-message" :id="error_id" role="alert">
       {{ error_message }}
     </span>
     <input
         class="usa-input usa-input"
-        :class="{ 'usa-input--error':isValid, 'error-focus': isValid }"
+        :class="{ 'usa-input--error':isInvalid, 'error-focus': isInvalid }"
         :id="name"
         :name="name"
         :value="modelValue"

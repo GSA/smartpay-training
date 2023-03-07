@@ -95,28 +95,28 @@
 
         <ValidatedInput 
           v-model="user.first_name" 
-          :isValid="v$.first_name.$error" 
+          :isInvalid="v$.first_name.$error" 
           label="First name (*Required)"
           name="first_name"
           error_message="Please enter your first name"
         />
         <ValidatedInput 
           v-model="user.last_name" 
-          :isValid="v$.last_name.$error" 
+          :isInvalid="v$.last_name.$error" 
           label="Last name (*Required)"
           name="last_name"
           error_message="Please enter your last name"
         />
         <ValidatedInput 
           v-model="user.email" 
-          :isValid="v$.email.$error" 
+          :isInvalid="v$.email.$error" 
           label="Email Address (*Required)"
           name="email"
           error_message="Please enter a valid email address"
         />
         <ValidatedInput 
           v-model="user.agency" 
-          :isValid="v$.agency.$error" 
+          :isInvalid="v$.agency.$error" 
           label="Agency / organization(*Required)"
           name="agency"
           error_message="Please enter your agency"
