@@ -84,13 +84,11 @@ cf cups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
 
 ## Deploy the app
 
-After the services have been successfully created and environment variables are in place, deploy the training app:
+After the services have been successfully created, deploy the training app but don't start it yet since we still have to set some environment variables:
 
 ```
-cf push
+cf push --no-start
 ```
-
-The app will output errors due to not finding the expected environment variables, but it's necessary to have an app in place first before we can configure environment variables.
 
 ## Set required environment variables
 
