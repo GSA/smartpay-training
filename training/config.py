@@ -17,9 +17,9 @@ def vcap_services_settings(settings: BaseSettings) -> Dict[str, Any]:
         config["REDIS_PASSWORD"] = redis.credentials["password"]
 
     secrets = appenv.get_service(label="user-provided")
-    if secrets.credentials["JWT_SECRET"]:
+    if secrets and secrets.credentials["JWT_SECRET"]:
         config["JWT_SECRET"] = secrets.credentials["JWT_SECRET"]
-    if secrets.credentials["SMTP_PASSWORD"]:
+    if secrets and secrets.credentials["SMTP_PASSWORD"]:
         config["SMTP_PASSWORD"] = secrets.credentials["SMTP_PASSWORD"]
 
     return config
