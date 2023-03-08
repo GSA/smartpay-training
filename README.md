@@ -52,11 +52,14 @@ Follow these steps to deploy the application on cloud.gov.
 
 ## Prepare the cloud.gov space
 
-Configure cloud.gov to [permit egress from the app's space](https://cloud.gov/docs/management/space-egress/) to the backend services. Replace `ORG_NAME` and `SPACE_NAME` with the appropriate names for your environment:
+Configure cloud.gov to [permit egress from the app's space](https://cloud.gov/docs/management/space-egress/) to other services. Replace `ORG_NAME` and `SPACE_NAME` with the appropriate names for your environment:
 
 ```
 cf bind-security-group trusted_local_networks_egress ORG_NAME --space SPACE_NAME
+cf bind-security-group public_networks_egress ORG_NAME --space SPACE_NAME
 ```
+
+The `trusted_local_networks_egress` security group allows the app to connect to cloud.gov marketplace services such as Redis and RDS. The `public_networks_egress` security group allows the app to connect to external SMTP servers.
 
 ## Provision the backend services
 
