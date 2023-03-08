@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     # These are normally parsed from VCAP_SERVICES in Cloud Foundry, but can
     # be overridden locally by using the .env file.
     REDIS_HOST: str
-    REDIS_PORT: str
+    REDIS_PORT: int
     REDIS_PASSWORD: str
 
     class Config:
