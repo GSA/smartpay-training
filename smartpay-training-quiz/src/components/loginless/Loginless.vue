@@ -84,7 +84,9 @@
   </div>
 
   <div v-else class="grid-container" data-test="pre-submit">
-    <Alert v-if="error" heading="Error" status="error">There was an error with input.</Alert> <!-- This happens on server error -->
+    <Alert v-if="error" heading="Error" status="error" data-test="error"> <!-- This happens on server error -->
+      There was an error with input.
+    </Alert> 
 
     <h2>Getting access to training</h2>
       

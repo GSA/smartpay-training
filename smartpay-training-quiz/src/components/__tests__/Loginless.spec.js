@@ -80,5 +80,17 @@ describe('ValidatedInput', () => {
     expect(initial_div.exists()).toBe(true)
     expect(result_div.exists()).toBe(false)
   })
+  
+  it('shows alert on server error' , async () => {
+    const fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, json: () => Promise.reject("Bad Request") })
+    })
+    const wrapper = mount(Loginless)
+    submitForm(wrapper, userData)
+    await flushPromises()
+
+    const error_alert = wrapper.find('[data-test="error"]') 
+    expect(error_alert.exists()).toBe(true)
+  })
 
 })
