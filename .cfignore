@@ -1,0 +1,8 @@
+.env
+.env_example
+.flake8
+.venv
+.vscode
+docker-compose.yaml
+README.md
+requirements.dev.txt

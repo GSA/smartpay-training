@@ -46,3 +46,78 @@ npm install
 npm run dev
 ```
 
+# Deployment
+
+Follow these steps to deploy the application on cloud.gov.
+
+## Provision the backend services
+
+The API uses Redis and PostgreSQL. To provision these services on cloud.gov:
+
+```
+cf create-service aws-elasticache-redis redis-3node smartpay-training-redis
+cf create-service aws-rds small-psql smartpay-training-db
+```
+
+You can monitor the deployment status with `cf services`. It might take a while to fully provision everything.
+
+## Set up required secrets
+
+Create a user-provided service to store secrets [in accordance with cloud.gov practices](https://cloud.gov/docs/deployment/production-ready/#protect-access-to-sensitive-credentials).
+
+The CLI will prompt you to enter each secret one by one:
+
+```
+cf cups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
+```
+
+## Set required environment variables
+
+The app requires a number of environment variables. You only have to set them once per deployment on cloud.gov, and you can change them later with another `cf set-env` command.
+
+Replace the example values with the appropriate ones and run:
+
+```
+cf set-env smartpay-training SMTP_USER "user@example.com"
+cf set-env smartpay-training SMTP_SERVER "smtp.example.com"
+cf set-env smartpay-training SMTP_PORT 587
+cf set-env smartpay-training SMTP_STARTTLS true
+cf set-env smartpay-training SMTP_SSL_TLS false
+cf set-env smartpay-training EMAIL_FROM "user@example.com"
+cf set-env smartpay-training EMAIL_FROM_NAME "GSA SmartPay"
+cf set-env smartpay-training EMAIL_SUBJECT "GSA SmartPay Training"
+```
+
+## Deploy the app
+
+After the services have been successfully created and environment variables are in place, deploy the training app:
+
+```
+cf push
+```
+
+# Updates
+
+## App
+
+You can deploy any updates by simply pushing the app to cloud.gov again:
+
+```
+cf push
+```
+
+## Secrets
+
+You can update secrets by updating the user-provided service. Note that you will need to enter each secret one by one again.
+
+```
+cf uups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
+```
+
+## Environment variables
+
+You can update environment variables simply by setting them again. For example:
+
+```
+cf set-env smartpay-training SMTP_USER "hello@example.com"
+```

@@ -1,0 +1,11 @@
+---
+applications:
+  - name: smartpay-training
+    buildpacks:
+      - python_buildpack
+    memory: 256M
+    random-route: true
+    services:
+      - smartpay-training-db
+      - smartpay-training-redis
+      - smartpay-training-secrets
