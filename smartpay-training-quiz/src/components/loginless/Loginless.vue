@@ -39,8 +39,7 @@
     error.value = ''
     
     const url = new URL(`${base_url}/api/v1/get-link`);
-
-    fetch(url,  {
+    await fetch(url,  {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify(user)
@@ -71,7 +70,7 @@
     </template>
   </Hero>
 
-  <div v-if="isSubmitted" class="grid-container" >
+  <div v-if="isSubmitted" class="grid-container" data-test="post-submit">
     <h3>Check your email</h3>
     <p>We just send an email to:</p>
     <p><b>{{user.email}}</b></p>
@@ -84,7 +83,7 @@
     </p>
   </div>
 
-  <div v-else class="grid-container" >
+  <div v-else class="grid-container" data-test="pre-submit">
     <Alert v-if="error" heading="Error" status="error">There was an error with input.</Alert> <!-- This happens on server error -->
 
     <h2>Getting access to training</h2>
@@ -122,7 +121,7 @@
           error_message="Please enter your agency"
         />
 
-        <input class="usa-button" type="submit" value="Submit" :disabled='isLoading'/>
+        <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
 
         <p>Didn’t receive the access email?</p>
       </fieldset>

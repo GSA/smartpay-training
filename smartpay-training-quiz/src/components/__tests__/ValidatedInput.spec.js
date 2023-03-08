@@ -22,9 +22,7 @@ describe('ValidatedInput', () => {
     })
     expect(wrapper.text()).toContain('First name')
   })
-})
 
-describe('ValidatedInput', () => {
   it('does not render error when valid', () => {
     const wrapper = mount(ValidatedInput, { 
       props: valid_input
@@ -32,9 +30,7 @@ describe('ValidatedInput', () => {
     const element = wrapper.find('[id="first_name-input-error-message"]')
     expect(element.exists()).toBe(false)
   })
-})
 
-describe('ValidatedInput', () => {
   it('does render error when invalid', () => {
     const wrapper = mount(ValidatedInput, { 
       props: invalid_input
@@ -43,9 +39,7 @@ describe('ValidatedInput', () => {
     expect(element.exists()).toBe(true)
     expect(element.text()).toBe('Please enter your first name')
   })
-})
- 
-describe('ValidatedInput', () => {
+
   it('label should be "for" input', () => {
     const wrapper = mount(ValidatedInput, { 
       props: valid_input
@@ -55,5 +49,5 @@ describe('ValidatedInput', () => {
 
     expect(label.attributes('for')).toBe(input.attributes('name'))
   })
+
 })
- 
