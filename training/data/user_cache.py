@@ -7,7 +7,13 @@ from training.config import settings
 from ..models import TempUser
 
 
-redis = Redis()
+redis = Redis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    password=settings.REDIS_PASSWORD,
+    ssl=settings.REDIS_TLS,
+    ssl_cert_reqs=None,
+)
 
 
 class UserCache:
