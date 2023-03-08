@@ -50,6 +50,14 @@ npm run dev
 
 Follow these steps to deploy the application on cloud.gov.
 
+## Prepare the cloud.gov space
+
+Configure cloud.gov to [permit egress from the app's space](https://cloud.gov/docs/management/space-egress/) to the backend services. Replace `ORG_NAME` and `SPACE_NAME` with the appropriate names for your environment:
+
+```
+cf bind-security-group trusted_local_networks_egress ORG_NAME --space SPACE_NAME
+```
+
 ## Provision the backend services
 
 The API uses Redis and PostgreSQL. To provision these services on cloud.gov:
@@ -71,6 +79,16 @@ The CLI will prompt you to enter each secret one by one:
 cf cups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
 ```
 
+## Deploy the app
+
+After the services have been successfully created and environment variables are in place, deploy the training app:
+
+```
+cf push
+```
+
+The app will output errors due to not finding the expected environment variables, but it's necessary to have an app in place first before we can configure environment variables.
+
 ## Set required environment variables
 
 The app requires a number of environment variables. You only have to set them once per deployment on cloud.gov, and you can change them later with another `cf set-env` command.
@@ -88,12 +106,10 @@ cf set-env smartpay-training EMAIL_FROM_NAME "GSA SmartPay"
 cf set-env smartpay-training EMAIL_SUBJECT "GSA SmartPay Training"
 ```
 
-## Deploy the app
-
-After the services have been successfully created and environment variables are in place, deploy the training app:
+Restart the app to ensure it picks up the environment variables.
 
 ```
-cf push
+cf restart smartpay-training
 ```
 
 # Updates
