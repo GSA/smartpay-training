@@ -4,32 +4,31 @@ import { mount } from '@vue/test-utils'
 import ValidatedInput from '../loginless/ValidatedInput.vue'
 
 
+const valid_input = { 
+  'modelValue': "Ringo",
+  'isInvalid': false,
+  'name': 'first_name',
+  'label': 'First name',
+  'error_message': 'Please enter your first name'
+}
+
+const invalid_input = {...valid_input, 'isInvalid': true}
+
+
 describe('ValidatedInput', () => {
-    it('renders properly', () => {
-      const wrapper = mount(ValidatedInput, { 
-        props: { 
-          'modelValue': "Ringo",
-          'isInvalid': false,
-          'name': 'first_name',
-          'label': 'First name',
-          'error_message': 'Please enter your first name'
-        }
-      })
-      expect(wrapper.text()).toContain('First name')
+  it('renders properly', () => {
+    const wrapper = mount(ValidatedInput, { 
+      props: valid_input
     })
+    expect(wrapper.text()).toContain('First name')
+  })
 })
 
 describe('ValidatedInput', () => {
   it('does not render error when valid', () => {
     const wrapper = mount(ValidatedInput, { 
-      props: { 
-        'modelValue': "Ringo",
-        'isInvalid': false,
-        'name': 'first_name',
-        'label': 'First name',
-        'error_message': 'Please enter your first name'
-      }
-    })
+      props: valid_input
+  })
     const element = wrapper.find('[id="first_name-input-error-message"]')
     expect(element.exists()).toBe(false)
   })
@@ -38,17 +37,23 @@ describe('ValidatedInput', () => {
 describe('ValidatedInput', () => {
   it('does render error when invalid', () => {
     const wrapper = mount(ValidatedInput, { 
-      props: { 
-        'modelValue': "Ringo",
-        'isInvalid': true,
-        'name': 'first_name',
-        'label': 'First name',
-        'error_message': 'Please enter your first name'
-      }
+      props: invalid_input
     })
     const element = wrapper.find('[id="first_name-input-error-message"]')
     expect(element.exists()).toBe(true)
     expect(element.text()).toBe('Please enter your first name')
+  })
+})
+ 
+describe('ValidatedInput', () => {
+  it('label should be "for" input', () => {
+    const wrapper = mount(ValidatedInput, { 
+      props: valid_input
+    })
+    const label = wrapper.find('label')
+    const input = wrapper.find('input')
+
+    expect(label.attributes('for')).toBe(input.attributes('name'))
   })
 })
  
