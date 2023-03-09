@@ -89,7 +89,7 @@
     </Alert> 
 
     <h2>Getting access to training</h2>
-      BASE: {{ base_url }}
+
     <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
     <form class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
       <fieldset class="usa-fieldset">

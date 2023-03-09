@@ -27,7 +27,7 @@ async def send_link(user: TempUser, status_code=status.HTTP_201_CREATED):
     # http://127.0.0.1:5173/start-quiz/99e554ad-7e28-4429-914d-e725dbade3c7
     # which would hit the endpoint below
 
-    url = f"{settings.BASE_URL}/start-quiz/{token}"
+    url = f"{settings.BASE_URL}/#start-quiz/{token}"
     try:
         res = await send_email(to_email=user.email, name=user.first_name, link=url)
 
