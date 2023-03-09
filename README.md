@@ -105,6 +105,7 @@ cf set-env smartpay-training SMTP_SSL_TLS false
 cf set-env smartpay-training EMAIL_FROM "user@example.com"
 cf set-env smartpay-training EMAIL_FROM_NAME "GSA SmartPay"
 cf set-env smartpay-training EMAIL_SUBJECT "GSA SmartPay Training"
+cf set-env smartpay-training BASE_URL "https://federalist-....sites.pages.cloud.gov/site/gsa/smartpay-training/"
 ```
 
 Restart the app to ensure it picks up the environment variables.
