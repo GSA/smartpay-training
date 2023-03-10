@@ -3,9 +3,11 @@
   import Alert from '@/components/uswds/Alert.vue'
   import Hero from '@/components/smartpay/Hero.vue'
   import ValidatedInput from '@/components/loginless/ValidatedInput.vue'
+  import ValidatedSelect from '@/components/loginless/ValidatedSelect.vue'
   import hero_image from '@/assets/images/Training_TravelAH_Hero.jpg'
   import { useVuelidate } from '@vuelidate/core'
   import { required, email } from '@vuelidate/validators'
+  import agencyList from '@/data/agencies.js'
 
   const base_url = import.meta.env.VITE_API_BASE_URL
 
@@ -115,9 +117,10 @@
           name="email"
           error_message="Please enter a valid email address"
         />
-        <ValidatedInput 
+        <ValidatedSelect 
           v-model="user.agency" 
           :isInvalid="v$.agency.$error" 
+          :options="agencyList"
           label="Agency / organization(*Required)"
           name="agency"
           error_message="Please enter your agency"
