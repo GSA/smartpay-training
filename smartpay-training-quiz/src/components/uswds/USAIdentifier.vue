@@ -77,9 +77,10 @@
   >
     <div class="usa-identifier__container">
       <div class="usa-identifier__usagov-description">
-        Looking for U.S. government information and services?
+        Looking for U.S. government information and services?&nbsp;
       </div>
-      <a href="https://www.usa.gov/" class="usa-link">Visit USA.gov</a>
+
+      <a href="https://www.usa.gov/" class="usa-link--external">Visit USA.gov</a>
     </div>
   </section>
 </div>
