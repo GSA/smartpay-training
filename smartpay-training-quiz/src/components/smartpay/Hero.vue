@@ -8,7 +8,7 @@
   <section class="usa-hero padding-y-4" :style="{backgroundImage: `url(${hero_image}`}">
     <div class="grid-container">
       <div class="grid-row">
-        <h1 class="usa-hero__heading grid-col-6">
+        <h1 class="usa-hero__heading tablet:grid-col-6">
           <span class="usa-hero__heading--alt">
             <slot></slot>
           </span>
