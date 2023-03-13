@@ -2,7 +2,7 @@ import logging
 import jwt
 
 from fastapi import APIRouter, status, HTTPException
-from training.models import TempUser
+from training.schemas import TempUser
 from training.data import UserCache
 from training.config import settings
 from training.api.email import send_email

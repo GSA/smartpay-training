@@ -4,4 +4,15 @@ services:
     image: redis:6.2-alpine
     ports:
       - "6379:6379"
-
+  db:
+    image: postgres:12  # For best results, match version in use by cloud.gov RDS
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+  adminer:
+    image: adminer
+    ports:
+      - "8432:8080"
+    depends_on:
+      - db
