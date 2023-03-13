@@ -7,3 +7,4 @@ docker-compose.yaml
 README.md
 requirements.dev.txt
 smartpay-training-quiz
+_site

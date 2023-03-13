@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "build:frontend": "cd smartpay-training-quiz && npm install && npm run build && cd ..",
+        "federalist": "npm run build:frontend"
+    }
+}

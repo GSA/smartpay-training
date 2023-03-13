@@ -9,7 +9,7 @@
     'token': String
   })
   const store = userFlowStore()
-  onMounted(() => {store.getUserFromToken(props.token)})
+  onMounted(() => store.getUserFromToken(props.token))
 </script>
 
 <template>
@@ -28,7 +28,7 @@
       [Link To start the quiz goes here]
     </p>
   </div>
-  <div v-else>
+  <div v-else-if="store.loading == false">
     <Alert heading="Not Found" status="warning">
         <span>
             We were not able to locate this link. Some helpful user instructions go here.

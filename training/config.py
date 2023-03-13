@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     JWT_SECRET: str
     PROJECT_NAME: str = "GSA SmartPay Training"
     # url for front end
-    BASE_URL: str = "http://127.0.0.1:5173"
+    BASE_URL: str
     # Number of seconds user has to click email link
     EMAIL_TOKEN_TTL: int = 60 * 60 * 2
 

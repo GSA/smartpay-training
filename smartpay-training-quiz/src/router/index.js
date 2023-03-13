@@ -1,14 +1,20 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import UserHome from '@/views/UserHome.vue'
+import Index from '@/views/Index.vue'
 import Loginless from '@/components/loginless/Loginless.vue'
 import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
         path: '/',
-        name: 'home',
+        name: 'index',
+        component: Index
+    },
+    {
+        path: '/get-started/',
+        name: 'getstarted',
         component: Loginless
     },
     {
