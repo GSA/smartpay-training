@@ -15,7 +15,8 @@ export const  userFlowStore = defineStore('userStore', () => {
 
     function getUserFromToken(token) { 
         const url = `${base_url}/api/v1/get-user/${token}`  
-        fetch(url)
+        loading.value = true
+        return fetch(url)
         .then(res => {
             if (res.ok) {
                 return res.json()
@@ -28,11 +29,12 @@ export const  userFlowStore = defineStore('userStore', () => {
             user.email =  json.user.email
             user.agency =  json.user.agency
             jwt.value = json.jwt
+            loading.value = false
         })
         .catch((err) => {
             loading.value = false
         })
   }
 
-  return { jwt, getUserFromToken, user }
+  return { jwt, getUserFromToken, user, loading }
 })

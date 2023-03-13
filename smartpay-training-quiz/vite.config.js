@@ -5,6 +5,10 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: process.env.BASEURL,
+  build: {
+    outDir: '../_site'
+  },
   plugins: [vue()],
   resolve: {
     alias: {

@@ -12,7 +12,7 @@ import GSAHeader from "@/components/uswds/GSAHeader.vue"
 <template>
     <Banner />
     <div  class="background flex-fill">
-        <GSAHeader :linkHome="false" />
+        <GSAHeader/>
         <div id="main-container" class="wide-layout">
             <main>
                 <RouterView />
@@ -22,8 +22,9 @@ import GSAHeader from "@/components/uswds/GSAHeader.vue"
     </div>
     <footer class="usa-footer flex-shrink-0">
         <GSAFooter />
-        <USAIdentifier />
     </footer>
+    <USAIdentifier />
+    
 </template>
 
 <style scoped>
