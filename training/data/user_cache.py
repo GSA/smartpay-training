@@ -4,7 +4,7 @@ from typing import Optional
 from redis import Redis
 
 from training.config import settings
-from ..models import TempUser
+from ..schemas import TempUser
 
 
 redis = Redis(
