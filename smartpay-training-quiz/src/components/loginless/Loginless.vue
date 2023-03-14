@@ -86,51 +86,55 @@
   </div>
 
   <div v-else class="grid-container" data-test="pre-submit">
-    <Alert v-if="error" heading="Error" status="error" data-test="error"> <!-- This happens on server error -->
-      There was an error with input.
-    </Alert> 
+    <div class="grid-row">
+      <div class="tablet:grid-col-8">
+        <Alert v-if="error" heading="Error" status="error" data-test="error"> <!-- This happens on server error -->
+          There was an error with input.
+        </Alert> 
 
-    <h2>Getting access to training</h2>
+        <h2>Getting access to training</h2>
 
-    <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
-    <form class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
-      <fieldset class="usa-fieldset">
+        <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
+        <form class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
+          <fieldset class="usa-fieldset">
 
-        <ValidatedInput 
-          v-model="user.first_name" 
-          :isInvalid="v$.first_name.$error" 
-          label="First name (*Required)"
-          name="first_name"
-          error_message="Please enter your first name"
-        />
-        <ValidatedInput 
-          v-model="user.last_name" 
-          :isInvalid="v$.last_name.$error" 
-          label="Last name (*Required)"
-          name="last_name"
-          error_message="Please enter your last name"
-        />
-        <ValidatedInput 
-          v-model="user.email" 
-          :isInvalid="v$.email.$error" 
-          label="Email Address (*Required)"
-          name="email"
-          error_message="Please enter a valid email address"
-        />
-        <ValidatedSelect 
-          v-model="user.agency" 
-          :isInvalid="v$.agency.$error" 
-          :options="agencyList"
-          label="Agency / organization(*Required)"
-          name="agency"
-          error_message="Please enter your agency"
-        />
+            <ValidatedInput 
+              v-model="user.first_name" 
+              :isInvalid="v$.first_name.$error" 
+              label="First name (*Required)"
+              name="first_name"
+              error_message="Please enter your first name"
+            />
+            <ValidatedInput 
+              v-model="user.last_name" 
+              :isInvalid="v$.last_name.$error" 
+              label="Last name (*Required)"
+              name="last_name"
+              error_message="Please enter your last name"
+            />
+            <ValidatedInput 
+              v-model="user.email" 
+              :isInvalid="v$.email.$error" 
+              label="Email Address (*Required)"
+              name="email"
+              error_message="Please enter a valid email address"
+            />
+            <ValidatedSelect 
+              v-model="user.agency" 
+              :isInvalid="v$.agency.$error" 
+              :options="agencyList"
+              label="Agency / organization (*Required)"
+              name="agency"
+              error_message="Please enter your agency"
+            />
 
-        <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
+            <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
 
-        <p>Didn’t receive the access email?</p>
-      </fieldset>
-    </form>
+            <p>Didn’t receive the access email?</p>
+          </fieldset>
+        </form>
+      </div>
+    </div>
   </div>
 
 </template>
