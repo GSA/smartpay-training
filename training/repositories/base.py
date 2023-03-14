@@ -21,5 +21,5 @@ class BaseRepository:
     def find_all(self) -> List[__model__]:
         return self._session.query(self.__model__).all()
 
-    def delete_by_id(self, id: int) -> int:
-        return self._session.query(self.__model__).filter(self.__model__.id == id).delete()
+    def delete_by_id(self, id: int) -> None:
+        self._session.query(self.__model__).filter(self.__model__.id == id).delete()
