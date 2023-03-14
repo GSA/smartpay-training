@@ -9,8 +9,6 @@ def db():
     '''
     This fixture initiates a transactional DB session and rolls back all
     changes after the test case completes.
-
-    This essentially replaces training.database.get_db in the tests.
     '''
 
     connection = engine.connect()

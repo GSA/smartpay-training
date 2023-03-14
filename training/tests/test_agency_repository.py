@@ -7,6 +7,9 @@ from sqlalchemy.orm import Session
 
 @pytest.fixture
 def valid_names() -> List[str]:
+    '''
+    Provides a list of valid agency names.
+    '''
     return [
         "Department of Mysteries",
         "Department of Magical Law Enforcement",
@@ -16,11 +19,17 @@ def valid_names() -> List[str]:
 
 @pytest.fixture
 def valid_name(valid_names: List[str]) -> str:
+    '''
+    Provides a valid agency name.
+    '''
     return valid_names[0]
 
 
 @pytest.fixture
 def db_with_data(db: Session, valid_names: List[str]):
+    '''
+    Provides a populated database.
+    '''
     for name in valid_names:
         db.add(models.Agency(name=name))
     db.commit()
@@ -29,11 +38,17 @@ def db_with_data(db: Session, valid_names: List[str]):
 
 @pytest.fixture
 def repo(db: Session) -> AgencyRepository:
+    '''
+    Provides an AgencyRepository injected with an empty database.
+    '''
     yield AgencyRepository(session=db)
 
 
 @pytest.fixture
 def repo_with_data(db_with_data: Session) -> AgencyRepository:
+    '''
+    Provides an AgencyRepository injected with a populated database.
+    '''
     yield AgencyRepository(session=db_with_data)
 
 
