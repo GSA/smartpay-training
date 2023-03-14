@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from training.config import settings
+from training.models import Base
 
 
 # cloud.gov provides the URI in postgres:// format, but SQLAlchemy requires
@@ -8,8 +9,9 @@ from training.config import settings
 db_uri = settings.DB_URI.replace("postgres://", "postgresql://")
 
 engine = create_engine(db_uri)
-Session = sessionmaker(engine)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 # TODO: Alembic migrations
-from training.models import Base
 Base.metadata.create_all(engine)

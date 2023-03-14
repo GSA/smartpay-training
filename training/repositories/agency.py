@@ -1,23 +1,14 @@
-from training.database import Session
+from typing import Optional
 from training import models, schemas
+from .base import BaseRepository
 
 
-class AgencyRepository:
-    def create(self, agency: schemas.AgencyCreate, db=Session()):
+class AgencyRepository(BaseRepository):
+    __model__ = models.Agency
+
+    def create(self, agency: schemas.AgencyCreate) -> models.Agency:
         db_agency = models.Agency(name=agency.name)
-        db.add(db_agency)
-        db.commit()
-        db.refresh(db_agency)
-        return db_agency
+        return self.save(db_agency)
 
-    def get(self, id: int, db=Session()):
-        return db.query(models.Agency).filter(models.Agency.id == id).first()
-
-    def get_by_name(self, name: str, db=Session()):
-        return db.query(models.Agency).filter(models.Agency.name == name).first()
-
-    def get_all(self, db=Session()):
-        return db.query(models.Agency).all()
-
-
-agency = AgencyRepository()
+    def find_by_name(self, name: str) -> Optional[models.Agency]:
+        return self._session.query(models.Agency).filter(models.Agency.name == name).first()

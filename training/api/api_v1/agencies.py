@@ -1,36 +1,33 @@
 from typing import List
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
 from training.schemas import Agency, AgencyCreate
-import training.repositories as repo
+from training.repositories import AgencyRepository
+from training.api.deps import agency_repository
 
 
 router = APIRouter()
 
 
-@router.post(
-        "/agencies",
-        response_model=Agency,
-        status_code=status.HTTP_201_CREATED
-)
-def create_agency(agency: AgencyCreate):
-    db_agency = repo.agency.get_by_name(agency.name)
+@router.post("/agencies", response_model=Agency, status_code=status.HTTP_201_CREATED)
+def create_agency(agency: AgencyCreate, repo: AgencyRepository = Depends(agency_repository)):
+    db_agency = repo.find_by_name(agency.name)
     if db_agency:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Agency already exists"
         )
-    db_agency = repo.agency.create(agency)
+    db_agency = repo.create(agency)
     return db_agency
 
 
 @router.get("/agencies", response_model=List[Agency])
-def get_agencies():
-    return repo.agency.get_all()
+def get_agencies(repo: AgencyRepository = Depends(agency_repository)):
+    return repo.find_all()
 
 
 @router.get("/agencies/{id}", response_model=Agency)
-def get_agency(id: int):
-    db_agency = repo.agency.get(id=id)
+def get_agency(id: int, repo: AgencyRepository = Depends(agency_repository)):
+    db_agency = repo.find_by_id(id)
     if db_agency is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return db_agency
