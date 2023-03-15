@@ -28,15 +28,27 @@ pip install -r requirements.dev.txt -r requirements.txt
 uvicorn training.main:app --reload
 ```
 
-## Redis
+## Redis and PostgreSQL
 
-This needs depends on Redis to support the temporary tokens used for tests. To start up a local redis server:
+This app depends on Redis to support the temporary tokens used for tests. It also uses PostgreSQL as a main data store. To start up local services:
 
 ``` sh
-> docker-compose up
+docker-compose up
 ```
-This will start a local Redis cache listening on port 6379.
 
+This will start:
+
+* A local Redis cache listening on port 6379
+* A local PostgreSQL database listening on port 5432
+* An Adminer instance listening on port 8432
+
+### Seeding the database
+
+To load seed data into PostgreSQL, run:
+
+```
+python -m training.database.seed
+```
 
 ## VueJS Interface
 To run view locally:
