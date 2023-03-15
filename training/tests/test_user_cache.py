@@ -2,7 +2,7 @@ import pytest
 import json
 from unittest import mock
 from training.data.user_cache import UserCache, redis
-from training.models import TempUser
+from training.schemas import TempUser
 
 
 @pytest.fixture

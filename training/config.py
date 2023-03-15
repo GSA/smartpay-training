@@ -17,6 +17,10 @@ def vcap_services_settings(settings: BaseSettings) -> Dict[str, Any]:
         config["REDIS_PASSWORD"] = redis.credentials["password"]
         config["REDIS_TLS"] = True  # cloud.gov Redis always requires TLS
 
+    db = appenv.get_service(label="aws-rds")
+    if db:
+        config["DB_URI"] = db.credentials["uri"]
+
     secrets = appenv.get_service(label="user-provided")
     if secrets and secrets.credentials["JWT_SECRET"]:
         config["JWT_SECRET"] = secrets.credentials["JWT_SECRET"]
@@ -58,6 +62,7 @@ class Settings(BaseSettings):
     REDIS_PORT: int
     REDIS_PASSWORD: str
     REDIS_TLS: bool = False
+    DB_URI: str
 
     class Config:
         env_file = '.env'
