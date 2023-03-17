@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from training.config import settings
-from training.models import Base
 
 
 # cloud.gov provides the URI in postgres:// format, but SQLAlchemy requires
