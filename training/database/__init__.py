@@ -1,1 +1,1 @@
-from .database import engine, SessionLocal
+from .database import db_uri, engine, SessionLocal

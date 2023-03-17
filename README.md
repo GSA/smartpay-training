@@ -42,6 +42,14 @@ This will start:
 * A local PostgreSQL database listening on port 5432
 * An Adminer instance listening on port 8432
 
+### Migrating the database schema
+
+Run the database migrations to build the database schema:
+
+```
+alembic upgrade head
+```
+
 ### Seeding the database
 
 To load seed data into PostgreSQL, run:
