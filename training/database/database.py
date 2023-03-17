@@ -11,7 +11,3 @@ db_uri = settings.DB_URI.replace("postgres://", "postgresql://")
 engine = create_engine(db_uri)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-# TODO: Alembic migrations
-Base.metadata.create_all(engine)
