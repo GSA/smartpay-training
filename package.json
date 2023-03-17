@@ -1,6 +1,12 @@
 {
     "scripts": {
         "build:frontend": "cd smartpay-training-quiz && npm install && npm run build && cd ..",
-        "federalist": "npm run build:frontend"
+        "federalist": "npm run build:frontend",
+        "dev": "(trap 'kill 0' SIGINT; npm run dev:frontend & npm run dev:backend)",
+        "dev:frontend": "cd smartpay-training-quiz && npm run dev -- --clearScreen=false",
+        "dev:backend": "uvicorn training.main:app --reload",
+        "dev:db-start": "docker-compose up -d",
+        "dev:db-stop": "docker-compose stop",
+        "test": "pytest"
     }
 }
