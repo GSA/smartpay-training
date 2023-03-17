@@ -23,7 +23,7 @@ pip install -r requirements.dev.txt -r requirements.txt
 
 ### Frontend dev environment
 
-Install NPM dependencies for the Vue backend:
+Install NPM dependencies for the Vue frontend:
 
 ```sh
 npm run build:frontend
