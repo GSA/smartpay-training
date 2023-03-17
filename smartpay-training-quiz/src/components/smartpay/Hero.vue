@@ -5,16 +5,16 @@
 </script>
 
 <template>
-  <section class="usa-hero padding-y-4" :style="{backgroundImage: `url(${hero_image}`}">
+  <section class="usa-hero padding-y-5" :style="{backgroundImage: `url(${hero_image}`}">
     <div class="grid-container">
       <div class="grid-row">
-        <h1 class="usa-hero__heading tablet:grid-col-6">
+        <h1 class="usa-hero__heading tablet:grid-col-4">
           <span class="usa-hero__heading--alt">
             <slot></slot>
           </span>
         </h1>
       </div>
-      <div class="grid-row">
+      <div class="grid-row tablet:grid-col-5">
         <p v-if="$slots.subheader" class="margin-bottom-0">
             <slot name="subheader"></slot>
         </p>
