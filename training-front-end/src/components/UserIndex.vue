@@ -30,11 +30,11 @@
     const token = urlParams.get('t')
 
     if (token) {
-        try {
-            await getUserFromToken(base_url, token)
-        } catch(e) {
-            error.value = e
-        }
+      try {
+        await getUserFromToken(base_url, token)
+      } catch(e) {
+          error.value = e
+      }
     } 
     loaded.value = true
   })
