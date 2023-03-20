@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+import Hero from '../components/Hero.astro';
+const hero_image = '/images/Training_TravelAH_Hero.jpg';
+const pageTitle = "GSA Training";
+---
+<BaseLayout pageTitle={pageTitle}>
+    <Hero hero_image={hero_image}>
+        GSA SmartPay Training
+    </Hero>
+    <div class="grid-container" data-test="pre-submit">
+        <p>
+            GSA offers free Government-wide GSA SmartPay training to all agency account holders (cardholders)/ approving officials and program coordinators. All training courses meet the OMB Circular A-123, Appendix B training requirement. Each training course takes approximately 45 minutes to complete and is worth 1 CLP.  To receive credit and your certificate, you must  login and pass your quiz with a score of 75% or higher.    
+        </p>
+        <h2>
+            Start Training
+        </h2>
+        <p>
+            <a href='/home'>
+                Get a link to training
+            </a>
+        </p>
+      </div>
+</BaseLayout>

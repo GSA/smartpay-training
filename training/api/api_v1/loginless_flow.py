@@ -1,11 +1,12 @@
 import logging
 import jwt
 
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
 from training.schemas import TempUser
 from training.data import UserCache
 from training.config import settings
 from training.api.email import send_email
+from training.api.auth import JWTUser
 
 router = APIRouter()
 u = UserCache()
@@ -24,10 +25,10 @@ async def send_link(user: TempUser, status_code=status.HTTP_201_CREATED):
 
     # the token is the temp key in the Redis Cache
     # this it what will be needed to creat an email link such as
-    # http://127.0.0.1:5173/start-quiz/99e554ad-7e28-4429-914d-e725dbade3c7
+    # http://127.0.0.1:5173?t=99e554ad-7e28-4429-914d-e725dbade3c7
     # which would hit the endpoint below
 
-    url = f"{settings.BASE_URL}/#start-quiz/{token}"
+    url = f"{settings.BASE_URL}/home?t={token}"
     try:
         res = await send_email(to_email=user.email, name=user.first_name, link=url)
 
@@ -39,6 +40,14 @@ async def send_link(user: TempUser, status_code=status.HTTP_201_CREATED):
         )
 
     return {"token": url, "response": res}
+
+
+@router.get("/user-info")
+def user_info(user=Depends(JWTUser())):
+    # This will eventually query the DB for the
+    # info we want to display on a user's home page
+    # But for now just send the jwt data
+    return user
 
 
 @router.get("/get-user/{token}")
