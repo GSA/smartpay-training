@@ -1,6 +1,17 @@
 <script setup>
   import hero_image from '@/assets/images/Training_TravelAH_Hero.jpg'
   import Hero from '@/components/smartpay/Hero.vue'
+  import accounts_data from '@/data/trainingaccounts.json'
+  import TrainingAccounts from '@/components/smartpay/TrainingAccounts.vue'
+  console.log(accounts_data.card_holders,"jason data");
+    const cardholders = {
+      "listItems":[],
+    };
+    const coordinators = {
+      "listItems":[],
+    };
+    cardholders.listItems = accounts_data.card_holders
+    coordinators.listItems = accounts_data.coordinators
 
 </script>
 <template>
@@ -21,149 +32,11 @@
       <h3>
         TRAINING FOR CARD / ACCOUNT HOLDERS AND APPROVING OFFICIALS
       </h3>
-      <ul class="usa-card-group">
-        <li class="usa-card tablet:grid-col-4">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-             
-              <h4 class="usa-card__heading ">
-                <span>
-                  <img
-                  src="../assets/images/travelc.svg"
-                  alt="a blue circle represent blue travel card"
-                  class="circle-icon" />
-                Travel training</span></h4>
-            </div>
-            <div class="usa-card__body">
-              <p>
-                Learn about the basics about your role and responsibility as a card / account holder, the Federal Travel Regulations (FTR), and other government travel policies.
-              </p>
-            </div>
-            
-            <div class="usa-card__footer">
-              <router-link :to="{ name: 'getstarted'}">
-              <button type="button" class="usa-button">Take the travel training</button>
-              </router-link>
-            </div>
-          </div>
-        </li>
-        <li class="usa-card tablet:grid-col-4">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-              
-              <h4 class="usa-card__heading"><span>
-                  <img
-                  src="../assets/images/purchasec.svg"
-                  alt="a blue circle represent blue travel card"
-                  class="circle-icon" />
-                  Purchase training</span>
-                </h4>
-            </div>
-            <!--
-            <div class="usa-card__media">
-              
-              <div class="usa-card__img">
-                <img
-                  src="../assets/images/red-card.png"
-                  alt="A placeholder image"
-                />
-              </div>
-            
-            </div>
-          -->
-            <div class="usa-card__body">
-              <p>
-                Learn about the basics about your role and responsibility as a card / account holder, the Federal Travel Regulations (FTR), and other government travel policies.
-              </p>
-            </div>
-            <div class="usa-card__footer">
-              <button type="button" class="usa-button">Take the purchase training</button>
-            </div>
-          </div>
-        </li>
-      </ul>
+      <TrainingAccounts :items ="cardholders.listItems"></TrainingAccounts>
 
       <h3>
         TRAINING FOR PROGRAM COORDINATORS
       </h3>
-      <ul class="usa-card-group">
-        <li class="usa-card tablet:grid-col-4">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-             
-              <h4 class="usa-card__heading ">
-                <span>
-                  <img
-                  src="../assets/images/travelc.svg"
-                  alt="a blue circle represent blue travel card"
-                  class="circle-icon" />
-                Travel training</span></h4>
-            </div>
-            <div class="usa-card__body">
-              <p>
-                Learn about the basics about your role and responsibility as a card / account holder, the Federal Travel Regulations (FTR), and other government travel policies.
-              </p>
-            </div>
-            
-            <div class="usa-card__footer">
-              <router-link :to="{ name: 'getstarted'}">
-              <button type="button" class="usa-button">Take the travel training</button>
-              </router-link>
-            </div>
-          </div>
-        </li>
-        <li class="usa-card tablet:grid-col-4">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-              <h4 class="usa-card__heading"><span>
-                  <img
-                  src="../assets/images/purchasec.svg"
-                  alt="a blue circle represent blue travel card"
-                  class="circle-icon" />
-                  Purchase training</span>
-                </h4>
-            </div>
-            
-            <div class="usa-card__body">
-              <p>
-                Learn about the basics about your role and responsibility as a card / account holder, the Federal Travel Regulations (FTR), and other government travel policies.
-              </p>
-            </div>
-            <div class="usa-card__footer">
-              <button type="button" class="usa-button">Take the purchase training</button>
-            </div>
-          </div>
-        </li>
-        <li class="usa-card tablet:grid-col-4">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-              <h4 class="usa-card__heading"><span>
-                  <img
-                  src="../assets/images/fleetc.svg"
-                  alt="a blue circle represent blue travel card"
-                  class="circle-icon" />
-                  Fleet training</span>
-                </h4>
-            </div>
-           
-            <div class="usa-card__body">
-              <p>
-                Learn about the basics about your role and responsibility as a card / account holder, the Federal Travel Regulations (FTR), and other government travel policies.
-              </p>
-            </div>
-            <div class="usa-card__footer">
-              <button type="button" class="usa-button">Take the fleet training</button>
-            </div>
-          </div>
-        </li>
-      </ul>
-
+      <TrainingAccounts :items ="coordinators.listItems"></TrainingAccounts>
     </div>
 </template>
-
-<style scoped>
- .circle-icon {
-    vertical-align: middle;
-    width: 15%;
-  }
-</style>
