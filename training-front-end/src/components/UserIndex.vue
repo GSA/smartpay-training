@@ -1,4 +1,15 @@
 <script setup>
+  /**
+   * This component governs the display of the user's main profile page
+   * When mounted, it will look for a token in the url query string:
+   * http://example.com/home?t=some-token-value
+   * 
+	 * It will pass this token to the store to generate fetch a JWT
+	 * from the backend.
+	 * 
+	 * Once a jwt is present in the store it will mount the user home component
+   */
+
   import { onMounted, ref } from 'vue'
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
@@ -9,8 +20,10 @@
 
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
+
   const loaded = ref(false)
-  const invalidToken = ref(false)
+
+	const error = ref()
 
   onMounted(async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -20,16 +33,18 @@
         try {
             await getUserFromToken(base_url, token)
         } catch(e) {
-            console.log("error", e)
-            invalidToken.value = true
+            error.value = e
         }
     } 
     loaded.value = true
   })
 
-  function formsubmitted() {
-    invalidToken.value = false
+  function endLoading() {
+    error.value = undefined
   }
+	function setError(event){
+		console.log(event)
+	}
 
 </script>
 
@@ -38,11 +53,10 @@
     <div v-if="loaded" class="grid-container">
       <UserHome  v-if="user.jwt"/>
       <div v-else>
-          <Alert v-if="invalidToken" class="tablet:grid-col-8" status="warning" heading="Invalid Link">
-            This link is either expired or is invalid. Links to training are only valid for 24 hours.
-            Please request a new link with the form below.
+          <Alert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
+            {{ error.message }}
           </Alert>
-          <Loginless @submitted="formsubmitted"/>
+          <Loginless @endLoading="endLoading" @error="setError"/>
       </div>
     </div>
   </div>

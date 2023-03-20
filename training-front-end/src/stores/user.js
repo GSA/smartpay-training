@@ -15,12 +15,17 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   try {
     res = await fetch(url)
   } catch(e) {
-    console.log("error connecting to api", e)
+    // THis would indicate an API problem
+    // What to tell the user here?
     throw e
   }
   if (!res.ok) {
     clearUser()
-    throw "invalid token"
+    const e = new Error('This link is either expired or is invalid.\
+     Links to training are only valid for 24 hours. \
+     Please request a new link with the form below.')
+    e.name = "Invalid Token"
+    throw e
   }
 
   let {user, jwt} = await res.json()
@@ -38,14 +43,16 @@ export const getUserFromJWT = action(profile, 'validateUser', async (store, base
       body:  jwt
     })
   } catch(e) {
-    // server error?
+    // server error
     console.log("error connecting to api", e)
     throw e
   }
   if (!res.ok) {
+    // indicates an invalid JWT
     clearUser()
-    throw "invalid token"
+    throw new Error("invalid token")
   }
+  
   let user = await res.json()
   store.set({...user, jwt:jwt})
 })
