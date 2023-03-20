@@ -6,3 +6,4 @@ fastapi_mail==1.2.5
 cfenv==0.5.3
 SQLAlchemy==2.0.5.post1
 psycopg2==2.9.5
+alembic==1.10.2

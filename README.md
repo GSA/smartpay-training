@@ -1,56 +1,77 @@
 # GSA SmartPay Training
 
-This will the quiz platform for GSA SmartPay training for card holders and AOs.
+This will be the quiz platform for GSA SmartPay training for card holders and AOs.
 
-# Getting Started
+## Getting Started
 
-## Environment Settings
+### Environment Settings
 
-## SMTP Settings
-There are several configuration settings that are needed for setting emails. See .env_example for what we will (probably) need.
+There are several configuration settings that are needed. See `.env_example` for a list of environment variables that we will need. The settings object in `training/config` will try to read these from a `.env` file (which should not be checked into GitHub).
 
-## JWT Secret
-The backend uses a JWT (JSON Web Token) to allow the browser to tell the backend who is taking a quiz. This requires a secret key to sign the token. The settings object in `training/api/config` will try to read this from a .env file (which should not be checked into github). To make this work in development, create a file in the main directory called `.env` and add the line:
+To make this work in development, create a file in the main directory called `.env` and include the variables from `.env_example`.
 
-```
-JWT_SECRET="some_super_secret"
-```
 
-## Backend Dev environment
+### Backend Dev environment
 
-``` sh
-# Create and activate a Python venv
+Create and activate a Python venv, then install dependencies for the FastAPI backend:
+
+```sh
 python -m venv .venv
 source .venv/bin/activate
-# Install dependencies
 pip install -r requirements.dev.txt -r requirements.txt
-# Run the local dev server
-uvicorn training.main:app --reload
 ```
 
-## Redis
+### Frontend dev environment
 
-This needs depends on Redis to support the temporary tokens used for tests. To start up a local redis server:
+Install NPM dependencies for the Vue frontend:
 
-``` sh
-> docker-compose up
+```sh
+npm run build:frontend
 ```
-This will start a local Redis cache listening on port 6379.
 
+### Redis and PostgreSQL
 
-## VueJS Interface
-To run view locally:
+This app depends on Redis to support the temporary tokens used for tests. It also uses PostgreSQL as a main data store. To start up local services:
+
+```sh
+docker-compose up
+# Or to run them in the background:
+docker-compose up -d
 ```
-cd smartpay-training-quiz
-npm install
+
+This will start:
+
+* A local Redis cache listening on port 6379
+* A local PostgreSQL database listening on port 5432
+* An Adminer instance listening on port 8432
+
+### Migrating the database schema
+
+Run the database migrations to build the database schema:
+
+```
+alembic upgrade head
+```
+
+### Seeding the database
+
+To load seed data into PostgreSQL, run:
+
+```
+python -m training.database.seed
+```
+
+### Run both the frontend and backend dev servers
+
+```sh
 npm run dev
 ```
 
-# Deployment
+## Deployment
 
-Follow these steps to deploy the application on cloud.gov.
+Follow these steps to deploy the application on cloud.gov. The following commands assume the app is named `smartpay-training`.
 
-## Prepare the cloud.gov space
+### Prepare the cloud.gov space
 
 Configure cloud.gov to [permit egress from the app's space](https://cloud.gov/docs/management/space-egress/) to other services. Replace `ORG_NAME` and `SPACE_NAME` with the appropriate names for your environment:
 
@@ -61,7 +82,7 @@ cf bind-security-group public_networks_egress ORG_NAME --space SPACE_NAME
 
 The `trusted_local_networks_egress` security group allows the app to connect to cloud.gov marketplace services such as Redis and RDS. The `public_networks_egress` security group allows the app to connect to external SMTP servers.
 
-## Provision the backend services
+### Provision the backend services
 
 The API uses Redis and PostgreSQL. To provision these services on cloud.gov:
 
@@ -72,7 +93,7 @@ cf create-service aws-rds small-psql smartpay-training-db
 
 You can monitor the deployment status with `cf services`. It might take a while to fully provision everything.
 
-## Set up required secrets
+### Set up required secrets
 
 Create a user-provided service to store secrets [in accordance with cloud.gov practices](https://cloud.gov/docs/deployment/production-ready/#protect-access-to-sensitive-credentials).
 
@@ -82,7 +103,7 @@ The CLI will prompt you to enter each secret one by one:
 cf cups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
 ```
 
-## Deploy the app
+### Deploy the app
 
 After the services have been successfully created, deploy the training app but don't start it yet since we still have to set some environment variables:
 
@@ -90,22 +111,14 @@ After the services have been successfully created, deploy the training app but d
 cf push --no-start
 ```
 
-## Set required environment variables
+### Set required environment variables
 
-The app requires a number of environment variables. You only have to set them once per deployment on cloud.gov, and you can change them later with another `cf set-env` command.
+The app requires a number of environment variables. Refer to `.env_example` for information on necessary environment variables. You only have to set them once per deployment on cloud.gov, and you can change them later with another `cf set-env` command.
 
-Replace the example values with the appropriate ones and run:
+Replace the example values with the appropriate ones and for each environment variable, run:
 
 ```
-cf set-env smartpay-training SMTP_USER "user@example.com"
-cf set-env smartpay-training SMTP_SERVER "smtp.example.com"
-cf set-env smartpay-training SMTP_PORT 587
-cf set-env smartpay-training SMTP_STARTTLS true
-cf set-env smartpay-training SMTP_SSL_TLS false
-cf set-env smartpay-training EMAIL_FROM "user@example.com"
-cf set-env smartpay-training EMAIL_FROM_NAME "GSA SmartPay"
-cf set-env smartpay-training EMAIL_SUBJECT "GSA SmartPay Training"
-cf set-env smartpay-training BASE_URL "https://federalist-....sites.pages.cloud.gov/site/gsa/smartpay-training/"
+cf set-env smartpay-training ENV_VAR_NAME "env_var_value"
 ```
 
 Restart the app to ensure it picks up the environment variables.
@@ -114,9 +127,9 @@ Restart the app to ensure it picks up the environment variables.
 cf restart smartpay-training
 ```
 
-# Updates
+## Updates
 
-## App
+### App
 
 You can deploy any updates by simply pushing the app to cloud.gov again:
 
@@ -124,7 +137,7 @@ You can deploy any updates by simply pushing the app to cloud.gov again:
 cf push
 ```
 
-## Secrets
+### Secrets
 
 You can update secrets by updating the user-provided service. Note that you will need to enter each secret one by one again.
 
@@ -132,7 +145,7 @@ You can update secrets by updating the user-provided service. Note that you will
 cf uups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
 ```
 
-## Environment variables
+### Environment variables
 
 You can update environment variables simply by setting them again. For example:
 
