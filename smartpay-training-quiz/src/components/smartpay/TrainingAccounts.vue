@@ -12,8 +12,18 @@
             <div class="usa-card__header">
               <h4 class="usa-card__heading">
                 <span>
-                  <img
-                  :src= item.img_src
+                  <img v-if= "item.img_type ==='T'"
+                  src="@/assets/images/travelc.svg"
+                  class="circle-icon"
+                  aria-hidden="true"
+                  />
+                  <img v-if= "item.img_type ==='P'"
+                  src="@/assets/images/purchasec.svg"
+                  class="circle-icon"
+                  aria-hidden="true"
+                  />
+                  <img v-if = "item.img_type ==='F'"
+                  src="@/assets/images/fleetc.svg"
                   class="circle-icon"
                   aria-hidden="true"
                   />
