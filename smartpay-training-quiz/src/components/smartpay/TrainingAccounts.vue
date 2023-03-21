@@ -27,7 +27,7 @@
             
             <div class="usa-card__footer">
               <router-link :to="{ name: item.link_name}">
-              <button type="button" class="usa-button">{{item.link_text}}</button>
+              {{item.link_text}}
               </router-link>
             </div>
           </div>
