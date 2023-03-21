@@ -3,7 +3,7 @@
   import Hero from '@/components/smartpay/Hero.vue'
   import accounts_data from '@/data/trainingaccounts.json'
   import TrainingAccounts from '@/components/smartpay/TrainingAccounts.vue'
-  console.log(accounts_data.card_holders,"jason data");
+
     const cardholders = {
       "listItems":[],
     };
