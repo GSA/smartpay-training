@@ -17,7 +17,7 @@
 <template>
     <Hero :hero_image="hero_image">
     <template #default>
-      Complete your SmartPay training
+      Complete Your GSA SmartPay Training
     </template>
     <template #subheader>
         We offer SmartPay training to all agency card / account holders, approving officials, and program coordinators. 
@@ -25,17 +25,17 @@
     
   </Hero>
     <div class="grid-container" data-test="pre-submit">
-      <h2>Select your training course</h2>
+      <h2>Select Your Training Course</h2>
       <p>
         Each training course takes approximately 45 minutes to complete and is worth 1 CLP. To receive credit and your certificate, you must pass your quiz with a score of 75% or higher.
       </p>
       <h3>
-        TRAINING FOR CARD / ACCOUNT HOLDERS AND APPROVING OFFICIALS
+        Training for Card / Account Holders and Approving Officials
       </h3>
       <TrainingAccounts :items ="cardholders.listItems"></TrainingAccounts>
 
       <h3>
-        TRAINING FOR PROGRAM COORDINATORS
+        Training for Program Coordinators
       </h3>
       <TrainingAccounts :items ="coordinators.listItems"></TrainingAccounts>
     </div>
