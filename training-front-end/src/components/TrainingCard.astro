@@ -1,0 +1,36 @@
+---
+const { item } = Astro.props;
+---
+
+<li class="usa-card tablet:grid-col-4">
+  <div class="usa-card__container">
+    <div class="usa-card__header">
+      <h4 class="usa-card__heading">
+        <span>
+          <img 
+          src={item.img_src}
+          class="circle-icon"
+          aria-hidden="true"
+          />
+        {item.header}</span></h4>
+    </div>
+    <div class="usa-card__body">
+      <p>
+        { item.text }
+      </p>
+    </div>
+    
+    <div class="usa-card__footer">
+      <a href={item.link_name}>
+      {item.link_text}
+      </a>
+    </div>
+  </div>
+</li>
+
+ <style>
+  .circle-icon {
+    vertical-align: middle;
+    width: 15%;
+  }
+ </style>
