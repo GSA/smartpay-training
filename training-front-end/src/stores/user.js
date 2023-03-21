@@ -24,7 +24,7 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
     const e = new Error('This link is either expired or is invalid.\
      Links to training are only valid for 24 hours. \
      Please request a new link with the form below.')
-    e.name = "Invalid Token"
+    e.name = "Invalid Link"
     throw e
   }
 
@@ -52,7 +52,7 @@ export const getUserFromJWT = action(profile, 'validateUser', async (store, base
     clearUser()
     throw new Error("invalid token")
   }
-  
+
   let user = await res.json()
   store.set({...user, jwt:jwt})
 })
