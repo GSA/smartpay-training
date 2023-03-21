@@ -1,0 +1,183 @@
+/* Site-specific styles and USWDS customizations can go here. */
+
+.wp-post h1{
+  font-size: 2.5rem;
+  font-weight:700;
+}
+.wp-post h2{
+  font-size: 1.8rem;
+  font-weight:700;
+}
+
+.wp-header__logo {
+  height: 100%;
+  margin-left: 0;
+}
+
+.wp-header__logo-image {
+  @include u-height('full');
+
+  @include at-media(desktop) {
+    @include u-height(7);
+  }
+}
+
+.wp-header__logo-text {
+  display: none;
+
+  @include at-media(desktop) {
+    display: inline;
+    position: relative;
+    bottom: 8px;
+    padding-left: 1rem;
+    @include u-font('sans', 'lg');
+  }
+}
+
+.wp-header__nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include at-media(desktop) {
+    flex-direction: row;
+  }
+}
+
+.wp-header__nav-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wp-header__nav-title-text {
+  @include u-font('sans', 'lg');
+  @include u-line-height('sans', 1);
+  @include u-text('bold');
+  @include u-text('no-underline');
+  @include u-text('base-darkest');
+}
+
+.wp-header__nav-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.usa-nav__primary > .usa-nav__primary-item > a {
+  @include u-text('base-darkest');
+}
+
+.usa-nav__primary > .usa-nav__primary-item > a.usa-current {
+  @include u-text('primary');
+}
+
+.wp-header__secondary {
+  bottom: 4.8rem;
+}
+
+.wp-breadcrumb {
+  @include u-bg('base-lightest');
+
+  .usa-breadcrumb {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+// Darken the hero image
+.usa-hero {
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to bottom, black, black);
+    opacity: 0.4;
+  }
+}
+
+#main-content {
+  padding: 4rem 0;
+}
+
+.wp-contact-topics {
+  max-width: unset;
+}
+
+.wp-social-icons {
+  display: flex;
+  flex-direction: row;
+}
+
+.wp-social-icon {
+  @include u-circle(5);
+  @include u-bg('primary');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 1em;
+
+  img {
+    filter: invert(1);
+  }
+}
+
+.wp-insights-heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include at-media(tablet) {
+    flex-direction: row;
+  }
+}
+
+.wp-insights-heading__header {
+  @include at-media(tablet) {
+    margin: 0;
+    align-self: flex-start;
+  }
+}
+
+blockquote {
+  @include u-bg('base-lightest');
+  @include u-border-left(1);
+  @include u-border-left('base-light');
+  @include u-margin-x(0);
+  @include u-margin-y(4);
+  @include u-padding(3);
+  @include u-font('serif', 'lg');
+  @include u-color('base-darker');
+  @include u-text('italic');
+}
+
+hr {
+  @include u-margin-y(6);
+  @include u-border(0);
+  @include u-border-top('1px');
+  @include u-border-color('base-light');
+}
+// issue #63, increase default line height to 1.3
+html{
+  line-height: 1.3;
+}
+.alignmiddle
+{
+  vertical-align:middle;
+}
+
+// classes for blog image with wrapped text
+.usa-prose{
+    img.wrap {
+        float: left;
+        max-width: 60%;
+        margin-right: 1em;
+        margin-bottom: 1em;
+    }
+}

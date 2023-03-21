@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import UserIndex from '../../components/UserIndex.vue';
+import Hero from '../../components/Hero.astro';
+const hero_image = '/images/Training_TravelAH_Hero.jpg';
+
+const pageTitle = "Home";
+---
+<BaseLayout pageTitle={pageTitle}>
+    <Hero hero_image={hero_image}>
+        Travel Training for Card / Account Holders and Approving officials
+    </Hero>
+    <UserIndex client:load />
+</BaseLayout>

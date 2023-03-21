@@ -1,0 +1,38 @@
+---
+import GSAHeader from '../components/GSAHeader.astro';
+import GSAFooter from '../components/GSAFooter.astro';
+import USAIdentifier from '../components/USAIdentifier.astro';
+import Banner from '../components/Banner.astro';
+
+import '../styles/uswds/styles.css';
+const { pageTitle } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline src="/js/uswds-init.min.js"></script>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div id="app" class="grid-row flex flex-column height-full">
+      <Banner />
+      <div  class="background flex-fill">
+        <GSAHeader />
+        <div id="main-container" class="wide-layout">
+          <main>
+            <slot />
+          </main>
+        </div>
+      </div>
+      <footer class="usa-footer flex-shrink-0">
+        <GSAFooter />
+      </footer>
+      <USAIdentifier /> 
+    </div>
+    <script is:inline src="/js/uswds.min.js"></script>
+  </body>
+</html>
