@@ -1,5 +1,5 @@
 from fastapi import Depends
-from training.repositories import AgencyRepository
+from training.repositories import AgencyRepository, UserRepository
 from training.database import SessionLocal
 from sqlalchemy.orm import Session
 
@@ -21,3 +21,7 @@ def db() -> None:
 
 def agency_repository(db: Session = Depends(db)) -> AgencyRepository:
     return AgencyRepository(db)
+
+
+def user_repository(db: Session = Depends(db)) -> UserRepository:
+    return UserRepository(db)
