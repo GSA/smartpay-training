@@ -1,13 +1,15 @@
 from typing import List
 import pytest
+import yaml
+import pathlib
 from training.database import engine
 from training import models
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository
+from training.repositories import AgencyRepository, UserRepository
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def db():
     '''
     This fixture initiates a transactional DB session and rolls back all
@@ -39,38 +41,69 @@ def db():
 
 
 @pytest.fixture
-def valid_agency_names() -> List[str]:
+def db_with_data(db: Session, testdata: dict):
     '''
-    Provides a list of valid agency names.
+    Provides a fully populated database.
     '''
-    return [
-        "Department of Mysteries",
-        "Department of Magical Law Enforcement",
-        "Department of Magical Accidents and Catastrophes",
-    ]
 
+    agency_ids = []
+    for name in testdata["agencies"]:
+        agency = models.Agency(name=name)
+        db.add(agency)
+        db.commit()
+        db.refresh(agency)
+        agency_ids.append(agency.id)
 
-@pytest.fixture
-def valid_agency_name(valid_agency_names: List[str]) -> str:
-    '''
-    Provides a valid agency name.
-    '''
-    return valid_agency_names[0]
+    for index, user in enumerate(testdata["users"]):
+        db.add(models.User(
+            email=user["email"],
+            name=user["name"],
+            agency_id=agency_ids[index % 2]
+        ))
+        db.commit()
 
-
-@pytest.fixture
-def db_with_data(db: Session, valid_agency_names: List[str]):
-    '''
-    Provides a populated database.
-    '''
-    for name in valid_agency_names:
-        db.add(models.Agency(name=name))
-    db.commit()
     yield db
 
 
 @pytest.fixture
-def agency_repo(db: Session) -> AgencyRepository:
+def testdata() -> dict:
+    '''
+    Provides a dictionary of test values from testdata.yaml. These values are
+    loaded into the test database in the db_with_data fixture.
+    '''
+    datafile_path = pathlib.PurePath(pathlib.Path(__file__).parent.resolve(), "testdata.yaml")
+    with open(datafile_path) as f:
+        return yaml.safe_load(f)
+
+
+@pytest.fixture
+def valid_user_ids(db_with_data: Session) -> List[int]:
+    '''
+    Provides a list of user IDs that have been loaded into the test database.
+    '''
+    users = db_with_data.query(models.User).all()
+    user_ids = list(map(lambda user: user.id, users))
+    yield user_ids
+
+
+@pytest.fixture
+def valid_agency_name(testdata: dict) -> str:
+    '''
+    Provides a valid agency name.
+    '''
+    yield testdata["agencies"][0]
+
+
+@pytest.fixture
+def valid_user(testdata: dict) -> dict:
+    '''
+    Provides a dict containing valid user values.
+    '''
+    yield testdata["users"][0]
+
+
+@pytest.fixture
+def agency_repo_empty(db: Session) -> AgencyRepository:
     '''
     Provides an AgencyRepository injected with an empty database.
     '''
@@ -83,3 +116,19 @@ def agency_repo_with_data(db_with_data: Session) -> AgencyRepository:
     Provides an AgencyRepository injected with a populated database.
     '''
     yield AgencyRepository(session=db_with_data)
+
+
+@pytest.fixture
+def user_repo_empty(db: Session) -> UserRepository:
+    '''
+    Provides an UserRepository injected with an empty database.
+    '''
+    yield UserRepository(session=db)
+
+
+@pytest.fixture
+def user_repo_with_data(db_with_data: Session) -> UserRepository:
+    '''
+    Provides an UserRepository injected with a populated database.
+    '''
+    yield UserRepository(session=db_with_data)
