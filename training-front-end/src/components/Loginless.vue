@@ -54,9 +54,9 @@
     error.value = undefined
     
     const apiURL = new URL(`${base_url}/api/v1/get-link`);
-
+    let res;
     try {
-      const res = await fetch(apiURL,  {
+       res = await fetch(apiURL,  {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({...user, page_id:props.page_id})
@@ -112,7 +112,12 @@
       <h2>Getting access to quiz</h2>
 
       <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
-      <form v-if="!emailValidated" class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
+      <form
+        v-if="!emailValidated"
+        class="usa-form usa-form--large margin-bottom-3"
+        @submit.prevent="start_email_flow"
+        data-test="email-submit-form"
+        >
         <fieldset class="usa-fieldset">
           <ValidatedInput 
             client:load
@@ -125,7 +130,12 @@
           <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
         </fieldset>
       </form>
-      <form v-else class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
+      <form
+        v-else
+        class="usa-form usa-form--large margin-bottom-3"
+        @submit.prevent="start_email_flow"
+        data-test="name-submit-form"
+        >
         <fieldset class="usa-fieldset">
           <ValidatedInput 
             client:load
