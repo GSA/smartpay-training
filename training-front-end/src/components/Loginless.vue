@@ -26,7 +26,7 @@
 
   const user_input = reactive({
     name: undefined,
-    email: '',
+    email: undefined,
     agency: undefined
   })
 
