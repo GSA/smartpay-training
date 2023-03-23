@@ -88,7 +88,7 @@ describe('Loginless', () => {
   })
 
   it('It uses the token in the url to confirm the user and show child component', async () => {
-    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => 'hello')
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
 
     const wrapper = await mount(Loginless, { 
       props: {"page_id": "training"}
