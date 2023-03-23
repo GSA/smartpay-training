@@ -15,63 +15,78 @@
   import agencyList from '../data/agencies.js';
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  
+
+  const props = defineProps(['page_id'])
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
   const user = reactive({
-    first_name: '',
-    last_name: '',
+    name: undefined,
     email: '',
-    agency: ''
+    agency: undefined
   })
 
-  const validations = {
-    first_name: {required},
-    last_name: {required},
+  const validations_just_email = {
+    email: {email, required},
+  }
+  const v_email$ = useVuelidate(validations_just_email, user)
+
+  const validations_all_info = {
+    name: {required},
     email: {email, required},
     agency: {required}
   }
-  const v$ = useVuelidate(validations, user)
+  const v_all_info$ = useVuelidate(validations_all_info, user)
 
   const token = ref('')
   const isLoading = ref(false)
-  const error = ref('')
+  const error = ref()
   const isFormSubmitted = ref(false)
+  const emailValidated = ref(false)
 
   async function start_email_flow() {
-    const isFormCorrect = await v$.value.$validate();
+    const validation = emailValidated ? v_email$ : v_all_info$
+    const isFormValid = await validation.value.$validate() 
+    emit('startLoading')
+    if (!isFormValid) {
+     return
+    }
+    isLoading.value = true
+    error.value = undefined
+    
+    const apiURL = new URL(`${base_url}/api/v1/get-link`);
 
-    if (!isFormCorrect) {
+    try {
+      const res = await fetch(apiURL,  {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({...user, page_id:props.page_id})
+      })
+    } catch (err) {
+      console.log("err", err)
+      isLoading.value = false
+      const e = new Error("Sorry, we had an error connecting to the server.")
+      e.name = "Server Error"
+      emit('error', e)
+      emit('endLoading')
       return
     }
-    emit('startLoading')
-    isLoading.value = true
-    error.value = ''
-    
-    const url = new URL(`${base_url}/api/v1/get-link`);
-
-    await fetch(url,  {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(user)
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json()
+      if (! res.ok) { 
+        // this indicates a server error 
+        // — what should we tell the user?
+        throw new Error(res)
       }
-      return Promise.reject(res)
-    })
-    .then(json => {
-      token.value =  json.token
+
+      const json = await res.json()
+      const status = res.status
+      
+      if (status == 200) {
+          emailValidated.value = true
+      } else {
+          token.value =  json.token
+          isFormSubmitted.value = true
+      }
       isLoading.value = false
-      isFormSubmitted.value = true
       emit('endLoading')
-    })
-    .catch((err) => {
-      isLoading.value = false
-      error.value = err
-      emit('endLoading')
-    })
   }
 </script>
 
@@ -94,57 +109,56 @@
 
   <div v-else class="grid-row" data-test="pre-submit">
     <div class="tablet:grid-col-8">
-      <Alert v-if="error" heading="Error" status="error" data-test="error"> <!-- This happens on server error -->
-        There was an error with input.
-      </Alert> 
-
       <h2>Getting access to quiz</h2>
 
       <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
-      <form class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
+      <form v-if="!emailValidated" class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
         <fieldset class="usa-fieldset">
-
-          <ValidatedInput 
-            client:load
-            v-model="user.first_name" 
-            :isInvalid="v$.first_name.$error" 
-            label="First name (*Required)"
-            name="first_name"
-            error_message="Please enter your first name"
-          />
-          <ValidatedInput 
-            client:load
-            v-model="user.last_name" 
-            :isInvalid="v$.last_name.$error" 
-            label="Last name (*Required)"
-            name="last_name"
-            error_message="Please enter your last name"
-          />
           <ValidatedInput 
             client:load
             v-model="user.email" 
-            :isInvalid="v$.email.$error" 
+            :isInvalid="v_email$.email.$error" 
             label="Email Address (*Required)"
             name="email"
             error_message="Please enter a valid email address"
+          />  
+          <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
+        </fieldset>
+      </form>
+      <form v-else class="usa-form usa-form--large margin-bottom-3" @submit.prevent="start_email_flow">
+        <fieldset class="usa-fieldset">
+          <ValidatedInput 
+            client:load
+            v-model="user.email" 
+            :isInvalid="v_all_info$.email.$error" 
+            label="Email Address (*Required)"
+            name="email"
+            error_message="Please enter a valid email address"
+            :readonly=true
+          />  
+          <ValidatedInput 
+            client:load
+            v-model="user.name" 
+            :isInvalid="v_all_info$.name.$error" 
+            label="Name name (*Required)"
+            name="name"
+            error_message="Please enter your full name"
           />
           <ValidatedSelect 
             client:load
             v-model="user.agency" 
-            :isInvalid="v$.agency.$error" 
+            :isInvalid="v_all_info$.agency.$error" 
             :options="agencyList"
             label="Agency / organization (*Required)"
             name="agency"
             error_message="Please enter your agency"
           />
-
           <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
-
-          <p>Didn’t receive the access email?</p>
         </fieldset>
       </form>
+
+      <p>Didn’t receive the access email?</p>
+
     </div>
   </div>
- 
-
 </template>

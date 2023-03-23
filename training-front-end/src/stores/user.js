@@ -14,9 +14,11 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   let res
   try {
     res = await fetch(url)
-  } catch(e) {
+  } catch(err) {
     // THis would indicate an API problem
     // What to tell the user here?
+    const e = new Error("Sorry, we had an error connecting to the server.")
+    e.name = "Server Error"
     throw e
   }
   if (!res.ok) {

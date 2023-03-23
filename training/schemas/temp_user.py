@@ -7,6 +7,14 @@ class TempUser(BaseModel):
     a quiz, but who's email has not been validated yet.
     '''
     email: EmailStr
-    first_name: str
-    last_name: str
+    name: str
     agency: str  # maybe an id?
+    page_id: str
+
+
+class IncompleteTempUser(BaseModel):
+    '''
+    This class represents a user that may or not be known yet.
+    '''
+    email: EmailStr
+    page_id: str
