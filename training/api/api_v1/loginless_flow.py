@@ -39,29 +39,18 @@ async def send_link(user: Union[TempUser, IncompleteTempUser], response: Respons
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Server Error"
         )
-
-    # If the request is only an email, look it up in the database to see
-    # if we know this user already. If not return an indication to let
-    # the front-end know we need more data.
-    # If we do know the user or the request has name and agency,
-    # put it in the cache and send the link
-
-    # the token is the temp key in the Redis Cache
-    # this it what will be needed to creat an email link such as
-    # http://127.0.0.1:5173?t=99e554ad-7e28-4429-914d-e725dbade3c7
-    # which would hit the endpoint below
-
+    # TODO: make a lookup that translates page_id to a url
+    # we may have the users going to pages other than quizes
     url = f"{settings.BASE_URL}/quiz/{user.page_id}/?t={token}"
     try:
         res = await send_email(to_email=user.email, name=user.name, link=url)
-
     except Exception as e:
         logging.error("Error sending mail", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Server Error"
         )
-
+    # TODO: don't send the token once we can send email
     return {"token": url, "response": res}
 
 
