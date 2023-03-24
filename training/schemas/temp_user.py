@@ -25,3 +25,4 @@ class WebDestination(BaseModel):
     after the loginless flow completes
     '''
     page_id: str
+    title: str

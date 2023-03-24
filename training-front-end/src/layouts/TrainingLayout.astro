@@ -1,0 +1,10 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const {frontmatter} = Astro.props;
+---
+<BaseLayout>
+  <div  class="grid-container" data-test="post-submit">
+    <h3>{frontmatter.title}</h3>
+    <slot />
+  </div>
+</BaseLayout>

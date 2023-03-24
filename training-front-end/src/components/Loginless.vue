@@ -18,7 +18,7 @@
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
-  const props = defineProps(['page_id'])
+  const props = defineProps(['page_id', 'title'])
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
   const user = useStore(profile)
@@ -89,7 +89,7 @@
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
           user: user_input, 
-          dest: {page_id: props.page_id}
+          dest: {page_id: props.page_id, title: props.title}
         })
       })
     } catch (err) {
@@ -144,7 +144,7 @@
       <div class="tablet:grid-col-8">
         <h2>Getting access to quiz</h2>
 
-        <p>Fill out this form to get access to the Travel training for card / account holders and approving officials. You'll receive an email with a link to access the training.</p>
+        <p>Fill out this form to get access to the {{ title }}. You'll receive an email with a link to access the training.</p>
         <form
           v-if="!emailValidated"
           class="usa-form usa-form--large margin-bottom-3"

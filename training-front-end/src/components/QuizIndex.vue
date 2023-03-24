@@ -22,7 +22,7 @@
       <Alert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
         {{ error.message }}
       </Alert>
-      <Loginless @startLoading="startLoading"  @error="setError" :page_id="page_id">
+      <Loginless @startLoading="startLoading"  @error="setError" :page_id="page_id" :title="title">
         <Quiz :title="title" />
       </Loginless>
     </div>
