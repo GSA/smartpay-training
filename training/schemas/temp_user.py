@@ -8,8 +8,7 @@ class TempUser(BaseModel):
     '''
     email: EmailStr
     name: str
-    agency: str  # maybe an id?
-    page_id: str
+    agency_id: int  # maybe an id?
 
 
 class IncompleteTempUser(BaseModel):
@@ -17,4 +16,12 @@ class IncompleteTempUser(BaseModel):
     This class represents a user that may or not be known yet.
     '''
     email: EmailStr
+
+
+class WebDestination(BaseModel):
+    '''
+    This class allow the front-end to communicate
+    the destination the user should be taken
+    after the loginless flow completes
+    '''
     page_id: str

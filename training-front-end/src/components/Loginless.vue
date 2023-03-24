@@ -27,7 +27,7 @@
   const user_input = reactive({
     name: undefined,
     email: undefined,
-    agency: undefined
+    agency_id: undefined
   })
 
   const validations_just_email = {
@@ -38,7 +38,7 @@
   const validations_all_info = {
     name: {required},
     email: {email, required},
-    agency: {required}
+    agency_id: {required}
   }
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
@@ -87,7 +87,10 @@
        res = await fetch(apiURL,  {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify({...user_input, page_id:props.page_id})
+        body: JSON.stringify({
+          user: user_input, 
+          dest: {page_id: props.page_id}
+        })
       })
     } catch (err) {
       console.log("err", err)
@@ -184,15 +187,17 @@
               name="name"
               error_message="Please enter your full name"
             />
+            <Suspense>
             <ValidatedSelect 
               client:load
-              v-model="user_input.agency" 
-              :isInvalid="v_all_info$.agency.$error" 
+              v-model="user_input.agency_id" 
+              :isInvalid="v_all_info$.agency_id.$error" 
               :options="agencyList"
               label="Agency / organization (*Required)"
               name="agency"
               error_message="Please enter your agency"
             />
+            </Suspense>
             <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
           </fieldset>
         </form>

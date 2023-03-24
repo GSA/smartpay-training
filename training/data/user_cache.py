@@ -4,7 +4,7 @@ from typing import Optional
 from redis import Redis
 
 from training.config import settings
-from ..schemas import TempUser
+from training.schemas import TempUser, UserCreate
 
 
 redis = Redis(
@@ -24,11 +24,11 @@ class UserCache:
 
     CACHE_TTL = settings.EMAIL_TOKEN_TTL
 
-    def get(self, token: str) -> Optional[TempUser]:
+    def get(self, token: str) -> Optional[UserCreate]:
         user = redis.get(token)
         if user:
             user = json.loads(user)
-            return TempUser(**user)
+            return UserCreate(**user)
 
     def set(self, user: TempUser) -> str:
         token = str(uuid4())

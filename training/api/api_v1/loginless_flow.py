@@ -3,8 +3,11 @@ import jwt
 from typing import Union
 
 from fastapi import APIRouter, status, Response, HTTPException, Depends
-from training.schemas import TempUser, IncompleteTempUser
+from training.schemas import TempUser, IncompleteTempUser, WebDestination
 from training.data import UserCache
+from training.repositories import UserRepository
+from training.api.deps import user_repository
+
 from training.config import settings
 from training.api.email import send_email
 from training.api.auth import JWTUser
@@ -14,23 +17,24 @@ u = UserCache()
 
 
 @router.post("/get-link", status_code=status.HTTP_201_CREATED)
-async def send_link(user: Union[TempUser, IncompleteTempUser], response: Response):
+async def send_link(
+    response: Response,
+    user: Union[TempUser, IncompleteTempUser],
+    dest: WebDestination,
+    repo: UserRepository = Depends(user_repository)
+):
     if isinstance(user, IncompleteTempUser):
-        user_from_database = None  # replace with function to get user from email address
-        if user_from_database is None:
+        user_from_db = repo.find_by_email(user.email)
+
+        if user_from_db is None:
             response.status_code = status.HTTP_200_OK
             return {'new': True}
         else:
-            # here we would have these values from the DB
-            # so we could make the appropriate type.
             user = TempUser.parse_obj({
-                "name": "Mark Meyer",
-                "email": 'mark.meyer@gsa.gov',
-                "agency": "GSA",
-                "page_id": user.page_id
+                "name": user_from_db.name,
+                "email": user_from_db.email,
+                "agency_id": user_from_db.agency_id,
             })
-        # if we did get a user from the DB or we got a full TempUser
-        # from the request, go ahead and send the link:
     try:
         token = u.set(user)
     except Exception as e:
@@ -41,7 +45,7 @@ async def send_link(user: Union[TempUser, IncompleteTempUser], response: Respons
         )
     # TODO: make a lookup that translates page_id to a url
     # we may have the users going to pages other than quizes
-    url = f"{settings.BASE_URL}/quiz/{user.page_id}/?t={token}"
+    url = f"{settings.BASE_URL}/quiz/{dest.page_id}/?t={token}"
     try:
         res = await send_email(to_email=user.email, name=user.name, link=url)
     except Exception as e:
@@ -63,7 +67,7 @@ def user_info(user=Depends(JWTUser())):
 
 
 @router.get("/get-user/{token}")
-async def get_user(token: str):
+async def get_user(token: str, repo: UserRepository = Depends(user_repository)):
     try:
         user = u.get(token)
     except Exception as e:
@@ -75,6 +79,12 @@ async def get_user(token: str):
 
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
+
+    db_user = repo.find_by_email(user.email)
+    if db_user:
+        encoded_jwt = jwt.encode(user.dict(), settings.JWT_SECRET, algorithm="HS256")
+        return {'user': user, 'jwt': encoded_jwt}
+    db_user = repo.create(user)
     encoded_jwt = jwt.encode(user.dict(), settings.JWT_SECRET, algorithm="HS256")
 
     return {'user': user, 'jwt': encoded_jwt}

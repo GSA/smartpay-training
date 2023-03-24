@@ -2,6 +2,7 @@
   import { profile } from '../stores/user'
   import { useStore } from '@nanostores/vue'
 
+  const props = defineProps(['title'])
   const user = useStore(profile)
  
 </script>
