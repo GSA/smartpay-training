@@ -21,7 +21,7 @@ def create_user(user: UserCreate, repo: UserRepository = Depends(user_repository
 
 
 @router.get("/users", response_model=List[User])
-def get_users(agency_id: int = None, repo: UserRepository = Depends(user_repository)):
+def get_users(agency_id: int | None = None, repo: UserRepository = Depends(user_repository)):
     if agency_id:
         return repo.find_by_agency(agency_id)
     else:
