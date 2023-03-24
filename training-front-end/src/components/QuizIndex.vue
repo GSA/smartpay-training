@@ -18,13 +18,11 @@
 
 <template>
   <div  class="grid-container" data-test="post-submit">
-    <div  class="grid-container">
-      <Alert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
-        {{ error.message }}
-      </Alert>
-      <Loginless @startLoading="startLoading"  @error="setError" :page_id="page_id" :title="title">
-        <Quiz :title="title" />
-      </Loginless>
-    </div>
+    <Alert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
+      {{ error.message }}
+    </Alert>
+    <Loginless @startLoading="startLoading"  @error="setError" :page_id="page_id" :title="title">
+      <Quiz :title="title" />
+    </Loginless>
   </div>
 </template>
