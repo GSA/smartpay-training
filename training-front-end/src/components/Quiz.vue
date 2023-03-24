@@ -10,6 +10,6 @@
     <h2> A Quiz goes here</h2>
     <h3> {{ title }}</h3>
     <p class="usa-prose">
-    Welome {{ user.name }} from {{ user.agency }}
+    Welome {{ user.name }}
 </p>
 </template>

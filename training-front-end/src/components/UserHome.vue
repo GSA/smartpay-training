@@ -20,8 +20,7 @@
 </script>
 <template>
     <div>
-        <h2>Welcome {{ user.first_name }}</h2>
-        {{ user.first_name }} {{ user.last_name }} {{ user.agency }}
+        <h2>Welcome {{ user.name }}</h2>
         
         <p>for testing: <br />{{ user.jwt }} </p>
     </div>
