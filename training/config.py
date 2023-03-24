@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     # url for front end
     BASE_URL: str
     # Number of seconds user has to click email link
-    EMAIL_TOKEN_TTL: int = 60 * 60 * 2
+    EMAIL_TOKEN_TTL: int = 60 * 60 * 24
 
     API_V1_STR: str = "/api/v1"
 
