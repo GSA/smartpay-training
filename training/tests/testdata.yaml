@@ -1,0 +1,12 @@
+agencies:
+  - Department of Mysteries
+  - Department of Magical Law Enforcement
+  - Department of Magical Accidents and Catastrophes
+
+users:
+  - email: test1@example.com
+    name: Test One
+  - email: test2@example.com
+    name: Test Two
+  - email: test3@example.com
+    name: Test Three
