@@ -1,4 +1,8 @@
 ---
+import us_flag_small from "../assets/images/us_flag_small.png" 
+import icon_dot_gov from "../assets/images/icon-dot-gov.svg" 
+import icon_https from "../assets/images/icon-https.svg" 
+
 ---
     <section
     class="usa-banner"
@@ -11,7 +15,7 @@
             <img
             aria-hidden="true"
             class="usa-banner__header-flag"
-            src="/images/us_flag_small.png"
+            src={us_flag_small}
             alt=""
             />
         </div>
@@ -39,7 +43,7 @@
         <div class="usa-banner__guidance tablet:grid-col-6">
             <img
             class="usa-banner__icon usa-media-block__img"
-            src="/images/icon-dot-gov.svg"
+            src={icon_dot_gov}
             role="img"
             alt=""
             aria-hidden="true"
@@ -55,7 +59,7 @@
         <div class="usa-banner__guidance tablet:grid-col-6">
             <img
             class="usa-banner__icon usa-media-block__img"
-            src="/images/icon-https.svg"
+            src={ icon_https }
             role="img"
             alt=""
             aria-hidden="true"
