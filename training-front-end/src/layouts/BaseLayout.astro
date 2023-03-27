@@ -4,13 +4,15 @@ import GSAFooter from '../components/GSAFooter.astro';
 import USAIdentifier from '../components/USAIdentifier.astro';
 import Banner from '../components/Banner.astro';
 
-import '../styles/uswds/styles.css';
+//import '../styles/uswds/styles.css';
 const { pageTitle } = Astro.props;
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <script is:inline src={`${import.meta.env.BASE_URL}js/uswds-init.min.js`}></script>
+    <link rel="stylesheet" href="/styles/styles.css" />
+
     <link rel="apple-touch-icon" sizes="180x180" href='/images/apple-touch-icon.png'>
     <link rel="icon" type="image/png" sizes="32x32" href='/images/favicon-32x32.png'>
     <link rel="icon" type="image/png" sizes="16x16" href='/images/favicon-16x16.png'>
