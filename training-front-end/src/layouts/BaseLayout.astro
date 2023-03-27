@@ -11,8 +11,10 @@ const { pageTitle } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <script is:inline src="/js/uswds-init.min.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href='/images/apple-touch-icon.png'>
+    <link rel="icon" type="image/png" sizes="32x32" href='/images/favicon-32x32.png'>
+    <link rel="icon" type="image/png" sizes="16x16" href='/images/favicon-16x16.png'>
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>

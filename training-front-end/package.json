@@ -16,7 +16,7 @@
     "@markmeyer/vuelidate-validators": "^4.0.1",
     "@nanostores/persistent": "^0.7.0",
     "@nanostores/vue": "^0.7.0",
-    "astro": "^2.1.3",
+    "astro": "^2.1.7",
     "nanostores": "^0.7.4",
     "vue": "^3.2.47"
   },
