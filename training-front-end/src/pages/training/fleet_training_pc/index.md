@@ -6,4 +6,4 @@ quiz_url: /quiz/fleet_training_pc/
 
 Training Material Goes Here
 
-[Take the Fleet Training Quiz](/quiz/fleet_training_pc/)
+[Take the Fleet Training Quiz](../../quiz/fleet_training_pc/)
