@@ -13,7 +13,6 @@ from training.api.email import send_email
 from training.api.auth import JWTUser
 
 router = APIRouter()
-u = UserCache()
 
 
 @router.post("/get-link", status_code=status.HTTP_201_CREATED)
@@ -21,7 +20,8 @@ async def send_link(
     response: Response,
     user: Union[TempUser, IncompleteTempUser],
     dest: WebDestination,
-    repo: UserRepository = Depends(user_repository)
+    repo: UserRepository = Depends(user_repository),
+    cache: UserCache = Depends(UserCache)
 ):
     if isinstance(user, IncompleteTempUser):
         user_from_db = repo.find_by_email(user.email)
@@ -36,7 +36,7 @@ async def send_link(
                 "agency_id": user_from_db.agency_id,
             })
     try:
-        token = u.set(user)
+        token = cache.set(user)
     except Exception as e:
         logging.error("Error saving user to Redis", e)
         raise HTTPException(
@@ -67,9 +67,13 @@ def user_info(user=Depends(JWTUser())):
 
 
 @router.get("/get-user/{token}")
-async def get_user(token: str, repo: UserRepository = Depends(user_repository)):
+async def get_user(
+    token: str,
+    repo: UserRepository = Depends(user_repository),
+    cache: UserCache = Depends(UserCache)
+):
     try:
-        user = u.get(token)
+        user = cache.get(token)
     except Exception as e:
         logging.error("Error reading token from Redis", e)
         raise HTTPException(
