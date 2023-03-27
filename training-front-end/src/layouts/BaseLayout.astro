@@ -4,15 +4,19 @@ import GSAFooter from '../components/GSAFooter.astro';
 import USAIdentifier from '../components/USAIdentifier.astro';
 import Banner from '../components/Banner.astro';
 
-import '../styles/uswds/styles.css';
+//import '../styles/uswds/styles.css';
 const { pageTitle } = Astro.props;
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <script is:inline src="/js/uswds-init.min.js"></script>
+    <script is:inline src={`${import.meta.env.BASE_URL}js/uswds-init.min.js`}></script>
+    <link rel="stylesheet" href={`${import.meta.env.BASE_URL}styles/styles.css`} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href='/images/apple-touch-icon.png'>
+    <link rel="icon" type="image/png" sizes="32x32" href='/images/favicon-32x32.png'>
+    <link rel="icon" type="image/png" sizes="16x16" href='/images/favicon-16x16.png'>
+
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
@@ -33,6 +37,6 @@ const { pageTitle } = Astro.props;
       </footer>
       <USAIdentifier /> 
     </div>
-    <script is:inline src="/js/uswds.min.js"></script>
+    <script is:inline src={`${import.meta.env.BASE_URL}js/uswds.min.js`}></script>
   </body>
 </html>

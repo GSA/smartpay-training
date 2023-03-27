@@ -14,16 +14,16 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   let res
   try {
     res = await fetch(url)
-  } catch(e) {
+  } catch(err) {
     // THis would indicate an API problem
     // What to tell the user here?
+    const e = new Error("Sorry, we had an error connecting to the server.")
+    e.name = "Server Error"
     throw e
   }
   if (!res.ok) {
     clearUser()
-    const e = new Error('This link is either expired or is invalid.\
-     Links to training are only valid for 24 hours. \
-     Please request a new link with the form below.')
+    const e = new Error('This link is either expired or is invalid. Links to training are only valid for 24 hours. Please request a new link with the form below.')
     e.name = "Invalid Link"
     throw e
   }

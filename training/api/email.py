@@ -8,11 +8,21 @@ from training.config import settings
 # We also use jinja template.
 # See: https://sabuhish.github.io/fastapi-mail/example/#using-jinja2-html-templates
 EMAIL_TEMPLATE = Template('''
-Hello $name,
+<p>Hello $name,</p>
 
-Please follow this link to access SmartPay Training:
+<p>
+Thank you for registering for $training_title. Please confirm the email address
+you submitted is correct by clicking on the link below.
+</p>
 
-$link
+<p><a href="$link">$link</a></p>
+
+<p>This link will expire in 24 hours.</p>
+<p>
+If you did not register for this class, you may be receiving this message in error.
+Please disregard this email. If you have any questions or need further assistance,
+email us at gsa_smartpay@gsa.gov.
+</p>
 ''')
 
 conf = ConnectionConfig(
@@ -29,8 +39,8 @@ conf = ConnectionConfig(
 )
 
 
-async def send_email(to_email: EmailStr, name: str, link: str) -> JSONResponse:
-    body = EMAIL_TEMPLATE.substitute({"name": name, "link": link})
+async def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> JSONResponse:
+    body = EMAIL_TEMPLATE.substitute({"name": name, "link": link, "training_title": training_title})
 
     message = MessageSchema(
         subject=settings.EMAIL_SUBJECT,

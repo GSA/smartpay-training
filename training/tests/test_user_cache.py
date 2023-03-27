@@ -7,7 +7,7 @@ from training.schemas import TempUser
 
 @pytest.fixture
 def temp_user():
-    return {"email": "test@example.com", "first_name": "Mark", "last_name": "Test", "agency": "GSA"}
+    return {"email": "test@example.com", "name": "Meg March", "agency_id": 3}
 
 
 @pytest.fixture

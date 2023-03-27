@@ -1,8 +1,13 @@
+---
+import GSALogo from '../assets/images/gsa-smartpay-training-logo.svg'
+import closeIcon from '../assets/images/usa-icons/close.svg'
+import search__white from '../assets/images/usa-icons/search--white.svg'
+---
 <header class="usa-header usa-header--extended">
     <div class="usa-navbar">
       <div class="usa-logo" id="header-logo">
           <a href="/">
-              <img class="usa-logo-img" src="/images/gsa-smartpay-training-logo.svg" alt="GSA SmartPay Logo" title="U.S. General Services Administration">
+              <img class="usa-logo-img" src={GSALogo} alt="GSA SmartPay Logo" title="U.S. General Services Administration">
           </a>
       </div>
       <button type="button" class="usa-menu-btn">Menu</button>
@@ -10,7 +15,7 @@
     <nav aria-label="Primary navigation" class="usa-nav">
       <div class="usa-nav__inner">
         <button type="button" class="usa-nav__close">
-          <img src="/images/usa-icons/close.svg" role="img" alt="Close" />
+          <img src={ closeIcon } role="img" alt="Close" />
         </button>
         <ul class="usa-nav__primary usa-accordion">
           <li class="usa-nav__primary-item">
@@ -86,7 +91,7 @@
               />
               <button class="usa-button" type="submit">
                 <img
-                  src="/images/usa-icons-bg/search--white.svg"
+                  src={ search__white }
                   class="usa-search__submit-icon"
                   alt="Search"
                 />

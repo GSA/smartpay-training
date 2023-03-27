@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import QuizIndex from '../../components/QuizIndex.vue';
+import Hero from '../../components/Hero.astro';
+import hero_image from '../../assets/images/Training_TravelAH_Hero.jpg';
+
+export function getStaticPaths() {
+  const quizes = [
+    {
+      training_id: 'travel_training',
+      title: "Travel Training for Card / Account Holders and Approving Officials"
+    },
+    {
+      training_id: 'purchase_training',
+      title: "Purchase Training for Card / Account Holders and Approving Officials"
+    },
+    {
+      training_id: "travel_training_pc",
+      title: "Travel Training For Program Coordinators"
+    },
+    {
+      training_id: "purchase_training_pc",
+      title: "Purchase Training For Program Coordinators"
+    },
+    {
+      training_id: "fleet_training_pc",
+      title: "Fleet Training For Program Coordinators"
+    }
+  ]
+  return  quizes.map(({training_id, title}) => {
+   return {
+    params: {training_id},
+    props: {title}
+  }});
+}
+
+const { training_id } = Astro.params;
+const { title } = Astro.props;
+---
+<BaseLayout>
+  <Hero hero_image={hero_image}>
+    {title}
+</Hero>
+<QuizIndex page_id={training_id} title={title} client:load />
+</BaseLayout>

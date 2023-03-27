@@ -1,10 +1,6 @@
 <script setup>
-
+const options = await fetch('http://127.0.0.1:8000/api/v1/agencies').then((r) => r.json())
 const props = defineProps({
-    options: {
-            type: Array,
-            default: ['']
-    },
     'modelValue': String,
     'isInvalid': Boolean,
     'name': String,
@@ -27,7 +23,7 @@ const props = defineProps({
       @input="$emit('update:modelValue', $event.target.value)"
       >
       <option disabled value="" selected>- Select -</option>
-      <option v-for="option in options" :value="option" :key="option">{{option}}</option>
+      <option v-for="option in options" :value="option.id" :key="option.id">{{option.name}}</option>
     </select>
   </div>
 </template>

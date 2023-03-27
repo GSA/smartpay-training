@@ -7,4 +7,5 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: process.env.BASEURL,
   plugins: [vue()],
+  envPrefix: "PUBLIC_"
 })

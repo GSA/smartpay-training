@@ -5,7 +5,8 @@
     'isInvalid': Boolean,
     'name': String,
     'label': String,
-    'error_message': String
+    'error_message': String,
+    'readonly': Boolean
   })
   defineEmits(['update:modelValue'])
   var error_id = computed(() => props.name + '-input-error-message')
@@ -25,6 +26,7 @@
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
         :aria-describedby="error_id"
+        :readonly="readonly"
     />
   </div>    
 </template>
