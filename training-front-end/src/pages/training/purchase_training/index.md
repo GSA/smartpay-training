@@ -6,4 +6,4 @@ quiz_url: /quiz/purchase_training/
 
 Training Material Goes Here
 
-[Take the Purchase Training Quiz](/quiz/purchase_training/)
+[Take the Purchase Training Quiz](../quiz/purchase_training/)
