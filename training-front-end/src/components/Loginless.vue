@@ -71,7 +71,7 @@
   })
 
   async function start_email_flow() {
-    const validation = emailValidated ? v_email$ : v_all_info$
+    const validation = emailValidated.value ? v_all_info$ : v_email$
     const isFormValid = await validation.value.$validate() 
     if (!isFormValid) {
      return
