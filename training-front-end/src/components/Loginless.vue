@@ -71,7 +71,7 @@
   })
 
   async function start_email_flow() {
-    const validation = emailValidated ? v_email$ : v_all_info$
+    const validation = emailValidated.value ? v_all_info$ : v_email$
     const isFormValid = await validation.value.$validate() 
     if (!isFormValid) {
      return
@@ -183,7 +183,7 @@
               client:load
               v-model="user_input.name" 
               :isInvalid="v_all_info$.name.$error" 
-              label="Name name (*Required)"
+              label="Name (*Required)"
               name="name"
               error_message="Please enter your full name"
             />
