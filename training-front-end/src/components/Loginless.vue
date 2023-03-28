@@ -183,7 +183,7 @@
               client:load
               v-model="user_input.name" 
               :isInvalid="v_all_info$.name.$error" 
-              label="Name name (*Required)"
+              label="Name (*Required)"
               name="name"
               error_message="Please enter your full name"
             />
