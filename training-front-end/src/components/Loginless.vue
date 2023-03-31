@@ -14,7 +14,6 @@
   import ValidatedSelect from './ValidatedSelect.vue';
   import { useVuelidate } from '@markmeyer/vuelidate-core';
   import { required, email } from '@markmeyer/vuelidate-validators';
-  import agencyList from '../data/agencies.js';
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
