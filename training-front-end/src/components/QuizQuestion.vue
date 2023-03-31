@@ -12,7 +12,7 @@
   <fieldset class="usa-fieldset margin-bottom-2">
     <div class="usa-radio" v-for="(answer, index) in question.answers">
       <input
-        class="usa-radio__input"
+        class="usa-radio__input usa-radio__input--tile"
         :id="index"
         type="radio"
         name="historical-figures"

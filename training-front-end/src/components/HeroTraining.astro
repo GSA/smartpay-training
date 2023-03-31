@@ -1,0 +1,21 @@
+---
+    const { hero_image } = Astro.props;
+---
+
+<section class="bg-primary padding-y-3">
+    <div class="grid-container">
+      <div class="grid-row">
+        <p v-if="$slots.subheader" class="usa-hero__heading--alt margin-bottom-0 tablet:grid-col-5">
+            <slot name="subheader"></slot>
+        </p>
+    </div>
+      <div class="grid-row">
+          <h1 class="usa-hero__heading font-heading-2xl tablet:grid-col-6">
+          <span class="usa-hero__heading--alt">
+              <slot></slot>
+          </span>
+          </h1>
+      </div>
+    </div>
+</section>
+
