@@ -18,7 +18,6 @@
 	}
 
   function startQuiz() {
-    console.log("Starting")
     isStarted.value = true
   }
 </script>
