@@ -1,28 +1,28 @@
 <script setup>
-  import { ref } from "vue"
   const props = defineProps(['question', 'selection'])
-  const emits = defineEmits(['select_answer'])
-  const selected = ref()
+  const emit = defineEmits(['select_answer'])
+
+  function select_answer(event) {
+    const answer = {'question_id': props.question.id, 'response_ids': [parseInt([event.target.value])] }
+    emit('select_answer', answer)
+  }
 </script>
 <template>
-  
-  
-  <h3 class="">{{ question.question }}</h3>
+  <h3 class="">{{ question.text }}</h3>
 
   <fieldset class="usa-fieldset margin-bottom-2">
-    <div class="usa-radio" v-for="(answer, index) in question.answers">
+    <div class="usa-radio" v-for="({id, text}) in question.choices">
       <input
         class="usa-radio__input usa-radio__input--tile"
-        :id="index"
+        :id="id"
         type="radio"
         name="historical-figures"
-        :checked="selection === index"
-        @change="$emit('select_answer', $event.target.value)"
-        :value="index"
+        :checked="selection && selection.response_ids.includes(id)"
+        @change="select_answer"
+        :value="id"
       />
-      <label class="usa-radio__label" :for="index"
-      >{{answer}}</label
-      >
+      <label class="usa-radio__label" :for="id"
+      >{{text}}</label>
     </div>
   </fieldset>
 </template>

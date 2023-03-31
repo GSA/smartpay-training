@@ -9,17 +9,20 @@
 
 	const error = ref()
   const isStarted = ref(false)
-
+  
+  function startQuiz() {
+    /* Fired by the Start Quiz button on the first page */
+    isStarted.value = true
+  }
+  
   function startLoading() {
     error.value = undefined
   }
+
 	function setError(event){
     error.value = event
 	}
 
-  function startQuiz() {
-    isStarted.value = true
-  }
 </script>
 
 <template>
