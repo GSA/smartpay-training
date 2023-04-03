@@ -1,10 +1,21 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-const {frontmatter} = Astro.props;
+import HeroTraining from "../components/HeroTraining.astro"
+import SideNav from "../components/SideNav.astro"
+
+const {hero_image, entry, pages, training_category} = Astro.props;
 ---
 <BaseLayout>
-  <div  class="grid-container" data-test="post-submit">
-    <h3>{frontmatter.title}</h3>
-    <slot />
+  <HeroTraining hero_image={hero_image}>
+    <span slot="subheader">Card / Account Holders and Approving officials</span>
+    Travel Training
+  </HeroTraining>
+  <div class="usa-section">
+    <div class="grid-container">
+      <div class="grid-row grid-gap flex-align-start">
+        <SideNav id={entry.id} pages={pages} training_category={training_category} />
+        <slot />
+      </div>
+    </div>
   </div>
 </BaseLayout>

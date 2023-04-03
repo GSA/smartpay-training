@@ -1,8 +1,9 @@
 ---
     const { hero_image } = Astro.props;
+    const style = hero_image ? `background-image: url(${hero_image}`: ''
 ---
 
-<section class="bg-primary padding-y-3">
+<section class="bg-primary padding-y-3" style={style}>
     <div class="grid-container">
       <div class="grid-row">
         <p v-if="$slots.subheader" class="usa-hero__heading--alt margin-bottom-0 tablet:grid-col-5">

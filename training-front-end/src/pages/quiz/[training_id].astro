@@ -48,7 +48,7 @@ const { training_id } = Astro.params;
 const { title, header, subhead } = Astro.props;
 ---
 <BaseLayout>
-  <HeroTraining hero_image={hero_image}>
+  <HeroTraining>
     <span slot="subheader">{subhead}</span>
     {header} Quiz
 </HeroTraining>
