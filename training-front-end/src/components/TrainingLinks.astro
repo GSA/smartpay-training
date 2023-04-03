@@ -1,0 +1,23 @@
+---
+const {pages, index} = Astro.props
+import NavigateNext from "./icons/NavigateNext.vue"
+import NavigateBack from "./icons/NavigateBack.vue"
+
+function next_link() {
+  if (index >= pages.length - 1) {
+    return
+  }
+  return index ? "Next" : "Continue Training"
+}
+const next_link_text = next_link()
+const next_href = pages[index + 1]
+const previous_href = pages[index - 1]
+
+---
+{ next_link_text &&
+  <a href={next_href.slug} class="usa-button margin-y-2">{next_link_text}<NavigateNext /></a><br />
+}
+{ index 
+  ? <a href={previous_href.slug} class="usa-pagination__link usa-pagination__previous-page"><NavigateBack /><span class="usa-pagination__link-text">Back</span></a>
+  : <a href="../quiz/travel_training">Skip ahead to the quiz</a>
+}
