@@ -9,7 +9,6 @@
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
 
-  import Alert from './Alert.vue';
   import ValidatedInput from './ValidatedInput.vue';
   import ValidatedSelect from './ValidatedSelect.vue';
   import { useVuelidate } from '@markmeyer/vuelidate-core';

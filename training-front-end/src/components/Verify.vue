@@ -2,7 +2,7 @@
   import { onMounted, ref } from 'vue'
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
-  import Loginless from '../components/Loginless.vue';
+  import Loginless from './Loginless.vue';
   
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
