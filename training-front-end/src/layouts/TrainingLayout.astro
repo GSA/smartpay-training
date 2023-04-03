@@ -5,10 +5,9 @@ import SideNav from "@components/SideNav.astro"
 
 const {hero_image, entry, pages, training_category} = Astro.props;
 ---
-<BaseLayout>
+<BaseLayout title={entry.data.title}>
   <HeroTraining hero_image={hero_image}>
     <span slot="subheader">Card / Account Holders and Approving officials</span>
-    Travel Training
   </HeroTraining>
   <div class="usa-section">
     <div class="grid-container">

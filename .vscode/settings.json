@@ -1,4 +1,7 @@
 {
     "python.linting.flake8Enabled": true,
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "files.associations": {
+      "*.mdx": "markdown"
+  }
 }
