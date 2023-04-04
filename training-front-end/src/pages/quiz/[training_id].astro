@@ -6,50 +6,55 @@ import HeroTraining from '@components/HeroTraining.astro';
 export function getStaticPaths() {
   const quizes = [
     {
+      quiz_id: 101,
       header: 'Travel Training',
       subhead: 'Card / Account Holders and Approving Officials',
       training_id: 'travel_training',
       title: "Travel Training for Card / Account Holders and Approving Officials"
     },
     {
+      quiz_id: 2,
       header: 'Purchase Training',
       subhead: 'Card / Account Holders and Approving Officials',
       training_id: 'purchase_training',
       title: "Purchase Training for Card / Account Holders and Approving Officials"
     },
     {
+      quiz_id: 3,
       header: 'Travel Training',
       subhead: 'Program Coordinators',
       training_id: "travel_training_pc",
       title: "Travel Training For Program Coordinators"
     },
     {
+      quiz_id: 4,
       header: 'Purchase Training',
       subhead: 'Program Coordinators',
       training_id: "purchase_training_pc",
       title: "Purchase Training For Program Coordinators"
     },
     {
+      id: 5,
       header: 'Fleet Training',
       subhead: 'Program Coordinators',
       training_id: "fleet_training_pc",
       title: "Fleet Training For Program Coordinators"
     }
   ]
-  return  quizes.map(({training_id, title, header, subhead}) => {
+  return  quizes.map(({quiz_id, training_id, title, header, subhead}) => {
    return {
     params: {training_id},
-    props: {title, header, subhead}
+    props: {quiz_id, title, header, subhead}
   }});
 }
 
 const { training_id } = Astro.params;
-const { title, header, subhead } = Astro.props;
+const { quiz_id, title, header, subhead } = Astro.props;
 ---
 <BaseLayout>
   <HeroTraining>
     <span slot="subheader">{subhead}</span>
     {header} Quiz
 </HeroTraining>
-<QuizIndex page_id={training_id} title={title} client:load />
+<QuizIndex quiz_id={quiz_id} page_id={training_id} title={title} client:load />
 </BaseLayout>

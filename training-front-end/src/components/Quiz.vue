@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, computed, reactive, onBeforeMount} from "vue"
+  import { ref, onMounted, onBeforeUnmount, computed, reactive} from "vue"
   import { profile } from '../stores/user'
   import { useStore } from '@nanostores/vue'
   import QuizQuestion from "./QuizQuestion.vue"
@@ -7,37 +7,55 @@
   import NavigateNext from "./icons/NavigateNext.vue"
   import NavigateBack from "./icons/NavigateBack.vue"
 
-  // TODO: replace with API call
-  import quiz from '../dev_data/travel_a_opc.json'
 
-  const props = defineProps(['title'])
+  const emit = defineEmits(['submitQuiz'])
+  const props = defineProps(['quiz_id', 'title'])
   const user = useStore(profile)
-  
+  const base_url = import.meta.env.PUBLIC_API_BASE_URL
+
+  // TODO: replace with API call
+  const quiz = ref()
+  // import quiz from '../dev_data/travel_a_opc.json'
+  const res = await fetch(`${base_url}/api/v1/quizzes/${props.quiz_id}`)
+  if (!res.ok) {
+    // TODO: give the user something better than this
+    throw new Error("Sorry, a server error was encountered.")
+  }
+  quiz.value = await res.json();
+
   const question_index = ref(0)
   const user_answers = reactive([])
-  const number_of_questions = quiz['questions'].length
-  
-  const is_quiz_complete = computed(() => user_answers.length === quiz.questions.length)
-  const current_question = computed(() => quiz['questions'][question_index.value])
-  const is_current_unanswered = computed(() => user_answers[question_index.value] === undefined )
-  const show_acknowledge = computed(() => is_quiz_complete.value && (question_index.value >= quiz.questions.length))
   const acknowledge = ref(false)
 
+  const number_of_questions = quiz.value['questions'].length
+  const is_quiz_complete = computed(() => user_answers.length === number_of_questions)
+  const current_question = computed(() => quiz.value['questions'][question_index.value])
+  const is_current_unanswered = computed(() => user_answers[question_index.value] === undefined )
+  const show_acknowledge = computed(() => is_quiz_complete.value && (question_index.value >= number_of_questions))
+
+ 
   function exit_warning(event) {
     event.preventDefault()
     return event.returnValue = "Are you sure you want to exit?";
   }
   
-  onMounted(() => {
+  function windowStateListener(event) {
+    if (event.state) {
+        question_index.value = event.state.page
+      }
+  }
+
+  onMounted(async () => {
     window.addEventListener("beforeunload", exit_warning)
     const state = { page: 0 };
     history.replaceState(state, "", "");
+    window.addEventListener("popstate", windowStateListener)
+    
 
-    window.onpopstate = event => {
-      if (event.state) {
-        question_index.value = event.state.page
-      }
-    }
+  })
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('popstate', windowStateListener)
   })
 
   function next_question(){
@@ -62,13 +80,14 @@
   }
 
   function submit_quiz() {
-    // Post to API goes here
+    // Post to API goes here or in results component?
     const response = {
       'id': quiz.id,
       'responses': user_answers
     }
     console.log("Submitting for: ", user.value)
-    console.log(response)
+    emit('submitQuiz', response)
+    // clear state here?
   }
 
 </script>
