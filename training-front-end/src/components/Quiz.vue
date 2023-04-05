@@ -114,7 +114,7 @@
     <div v-else>
       <QuizCounter :current="question_index + 1" :total="number_of_questions" />
 
-      <section class="usa-prose margin-y-2 bg-white padding-4 border-1px border-base-lighter radius-md">
+      <section class="usa-prose margin-y-4 bg-white padding-4 border-1px border-base-lighter radius-md">
         <QuizQuestion 
           :question="current_question" 
           :selection="user_answers[question_index]" 

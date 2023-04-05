@@ -17,7 +17,14 @@ const { entry, pages, index } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<TrainingLayout hero_image={hero_image} entry={entry} pages={pages} training_category="training_travel">
+<TrainingLayout 
+  hero_image={hero_image}
+  entry={entry}
+  pages={pages}
+  training_category="training_travel"
+  header="Travel Training"
+  subheader="Card / Account Holders and Approving officials"
+  >
   <main
     class="
       usa-layout-docs__main

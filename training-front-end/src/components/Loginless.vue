@@ -16,7 +16,7 @@
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
-  const props = defineProps(['page_id', 'title'])
+  const props = defineProps(['page_id', 'title', 'header'])
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
   const user = useStore(profile)
@@ -137,11 +137,11 @@
       </div>
     </div>
     <div v-else class="grid-row" data-test="pre-submit">
-      <div  v-if="!emailValidated" class="tablet:grid-col-8 usa-prose">
-        <h2>Getting access to quiz</h2>
-        <p>Fill out this form to get access to the {{ title }}. You'll receive an email with a link to access the training.</p>
+      <div  v-if="!emailValidated" class="usa-prose">
+        <h2>Take the GSA SmartPay {{ header }} Quiz</h2>
+        <p>Enter your email address to get access to the quiz. You'll receive an email with an access link.</p>
         <form
-          class="usa-form usa-form--large margin-bottom-3"
+          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
           @submit.prevent="start_email_flow"
           data-test="email-submit-form"
           >
@@ -158,11 +158,11 @@
           </fieldset>
         </form>
       </div>
-      <div  v-else class="tablet:grid-col-8 usa-prose">
+      <div  v-else class=" usa-prose">
         <h2>Welcome!</h2>
         <p>Before you can take a quiz, you'll need to create and complete your profile.</p>
         <form
-          class="usa-form usa-form--large margin-bottom-3"
+          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
           @submit.prevent="start_email_flow"
           data-test="name-submit-form"
           >
