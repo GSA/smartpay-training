@@ -24,13 +24,15 @@
 </script>
 
 <template>
-  <h3>Quiz Results</h3>
-  🎉 {{ gradedResults }} 🎉
-  
-  <p>
-    <b>Dev only:</b> <br />
-    results sent to server for grading:
-  </p>
+  <div class="usa-prose">
+    <h3>Quiz Results</h3>
+    🎉 {{ gradedResults }} 🎉
+    
+    <p>
+      <b>Dev only:</b> <br />
+      results sent to server for grading:
+    </p>
+  </div>
   <code>
   {{ quizSubmission }}
   </code>

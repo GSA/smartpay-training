@@ -40,7 +40,7 @@
 </script>
 
 <template>
-  <div class="bg-base-lightest padding-top-1 padding-bottom-4">
+  <div class="bg-base-lightest padding-top-4 padding-bottom-4">
   <div  class="grid-container" data-test="post-submit">
     <div class="grid-row">
       <div class="tablet:grid-col-7">

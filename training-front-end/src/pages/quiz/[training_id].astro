@@ -51,7 +51,7 @@ export function getStaticPaths() {
 const { training_id } = Astro.params;
 const { quiz_id, title, header, subhead } = Astro.props;
 ---
-<BaseLayout>
+<BaseLayout title={title}>
   <HeroTraining>
     <span slot="subheader">{subhead}</span>
     {header} Quiz

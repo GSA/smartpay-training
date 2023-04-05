@@ -6,6 +6,8 @@
   import QuizCounter from "./QuizCounter.vue"
   import NavigateNext from "./icons/NavigateNext.vue"
   import NavigateBack from "./icons/NavigateBack.vue"
+  
+  import quiz_temp_json from '../dev_data/travel_a_opc.json'
 
 
   const emit = defineEmits(['submitQuiz'])
@@ -14,14 +16,13 @@
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
   // TODO: replace with API call
-  const quiz = ref()
-  // import quiz from '../dev_data/travel_a_opc.json'
-  const res = await fetch(`${base_url}/api/v1/quizzes/${props.quiz_id}`)
-  if (!res.ok) {
-    // TODO: give the user something better than this
-    throw new Error("Sorry, a server error was encountered.")
-  }
-  quiz.value = await res.json();
+  const quiz = ref(quiz_temp_json)
+  // const res = await fetch(`${base_url}/api/v1/quizzes/${props.quiz_id}`)
+  // if (!res.ok) {
+  //   // TODO: give the user something better than this
+  //   throw new Error("Sorry, a server error was encountered.")
+  // }
+  // quiz.value = await res.json();
 
   const question_index = ref(0)
   const user_answers = reactive([])
@@ -92,7 +93,7 @@
 
 </script>
 <template >
-    <section v-if="show_acknowledge" class="margin-y-4">
+    <section v-if="show_acknowledge" class="margin-y-1">
         <div class="usa-checkbox padding-4">
           <input
             class="usa-checkbox__input"
