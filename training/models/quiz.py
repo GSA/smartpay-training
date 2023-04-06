@@ -1,5 +1,6 @@
+from typing import Any
 from training.models import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship, Relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class Quiz(Base):
@@ -10,4 +11,4 @@ class Quiz(Base):
     topic: Mapped[str] = mapped_column()
     audience: Mapped[str] = mapped_column()
     active: Mapped[bool] = mapped_column()
-    questions: Relationship = relationship("QuizQuestion")
+    content: Mapped[dict[str, Any]] = mapped_column()

@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Depends
-from training.schemas import Quiz, QuizGrade, QuizSubmission
+from training.schemas import Quiz, QuizPublic, QuizGrade, QuizSubmission, QuizCreate
 from training.repositories import QuizRepository
 from training.api.deps import quiz_repository
 
@@ -8,17 +8,23 @@ from training.api.deps import quiz_repository
 router = APIRouter()
 
 
-@router.get("/quizzes", response_model=List[Quiz])
+@router.post("/quizzes", response_model=Quiz, status_code=status.HTTP_201_CREATED)
+def create_quiz(quiz: QuizCreate, repo: QuizRepository = Depends(quiz_repository)):
+    db_quiz = repo.create(quiz)
+    return db_quiz
+
+
+@router.get("/quizzes", response_model=List[QuizPublic])
 def get_quizzes(repo: QuizRepository = Depends(quiz_repository)):
     return repo.find_all()
 
 
-@router.get("/quizzes/{id}", response_model=Quiz)
+@router.get("/quizzes/{id}", response_model=QuizPublic)
 def get_quiz(id: int, repo: QuizRepository = Depends(quiz_repository)):
-    db_quiz = repo.find_by_id(id)
-    if db_quiz is None:
+    quiz = repo.find_by_id(id)
+    if quiz is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return db_quiz
+    return quiz
 
 
 @router.post("/quizzes/{id}/submission", response_model=QuizGrade)
@@ -28,16 +34,16 @@ def submit_quiz(id: int, submission: QuizSubmission, repo: QuizRepository = Depe
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Quiz not found")
 
     correct_count = 0
-    question_count = len(quiz.questions)
+    question_count = len(quiz.content.questions)
     questions = []
 
-    for question in quiz.questions:
+    for question in quiz.content.questions:
         # From the submission, get the response matching the current question
         response = next((r for r in submission.responses if r.question_id == question.id), None)
         if response is None:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=f"No responses given for question ID {question.id}"
+                detail=f'No response(s) given for question ID {question.id}'
             )
 
         # Get a list of correct choice IDs from the answer sheet

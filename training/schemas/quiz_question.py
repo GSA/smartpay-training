@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-
-from training.schemas import QuizChoice
+from training.schemas import QuizChoice, QuizChoicePublic, QuizChoiceCreate
 
 
 class QuizQuestionBase(BaseModel):
@@ -10,12 +9,16 @@ class QuizQuestionBase(BaseModel):
 
 
 class QuizQuestionCreate(QuizQuestionBase):
-    quiz_id: int
+    choices: list[QuizChoiceCreate]
+
+
+class QuizQuestionPublic(QuizQuestionBase):
+    id: int
+    choices: list[QuizChoicePublic]
 
 
 class QuizQuestion(QuizQuestionBase):
     id: int
-    quiz_id: int
 
     class Config:
         orm_mode = True

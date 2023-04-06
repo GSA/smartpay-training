@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-
-from training.schemas import QuizQuestion
+from training.schemas import QuizContent, QuizContentCreate, QuizContentPublic
 
 
 class QuizBase(BaseModel):
@@ -8,11 +7,16 @@ class QuizBase(BaseModel):
     topic: str
     audience: str
     active: bool
-    questions: list[QuizQuestion]
+    content: QuizContent
 
 
 class QuizCreate(QuizBase):
-    pass
+    content: QuizContentCreate
+
+
+class QuizPublic(QuizBase):
+    id: int
+    content: QuizContentPublic
 
 
 class Quiz(QuizBase):
