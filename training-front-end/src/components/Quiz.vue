@@ -80,15 +80,31 @@
     user_answers[question_index.value] = event
   }
 
-  function submit_quiz() {
+  async function submit_quiz() {
     // Post to API goes here or in results component?
+    const url = `${base_url}/api/v1/quizzes/${quiz.value.id}/submission`
+    let res
+    
     const response = {
-      'id': quiz.id,
+      // 'id': quiz.id, 
       'responses': user_answers
     }
-    console.log("Submitting for: ", user.value)
-    emit('submitQuiz', response)
-    // clear state here?
+    console.log(JSON.stringify(response))
+    
+    try {
+      res = await fetch(url, { 
+        method: "POST", 
+        headers: { 'Content-Type': 'application/json'},
+        body:  JSON.stringify(response)
+      })
+    } catch(e) {
+      // server error
+      console.log("error connecting to api", e)
+      throw e
+    }
+    const graded_response = await res.json()
+    
+    emit('submitQuiz', graded_response)
   }
 
 </script>

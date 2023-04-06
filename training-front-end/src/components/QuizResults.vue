@@ -1,8 +1,9 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
-    const props = defineProps(['quizSubmission']);
-    
-    const gradedResults = ref();
+    import {computed, onMounted } from 'vue';
+    const props = defineProps(['quizSubmission', 'quizResults']);
+    const passed = computed(() => props.quizResults.passed)
+    const result_string = computed(() => `${props.quizResults.correct_count} correct out of ${props.quizResults.question_count}`)
+    const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
 
     function exit_warning(event) {
       event.preventDefault()
@@ -17,8 +18,6 @@
       // send to API
       window.addEventListener("beforeunload", exit_warning)
       window.addEventListener("popstate", windowStateListener)
-
-      gradedResults.value = "You scored x out of x"
     })
 
 </script>
@@ -26,14 +25,25 @@
 <template>
   <div class="usa-prose">
     <h3>Quiz Results</h3>
-    🎉 {{ gradedResults }} 🎉
+    <div v-if="passed">
+      🎉 You passed 🎉
+      <p>
+        You answered {{ result_string }} for a score of {{ percentage }}%
+      </p>
+    </div>
+    <div v-else>
+      😥 You did not pass 😥
+      <p>
+        You answered {{ result_string }} for a score of {{ percentage }}% 
+      </p>
+    </div>
     
     <p>
       <b>Dev only:</b> <br />
-      results sent to server for grading:
+      quiz results from server:
     </p>
   </div>
   <code>
-  {{ quizSubmission }}
+  {{ quizResults }}
   </code>
 </template>

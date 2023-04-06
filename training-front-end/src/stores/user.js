@@ -37,7 +37,7 @@ export const getUserFromJWT = action(profile, 'validateUser', async (store, base
   const url = `${base_url}/api/v1/validate-jwt/${token}` 
   let res 
   try {
-    res = fetch(url, { 
+    res = await fetch(url, { 
       method: "POST", 
       headers: { 'Content-Type': 'application/json'},
       body:  jwt

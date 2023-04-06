@@ -108,7 +108,8 @@
     if (status == 201) {
       // the api sends a 201 if the token was created
       // in the cache and an email was sent
-      tempURL.value = json.token // this is just temporary while in Dev
+      const token = new URL(json.token)
+      tempURL.value = `${window.location.href}${token.search}` // this is just temporary while in Dev
       isFlowComplete.value = true
     } else {
       // any other 2xx response should assume
@@ -132,7 +133,7 @@
             
         <p><b>Temp for development</b></p>
         <p>
-          URL that was emailed: {{ tempURL }}
+          URL that was emailed: <a :href="tempURL">{{ tempURL }}</a>
         </p>
       </div>
     </div>
