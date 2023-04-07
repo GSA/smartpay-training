@@ -12,7 +12,6 @@
 
   onBeforeMount(async () => {
     // import quiz_temp_json from '../dev_data/travel_a_opc.json'
-    // TODO: replace with API call
     // quiz.value = quiz_temp_json
     const res = await fetch(`${base_url}/api/v1/quizzes/${props.quiz_id}`)
     if (!res.ok) {
@@ -23,7 +22,7 @@
   })
 
   onErrorCaptured((err) => {
-    console.log("got error in parent", err)
+    console.log("Error from child component", err)
     setError(err)
   })
 
@@ -49,18 +48,25 @@
     const url = `${base_url}/api/v1/quizzes/${props.quiz_id}/submission`
     
     let res
-    const submission = {'responses': user_answers}
     
     try {
       res = await fetch(url, { 
         method: "POST", 
         headers: { 'Content-Type': 'application/json'},
-        body:  JSON.stringify(submission)
+        body:  JSON.stringify( {'responses': user_answers}) 
       })
     } catch(e) {
       // server error
       console.log("error connecting to api", e)
       throw e
+    }
+    if (!res.ok){
+      // non 2xx response from server
+      // TODO: this could happen with an expired jwt
+      // should offer solution for user in that case.
+      const e = new Error("There was a problem connecting with the server")
+      e.name = "Server Error"
+      setError(e)
     }
     quizResults.value = await res.json()
     isStarted.value = false

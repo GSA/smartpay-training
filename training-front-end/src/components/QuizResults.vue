@@ -55,12 +55,6 @@
       <button class="usa-button margin-y-4" @click="$emit('reset_quiz')">Try again</button>
     </div>
     
-    <p>
-      <b>Dev only:</b> <br />
-      quiz results from server:
-    </p>
-    <code>
-      {{ quizResults }}
-    </code>
+
   </div>
 </template>
