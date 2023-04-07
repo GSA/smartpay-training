@@ -7,30 +7,18 @@
   import NavigateNext from "./icons/NavigateNext.vue"
   import NavigateBack from "./icons/NavigateBack.vue"
   
-  // import quiz_temp_json from '../dev_data/travel_a_opc.json'
-
 
   const emit = defineEmits(['submitQuiz'])
-  const props = defineProps(['quiz_id', 'title'])
+  const props = defineProps(['quiz', 'quiz_id', 'title'])
   const user = useStore(profile)
-  const base_url = import.meta.env.PUBLIC_API_BASE_URL
-
-  // TODO: replace with API call
-  const quiz = ref() // ref(quiz_temp_json)
-  const res = await fetch(`${base_url}/api/v1/quizzes/${props.quiz_id}`)
-  if (!res.ok) {
-    // TODO: give the user something better than this
-    throw new Error("Sorry, a server error was encountered.")
-  }
-  quiz.value = await res.json();
 
   const question_index = ref(0)
   const user_answers = reactive([])
   const acknowledge = ref(false)
 
-  const number_of_questions = quiz.value['questions'].length
+  const number_of_questions = props.quiz['content']['questions'].length
   const is_quiz_complete = computed(() => user_answers.length === number_of_questions)
-  const current_question = computed(() => quiz.value['questions'][question_index.value])
+  const current_question = computed(() => props.quiz['content']['questions'][question_index.value])
   const is_current_unanswered = computed(() => user_answers[question_index.value] === undefined )
   const show_acknowledge = computed(() => is_quiz_complete.value && (question_index.value >= number_of_questions))
 
@@ -51,8 +39,6 @@
     const state = { page: 0 };
     history.replaceState(state, "", "");
     window.addEventListener("popstate", windowStateListener)
-    
-
   })
 
   onBeforeUnmount(() => {
@@ -81,30 +67,7 @@
   }
 
   async function submit_quiz() {
-    // Post to API goes here or in results component?
-    const url = `${base_url}/api/v1/quizzes/${quiz.value.id}/submission`
-    let res
-    
-    const response = {
-      // 'id': quiz.id, 
-      'responses': user_answers
-    }
-    console.log(JSON.stringify(response))
-    
-    try {
-      res = await fetch(url, { 
-        method: "POST", 
-        headers: { 'Content-Type': 'application/json'},
-        body:  JSON.stringify(response)
-      })
-    } catch(e) {
-      // server error
-      console.log("error connecting to api", e)
-      throw e
-    }
-    const graded_response = await res.json()
-    
-    emit('submitQuiz', graded_response)
+    emit('submitQuiz', user_answers)
   }
 
 </script>
@@ -141,7 +104,8 @@
       <button class="usa-button margin-bottom-2" :disabled="is_current_unanswered" @click="next_question">
         <span class="usa-pagination__link-text">Next</span>
         <NavigateNext />
-      </button><br />
+      </button>
+      <br />
       <button v-if="question_index" type="" @click="previous_question" class="usa-button usa-button--unstyled">
         <NavigateBack />
         <span class="usa-pagination__link-text">Back</span>
