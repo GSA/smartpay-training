@@ -16,6 +16,7 @@ def test_create_duplicate(agency_repo_with_data: AgencyRepository, valid_agency_
 
 def test_find_by_name(agency_repo_with_data: AgencyRepository, valid_agency_name):
     result = agency_repo_with_data.find_by_name(valid_agency_name)
+    assert result is not None
     assert result.name == valid_agency_name
 
 
@@ -27,12 +28,15 @@ def test_find_by_nonexistent_name(agency_repo_empty: AgencyRepository):
 def test_save(agency_repo_empty: AgencyRepository, valid_agency_name):
     result = agency_repo_empty.save(models.Agency(name=valid_agency_name))
     assert result.id
-    assert agency_repo_empty.find_by_id(result.id).name == valid_agency_name
+    retrieved_result = agency_repo_empty.find_by_id(result.id)
+    assert retrieved_result is not None
+    assert retrieved_result.name == valid_agency_name
 
 
 def test_find_by_id(agency_repo_empty: AgencyRepository, valid_agency_name):
     agency_id = agency_repo_empty.save(models.Agency(name=valid_agency_name)).id
     result = agency_repo_empty.find_by_id(agency_id)
+    assert result is not None
     assert result.name == valid_agency_name
 
 
