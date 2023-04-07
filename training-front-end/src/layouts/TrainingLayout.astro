@@ -3,7 +3,7 @@ import BaseLayout from "./BaseLayout.astro";
 import HeroTraining from "@components/HeroTraining.astro"
 import SideNav from "@components/SideNav.astro"
 
-const {hero_image, entry, pages, training_category, header, subheader} = Astro.props;
+const {hero_image, entry, pages, training_category, header, subheader, quiz_title} = Astro.props;
 ---
 <BaseLayout title={entry.data.title}>
   <HeroTraining hero_image={hero_image}>
@@ -13,7 +13,7 @@ const {hero_image, entry, pages, training_category, header, subheader} = Astro.p
   <div class="usa-section">
     <div class="grid-container">
       <div class="grid-row grid-gap flex-align-start">
-        <SideNav id={entry.id} pages={pages} training_category={training_category} />
+        <SideNav id={entry.id} pages={pages} training_category={training_category} quiz_title={quiz_title} />
         <slot />
       </div>
     </div>
