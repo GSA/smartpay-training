@@ -29,10 +29,11 @@ def get_quiz(id: int, repo: QuizRepository = Depends(quiz_repository)):
 
 @router.post("/quizzes/{id}/submission", response_model=QuizGrade)
 def submit_quiz(id: int, submission: QuizSubmission, repo: QuizRepository = Depends(quiz_repository)):
-    quiz = repo.find_by_id(id)
-    if quiz is None:
+    db_quiz = repo.find_by_id(id)
+    if db_quiz is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Quiz not found")
 
+    quiz = Quiz.from_orm(db_quiz)
     correct_count = 0
     question_count = len(quiz.content.questions)
     questions = []
