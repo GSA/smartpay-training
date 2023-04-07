@@ -1,0 +1,10 @@
+---
+const {src, alt, width, height, class: className} = Astro.props
+---
+<img 
+  src={`${import.meta.env.BASE_URL}images/${src}`} 
+  alt={alt}
+  width={width}
+  height={height}
+  class={className}
+/>
