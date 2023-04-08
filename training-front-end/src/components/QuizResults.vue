@@ -37,6 +37,7 @@
       <p>
         You answered {{ result_string }} for a score of {{ percentage }}%
       </p>
+      <p>Download a PDF of your training certificate [link: coming soon]</p>
     </div>
     <div v-else>
       <h3>😥 You did not pass 😥</h3>
