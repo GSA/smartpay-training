@@ -19,14 +19,10 @@ class BaseRepository(Generic[T]):
         return item
 
     def find_by_id(self, id: int) -> Optional[T]:
-        return self._session.query(self._model).filter(
-            self._model.id == id  # type: ignore
-        ).first()
+        return self._session.query(self._model).filter_by(id=id).first()
 
     def find_all(self) -> List[T]:
         return self._session.query(self._model).all()
 
     def delete_by_id(self, id: int) -> None:
-        self._session.query(self._model).filter(
-            self._model.id == id  # type: ignore
-        ).delete()
+        self._session.query(self._model).filter_by(id=id).delete()
