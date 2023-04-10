@@ -7,8 +7,8 @@ const {hero_image, entry, pages, training_category, header, subheader, quiz_titl
 ---
 <BaseLayout title={entry.data.title}>
   <HeroTraining hero_image={hero_image}>
-    <span slot="subheader">{subheader}</span>
-    {header}
+    <span slot="subheader">{subheader} {header}</span>
+    {entry.data.title}
   </HeroTraining>
   <div class="usa-section">
     <div class="grid-container">
