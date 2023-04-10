@@ -15,8 +15,20 @@ def create_quiz(quiz: QuizCreate, repo: QuizRepository = Depends(quiz_repository
 
 
 @router.get("/quizzes", response_model=List[QuizPublic])
-def get_quizzes(repo: QuizRepository = Depends(quiz_repository)):
-    return repo.find_all()
+def get_quizzes(
+    topic: str | None = None,
+    audience: str | None = None,
+    active: bool | None = None,
+    repo: QuizRepository = Depends(quiz_repository)
+):
+    filters = {}
+    if topic is not None:
+        filters["topic"] = topic
+    if audience is not None:
+        filters["audience"] = audience
+    if active is not None:
+        filters["active"] = active
+    return repo.find_all(filters=filters)
 
 
 @router.get("/quizzes/{id}", response_model=QuizPublic)
