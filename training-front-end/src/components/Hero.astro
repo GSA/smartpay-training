@@ -1,18 +1,19 @@
 ---
     const { hero_image } = Astro.props;
+    const style = hero_image ? `background-image: url(${hero_image}`: 'background-image: none'
 ---
 
-<section class="usa-hero padding-y-4" style={`background-image: url(${hero_image}`}>
+<section class:list={['bg-base-lighter', 'padding-y-4', { 'usa-hero': hero_image }]} style={style}>
     <div class="grid-container">
     <div class="grid-row">
-        <h1 class="usa-hero__heading tablet:grid-col-4">
-        <span class="usa-hero__heading--alt">
+        <h1 class="usa-hero__heading tablet:grid-col">
+        <span class="usa-hero__heading text-black">
             <slot></slot>
         </span>
         </h1>
     </div>
     <div class="grid-row">
-        <p v-if="$slots.subheader" class="margin-bottom-0 tablet:grid-col-5">
+        <p v-if="$slots.subheader" class="margin-bottom-0 tablet:grid-col">
             <slot name="subheader"></slot>
         </p>
     </div>
