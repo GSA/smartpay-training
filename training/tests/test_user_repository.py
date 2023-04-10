@@ -29,6 +29,7 @@ def test_create_duplicate(user_repo_with_data: UserRepository):
 
 def test_find_by_email(user_repo_with_data: UserRepository, valid_user):
     result = user_repo_with_data.find_by_email(valid_user["email"])
+    assert result is not None
     assert result.name == valid_user["name"]
 
 
@@ -45,11 +46,14 @@ def test_save(user_repo_empty: UserRepository, agency_repo_with_data: AgencyRepo
         agency_id=agency_id,
     ))
     assert result.id
-    assert user_repo_empty.find_by_id(result.id).name == "New User"
+    retrieved_result = user_repo_empty.find_by_id(result.id)
+    assert retrieved_result is not None
+    assert retrieved_result.name == "New User"
 
 
 def test_find_by_id(user_repo_with_data: UserRepository, valid_user_ids: List[int]):
     result = user_repo_with_data.find_by_id(valid_user_ids[0])
+    assert result is not None
     assert result.id == valid_user_ids[0]
 
 

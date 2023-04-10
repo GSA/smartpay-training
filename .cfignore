@@ -6,5 +6,6 @@
 docker-compose.yaml
 README.md
 requirements.dev.txt
-smartpay-training-quiz
+training-front-end
 _site
+__pycache__
