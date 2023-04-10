@@ -1,4 +1,4 @@
-from typing import List
+from collections.abc import Generator
 import pytest
 import yaml
 import pathlib
@@ -77,7 +77,7 @@ def testdata() -> dict:
 
 
 @pytest.fixture
-def valid_user_ids(db_with_data: Session) -> List[int]:
+def valid_user_ids(db_with_data: Session) -> Generator[list[int], None, None]:
     '''
     Provides a list of user IDs that have been loaded into the test database.
     '''
@@ -87,7 +87,7 @@ def valid_user_ids(db_with_data: Session) -> List[int]:
 
 
 @pytest.fixture
-def valid_agency_name(testdata: dict) -> str:
+def valid_agency_name(testdata: dict) -> Generator[str, None, None]:
     '''
     Provides a valid agency name.
     '''
@@ -95,7 +95,7 @@ def valid_agency_name(testdata: dict) -> str:
 
 
 @pytest.fixture
-def valid_user(testdata: dict) -> dict:
+def valid_user(testdata: dict) -> Generator[dict, None, None]:
     '''
     Provides a dict containing valid user values.
     '''
@@ -103,7 +103,7 @@ def valid_user(testdata: dict) -> dict:
 
 
 @pytest.fixture
-def agency_repo_empty(db: Session) -> AgencyRepository:
+def agency_repo_empty(db: Session) -> Generator[AgencyRepository, None, None]:
     '''
     Provides an AgencyRepository injected with an empty database.
     '''
@@ -111,7 +111,7 @@ def agency_repo_empty(db: Session) -> AgencyRepository:
 
 
 @pytest.fixture
-def agency_repo_with_data(db_with_data: Session) -> AgencyRepository:
+def agency_repo_with_data(db_with_data: Session) -> Generator[AgencyRepository, None, None]:
     '''
     Provides an AgencyRepository injected with a populated database.
     '''
@@ -119,7 +119,7 @@ def agency_repo_with_data(db_with_data: Session) -> AgencyRepository:
 
 
 @pytest.fixture
-def user_repo_empty(db: Session) -> UserRepository:
+def user_repo_empty(db: Session) -> Generator[UserRepository, None, None]:
     '''
     Provides an UserRepository injected with an empty database.
     '''
@@ -127,7 +127,7 @@ def user_repo_empty(db: Session) -> UserRepository:
 
 
 @pytest.fixture
-def user_repo_with_data(db_with_data: Session) -> UserRepository:
+def user_repo_with_data(db_with_data: Session) -> Generator[UserRepository, None, None]:
     '''
     Provides an UserRepository injected with a populated database.
     '''
