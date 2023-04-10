@@ -23,10 +23,11 @@ const { pageTitle } = Astro.props;
   </head>
   <body>
     <div id="app" class="grid-row flex flex-column height-full">
+      <a class="usa-skipnav" href="#main-content">Skip to main content</a>
       <Banner />
       <div  class="background flex-fill">
         <GSAHeader />
-        <div id="main-container" class="wide-layout">
+        <div id="main-content" class="wide-layout">
           <main>
             <slot />
           </main>
