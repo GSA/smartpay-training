@@ -1,11 +1,10 @@
 ---
-import GSAHeader from '../components/GSAHeader.astro';
-import GSAFooter from '../components/GSAFooter.astro';
-import USAIdentifier from '../components/USAIdentifier.astro';
-import Banner from '../components/Banner.astro';
+import GSAHeader from '@components/GSAHeader.astro';
+import GSAFooter from '@components/GSAFooter.astro';
+import USAIdentifier from '@components/USAIdentifier.astro';
+import Banner from '@components/Banner.astro';
 
-//import '../styles/uswds/styles.css';
-const { pageTitle } = Astro.props;
+const { title } = Astro.props;
 ---
 <html lang="en">
   <head>
@@ -19,7 +18,7 @@ const { pageTitle } = Astro.props;
 
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
+    <title>{title}</title>
   </head>
   <body>
     <div id="app" class="grid-row flex flex-column height-full">

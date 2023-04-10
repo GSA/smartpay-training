@@ -14,7 +14,6 @@
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
   import Alert from '../components/Alert.vue'
-  import Verify from '../components/Verify.vue'
   import UserHome from '../components/UserHome.vue'
   import Loginless from '../components/Loginless.vue';
 

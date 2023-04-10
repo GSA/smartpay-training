@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import TrainingLayout from '@layouts/TrainingLayout.astro';
+import TrainingLinks from '@components/TrainingLinks.astro'
+import hero_image from '../../assets/images/Training_TravelAH_Hero.jpg';
+
+
+export async function getStaticPaths() {
+  const pages = await getCollection('training_travel');
+  return pages.map((entry, index) => {
+    const slug = entry.slug == './' ? undefined : entry.slug
+    return {params: {slug: slug }, props: { entry, pages, index }}
+  })
+}
+
+const { entry, pages, index } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<TrainingLayout 
+  hero_image={hero_image}
+  entry={entry}
+  pages={pages}
+  training_category="training_travel"
+  header="Travel Training"
+  subheader="Card / Account Holders and Approving officials"
+  quiz_title="GSA SmartPay Travel Training (Account Holder / AOs)"
+  >
+  <main
+    class="
+      usa-layout-docs__main
+      desktop:grid-col-9
+      usa-prose usa-layout-docs
+    "
+    id="main-content"
+  >
+    <Content />
+    <TrainingLinks pages={pages} index={index}  training_category="training_travel"/>
+  </main>
+</TrainingLayout>
+

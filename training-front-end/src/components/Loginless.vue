@@ -9,16 +9,14 @@
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
 
-  import Alert from './Alert.vue';
   import ValidatedInput from './ValidatedInput.vue';
   import ValidatedSelect from './ValidatedSelect.vue';
   import { useVuelidate } from '@markmeyer/vuelidate-core';
   import { required, email } from '@markmeyer/vuelidate-validators';
-  import agencyList from '../data/agencies.js';
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
-  const props = defineProps(['page_id', 'title'])
+  const props = defineProps(['page_id', 'title', 'header'])
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
   const user = useStore(profile)
@@ -45,7 +43,7 @@
   const tempURL = ref('')
   const isLoaded = ref(false)
   const isLoading = ref(false)
-  const error = ref()
+
   const isFlowComplete = ref(false)
   const emailValidated = ref(false)
 
@@ -79,7 +77,6 @@
 
     emit('startLoading')
     isLoading.value = true
-    error.value = undefined
     
     const apiURL = new URL(`${base_url}/api/v1/get-link`)
     let res
@@ -97,30 +94,30 @@
       isLoading.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
       e.name = "Server Error"
-      emit('error', e)
       emit('endLoading')
-      return
+      throw e
     }
     
-      if (! res.ok) { 
-        throw new Error(res)
-      }
+    if (! res.ok) { 
+      throw new Error(res)
+    }
 
-      const json = await res.json()
-      const status = res.status
+    const json = await res.json()
+    const status = res.status
       
-      if (status == 201) {
-        // the api sends a 201 if the token was created
-        // in the cache and an email was sent
-        tempURL.value = json.token // this is just temporary while in Dev
-        isFlowComplete.value = true
-      } else {
-        // any other 2xx response should assume
-        // it worked, but we need more info
-        emailValidated.value = true
-      }
-      isLoading.value = false
-      emit('endLoading')
+    if (status == 201) {
+      // the api sends a 201 if the token was created
+      // in the cache and an email was sent
+      const token = new URL(json.token)
+      tempURL.value = `${window.location.href}${token.search}` // this is just temporary while in Dev
+      isFlowComplete.value = true
+    } else {
+      // any other 2xx response should assume
+      // it worked, but we need more info
+      emailValidated.value = true
+    }
+    isLoading.value = false
+    emit('endLoading')
   }
 </script>
 
@@ -136,18 +133,16 @@
             
         <p><b>Temp for development</b></p>
         <p>
-          URL that was emailed: {{ tempURL }}
+          URL that was emailed: <a :href="tempURL">{{ tempURL }}</a>
         </p>
       </div>
     </div>
     <div v-else class="grid-row" data-test="pre-submit">
-      <div class="tablet:grid-col-8">
-        <h2>Getting access to quiz</h2>
-
-        <p>Fill out this form to get access to the {{ title }}. You'll receive an email with a link to access the training.</p>
+      <div  v-if="!emailValidated" class="usa-prose">
+        <h2>Take the GSA SmartPay {{ header }} Quiz</h2>
+        <p>Enter your email address to get access to the quiz. You'll receive an email with an access link.</p>
         <form
-          v-if="!emailValidated"
-          class="usa-form usa-form--large margin-bottom-3"
+          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
           @submit.prevent="start_email_flow"
           data-test="email-submit-form"
           >
@@ -163,9 +158,12 @@
             <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
           </fieldset>
         </form>
+      </div>
+      <div  v-else class=" usa-prose">
+        <h2>Welcome!</h2>
+        <p>Before you can take a quiz, you'll need to create and complete your profile.</p>
         <form
-          v-else
-          class="usa-form usa-form--large margin-bottom-3"
+          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
           @submit.prevent="start_email_flow"
           data-test="name-submit-form"
           >

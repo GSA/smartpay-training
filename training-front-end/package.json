@@ -11,13 +11,17 @@
     "test:unit": "vitest --environment jsdom --root ."
   },
   "dependencies": {
+    "@astrojs/mdx": "^0.18.2",
     "@astrojs/vue": "^2.1.0",
     "@markmeyer/vuelidate-core": "^4.0.1",
     "@markmeyer/vuelidate-validators": "^4.0.1",
     "@nanostores/persistent": "^0.7.0",
     "@nanostores/vue": "^0.7.0",
     "astro": "^2.1.7",
+    "hast-util-select": "^5.0.5",
+    "install": "^0.13.0",
     "nanostores": "^0.7.4",
+    "npm": "^9.6.3",
     "vue": "^3.2.47"
   },
   "devDependencies": {
