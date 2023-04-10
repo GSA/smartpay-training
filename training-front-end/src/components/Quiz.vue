@@ -9,7 +9,7 @@
   
 
   const emit = defineEmits(['submitQuiz'])
-  const props = defineProps(['quiz', 'quiz_id', 'title'])
+  const props = defineProps(['quiz', 'title'])
   const user = useStore(profile)
 
   const question_index = ref(0)

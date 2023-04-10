@@ -6,55 +6,60 @@ import HeroTraining from '@components/HeroTraining.astro';
 export function getStaticPaths() {
   const quizes = [
     {
-      quiz_id: 2,
+      topic: 'Travel',
+      audience: 'AccountHoldersApprovingOfficials',
       header: 'Travel Training',
       subhead: 'Card / Account Holders and Approving Officials',
       training_id: 'training_travel',
       title: "Travel Training for Card / Account Holders and Approving Officials"
     },
     {
-      quiz_id: 3,
+      topic: 'Purchase',
+      audience: 'AccountHoldersApprovingOfficials',
       header: 'Purchase Training',
       subhead: 'Card / Account Holders and Approving Officials',
       training_id: 'training_purchase',
       title: "Purchase Training for Card / Account Holders and Approving Officials"
     },
     {
-      quiz_id: 4,
+      topic: 'Travel',
+      audience: 'ProgramCoordinators',
       header: 'Travel Training',
       subhead: 'Program Coordinators',
       training_id: "training_travel_pc",
       title: "Travel Training For Program Coordinators"
     },
     {
-      quiz_id: 5,
+      topic: 'Purchase',
+      audience: 'ProgramCoordinators',
       header: 'Purchase Training',
       subhead: 'Program Coordinators',
       training_id: "training_purchase_pc",
       title: "Purchase Training For Program Coordinators"
     },
     {
-      id: 6,
+      topic: 'Fleet',
+      audience: 'ProgramCoordinators',
       header: 'Fleet Training',
       subhead: 'Program Coordinators',
       training_id: "training_fleet_pc",
       title: "Fleet Training For Program Coordinators"
     }
   ]
-  return  quizes.map(({quiz_id, training_id, title, header, subhead}) => {
+  return  quizes.map(({topic, audience, training_id, title, header, subhead}) => {
    return {
     params: {training_id},
-    props: {quiz_id, title, header, subhead}
+    props: {topic, audience, title, header, subhead}
   }});
 }
 
 const { training_id } = Astro.params;
-const { quiz_id, title, header, subhead } = Astro.props;
+const { topic, audience, title, header, subhead } = Astro.props;
 ---
 <BaseLayout title={title}>
   <HeroTraining>
     <span slot="subheader">{subhead}</span>
     {header} Quiz
   </HeroTraining>
-  <QuizIndex quiz_id={quiz_id} page_id={training_id} title={title} header={header} subhead={subhead} client:load />
+  <QuizIndex topic={topic} audience={audience} page_id={training_id} title={title} header={header} subhead={subhead} client:load />
 </BaseLayout>
