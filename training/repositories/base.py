@@ -1,4 +1,4 @@
-from typing import Any, Generic, Optional, List, Type, TypeVar
+from typing import Any, Generic, Type, TypeVar
 from sqlalchemy.orm import Session
 from training import models
 
@@ -18,10 +18,10 @@ class BaseRepository(Generic[T]):
         self._session.refresh(item)
         return item
 
-    def find_by_id(self, id: int) -> Optional[T]:
+    def find_by_id(self, id: int) -> T | None:
         return self._session.query(self._model).filter_by(id=id).first()
 
-    def find_all(self, filters: dict[str, Any] = {}) -> List[T]:
+    def find_all(self, filters: dict[str, Any] = {}) -> list[T]:
         query = self._session.query(self._model)
         for key, value in filters.items():
             query = query.filter(getattr(self._model, key) == value)
