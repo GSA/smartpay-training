@@ -1,5 +1,4 @@
 from collections.abc import Generator
-import os
 import pytest
 import yaml
 import pathlib
@@ -8,10 +7,6 @@ from training import models
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import AgencyRepository, UserRepository, QuizRepository
-
-
-def pytest_generate_tests(metafunc):
-    os.environ["DB_URI"] = "postgres://postgres:postgres@localhost:5432/smartpay-test"
 
 
 @pytest.fixture
