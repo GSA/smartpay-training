@@ -21,9 +21,20 @@ const { item } = Astro.props;
     </div>
     
     <div class="usa-card__footer">
-      <a href={item.link_name}>
-      {item.link_text}
-      </a>
+    <ul class="card_link">
+      <li class="margin-y-1">
+        <a href={item.training_link_name}>
+        <button type="button" class="usa-button">
+        {item.training_link_text}
+        </button>
+        </a>
+      </li>
+      <li>
+        <a href={item.quiz_link_name} class="margin-top-2">
+        Take the quiz
+        </a>
+      </li>
+      </ul>
     </div>
   </div>
 </li>
@@ -32,5 +43,11 @@ const { item } = Astro.props;
   .circle-icon {
     vertical-align: top;
     width: 15%;
+  }
+  .card_link{
+    list-style-type:none;
+    display:block; 
+    margin-left:0px; 
+    padding-left:0px;
   }
  </style>
