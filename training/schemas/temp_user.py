@@ -10,6 +10,9 @@ class TempUser(BaseModel):
     name: str
     agency_id: int  # maybe an id?
 
+    class Config:
+        orm_mode = True
+
 
 class IncompleteTempUser(BaseModel):
     '''

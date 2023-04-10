@@ -3,7 +3,7 @@ import jwt
 from typing import Union
 
 from fastapi import APIRouter, status, Response, HTTPException, Depends
-from training.schemas import TempUser, IncompleteTempUser, WebDestination
+from training.schemas import TempUser, IncompleteTempUser, WebDestination, User
 from training.data import UserCache
 from training.repositories import UserRepository
 from training.api.deps import user_repository
@@ -85,10 +85,8 @@ async def get_user(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
 
     db_user = repo.find_by_email(user.email)
-    if db_user:
-        encoded_jwt = jwt.encode(user.dict(), settings.JWT_SECRET, algorithm="HS256")
-        return {'user': user, 'jwt': encoded_jwt}
-    db_user = repo.create(user)
-    encoded_jwt = jwt.encode(user.dict(), settings.JWT_SECRET, algorithm="HS256")
-
-    return {'user': user, 'jwt': encoded_jwt}
+    if not db_user:
+        db_user = repo.create(user)
+    user_return = User.from_orm(db_user)
+    encoded_jwt = jwt.encode(user_return.dict(), settings.JWT_SECRET, algorithm="HS256")
+    return {'user': user_return, 'jwt': encoded_jwt}
