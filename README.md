@@ -31,7 +31,7 @@ npm run build:frontend
 
 ### Redis and PostgreSQL
 
-This app depends on Redis to support the temporary tokens used for tests. It also uses PostgreSQL as a main data store. To start up local services:
+This app depends on Redis to support the temporary tokens used for verification emails. It also uses PostgreSQL as a main data store. To start up local services:
 
 ```sh
 docker-compose up
@@ -65,6 +65,14 @@ python -m training.database.seed
 
 ```sh
 npm run dev
+```
+
+## Testing
+
+To run tests, first ensure that the `DB_URI` environment variable is set to an empty test database (example: `postgres://postgres:postgres@localhost:5432/smartpay-test`), then run:
+
+```
+pytest
 ```
 
 ## Deployment

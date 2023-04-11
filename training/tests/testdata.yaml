@@ -10,3 +10,40 @@ users:
     name: Test Two
   - email: test3@example.com
     name: Test Three
+
+quizzes:
+  - name: "Travel Training for Card / Account Holders and Approving Officials"
+    topic: "Travel"
+    audience: "AccountHoldersApprovingOfficials"
+    active: true
+    content:
+      questions:
+        - type: MultipleChoiceSingleSelect
+          text: "Official ministry travel is performed via the floo network."
+          choices:
+            - text: True.
+              correct: true
+            - text: False.
+              correct: false
+        - type: MultipleChoiceSingleSelect
+          text: "How do you travel via the floo network?"
+          choices:
+            - text: Say 'abracadabra'.
+              correct: false
+            - text: Toss floo powder into the fireplace and announce your destination.
+              correct: true
+            - text: Use the Floo app.
+              correct: false
+  - name: "Travel Training for Card / Account Holders and Approving Officials"
+    topic: "Travel"
+    audience: "AccountHoldersApprovingOfficials"
+    active: false
+    content:
+      questions:
+        - type: MultipleChoiceSingleSelect
+          text: "This should be an old, inactive version of the quiz."
+          choices:
+            - text: True.
+              correct: true
+            - text: False.
+              correct: false

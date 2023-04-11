@@ -7,3 +7,4 @@ from .quiz_content import QuizContent, QuizContentCreate, QuizContentPublic
 from .quiz import Quiz, QuizCreate, QuizPublic
 from .quiz_submission import QuizSubmission
 from .quiz_grade import QuizGrade
+from .quiz_completion import QuizCompletion, QuizCompletionCreate
