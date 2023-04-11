@@ -20,7 +20,6 @@
     }
     const filtered_quizzes =  await res.json();
     quiz.value = filtered_quizzes[0]
-    console.log("quiz: ", quiz.value)
   })
 
   onErrorCaptured((err) => {

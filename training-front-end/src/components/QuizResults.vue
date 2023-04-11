@@ -12,10 +12,6 @@
     const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
     const questions_incorrect = computed(() => quiz_questions.filter((q, i) => !props.quizResults.questions[i].correct))
 
-    function exit_warning(event) {
-      event.preventDefault()
-      return event.returnValue = "Are you sure you want to exit?";
-    }
     
     function windowStateListener(event) {
       window.location = import.meta.env.BASE_URL
@@ -23,7 +19,6 @@
 
     onMounted(() => {
       // send to API
-      window.addEventListener("beforeunload", exit_warning)
       window.addEventListener("popstate", windowStateListener)
     })
 

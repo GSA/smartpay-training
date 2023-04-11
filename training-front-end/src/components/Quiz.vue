@@ -43,6 +43,7 @@
 
   onBeforeUnmount(() => {
     window.removeEventListener('popstate', windowStateListener)
+    window.removeEventListener('beforeunload', exit_warning)
   })
 
   function next_question(){
