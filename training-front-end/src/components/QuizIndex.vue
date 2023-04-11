@@ -1,11 +1,14 @@
 <script setup>
   import { ref, onErrorCaptured, onBeforeMount } from 'vue';
+  import { useStore } from '@nanostores/vue'
+  import { profile} from '../stores/user'
   import Alert from './Alert.vue';
   import Quiz from './Quiz.vue';
   import Loginless from './Loginless.vue';
   import QuizIntro from './QuizIntro.vue';
   import QuizResults from './QuizResults.vue';
 
+  const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const quiz = ref()
   const props = defineProps(['topic', 'audience','page_id', 'title', 'header', 'subhead', 'hero_image'])
@@ -13,7 +16,12 @@
   onBeforeMount(async () => {
     // import quiz_temp_json from '../dev_data/travel_a_opc.json'
     // quiz.value = quiz_temp_json
-    const res = await fetch(`${base_url}/api/v1/quizzes/?topic=${props.topic}&audience=${props.audience}&active=true`)
+    const url = `${base_url}/api/v1/quizzes/?topic=${props.topic}&audience=${props.audience}&active=true`
+    const res = await fetch(url, {
+      method: 'GET', 
+      headers: {'Authorization': `Bearer ${user.value.jwt}`}
+    })
+
     if (!res.ok) {
       // TODO: give the user something better than this
       throw new Error("Sorry, a server error was encountered.")
@@ -53,7 +61,10 @@
     try {
       res = await fetch(url, { 
         method: "POST", 
-        headers: { 'Content-Type': 'application/json'},
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.value.jwt}`
+        },
         body:  JSON.stringify( {'responses': user_answers}) 
       })
     } catch(e) {
