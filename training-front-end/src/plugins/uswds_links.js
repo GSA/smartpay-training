@@ -11,7 +11,7 @@ export default () => {
       const properties = node.properties
       let domain = new URL(properties.href)
 
-      if (domain.hostname.endsWith('gsa.gov')) {
+      if (domain.hostname.endsWith('smartpay-training')) {
         properties.className = 'usa-link'
       } else {
         properties.className = 'usa-link usa-link--external'
