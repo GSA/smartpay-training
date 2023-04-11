@@ -78,7 +78,7 @@ def submit_quiz(id: int, submission: QuizSubmission, repo: QuizRepository = Depe
         correct_count=correct_count,
         question_count=question_count,
         percentage=(correct_count / question_count),
-        passed=((correct_count / question_count) > 0.75),
+        passed=((correct_count / question_count) >= 0.75),
         questions=questions,
     )
 
