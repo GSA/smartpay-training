@@ -139,7 +139,7 @@
     </div>
     <div v-else class="grid-row" data-test="pre-submit">
       <div  v-if="!emailValidated" class="usa-prose">
-        <h2>Take the GSA SmartPay {{ header }} Quiz</h2>
+        <h2>Take the GSA SmartPay® {{ header }} Quiz</h2>
         <p>Enter your email address to get access to the quiz. You'll receive an email with an access link.</p>
         <form
           class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"

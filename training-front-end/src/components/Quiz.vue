@@ -87,7 +87,7 @@
           >ACKNOWLEDGMENT STATEMENT<br/>“I acknowledge that I’ve read and understand the policies and regulations that govern the use of the GSA SmartPay® travel account, as well as understand my role and responsibilities as a Card / Account Holder or Approving Official as outlined in this training course.” </label>
         </div>
       <div class="grid-row">
-        <button class="usa-button margin-y-3"  :disabled="!acknowledge" @click="submit_quiz">Submit Quiz</button>
+        <button class="usa-button margin-y-3"  :disabled="!acknowledge" @click="submit_quiz">Submit quiz</button>
       </div>
     </section>
 
