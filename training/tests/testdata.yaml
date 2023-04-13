@@ -12,7 +12,7 @@ users:
     name: Test Three
 
 quizzes:
-  - name: "Travel Training for Card / Account Holders and Approving Officials"
+  - name: "Travel Training for Card/Account Holders and Approving Officials"
     topic: "Travel"
     audience: "AccountHoldersApprovingOfficials"
     active: true
@@ -34,7 +34,7 @@ quizzes:
               correct: true
             - text: Use the Floo app.
               correct: false
-  - name: "Travel Training for Card / Account Holders and Approving Officials"
+  - name: "Travel Training for Card/Account Holders and Approving Officials"
     topic: "Travel"
     audience: "AccountHoldersApprovingOfficials"
     active: false
