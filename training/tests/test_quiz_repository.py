@@ -52,7 +52,7 @@ def test_find_by_type(quiz_repo_with_data: QuizRepository):
         "active": True
     })
     assert len(result) == 1
-    assert result[0].name == "Travel Training for Card / Account Holders and Approving Officials"
+    assert result[0].name == "Travel Training for Card/Account Holders and Approving Officials"
 
 
 def test_find_by_nonexistent_type(quiz_repo_with_data: QuizRepository):
