@@ -56,7 +56,6 @@ describe('ValidatedInput', () => {
     const wrapper =  mount(makeAsyncComponent(), {props: {isInvalid: false}})
 
     await flushPromises()
-    console.log(wrapper.text())
     expect(wrapper.text()).toContain('Agency')
   })
 
