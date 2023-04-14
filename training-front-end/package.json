@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test:unit": "vitest --environment jsdom --root ."
+    "test:unit": "vitest --environment jsdom --root .",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@astrojs/mdx": "^0.18.2",
