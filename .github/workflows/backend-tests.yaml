@@ -16,6 +16,8 @@ jobs:
     services:
       postgres:
         image: postgres:12  # For best results, match version in use by cloud.gov RDS
+        ports:
+          - 5432:5432
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
