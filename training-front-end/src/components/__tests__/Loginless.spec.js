@@ -10,7 +10,7 @@ function submitEmail(wrapper, email) {
 }
 
 const fetchData = {
-  token: "test-token"
+  token: "http://www.example.com/?test-token"
 }
 
 
@@ -24,7 +24,7 @@ describe('Loginless', () => {
     const wrapper = await shallowMount(Loginless, { 
       props: {"page_id": "training"}
     })
-    expect(wrapper.text()).toContain('Getting access to quiz')
+    expect(wrapper.text()).toContain('Enter your email address to get access to the quiz')
     const initial_div = wrapper.find('[data-test="pre-submit"]') 
     const confirmation_div = wrapper.find('[data-test="post-submit"]')
     expect(initial_div.exists()).toBe(true)
