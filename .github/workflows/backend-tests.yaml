@@ -51,6 +51,9 @@ jobs:
       - name: Seed the database
         run: python -m training.database.seed
 
+      - name: Run linter
+        run: flake8 training --show-source --statistics
+
       - name: Run unit tests with test coverage checking
         run: coverage run -m pytest
 
