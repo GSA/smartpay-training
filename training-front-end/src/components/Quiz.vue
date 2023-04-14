@@ -1,7 +1,5 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, computed, reactive} from "vue"
-  import { profile } from '../stores/user'
-  import { useStore } from '@nanostores/vue'
   import QuizQuestion from "./QuizQuestion.vue"
   import QuizCounter from "./QuizCounter.vue"
   import NavigateNext from "./icons/NavigateNext.vue"
@@ -10,7 +8,6 @@
 
   const emit = defineEmits(['submitQuiz'])
   const props = defineProps(['quiz', 'title'])
-  const user = useStore(profile)
 
   const question_index = ref(0)
   const user_answers = reactive([])

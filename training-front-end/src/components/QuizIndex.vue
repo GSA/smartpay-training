@@ -103,8 +103,7 @@
           {{ error.message }}
         </Alert>
         <Suspense>
-          <template #fallback>
-            …Loading
+          <template #fallback>…Loading
           </template>
           <Loginless @startLoading="startLoading"  @error="setError" :page_id="page_id" :title="title" :header="header">
             <Quiz v-if="isStarted" :quiz="quiz" :title="title" @submitQuiz=submitQuiz class="grid-col-8"/>

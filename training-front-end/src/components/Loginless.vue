@@ -190,7 +190,6 @@
               client:load
               v-model="user_input.agency_id" 
               :isInvalid="v_all_info$.agency_id.$error" 
-              :options="agencyList"
               label="Agency / organization (*Required)"
               name="agency"
               error_message="Please enter your agency"

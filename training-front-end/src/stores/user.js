@@ -32,27 +32,3 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   store.set({...user, jwt: jwt})
 })
  
-
-export const getUserFromJWT = action(profile, 'validateUser', async (store, base_url, jwt) => {
-  const url = `${base_url}/api/v1/validate-jwt/${token}` 
-  let res 
-  try {
-    res = await fetch(url, { 
-      method: "POST", 
-      headers: { 'Content-Type': 'application/json'},
-      body:  jwt
-    })
-  } catch(e) {
-    // server error
-    console.log("error connecting to api", e)
-    throw e
-  }
-  if (!res.ok) {
-    // indicates an invalid JWT
-    clearUser()
-    throw new Error("invalid token")
-  }
-
-  let user = await res.json()
-  store.set({...user, jwt:jwt})
-})
