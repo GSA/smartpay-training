@@ -2,9 +2,8 @@
   import {computed} from 'vue'
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
-
+  
   const options = await fetch(`${base_url}/api/v1/agencies`).then((r) => r.json())
-
   const props = defineProps({
       'modelValue': String,
       'isInvalid': Boolean,
