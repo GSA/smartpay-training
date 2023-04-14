@@ -45,8 +45,6 @@ jobs:
 
       - name: Run unit tests with test coverage checking
         run: coverage run -m pytest
-        env:
-          DB_URI: "postgres://postgres:postgres@postgres:5432/postgres"
 
       - name: Verify >= 90% test coverage
         run: coverage report --fail-under=90
