@@ -40,8 +40,13 @@ jobs:
       - name: Install prerequisites
         run: pip install -r requirements.txt -r requirements.dev.txt
 
+      - name: Set up environment variables
+        run: cp .env_example .env
+
       - name: Run unit tests with test coverage checking
         run: coverage run -m pytest
+        env:
+          DB_URI: "postgres://postgres:postgres@postgres:5432/postgres"
 
       - name: Verify >= 90% test coverage
         run: coverage report --fail-under=90
