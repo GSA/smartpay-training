@@ -43,6 +43,12 @@ jobs:
       - name: Set up environment variables
         run: cp .env_example .env
 
+      - name: Run database migrations
+        run: alembic upgrade head
+
+      - name: Seed the database
+        run: python -m training.database.seed
+
       - name: Run unit tests with test coverage checking
         run: coverage run -m pytest
 
