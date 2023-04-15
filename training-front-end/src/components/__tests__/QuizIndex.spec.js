@@ -23,7 +23,7 @@ describe('QuizIndex', () => {
   })
 
   it('loads initial view with unknown user', async () => {
-    const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(sample_quiz) })
     })
     const wrapper = await mount(QuizIndex, {props: page_props})
@@ -32,7 +32,7 @@ describe('QuizIndex', () => {
   })
 
   it('handles API errors', async () => {
-    const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.reject(new Error("Whoops, Server Error"))
     })
     const wrapper = await mount(QuizIndex, {props: page_props})
@@ -42,7 +42,7 @@ describe('QuizIndex', () => {
   })
 
   it('handles non-2xx responses from API', async () => {
-    const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: false, status:404, json: () => Promise.resolve([sample_quiz]) })
     })
     const wrapper = await mount(QuizIndex, {props: page_props})
@@ -52,7 +52,7 @@ describe('QuizIndex', () => {
   })
 
   it('shows start quiz once user is known', async () => {
-    const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([sample_quiz]) })
     })
     profile.set({name:"Hal Incandenza", jwt:"some-token-value"})
@@ -62,7 +62,7 @@ describe('QuizIndex', () => {
   })
 
   it('starts quiz when user clicks button', async () => {
-    const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([sample_quiz]) })
     })
     profile.set({name:"Hal Incandenza", jwt:"some-token-value"})
@@ -106,9 +106,10 @@ describe('QuizIndex', () => {
           'Content-Type': 'application/json',
         },
         method: 'POST'
-      })
+      }
+    )
   })
-  
+
   it('it displays error when child component throws error', async () => {
     const fetchspy = vi.spyOn(global, 'fetch')
     // gets quiz

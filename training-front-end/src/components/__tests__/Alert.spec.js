@@ -1,5 +1,4 @@
 import { describe, it, expect } from "vitest";
-
 import { mount } from "@vue/test-utils";
 import Alert from "../Alert.vue";
 
@@ -22,7 +21,6 @@ describe("Alert", () => {
     const header = wrapper.get('[data-test="heading"]')
 
     expect(header.text()).toBe("Warning!!");
-
   });
 
   it("renders status prop by indicating corresponding USWDS calss", () => {

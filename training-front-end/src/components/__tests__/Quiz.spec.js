@@ -1,15 +1,14 @@
 import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import sample_quiz  from './fixtures/sample_quiz'
+import quiz  from './fixtures/sample_quiz'
 import Quiz from '../Quiz.vue'
-
-const quiz = sample_quiz
 
 
 describe('Quiz', () => {
   let wrapper 
   let addEventListenerMock
   let removeEventListenerMock
+  
   beforeEach(async () => {
     addEventListenerMock = vi.spyOn(global, 'addEventListener').mockImplementation(() => {})
     removeEventListenerMock = vi.spyOn(global, 'removeEventListener').mockImplementation(() => {})

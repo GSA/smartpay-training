@@ -49,5 +49,4 @@ describe('ValidatedInput', () => {
 
     expect(label.attributes('for')).toBe(input.attributes('name'))
   })
-
 })
