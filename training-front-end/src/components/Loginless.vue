@@ -122,7 +122,6 @@
 </script>
 
 <template>
-
   <div v-if="!isLoggedIn && isLoaded">
     <div v-if="isFlowComplete" class="grid-row" data-test="post-submit">
       <div class="tablet:grid-col-8 usa-prose margin-y-4">
