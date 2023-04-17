@@ -131,7 +131,6 @@ describe('Loginless', () => {
     expect(error_handler).toBeCalledTimes(1)
   })
 
-
   it('confirms the user email on the confirmation page', async () => {
     const wrapper = await mount(Loginless, { 
       props: {"page_id": "training"}
