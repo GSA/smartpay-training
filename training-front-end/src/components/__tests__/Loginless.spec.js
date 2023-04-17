@@ -254,8 +254,8 @@ describe('Loginless', () => {
     
     const select = second_form.find('select')
     await select.setValue('22')
-    select.trigger('input')
-    second_form.trigger('submit.prevent')
+    await select.trigger('input')
+    await second_form.trigger('submit.prevent')
     await flushPromises()
 
     expect(fetchspy).toBeCalledTimes(3)

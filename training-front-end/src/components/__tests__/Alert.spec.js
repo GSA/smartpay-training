@@ -32,6 +32,5 @@ describe("Alert", () => {
 
     expect(header.text()).toBe("Error!!");
     expect(wrapper.classes()).toContain('usa-alert--error')
-
   });
 });

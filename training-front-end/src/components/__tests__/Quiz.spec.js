@@ -97,7 +97,7 @@ describe('Quiz', () => {
     const button = wrapper.find('button')
     expect(button.element.disabled).toBe(false)
 
-    button.trigger('click')
+    await button.trigger('click')
     expect(wrapper.emitted().submitQuiz[0][0]).toEqual(
       [
         { question_id: 0, response_ids: [ selects[0] ] },
@@ -113,7 +113,7 @@ describe('Quiz', () => {
     await radioButtons[0].setChecked()
     
     const button = wrapper.find('button')
-    button.trigger('click')
+    await button.trigger('click')
     await flushPromises()
     expect(pushStateMock).toBeCalledWith({ page: 1 }, '', '')
   })
@@ -125,10 +125,10 @@ describe('Quiz', () => {
     await radioButtons[0].setChecked()
     
     const button = wrapper.find('button')
-    button.trigger('click')
+    await button.trigger('click')
     await flushPromises()
     const buttons = wrapper.findAll('button')
-    buttons[1].trigger('click')
+    await buttons[1].trigger('click')
     await flushPromises()
 
     expect(pushStateMock).toBeCalledTimes(2)
@@ -143,11 +143,11 @@ describe('Quiz', () => {
     await radioButtons[0].setChecked()
     
     const button = wrapper.find('button')
-    button.trigger('click')
+    await button.trigger('click')
     await flushPromises()
     const buttons = wrapper.findAll('button')
-    buttons[1].trigger('click')
-    buttons[1].trigger('click')
+    await buttons[1].trigger('click')
+    await buttons[1].trigger('click')
     await flushPromises()
 
     expect(pushStateMock).toBeCalledTimes(2)

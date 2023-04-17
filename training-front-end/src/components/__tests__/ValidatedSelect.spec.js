@@ -52,14 +52,14 @@ describe('ValidatedInput', () => {
   })
 
   it('renders properly', async () => {
-    const wrapper =  mount(makeAsyncComponent(), {props: {isInvalid: false}})
+    const wrapper = mount(makeAsyncComponent(), {props: {isInvalid: false}})
 
     await flushPromises()
     expect(wrapper.text()).toContain('Agency')
   })
 
   it('does not render error when valid', async () => {
-    const wrapper =mount(makeAsyncComponent(),  {props: {isInvalid: false}})
+    const wrapper = mount(makeAsyncComponent(),  {props: {isInvalid: false}})
     await flushPromises()
 
     const element = wrapper.find('[id="agency-input-error-message"]')
@@ -76,7 +76,7 @@ describe('ValidatedInput', () => {
   })
 
   it('label should be "for" input', async () => {
-    const wrapper =mount(makeAsyncComponent(), {props: {isInvalid: true}})
+    const wrapper = mount(makeAsyncComponent(), {props: {isInvalid: true}})
     await flushPromises()
 
     const label = wrapper.find('label')
@@ -86,7 +86,7 @@ describe('ValidatedInput', () => {
   })
 
   it('get choices from the api', async () => {
-    const wrapper =mount(makeAsyncComponent(), {props: {isInvalid: true}})
+    const wrapper = mount(makeAsyncComponent(), {props: {isInvalid: true}})
     await flushPromises()
 
     const options = wrapper.findAll('option')
@@ -115,7 +115,7 @@ describe('ValidatedInput', () => {
     const select = wrapper.find('select')
     const component = wrapper.findComponent(ValidatedSelect)
     await select.setValue('22')
-    select.trigger('input')
+    await select.trigger('input')
     await flushPromises()
 
     expect(component.emitted()).toMatchObject({'update:modelValue': [ [ '22' ] ]})

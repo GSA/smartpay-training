@@ -30,6 +30,7 @@ describe('QuizIndex', () => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(sample_quiz) })
     })
     const wrapper = await mount(QuizIndex, {props: page_props})
+    await flushPromises()
     expect(wrapper.text()).toContain("Take the GSA SmartPay Fancy Pants Quiz")
     expect(wrapper.text()).toContain("Enter your email address to get access to the quiz. You'll receive an email with an access link")
   })
@@ -68,6 +69,7 @@ describe('QuizIndex', () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([sample_quiz]) })
     })
+    await flushPromises()
     profile.set({name:"Hal Incandenza", jwt:"some-token-value"})
     const wrapper = await mount(QuizIndex, {props: page_props})
     
@@ -99,7 +101,7 @@ describe('QuizIndex', () => {
     })
     const quiz = wrapper.getComponent(Quiz)
     await quiz.vm.$emit('submitQuiz', [[0], [2]])
-
+    await flushPromises()
     expect(fetchspy).nthCalledWith(2, 
       expect.stringMatching('api/v1/quizzes/2/submission'), 
       {
