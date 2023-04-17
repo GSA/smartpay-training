@@ -14,3 +14,6 @@ class QuizCompletionRepository(BaseRepository[models.QuizCompletion]):
             user_id=quiz_completion.user_id,
             passed=quiz_completion.passed
         ))
+
+    def get_certificate_by_id(self, id: int) -> models.QuizCompletion | None:
+        return self._session.query(models.QuizCompletion).filter(models.QuizCompletion.id == id, models.QuizCompletion.passed).first()
