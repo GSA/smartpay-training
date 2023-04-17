@@ -15,7 +15,7 @@
   import { useStore } from '@nanostores/vue'
   import Alert from './USWDSAlert.vue'
   import UserHome from '../components/UserHome.vue'
-  import Loginless from '../components/Loginless.vue';
+  import Loginless from './LoginlessFlow.vue';
 
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL

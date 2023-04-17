@@ -1,4 +1,9 @@
 module.exports = {
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module'
+  },
+
   extends: [
     // add more generic rulesets here, such as:
     // 'eslint:recommended',

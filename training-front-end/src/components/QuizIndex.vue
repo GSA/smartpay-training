@@ -3,8 +3,8 @@
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
   import USWDSAlert from './USWDSAlert.vue'
-  import Quiz from './Quiz.vue';
-  import Loginless from './Loginless.vue';
+  import Quiz from './QuizMain.vue';
+  import Loginless from './LoginlessFlow.vue';
   import QuizIntro from './QuizIntro.vue';
   import QuizResults from './QuizResults.vue';
 

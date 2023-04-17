@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach, vi} from 'vitest'
 import { defineComponent } from 'vue'
 import { mount, shallowMount, flushPromises } from '@vue/test-utils'
 import { cleanStores, keepMount } from 'nanostores'
-import Loginless from '../Loginless.vue'
+import Loginless from '../LoginlessFlow.vue'
 import { profile } from '../../stores/user.js'
 
 function submitEmail(wrapper, email) {

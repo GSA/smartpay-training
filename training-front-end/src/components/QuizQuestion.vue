@@ -11,7 +11,7 @@
   <h3 class="">{{ question.text }}</h3>
 
   <fieldset class="usa-fieldset margin-bottom-2">
-    <div class="usa-radio" v-for="({id, text}) in question.choices">
+    <div class="usa-radio" v-for="({id, text}) in question.choices" v-bind:key="id">
       <input
         class="usa-radio__input usa-radio__input--tile"
         :id="id"
@@ -22,7 +22,7 @@
         :value="id"
       />
       <label class="usa-radio__label" :for="id"
-      >{{text}}</label>
+      >{{ text }}</label>
     </div>
   </fieldset>
 </template>

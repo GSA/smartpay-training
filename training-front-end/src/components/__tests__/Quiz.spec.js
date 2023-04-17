@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import Quiz from '../Quiz.vue'
+import Quiz from '../QuizMain.vue'
 import quiz  from './fixtures/sample_quiz'
 
 

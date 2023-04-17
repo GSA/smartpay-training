@@ -3,7 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import sample_quiz from './fixtures/sample_quiz'
 import {passing_result, failing_result} from './fixtures/sample_quiz_response'
 import QuizIndex from '../QuizIndex.vue'
-import Quiz from '../Quiz.vue'
+import Quiz from '../QuizMain.vue'
 import QuizResults from '../QuizResults.vue'
 
 import { cleanStores } from 'nanostores'

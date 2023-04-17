@@ -5,14 +5,10 @@
     const props = defineProps(['quiz', 'quizResults']);
     const emits = defineEmits(['reset_quiz'])
 
-    const passed = props.quizResults.passed
-    const quiz_questions = props.quiz.content.questions
-
     const result_string = computed(() => `${props.quizResults.correct_count} correct out of ${props.quizResults.question_count}`)
     const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
-    const questions_incorrect = computed(() => quiz_questions.filter((q, i) => !props.quizResults.questions[i].correct))
+    const questions_incorrect = computed(() => props.quiz.content.questions.filter((q, i) => !props.quizResults.questions[i].correct))
 
-    
     function windowStateListener() {
       window.location = import.meta.env.BASE_URL
     }
@@ -27,7 +23,7 @@
 <template>
   <div class="usa-prose">
     <h3>Quiz Results</h3>
-    <div v-if="passed">
+    <div v-if="quizResults.passed">
       <h3>🎉 You passed 🎉</h3>
       <p>
         You answered {{ result_string }} for a score of {{ percentage }}%
@@ -41,7 +37,7 @@
       </p>
       <h3>You answered these questions incorrectly</h3>
       <ul  class="usa-icon-list">
-        <li v-for="question in questions_incorrect" class="usa-icon-list__item">
+        <li v-for="question in questions_incorrect" v-bind:key="question.id" class="usa-icon-list__item">
           <div class="usa-icon-list__icon text-red">
             <Cancel />
           </div>
