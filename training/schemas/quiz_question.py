@@ -1,10 +1,16 @@
+from enum import Enum
 from pydantic import BaseModel
 from training.schemas import QuizChoice, QuizChoicePublic, QuizChoiceCreate
 
 
+class QuizQuestionType(str, Enum):
+    MultipleChoiceMultipleSelect = "MultipleChoiceMultipleSelect"
+    MultipleChoiceSingleSelect = "MultipleChoiceSingleSelect"
+
+
 class QuizQuestionBase(BaseModel):
     text: str
-    type: str
+    type: QuizQuestionType
     choices: list[QuizChoice]
 
 

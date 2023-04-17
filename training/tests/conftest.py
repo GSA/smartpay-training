@@ -219,9 +219,40 @@ def invalid_submission(testdata: dict) -> Generator[schemas.QuizSubmission, None
 @pytest.fixture
 def valid_quiz(testdata: dict) -> Generator[models.Quiz, None, None]:
     '''
-    Provides a valid Quiz schema object.
+    Provides a valid Quiz database model object.
     '''
     jsondata = testdata["quizzes"][0]
     db_quiz = models.Quiz(**jsondata)
     db_quiz.id = 123
     yield db_quiz
+
+
+@pytest.fixture
+def valid_quiz_create() -> schemas.QuizCreate:
+    '''
+    Provides a valid QuizCreate schema object.
+    '''
+    return schemas.QuizCreate(
+        name="New Quiz",
+        topic=schemas.QuizTopic.Travel,
+        audience=schemas.QuizAudience.AccountHoldersApprovingOfficials,
+        active=True,
+        content=schemas.QuizContentCreate(
+            questions=[
+                schemas.QuizQuestionCreate(
+                    type=schemas.QuizQuestionType.MultipleChoiceSingleSelect,
+                    text="Official ministry travel is performed via the floo network.",
+                    choices=[
+                        schemas.QuizChoiceCreate(
+                            text="True.",
+                            correct=True
+                        ),
+                        schemas.QuizChoiceCreate(
+                            text="True.",
+                            correct=True
+                        )
+                    ]
+                )
+            ]
+        )
+    )

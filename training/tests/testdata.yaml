@@ -14,7 +14,7 @@ users:
 quizzes:
   - name: "Travel Training for Ministry of Magic"
     topic: "Travel"
-    audience: "Wizards"
+    audience: "AccountHoldersApprovingOfficials"
     active: true
     content:
       questions:
@@ -43,7 +43,7 @@ quizzes:
               correct: false
   - name: "Travel Training for Ministry of Magic"
     topic: "Travel"
-    audience: "Wizards"
+    audience: "AccountHoldersApprovingOfficials"
     active: false
     content:
       questions:
