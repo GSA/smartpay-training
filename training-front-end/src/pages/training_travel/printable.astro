@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from "@layouts/BaseLayout.astro";
 import HeroTraining from "@components/HeroTraining.astro"
-import PrintIcon from "@components/icons/Print.vue"
+import PrintIcon from "@components/icons/PrintIcon.vue"
 
 const pages = await getCollection('training_travel');
 const content_components = pages.map(async entry => (

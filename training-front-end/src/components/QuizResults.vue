@@ -1,6 +1,6 @@
 <script setup>
     import {computed, onMounted } from 'vue';
-    import Cancel from './icons/Cancel.vue';
+    import Cancel from './icons/CancelIcon.vue';
 
     const props = defineProps(['quiz', 'quizResults']);
     const emits = defineEmits(['reset_quiz'])
