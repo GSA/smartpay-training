@@ -1,6 +1,6 @@
+from training.errors import IncompleteQuizResponseError, QuizNotFoundError
 from training.repositories import QuizRepository, QuizCompletionRepository
 from training.schemas import Quiz, QuizSubmission, QuizGrade, QuizCompletionCreate
-from training.services import ServiceResult, AppError
 from sqlalchemy.orm import Session
 
 
@@ -9,24 +9,23 @@ class QuizService():
         self.quiz_repo = QuizRepository(db)
         self.quiz_completion_repo = QuizCompletionRepository(db)
 
-    def grade(self, quiz_id: int, user_id: int, submission: QuizSubmission) -> ServiceResult:
+    def grade(self, quiz_id: int, user_id: int, submission: QuizSubmission) -> QuizGrade:
         db_quiz = self.quiz_repo.find_by_id(quiz_id)
         if db_quiz is None:
-            return ServiceResult(AppError(code=404, message="Quiz not found"))
+            raise QuizNotFoundError
 
         quiz = Quiz.from_orm(db_quiz)
         correct_count = 0
         question_count = len(quiz.content.questions)
         questions = []
+        questions_without_responses = []
 
         for question in quiz.content.questions:
             # From the submission, get the response matching the current question
             response = next((r for r in submission.responses if r.question_id == question.id), None)
             if response is None:
-                return ServiceResult(AppError(
-                    code=422,
-                    message=f"No response(s) given for question ID {question.id}"
-                ))
+                questions_without_responses.append(question.id)
+                continue
 
             # Get a list of correct choice IDs from the answer sheet
             correct_ids = [choice.id for choice in question.choices if choice.correct]
@@ -41,6 +40,9 @@ class QuizService():
                 "question_id": question.id,
                 "correct": response_correct
             })
+
+        if questions_without_responses:
+            raise IncompleteQuizResponseError(questions_without_responses)
 
         grade = QuizGrade(
             quiz_id=quiz_id,
@@ -57,4 +59,4 @@ class QuizService():
             passed=grade.passed
         ))
 
-        return ServiceResult(grade)
+        return grade

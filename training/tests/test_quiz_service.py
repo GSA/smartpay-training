@@ -1,6 +1,8 @@
+import pytest
 from unittest.mock import MagicMock, patch
 from training import models, schemas
-from training.services import QuizService, AppError
+from training.errors import IncompleteQuizResponseError
+from training.services import QuizService
 from training.repositories import QuizRepository, QuizCompletionRepository
 
 
@@ -18,10 +20,9 @@ def test_grade_passing(
 
     result = quiz_service.grade(quiz_id=123, user_id=123, submission=valid_passing_submission)
 
-    assert result.success
-    assert isinstance(result.value, schemas.QuizGrade)
-    assert result.value.passed
-    assert result.value.percentage == 1
+    assert isinstance(result, schemas.QuizGrade)
+    assert result.passed
+    assert result.percentage == 1
 
 
 @patch.object(QuizRepository, "find_by_id")
@@ -38,10 +39,9 @@ def test_grade_failing(
 
     result = quiz_service.grade(quiz_id=123, user_id=123, submission=valid_failing_submission)
 
-    assert result.success
-    assert isinstance(result.value, schemas.QuizGrade)
-    assert not result.value.passed
-    assert result.value.percentage == 0.5
+    assert isinstance(result, schemas.QuizGrade)
+    assert not result.passed
+    assert result.percentage == 0.5
 
 
 @patch.object(QuizRepository, "find_by_id")
@@ -56,8 +56,7 @@ def test_grade_invalid(
     mock_quiz_repo_find_by_id.return_value = valid_quiz
     mock_quiz_completion_repo_create.return_value = 0
 
-    result = quiz_service.grade(quiz_id=123, user_id=123, submission=invalid_submission)
+    with pytest.raises(IncompleteQuizResponseError) as err:
+        quiz_service.grade(quiz_id=123, user_id=123, submission=invalid_submission)
 
-    assert not result.success
-    assert isinstance(result.value, AppError)
-    assert result.error.code == 422
+    assert err.value.missing_responses == [1]

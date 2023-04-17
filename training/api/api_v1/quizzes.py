@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Depends
+from training.errors import IncompleteQuizResponseError, QuizNotFoundError
 from training.schemas import Quiz, QuizPublic, QuizGrade, QuizSubmission, QuizCreate
 from training.repositories import QuizRepository
 from training.services import QuizService
@@ -40,16 +41,26 @@ def get_quiz(id: int, repo: QuizRepository = Depends(quiz_repository)):
     return quiz
 
 
-@router.post("/quizzes/{id}/submission", response_model=QuizGrade)
+@router.post(
+    "/quizzes/{id}/submission",
+    response_model=QuizGrade,
+    status_code=status.HTTP_201_CREATED
+)
 def submit_quiz(
     id: int,
     submission: QuizSubmission,
     quiz_service: QuizService = Depends(quiz_service)
 ):
-    grade_result = quiz_service.grade(quiz_id=id, user_id=1, submission=submission)
-    if not grade_result.success:
+    try:
+        grade = quiz_service.grade(quiz_id=id, user_id=1, submission=submission)
+    except QuizNotFoundError:
         raise HTTPException(
-            status_code=grade_result.error.code,
-            detail=grade_result.error.message
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The given quiz ID does not exist."
         )
-    return grade_result.value
+    except IncompleteQuizResponseError as err:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"No response(s) given for question ID(s): {err.missing_responses}"
+        )
+    return grade
