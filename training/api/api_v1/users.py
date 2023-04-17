@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Depends
-from training.schemas import User, UserCreate
+from training.schemas import User, UserCreate, UserCertificate
 from training.repositories import UserRepository
 from training.api.deps import user_repository
 
@@ -35,3 +35,11 @@ def get_user(id: int, repo: UserRepository = Depends(user_repository)):
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return db_user
+
+
+@router.get("/usercertificates/{user_id}", response_model=List[UserCertificate])
+def get_certificates_by_userid(user_id: int, repo: UserRepository = Depends(user_repository)):
+    db_user_certificates = repo.get_certificates_by_userid(user_id)
+    if db_user_certificates is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    return db_user_certificates
