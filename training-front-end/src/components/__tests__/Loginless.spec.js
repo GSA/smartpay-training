@@ -110,7 +110,7 @@ describe('Loginless', () => {
     expect(confirmation_div.exists()).toBe(true)
   })
 
-  it('throws error on non-2xx reponse code', async () => {
+  it('throws error on non-2xx response code', async () => {
     /* this error should be handled by parent component */
     const error_handler =  vi.fn()
     const wrapper = await mount(Loginless, { 
