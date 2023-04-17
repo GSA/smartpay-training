@@ -109,6 +109,29 @@ describe('Loginless', () => {
     expect(confirmation_div.exists()).toBe(true)
   })
 
+  it('throws error on non-2xx reponse code', async () => {
+    /* this error should be handled by parent component */
+    const error_handler =  vi.fn()
+    const wrapper = await mount(Loginless, { 
+      props: {"page_id": "training"},
+      global: {
+        config: {
+          errorHandler: error_handler
+        }
+      }
+    })
+    
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: false, status:404, json: () => Promise.resolve(fetchData) })
+    })
+
+    await submitEmail(wrapper, 'test@example.com') 
+    await flushPromises()
+
+    expect(error_handler).toBeCalledTimes(1)
+  })
+
+
   it('confirms the user email on the confirmation page', async () => {
     const wrapper = await mount(Loginless, { 
       props: {"page_id": "training"}
@@ -227,6 +250,7 @@ describe('Loginless', () => {
 
     // ...then the second form
     const second_form = wrapper.get('form')
+    await wrapper.get('[name="email"]').setValue("test@example.com")
     await wrapper.get('[name="name"]').setValue("Molly")
     
     const select = second_form.find('select')

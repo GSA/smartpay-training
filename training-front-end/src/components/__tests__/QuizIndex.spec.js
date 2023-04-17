@@ -1,9 +1,11 @@
 import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import sample_quiz from './fixtures/sample_quiz'
-import {passing_result} from './fixtures/sample_quiz_response'
+import {passing_result, failing_result} from './fixtures/sample_quiz_response'
 import QuizIndex from '../QuizIndex.vue'
 import Quiz from '../Quiz.vue'
+import QuizResults from '../QuizResults.vue'
+
 import { cleanStores } from 'nanostores'
 import { profile } from '../../stores/user.js'
 
@@ -20,6 +22,7 @@ describe('QuizIndex', () => {
   afterEach(() => {
     vi.restoreAllMocks()
     cleanStores(profile)
+    profile.set({})
   })
 
   it('loads initial view with unknown user', async () => {
@@ -96,7 +99,7 @@ describe('QuizIndex', () => {
     })
     const quiz = wrapper.getComponent(Quiz)
     await quiz.vm.$emit('submitQuiz', [[0], [2]])
-    await wrapper.vm.$nextTick()
+
     expect(fetchspy).nthCalledWith(2, 
       expect.stringMatching('api/v1/quizzes/2/submission'), 
       {
@@ -134,5 +137,139 @@ describe('QuizIndex', () => {
     await flushPromises()
     let alert = wrapper.find('[data-test="alert-container"]')
     expect(alert.text()).toContain('There was a problem connecting with the server')
+  })
+
+  it('shows results after quiz', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch')
+    fetchMock.mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([sample_quiz]) })
+    })
+    profile.set({name:"Hal Incandenza", jwt:"some-token-value"})
+    const wrapper = await mount(QuizIndex, {props: page_props})
+    await flushPromises()
+    const start_button = wrapper.find('button')
+    start_button.trigger('click')
+    await flushPromises()
+
+    let radioButtons = wrapper.findAll('input[type="radio"]')
+    await radioButtons[0].setChecked()    
+    let button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    radioButtons = wrapper.findAll('input[type="radio"]')
+    await radioButtons[0].setChecked()    
+    button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    fetchMock.mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(passing_result) })
+    })
+    const checkbox = wrapper.find('input[type="checkbox"]')
+    await checkbox.setChecked()
+    button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    let results = wrapper.findComponent(QuizResults)
+    expect(results.exists()).toBe(true)
+    expect(results.text()).toContain("You passed")
+  })
+
+  it('quiz resets when results emits reset_quiz event', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch')
+    fetchMock.mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([sample_quiz]) })
+    })
+    profile.set({name:"Hal Incandenza", jwt:"some-token-value"})
+    const wrapper = await mount(QuizIndex, {props: page_props})
+    await flushPromises()
+    const start_button = wrapper.find('button')
+    start_button.trigger('click')
+    await flushPromises()
+
+    let radioButtons = wrapper.findAll('input[type="radio"]')
+    await radioButtons[0].setChecked()    
+    let button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    radioButtons = wrapper.findAll('input[type="radio"]')
+    await radioButtons[0].setChecked()    
+    button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    fetchMock.mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(failing_result) })
+    })
+    const checkbox = wrapper.find('input[type="checkbox"]')
+    await checkbox.setChecked()
+    button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('Start quiz')
+  })
+
+  it('handles non-2xx responses from API when submitting quiz', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch')
+    fetchMock.mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([sample_quiz]) })
+    })
+    profile.set({name:"Hal Incandenza", jwt:"some-token-value"})
+    const wrapper = await mount(QuizIndex, {props: page_props})
+    await flushPromises()
+    const start_button = wrapper.find('button')
+    start_button.trigger('click')
+    await flushPromises()
+
+    let radioButtons = wrapper.findAll('input[type="radio"]')
+    await radioButtons[0].setChecked()    
+    let button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    radioButtons = wrapper.findAll('input[type="radio"]')
+    await radioButtons[0].setChecked()    
+    button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    fetchMock.mockImplementation(() => {
+      return Promise.resolve({ok: false, status:404, json: () => Promise.resolve(failing_result) })
+    })
+    const checkbox = wrapper.find('input[type="checkbox"]')
+    await checkbox.setChecked()
+    button = wrapper.find('button')
+    button.trigger('click')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain("Server Error")
+  })
+
+  it('handles errors from child components', async () => {
+    const fetchMock =  vi.spyOn(global, 'fetch')
+    fetchMock.mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([sample_quiz]) })
+    })
+    const wrapper = await mount(QuizIndex, {props: page_props})
+    await flushPromises()
+
+    fetchMock.mockImplementation(() => {
+      return Promise.reject(new Error("whoops, server error"))
+    })
+
+    wrapper.get('[data-test="email-submit-form"] [name="email"]').setValue('test@example.com')
+    wrapper.get('form').trigger('submit.prevent')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain("Server Error")
+   
   })
 })

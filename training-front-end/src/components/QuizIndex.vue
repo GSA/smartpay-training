@@ -41,8 +41,8 @@
   })
 
   onErrorCaptured((err) => {
-    console.log("Error from child component", err)
     setError(err)
+    return false
   })
 
 	const error = ref()

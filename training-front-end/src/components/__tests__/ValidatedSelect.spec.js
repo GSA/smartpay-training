@@ -4,6 +4,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import ValidatedSelect from '../ValidatedSelect.vue'
 
 
+
 const agency_api = [
   {
     "name": "Central Intelligence Agency",
@@ -107,6 +108,20 @@ describe('ValidatedInput', () => {
 
     const error_span = wrapper.find('span[class="usa-error-message"]')
     expect(error_span.text()).toBe('Please enter your agency')
+  })
+
+  it('emits value on input', async () => {
+    const wrapper = mount(makeAsyncComponent(), {props: {isInvalid: false}})
+    await flushPromises()
+
+    const select = wrapper.find('select')
+    const component = wrapper.findComponent(ValidatedSelect)
+    await select.setValue('22')
+    select.trigger('input')
+    await flushPromises()
+
+    expect(component.emitted()).toMatchObject({'update:modelValue': [ [ '22' ] ]})
+
   })
 
 })

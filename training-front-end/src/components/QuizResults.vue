@@ -13,8 +13,8 @@
     const questions_incorrect = computed(() => quiz_questions.filter((q, i) => !props.quizResults.questions[i].correct))
 
     
-    function windowStateListener(event) {
-      window.location = import.meta.env.BASE_URL
+    function windowStateListener() {
+      window.location  = import.meta.env.BASE_URL
     }
 
     onMounted(() => {

@@ -90,7 +90,6 @@
         })
       })
     } catch (err) {
-      console.log("err", err)
       isLoading.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
       e.name = "Server Error"
