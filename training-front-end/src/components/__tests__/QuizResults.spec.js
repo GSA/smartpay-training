@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-
 import { mount } from "@vue/test-utils";
 import QuizResults from "../QuizResults.vue";
 import quiz from './fixtures/sample_quiz'

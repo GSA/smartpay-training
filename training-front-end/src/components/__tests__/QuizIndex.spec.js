@@ -270,6 +270,5 @@ describe('QuizIndex', () => {
     await flushPromises()
 
     expect(wrapper.text()).toContain("Server Error")
-   
   })
 })

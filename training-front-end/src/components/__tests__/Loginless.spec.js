@@ -33,6 +33,7 @@ function makeAsyncComponent() {
       </Suspense>`
   })
 }
+
 const fetchData = {
   token: "http://www.example.com/?test-token"
 }
@@ -124,7 +125,6 @@ describe('Loginless', () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: false, status:404, json: () => Promise.resolve(fetchData) })
     })
-
     await submitEmail(wrapper, 'test@example.com') 
     await flushPromises()
 
@@ -238,7 +238,7 @@ describe('Loginless', () => {
     expect(content_div.exists()).toBe(false)
   })
 
-  it('Submits form to api with complete information', async () => {
+  it('submits form to api with complete information', async () => {
     const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(agency_api) })
     })

@@ -14,7 +14,7 @@
 
     
     function windowStateListener() {
-      window.location  = import.meta.env.BASE_URL
+      window.location = import.meta.env.BASE_URL
     }
 
     onMounted(() => {

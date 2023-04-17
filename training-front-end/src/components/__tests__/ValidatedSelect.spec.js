@@ -4,7 +4,6 @@ import { mount, flushPromises } from '@vue/test-utils'
 import ValidatedSelect from '../ValidatedSelect.vue'
 
 
-
 const agency_api = [
   {
     "name": "Central Intelligence Agency",
@@ -20,7 +19,6 @@ const agency_api = [
  * which requires special handling in tests see:
  * https://test-utils.vuejs.org/guide/advanced/async-suspense.html#testing-asynchronous-setup
  */
-
 function makeAsyncComponent() {
   return defineComponent({
     components: { ValidatedSelect },
@@ -102,7 +100,7 @@ describe('ValidatedInput', () => {
     expect(fetchMock).toBeCalled()
   })
 
-  it('Displays error with invalid data', async () => {
+  it('displays error with invalid data', async () => {
     const wrapper = mount(makeAsyncComponent(), {props: {isInvalid: true}})
     await flushPromises()
 
@@ -121,7 +119,5 @@ describe('ValidatedInput', () => {
     await flushPromises()
 
     expect(component.emitted()).toMatchObject({'update:modelValue': [ [ '22' ] ]})
-
   })
-
 })

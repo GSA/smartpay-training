@@ -1,16 +1,12 @@
 import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import quiz  from './fixtures/sample_quiz'
 import Quiz from '../Quiz.vue'
+import quiz  from './fixtures/sample_quiz'
 
 
 const props = {"quiz":quiz, "title": "Astro Quiz!"}
 
 describe('Quiz', () => {
-  
-  beforeEach(async () => {
-  })
-
   afterEach(() => {
     vi.restoreAllMocks()
   })
@@ -159,7 +155,6 @@ describe('Quiz', () => {
 
   it('should add window listeners on mount', async () => {
     const addEventListenerMock = vi.spyOn(global, 'addEventListener').mockImplementation(() => {})
-    const removeEventListenerMock = vi.spyOn(global, 'removeEventListener').mockImplementation(() => {})
     const wrapper = await mount(Quiz, {props})
 
     expect(addEventListenerMock).toBeCalled(2)
@@ -169,7 +164,6 @@ describe('Quiz', () => {
 
   it('should remove window listeners on mount', async () => {
     const wrapper = await mount(Quiz, {props})
-    const addEventListenerMock = vi.spyOn(global, 'addEventListener').mockImplementation(() => {})
     const removeEventListenerMock = vi.spyOn(global, 'removeEventListener').mockImplementation(() => {})
 
     wrapper.unmount()
@@ -180,7 +174,6 @@ describe('Quiz', () => {
 
   it('handles beforeunload events', async () => {
     const wrapper = await mount(Quiz, {props})
-
     const preventMock = vi.fn()
     const event = new Event('beforeunload')
     event.preventDefault = preventMock
@@ -190,12 +183,11 @@ describe('Quiz', () => {
 
   it('sets page based on history event', async () => {
     const wrapper = await mount(Quiz, {props})
-
     const popstate = new Event('popstate')
     popstate.state = {page: 1}
     global.window.dispatchEvent(popstate)
     await flushPromises()
-    expect(wrapper.text()).toContain('Question 2 of 2')
 
+    expect(wrapper.text()).toContain('Question 2 of 2')
   })
 })
