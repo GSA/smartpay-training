@@ -27,10 +27,10 @@ def test_create_duplicate(user_repo_with_data: UserRepository):
         user_repo_with_data.create(duplicate_user)
 
 
-def test_find_by_email(user_repo_with_data: UserRepository, valid_user):
-    result = user_repo_with_data.find_by_email(valid_user["email"])
+def test_find_by_email(user_repo_with_data: UserRepository, valid_user_dict):
+    result = user_repo_with_data.find_by_email(valid_user_dict["email"])
     assert result is not None
-    assert result.name == valid_user["name"]
+    assert result.name == valid_user_dict["name"]
 
 
 def test_find_by_nonexistent_email(user_repo_empty: UserRepository):
