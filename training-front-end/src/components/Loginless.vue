@@ -8,7 +8,6 @@
   import { ref, reactive, computed, onMounted } from 'vue';
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
-
   import ValidatedInput from './ValidatedInput.vue';
   import ValidatedSelect from './ValidatedSelect.vue';
   import { useVuelidate } from '@markmeyer/vuelidate-core';
@@ -31,6 +30,7 @@
   const validations_just_email = {
     email: {email, required}
   }
+
   const v_email$ = useVuelidate(validations_just_email, user_input)
 
   const validations_all_info = {
@@ -38,12 +38,12 @@
     email: {email, required},
     agency_id: {required}
   }
+
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
   const tempURL = ref('')
   const isLoaded = ref(false)
   const isLoading = ref(false)
-
   const isFlowComplete = ref(false)
   const emailValidated = ref(false)
 
@@ -52,6 +52,7 @@
     url.search = ''
     history.replaceState({}, '', url)
   }
+
   onMounted(async () => {
     // Handle token in url query if it exists
     const urlParams = new URLSearchParams(window.location.search);
@@ -90,7 +91,6 @@
         })
       })
     } catch (err) {
-      console.log("err", err)
       isLoading.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
       e.name = "Server Error"
@@ -189,7 +189,6 @@
               client:load
               v-model="user_input.agency_id" 
               :isInvalid="v_all_info$.agency_id.$error" 
-              :options="agencyList"
               label="Agency / organization (*Required)"
               name="agency"
               error_message="Please enter your agency"

@@ -69,10 +69,16 @@ npm run dev
 
 ## Testing
 
-To run tests, first ensure that the `DB_URI` environment variable is set to an empty test database (example: `postgres://postgres:postgres@localhost:5432/smartpay-test`), then run:
+To run tests with code coverage checking:
 
 ```
-pytest
+coverage run -m pytest
+```
+
+To view the coverage report afterwards:
+
+```
+coverage report
 ```
 
 ## Deployment

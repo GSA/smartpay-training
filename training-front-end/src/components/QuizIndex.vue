@@ -2,7 +2,7 @@
   import { ref, onErrorCaptured, onBeforeMount } from 'vue';
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
-  import Alert from './Alert.vue';
+  import USWDSAlert from './USWDSAlert.vue'
   import Quiz from './Quiz.vue';
   import Loginless from './Loginless.vue';
   import QuizIntro from './QuizIntro.vue';
@@ -11,28 +11,38 @@
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const quiz = ref()
-  const props = defineProps(['topic', 'audience','page_id', 'title', 'header', 'subhead', 'hero_image'])
+  const props = defineProps(['topic', 'audience', 'page_id', 'title', 'header', 'subhead', 'hero_image'])
 
   onBeforeMount(async () => {
     // import quiz_temp_json from '../dev_data/travel_a_opc.json'
     // quiz.value = quiz_temp_json
     const url = `${base_url}/api/v1/quizzes/?topic=${props.topic}&audience=${props.audience}&active=true`
-    const res = await fetch(url, {
-      method: 'GET', 
-      headers: {'Authorization': `Bearer ${user.value.jwt}`}
-    })
+    let res
+    try {
+      res = await fetch(url, {
+        method: 'GET', 
+        headers: {'Authorization': `Bearer ${user.value.jwt}`}
+      })
+    } catch(e) {
+      const err = new Error("Sorry, a server error was encountered.")
+      err.name = "Server Error!"
+      setError(err)
+      return
+    }
 
     if (!res.ok) {
-      // TODO: give the user something better than this
-      throw new Error("Sorry, a server error was encountered.")
+      const err = new Error("Sorry, a server error was encountered.")
+      err.name = "Server Error!"
+      setError(err)
+      return
     }
     const filtered_quizzes =  await res.json();
     quiz.value = filtered_quizzes[0]
   })
 
   onErrorCaptured((err) => {
-    console.log("Error from child component", err)
     setError(err)
+    return false
   })
 
 	const error = ref()
@@ -47,7 +57,7 @@
   }
   
   function resetQuiz() {
-    /* Fired when user wants to retake quiz after unsuccesful attemtp */
+    /* Fired when user wants to retake quiz after unsuccesful attempt */
     isSubmitted.value = false
     quizSubmission.value = undefined
     quizResults.value = undefined
@@ -68,9 +78,10 @@
         body:  JSON.stringify( {'responses': user_answers}) 
       })
     } catch(e) {
-      // server error
-      console.log("error connecting to api", e)
-      throw e
+      const err = new Error("There was a problem connecting with the server")
+      err.name = "Server Error"
+      setError(err)
+      return 
     }
     if (!res.ok){
       // non 2xx response from server
@@ -99,9 +110,9 @@
   <div  class="grid-container" data-test="post-submit">
     <div class="grid-row">
       <div class="tablet:grid-col-12">
-        <Alert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
+        <USWDSAlert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
           {{ error.message }}
-        </Alert>
+        </USWDSAlert>
         <Suspense>
           <template #fallback>
             …Loading

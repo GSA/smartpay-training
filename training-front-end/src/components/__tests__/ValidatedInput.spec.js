@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest'
-
 import { mount } from '@vue/test-utils'
 import ValidatedInput from '../ValidatedInput.vue'
 
@@ -13,7 +12,6 @@ const valid_input = {
 }
 
 const invalid_input = {...valid_input, 'isInvalid': true}
-
 
 describe('ValidatedInput', () => {
   it('renders properly', () => {
@@ -49,5 +47,4 @@ describe('ValidatedInput', () => {
 
     expect(label.attributes('for')).toBe(input.attributes('name'))
   })
-
 })

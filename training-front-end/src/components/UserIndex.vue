@@ -13,7 +13,7 @@
   import { onMounted, ref } from 'vue'
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
-  import Alert from '../components/Alert.vue'
+  import Alert from './USWDSAlert.vue'
   import UserHome from '../components/UserHome.vue'
   import Loginless from '../components/Loginless.vue';
 

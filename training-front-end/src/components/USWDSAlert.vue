@@ -28,7 +28,7 @@
   <div 
     class="usa-alert margin-y-2" 
     :class="alertClass" 
-    data-test="container"
+    data-test="alert-container"
   >
     <div class="usa-alert__body">
       <h4 
