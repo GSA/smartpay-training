@@ -9,12 +9,19 @@ const { selectAll } = selector;
 export default () => {
     return node => selectAll('a', node).forEach(node => {
       const properties = node.properties
-      let domain = new URL(properties.href)
+      properties.className = 'usa-link'
 
-      if (domain.hostname.endsWith('training.smartpay.gsa.gov')) {
-        properties.className = 'usa-link'
-      } else {
-        properties.className = 'usa-link usa-link--external'
+      let domain;
+      try { 
+        domain = new URL(properties.href)
+      } catch(e) {
+        // Exceptions will be raised with relative links
+        // these will all be local, so ignore
+        return
+      }
+
+      if (! domain.hostname.endsWith('training.smartpay.gsa.gov')) {
+        properties.className += ' usa-link--external'
       }
     });
 };
