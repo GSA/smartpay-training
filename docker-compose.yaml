@@ -16,20 +16,20 @@ services:
       - "8432:8080"
     depends_on:
       - db
-  api:
-    build:
-      context: .
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./:/usr/src/app
-    depends_on:
-      - redis
-      - db
-  web:
-    build:
-      context: ./training-front-end
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./training-front-end:/usr/src/app
+  # api:
+  #   build:
+  #     context: .
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./:/usr/src/app
+  #   depends_on:
+  #     - redis
+  #     - db
+  # web:
+  #   build:
+  #     context: ./training-front-end
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./training-front-end:/usr/src/app
