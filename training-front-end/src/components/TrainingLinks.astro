@@ -19,7 +19,9 @@ const previous_href = pages[index - 1]
   : <a href={`${import.meta.env.BASE_URL}quiz/${training_category}`} class="usa-button margin-y-2">Take the quiz</a>
 }
 <br />
-{ index 
-  ? <a href={`${import.meta.env.BASE_URL}${training_category}/${previous_href.slug}`} class="usa-pagination__link usa-pagination__previous-page"><NavigateBack /><span class="usa-pagination__link-text">Back</span></a>
-  : <a href={`${import.meta.env.BASE_URL}quiz/${training_category}`}>Skip ahead to the quiz</a>
+{ 
+  index > 0 && 
+  <a href={`${import.meta.env.BASE_URL}${training_category}/${previous_href.slug}`} class="usa-pagination__link usa-pagination__previous-page">
+    <NavigateBack /><span class="usa-pagination__link-text">Back</span>
+  </a>
 }
