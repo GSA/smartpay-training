@@ -49,6 +49,8 @@ def db_with_data(db: Session, testdata: dict):
     '''
 
     agency_ids = []
+    user_ids = []
+    quiz_ids = []
     for name in testdata["agencies"]:
         agency = models.Agency(name=name)
         db.add(agency)
@@ -57,23 +59,32 @@ def db_with_data(db: Session, testdata: dict):
         agency_ids.append(agency.id)
 
     for index, user in enumerate(testdata["users"]):
-        db.add(models.User(
-            email=user["email"],
-            name=user["name"],
-            agency_id=agency_ids[index % 2]
-        ))
+        user = models.User(email=user["email"], name=user["name"], agency_id=agency_ids[index % 2])
+        db.add(user)
         db.commit()
+        db.refresh(user)
+        user_ids.append(user.id)
 
     for index, quiz in enumerate(testdata["quizzes"]):
-        db.add(models.Quiz(
+        quiz = models.Quiz(
             name=quiz["name"],
             topic=quiz["topic"],
             audience=quiz["audience"],
             active=quiz["active"],
             content=quiz["content"]
-        ))
+        )
+        db.add(quiz)
         db.commit()
+        db.refresh(quiz)
+        quiz_ids.append(quiz.id)
 
+    quiz_completion_pass = models.QuizCompletion(user_id=user_ids[-1], quiz_id=quiz_ids[-1], passed=True)
+    db.add(quiz_completion_pass)
+    db.commit()
+
+    quiz_completion_fail = models.QuizCompletion(user_id=user_ids[-1], quiz_id=quiz_ids[-1], passed=False)
+    db.add(quiz_completion_fail)
+    db.commit()
     yield db
 
 
@@ -256,3 +267,12 @@ def valid_quiz_create() -> schemas.QuizCreate:
             ]
         )
     )
+
+
+@pytest.fixture
+def passed_quiz_completion_id(db_with_data: Session) -> Generator[int, None, None]:
+    '''
+    Provides quiz completion id that have passed value equals true
+    '''
+    quiz_comletion_passed = db_with_data.query(models.QuizCompletion).filter(models.QuizCompletion.passed).first().id
+    yield quiz_comletion_passed
