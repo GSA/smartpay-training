@@ -22,6 +22,7 @@ const agency_api = [
 function makeAsyncComponent() {
   return defineComponent({
     components: { ValidatedSelect },
+    props: {isInvalid: Boolean},
     template: `
       <Suspense>
         <ValidatedSelect 
@@ -29,10 +30,9 @@ function makeAsyncComponent() {
           :isInvalid="isInvalid"
           name="agency"
           label="Agency / organization (*Required)"
-          error_message="Please enter your agency"
+          errorMessage="Please enter your agency"
          />
-      </Suspense>`,
-    props: {isInvalid: Boolean}
+      </Suspense>`
   })
 }
 

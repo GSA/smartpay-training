@@ -2,7 +2,16 @@
     import {computed, onMounted } from 'vue';
     import Cancel from './icons/CancelIcon.vue';
 
-    const props = defineProps(['quiz', 'quizResults']);
+    const props = defineProps({
+      'quiz':{
+        type: Object,
+        required: true
+      },
+      'quizResults': {
+        type: Object,
+        required: true
+      }
+    });
     const emits = defineEmits(['reset_quiz'])
 
     const result_string = computed(() => `${props.quizResults.correct_count} correct out of ${props.quizResults.question_count}`)
@@ -36,17 +45,26 @@
         You correctly answered {{ result_string }} for a score of {{ percentage }}% 
       </p>
       <h3>You answered these questions incorrectly</h3>
-      <ul  class="usa-icon-list">
-        <li v-for="question in questions_incorrect" v-bind:key="question.id" class="usa-icon-list__item">
+      <ul class="usa-icon-list">
+        <li
+          v-for="question in questions_incorrect"
+          :key="question.id"
+          class="usa-icon-list__item"
+        >
           <div class="usa-icon-list__icon text-red">
             <Cancel />
           </div>
-          <div class="usa-icon-list__content">{{ question.text }}</div>
+          <div class="usa-icon-list__content">
+            {{ question.text }}
+          </div>
         </li>
       </ul>
-      <button class="usa-button margin-y-4" @click="$emit('reset_quiz')">Try again</button>
+      <button
+        class="usa-button margin-y-4"
+        @click="$emit('reset_quiz')"
+      >
+        Try again
+      </button>
     </div>
-    
-
   </div>
 </template>

@@ -19,9 +19,9 @@
   })
 </script>
 <template>
-    <div>
-        <h2>Welcome {{ user.name }}</h2>
+  <div>
+    <h2>Welcome {{ user.name }}</h2>
         
-        <p>for testing: <br />{{ user.jwt }} </p>
-    </div>
+    <p>for testing: <br>{{ user.jwt }} </p>
+  </div>
 </template>

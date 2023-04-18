@@ -9,7 +9,11 @@
     <p>
       <b>Note:</b> Your quiz progress will not be saved if you navigate away.
     </p>
-    <button class="usa-button" @click="$emit('start')">Start quiz</button>
+    <button
+      class="usa-button"
+      @click="$emit('start')"
+    >
+      Start quiz
+    </button>
   </section>
-
 </template>

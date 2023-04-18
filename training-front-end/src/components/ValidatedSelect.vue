@@ -5,31 +5,72 @@
   
   const options = await fetch(`${base_url}/api/v1/agencies`).then((r) => r.json())
   const props = defineProps({
-      'modelValue': String,
-      'isInvalid': Boolean,
-      'name': String,
-      'label': String,
-      'error_message': String
+    'modelValue': {
+      type: String,
+      required: false,
+      default: undefined
+    },
+    'isInvalid': {
+      type: Boolean,
+      required: true
+    },
+    'name': {
+      type: String,
+      required: true
+    },
+    'label': {
+      type: String,
+      required: true
+    },
+    'errorMessage': {
+      type: String,
+      required: true
+    }
   })
+  
+  const emits = defineEmits(['update:modelValue'])
 
   var error_id = computed(() => props.name + '-input-error-message')
 </script>
 <template>
-  <div class="usa-form-group" :class="{ 'usa-form-group--error':isInvalid}">
-    <label class="usa-label" :for="name">{{label}}</label>
-    <span v-if="isInvalid" class="usa-error-message" :id="error_id" role="alert">
-      {{ error_message }}
+  <div
+    class="usa-form-group"
+    :class="{ 'usa-form-group--error':isInvalid}"
+  >
+    <label
+      class="usa-label"
+      :for="name"
+    >{{ label }}</label>
+    <span
+      v-if="isInvalid"
+      :id="error_id"
+      class="usa-error-message"
+      role="alert"
+    >
+      {{ errorMessage }}
     </span>
 
     <select 
-      class="usa-select"
       :id="name"
+      class="usa-select"
       :name="name"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
+    >
+      <option
+        disabled
+        value=""
+        selected
       >
-      <option disabled value="" selected>- Select -</option>
-      <option v-for="option in options" :value="option.id" :key="option.id">{{option.name}}</option>
+        - Select -
+      </option>
+      <option
+        v-for="option in options"
+        :key="option.id"
+        :value="option.id"
+      >
+        {{ option.name }}
+      </option>
     </select>
   </div>
 </template>

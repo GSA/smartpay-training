@@ -48,14 +48,28 @@
 </script>
 
 <template>
-  <div  class="grid-container" data-test="post-submit">
-    <div v-if="loaded" class="grid-container">
-      <UserHome  v-if="user.jwt"/>
+  <div
+    class="grid-container"
+    data-test="post-submit"
+  >
+    <div
+      v-if="loaded"
+      class="grid-container"
+    >
+      <UserHome v-if="user.jwt" />
       <div v-else>
-          <Alert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
-            {{ error.message }}
-          </Alert>
-          <Loginless @endLoading="endLoading" @error="setError"/>
+        <Alert
+          v-if="error"
+          class="tablet:grid-col-8"
+          status="warning"
+          :heading="error.name"
+        >
+          {{ error.message }}
+        </Alert>
+        <Loginless
+          @end-loading="endLoading"
+          @error="setError"
+        />
       </div>
     </div>
   </div>

@@ -13,7 +13,7 @@ const page_props = {
   header: "Fancy Pants",
   subhead: "for everyone",
   audience: "audience",
-  page_id: "training_travel",
+  pageId: "training_travel",
   topic: "tennis",
   title: "Eschaton Training"
 }
