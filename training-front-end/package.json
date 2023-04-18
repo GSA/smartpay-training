@@ -10,7 +10,7 @@
     "astro": "astro",
     "test:unit": "vitest --environment jsdom --root .",
     "test:coverage": "vitest --coverage",
-    "lint": "eslint 'src' --ext .vue --ext .js --ext .astro"
+    "lint": "eslint 'src' --ext .vue,.js,.astro"
   },
   "dependencies": {
     "@astrojs/mdx": "^0.18.2",

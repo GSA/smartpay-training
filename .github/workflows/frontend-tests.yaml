@@ -1,0 +1,30 @@
+name: Frontend tests and code coverage
+
+on:
+  - push
+
+jobs:
+  unit-tests-and-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'training-front-end' 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: training-front-end/package-lock.json
+      
+      - name: install dependencies
+        run: npm ci
+      
+      - name: run linter
+        run: npm run lint
+
+      - name: code run coverage > 90 %
+        run: npm run test:coverage -- --watch=false
