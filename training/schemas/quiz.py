@@ -1,11 +1,23 @@
+from enum import Enum
 from pydantic import BaseModel
 from training.schemas import QuizContent, QuizContentCreate, QuizContentPublic
 
 
+class QuizTopic(str, Enum):
+    Travel = "Travel"
+    Purchase = "Purchase"
+    Fleet = "Fleet"
+
+
+class QuizAudience(str, Enum):
+    AccountHoldersApprovingOfficials = "AccountHoldersApprovingOfficials"
+    ProgramCoordinators = "ProgramCoordinators"
+
+
 class QuizBase(BaseModel):
     name: str
-    topic: str
-    audience: str
+    topic: QuizTopic
+    audience: QuizAudience
     active: bool
     content: QuizContent
 
