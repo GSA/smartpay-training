@@ -7,6 +7,7 @@ module.exports = {
     "browser": true,
     "es6": true
   },
+  extends: ['eslint:recommended'],
 
   overrides: [
     {
@@ -14,7 +15,6 @@ module.exports = {
       "globals": {
         "global": "writeable" // vitest adds global to tests
       },
-      extends: ['eslint:recommended']
     },
     {
       files: ['*.astro'],

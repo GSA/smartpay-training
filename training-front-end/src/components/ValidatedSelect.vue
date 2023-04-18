@@ -28,7 +28,7 @@
     }
   })
   
-  const emits = defineEmits(['update:modelValue'])
+  defineEmits(['update:modelValue'])
 
   var error_id = computed(() => props.name + '-input-error-message')
 </script>

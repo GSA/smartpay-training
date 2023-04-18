@@ -1,5 +1,5 @@
 <script setup>
-  const emits = defineEmits(['start'])
+  defineEmits(['start'])
 </script>
 <template>
   <section class="usa-prose margin-y-1 usa-prose">

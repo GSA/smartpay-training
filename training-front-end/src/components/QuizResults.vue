@@ -12,7 +12,7 @@
         required: true
       }
     });
-    const emits = defineEmits(['reset_quiz'])
+    defineEmits(['reset_quiz'])
 
     const result_string = computed(() => `${props.quizResults.correct_count} correct out of ${props.quizResults.question_count}`)
     const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
