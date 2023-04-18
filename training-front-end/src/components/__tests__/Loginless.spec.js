@@ -158,7 +158,7 @@ describe('Loginless', () => {
   })
 
   it('gets the user from the api using the token from the url and sets it in the store', async () => {
-    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(key => '7348244d-76c7-4535-94f7-5929e039af97')
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
     keepMount(profile)
 
     const token_response = {
@@ -168,13 +168,13 @@ describe('Loginless', () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, json: () => Promise.resolve(token_response) })
     })
-    const wrapper = await mount(Loginless, {props}) 
+    await mount(Loginless, {props}) 
     await flushPromises()
     expect(profile.get()).toEqual({jwt: "abcd", name: 'Molly Bloom' })
   })
 
   it('resets history on a successful mount', async () => {
-    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(key => '7348244d-76c7-4535-94f7-5929e039af97')
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
 
     const token_response = {
       user: {name: "Molly Bloom"},
@@ -184,7 +184,7 @@ describe('Loginless', () => {
       return Promise.resolve({ok: true, json: () => Promise.resolve(token_response) })
     })
     const historymock = vi.spyOn(global.history, 'replaceState').mockImplementation(() => {})
-    const wrapper = await mount(Loginless, {props}) 
+    await mount(Loginless, {props}) 
     await flushPromises()
     expect(historymock).toBeCalledWith({}, '', expect.any(URL))
   })

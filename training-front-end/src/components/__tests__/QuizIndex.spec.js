@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
+import { describe, it, expect, afterEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import sample_quiz from './fixtures/sample_quiz'
 import {passing_result, failing_result} from './fixtures/sample_quiz_response'

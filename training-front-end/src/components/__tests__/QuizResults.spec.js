@@ -24,7 +24,7 @@ describe("QuizResults", () => {
 
   it('loads base url on popstate', async() => {
     const setMock = vi.fn();
-    const wrapper = await mount(QuizResults, {props: {quiz: quiz, quizResults: passing_result}})
+    await mount(QuizResults, {props: {quiz: quiz, quizResults: passing_result}})
     vi.spyOn(global.window, 'location', 'set').mockImplementation(setMock)
 
     const popEvent = new Event('popstate');
