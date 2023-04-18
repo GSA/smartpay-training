@@ -37,7 +37,7 @@ def user_complete():
 
 @pytest.fixture
 def page_dest():
-    return {"pageId": "travel_test", "title": "Amazing Training"}
+    return {"page_id": "travel_test", "title": "Amazing Training"}
 
 
 class TestAuth:
