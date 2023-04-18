@@ -59,7 +59,7 @@
     history.pushState(state, "", url)
   }
 
-  function previous_question(e){
+  function previous_question(){
     if (question_index.value <= 0) {
       return
     }

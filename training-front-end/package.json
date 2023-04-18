@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "test:unit": "vitest --environment jsdom --root .",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint 'src' --ext .vue --ext .js --ext .astro"
   },
   "dependencies": {
     "@astrojs/mdx": "^0.18.2",

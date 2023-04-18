@@ -7,27 +7,20 @@ module.exports = {
     "browser": true,
     "es6": true
   },
-  
-  extends: [
-    // add more generic rulesets here, such as:
-    'eslint:recommended',
-  ],
-  rules: {
-    // override/add rules settings here, such as:
-    // 'vue/no-unused-vars': 'error'
-  },
+
   overrides: [
     {
-      files: ["*.spec.js"],
+      files: ["*.js"],
       "globals": {
-        "global": true
+        "global": "writeable" // vitest adds global to tests
       },
+      extends: ['eslint:recommended']
     },
     {
       files: ['*.astro'],
       plugins: ["astro"],
       parser: 'astro-eslint-parser',
-      extends: ['plugin:astro/recommended']
+      extends: ['eslint:recommended', 'plugin:astro/recommended']
     },
     {
       files: ['*.vue'],
