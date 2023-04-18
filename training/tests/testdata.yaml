@@ -12,38 +12,66 @@ users:
     name: Test Three
 
 quizzes:
-  - name: "Travel Training for Card/Account Holders and Approving Officials"
+  - name: "Travel Training for Ministry of Magic"
     topic: "Travel"
     audience: "AccountHoldersApprovingOfficials"
     active: true
     content:
       questions:
-        - type: MultipleChoiceSingleSelect
+        - id: 0
+          type: MultipleChoiceSingleSelect
           text: "Official ministry travel is performed via the floo network."
           choices:
-            - text: True.
+            - id: 0
+              text: True.
               correct: true
-            - text: False.
+            - id: 1
+              text: False.
               correct: false
-        - type: MultipleChoiceSingleSelect
+        - id: 1
+          type: MultipleChoiceSingleSelect
           text: "How do you travel via the floo network?"
           choices:
-            - text: Say 'abracadabra'.
+            - id: 0
+              text: Say 'abracadabra'.
               correct: false
-            - text: Toss floo powder into the fireplace and announce your destination.
+            - id: 1
+              text: Toss floo powder into the fireplace and announce your destination.
               correct: true
-            - text: Use the Floo app.
+            - id: 2
+              text: Use the Floo app.
               correct: false
-  - name: "Travel Training for Card/Account Holders and Approving Officials"
+  - name: "Travel Training for Ministry of Magic"
     topic: "Travel"
     audience: "AccountHoldersApprovingOfficials"
     active: false
     content:
       questions:
-        - type: MultipleChoiceSingleSelect
+        - id: 0
+          type: MultipleChoiceSingleSelect
           text: "This should be an old, inactive version of the quiz."
           choices:
-            - text: True.
+            - id: 0
+              text: True.
               correct: true
-            - text: False.
+            - id: 1
+              text: False.
               correct: false
+
+quiz_submissions:
+  valid_passing:
+    responses:
+      - question_id: 0
+        response_ids: [0]
+      - question_id: 1
+        response_ids: [1]
+  valid_failing:
+    responses:
+      - question_id: 0
+        response_ids: [1]
+      - question_id: 1
+        response_ids: [1]
+  invalid_incomplete:
+    responses:
+      - question_id: 0
+        response_ids: [0]

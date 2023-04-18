@@ -1,12 +1,14 @@
 from collections.abc import Generator
+from pydantic import parse_obj_as
 import pytest
 import yaml
 import pathlib
 from training.database import engine
-from training import models
+from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository, UserRepository, QuizRepository
+from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository
+from training.services import QuizService
 
 
 @pytest.fixture
@@ -115,9 +117,9 @@ def valid_agency_name(testdata: dict) -> Generator[str, None, None]:
 
 
 @pytest.fixture
-def valid_user(testdata: dict) -> Generator[dict, None, None]:
+def valid_user_dict(testdata: dict) -> Generator[dict, None, None]:
     '''
-    Provides a dict containing valid user values.
+    Provides a dict containing valid values for a user.
     '''
     yield testdata["users"][0]
 
@@ -163,8 +165,94 @@ def quiz_repo_empty(db: Session) -> Generator[QuizRepository, None, None]:
 
 
 @pytest.fixture
+def quiz_completion_repo_with_data(db_with_data: Session) -> Generator[QuizCompletionRepository, None, None]:
+    '''
+    Provides a QuizCompletionRepository injected with a populated database.
+    '''
+    yield QuizCompletionRepository(session=db_with_data)
+
+
+@pytest.fixture
 def quiz_repo_with_data(db_with_data: Session) -> Generator[QuizRepository, None, None]:
     '''
     Provides a QuizRepository injected with a populated database.
     '''
     yield QuizRepository(session=db_with_data)
+
+
+@pytest.fixture
+def quiz_service(db_with_data: Session) -> Generator[QuizService, None, None]:
+    '''
+    Provides a QuizService injected with a populated database.
+    '''
+    yield QuizService(db=db_with_data)
+
+
+@pytest.fixture
+def valid_passing_submission(testdata: dict) -> Generator[schemas.QuizSubmission, None, None]:
+    '''
+    Provides a QuizSubmission schema object containing valid passing responses.
+    '''
+    jsondata = testdata["quiz_submissions"]["valid_passing"]
+    yield parse_obj_as(schemas.QuizSubmission, jsondata)
+
+
+@pytest.fixture
+def valid_failing_submission(testdata: dict) -> Generator[schemas.QuizSubmission, None, None]:
+    '''
+    Provides a QuizSubmission schema object containing valid failing responses.
+    '''
+    jsondata = testdata["quiz_submissions"]["valid_failing"]
+    yield parse_obj_as(schemas.QuizSubmission, jsondata)
+
+
+@pytest.fixture
+def invalid_submission(testdata: dict) -> Generator[schemas.QuizSubmission, None, None]:
+    '''
+    Provides a QuizSubmission schema object containing an incomplete set of
+    responses.
+    '''
+    jsondata = testdata["quiz_submissions"]["invalid_incomplete"]
+    yield parse_obj_as(schemas.QuizSubmission, jsondata)
+
+
+@pytest.fixture
+def valid_quiz(testdata: dict) -> Generator[models.Quiz, None, None]:
+    '''
+    Provides a valid Quiz database model object.
+    '''
+    jsondata = testdata["quizzes"][0]
+    db_quiz = models.Quiz(**jsondata)
+    db_quiz.id = 123
+    yield db_quiz
+
+
+@pytest.fixture
+def valid_quiz_create() -> schemas.QuizCreate:
+    '''
+    Provides a valid QuizCreate schema object.
+    '''
+    return schemas.QuizCreate(
+        name="New Quiz",
+        topic=schemas.QuizTopic.Travel,
+        audience=schemas.QuizAudience.AccountHoldersApprovingOfficials,
+        active=True,
+        content=schemas.QuizContentCreate(
+            questions=[
+                schemas.QuizQuestionCreate(
+                    type=schemas.QuizQuestionType.MultipleChoiceSingleSelect,
+                    text="Official ministry travel is performed via the floo network.",
+                    choices=[
+                        schemas.QuizChoiceCreate(
+                            text="True.",
+                            correct=True
+                        ),
+                        schemas.QuizChoiceCreate(
+                            text="True.",
+                            correct=True
+                        )
+                    ]
+                )
+            ]
+        )
+    )

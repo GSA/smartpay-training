@@ -1,14 +1,18 @@
 <script setup>
-const base_url = import.meta.env.PUBLIC_API_BASE_URL
+  import {computed} from 'vue'
 
-const options = await fetch(`${base_url}/api/v1/agencies`).then((r) => r.json())
-const props = defineProps({
-    'modelValue': String,
-    'isInvalid': Boolean,
-    'name': String,
-    'label': String,
-    'error_message': String
-})
+  const base_url = import.meta.env.PUBLIC_API_BASE_URL
+  
+  const options = await fetch(`${base_url}/api/v1/agencies`).then((r) => r.json())
+  const props = defineProps({
+      'modelValue': String,
+      'isInvalid': Boolean,
+      'name': String,
+      'label': String,
+      'error_message': String
+  })
+
+  var error_id = computed(() => props.name + '-input-error-message')
 </script>
 <template>
   <div class="usa-form-group" :class="{ 'usa-form-group--error':isInvalid}">

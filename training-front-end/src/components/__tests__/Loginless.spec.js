@@ -1,4 +1,5 @@
 import { describe, it, expect, afterEach, vi} from 'vitest'
+import { defineComponent } from 'vue'
 import { mount, shallowMount, flushPromises } from '@vue/test-utils'
 import { cleanStores, keepMount } from 'nanostores'
 import Loginless from '../Loginless.vue'
@@ -9,10 +10,33 @@ function submitEmail(wrapper, email) {
   wrapper.get('form').trigger('submit.prevent')
 }
 
+const agency_api = [
+  {
+    "name": "Central Intelligence Agency",
+    "id": '13'
+  },
+  {
+    "name": "General Services Administration",
+    "id": '22'
+  }
+]
+
+function makeAsyncComponent() {
+  return defineComponent({
+    components: { Loginless },
+    template: `
+      <Suspense>
+        <Loginless 
+          page_id="page-id"
+          header="Some header"
+         />
+      </Suspense>`
+  })
+}
+
 const fetchData = {
   token: "http://www.example.com/?test-token"
 }
-
 
 describe('Loginless', () => {
   afterEach(() => {
@@ -20,7 +44,7 @@ describe('Loginless', () => {
     cleanStores(profile)
   })
 
-  it('renders initial view but not response view', async () => {
+  it('renders initial view, but not the response view', async () => {
     const wrapper = await shallowMount(Loginless, { 
       props: {"page_id": "training"}
     })
@@ -31,7 +55,7 @@ describe('Loginless', () => {
     expect(confirmation_div.exists()).toBe(false)
   })
 
-  it('initially only asks for an email', async () => {
+  it('initially only asks for an email address', async () => {
     const wrapper = await shallowMount(Loginless, { 
       props: {"page_id": "training"}
     })
@@ -41,7 +65,7 @@ describe('Loginless', () => {
     expect(complete_form.exists()).toBe(false)
   })
 
-  it('asks for more info after unknown email is submitted', async () => {
+  it('asks for more information after an unknown email is submitted', async () => {
     const wrapper = await mount(Loginless, { 
       props: {"page_id": "training"}
     })
@@ -57,7 +81,20 @@ describe('Loginless', () => {
     expect(complete_form.exists()).toBe(true)
   })
 
-  it('After succesfully submitting form, it shows confirmation', async () => {
+  it("does not call the api if the form is invalid", async () => {
+    const wrapper = await mount(Loginless, { 
+      props: {"page_id": "training"}
+    })
+    const fetchMock = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(fetchData) })
+    })
+    await submitEmail(wrapper, 'bademail@') 
+    await flushPromises()
+
+    expect(fetchMock).not.toBeCalled()
+  })
+
+  it('after succesfully submitting the form, it shows confirmation', async () => {
     const wrapper = await mount(Loginless, { 
       props: {"page_id": "training"}
     })
@@ -73,7 +110,28 @@ describe('Loginless', () => {
     expect(confirmation_div.exists()).toBe(true)
   })
 
-  it('It confirms the user email on the confirmation page', async () => {
+  it('throws error on non-2xx response code', async () => {
+    /* this error should be handled by parent component */
+    const error_handler =  vi.fn()
+    const wrapper = await mount(Loginless, { 
+      props: {"page_id": "training"},
+      global: {
+        config: {
+          errorHandler: error_handler
+        }
+      }
+    })
+    
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: false, status:404, json: () => Promise.resolve(fetchData) })
+    })
+    await submitEmail(wrapper, 'test@example.com') 
+    await flushPromises()
+
+    expect(error_handler).toBeCalledTimes(1)
+  })
+
+  it('confirms the user email on the confirmation page', async () => {
     const wrapper = await mount(Loginless, { 
       props: {"page_id": "training"}
     })
@@ -87,7 +145,7 @@ describe('Loginless', () => {
     expect(confirmation_div.text()).toContain('test@example.com')
   })
 
-  it('It uses the token in the url to confirm the user and show child component', async () => {
+  it('uses the token in the url to confirm the user and show the child component', async () => {
     vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
 
     const wrapper = await mount(Loginless, { 
@@ -111,7 +169,7 @@ describe('Loginless', () => {
     expect(content_div.exists()).toBe(true)
   })
 
-  it('It gets the user from api using token and sets in store', async () => {
+  it('gets the user from the api using the token from the url and sets it in the store', async () => {
     vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(key => '7348244d-76c7-4535-94f7-5929e039af97')
     keepMount(profile)
 
@@ -129,7 +187,25 @@ describe('Loginless', () => {
     expect(profile.get()).toEqual({jwt: "abcd", name: 'Molly Bloom' })
   })
 
-  it("It emits error when api can't find the token", async () => {
+  it('resets history on a successful mount', async () => {
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(key => '7348244d-76c7-4535-94f7-5929e039af97')
+
+    const token_response = {
+      user: {name: "Molly Bloom"},
+      jwt: 'abcd'
+    }
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, json: () => Promise.resolve(token_response) })
+    })
+    const historymock = vi.spyOn(global.history, 'replaceState').mockImplementation(() => {})
+    const wrapper = await mount(Loginless, { 
+      props: {"page_id": "training"}
+    }) 
+    await flushPromises()
+    expect(historymock).toBeCalledWith({}, '', expect.any(URL))
+  })
+
+  it("emits error when api can't find the token", async () => {
     vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
     
     vi.spyOn(global, 'fetch').mockImplementation(() => {
@@ -142,7 +218,7 @@ describe('Loginless', () => {
     expect(wrapper.emitted().error[0][0].name).toBe('Invalid Link')
   })
 
-  it("It should show the form when the link is invalid", async () => {
+  it("shows the form when the link is invalid", async () => {
     vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
 
     vi.spyOn(global, 'fetch').mockImplementation(() => {
@@ -159,5 +235,34 @@ describe('Loginless', () => {
     expect(initial_div.exists()).toBe(true)
     expect(confirmation_div.exists()).toBe(false)
     expect(content_div.exists()).toBe(false)
+  })
+
+  it('submits form to api with complete information', async () => {
+    const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(agency_api) })
+    })
+    // first fill out the email only form...
+    const wrapper = await mount(makeAsyncComponent())
+    await flushPromises()
+    await submitEmail(wrapper, 'test@example.com') 
+    await flushPromises()
+
+    // ...then the second form
+    const second_form = wrapper.get('form')
+    await wrapper.get('[name="email"]').setValue("test@example.com")
+    await wrapper.get('[name="name"]').setValue("Molly")
+    
+    const select = second_form.find('select')
+    await select.setValue('22')
+    await select.trigger('input')
+    await second_form.trigger('submit.prevent')
+    await flushPromises()
+
+    expect(fetchspy).toBeCalledTimes(3)
+    expect(fetchspy).nthCalledWith(3, expect.any(URL), {
+      body: '{"user":{"name":"Molly","email":"test@example.com","agency_id":"22"},"dest":{"page_id":"page-id"}}',
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+    })
   })
 })

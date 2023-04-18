@@ -1,34 +1,5 @@
-import pytest
 from training import schemas
 from training.repositories import QuizRepository
-
-
-@pytest.fixture
-def valid_quiz_create() -> schemas.QuizCreate:
-    return schemas.QuizCreate(
-        name="New Quiz",
-        topic="Travel",
-        audience="AccountHoldersApprovingOfficials",
-        active=True,
-        content=schemas.QuizContentCreate(
-            questions=[
-                schemas.QuizQuestionCreate(
-                    type="MultipleChoiceSingleSelect",
-                    text="Official ministry travel is performed via the floo network.",
-                    choices=[
-                        schemas.QuizChoiceCreate(
-                            text="True.",
-                            correct=True
-                        ),
-                        schemas.QuizChoiceCreate(
-                            text="True.",
-                            correct=True
-                        )
-                    ]
-                )
-            ]
-        )
-    )
 
 
 def test_create(quiz_repo_empty: QuizRepository, valid_quiz_create: schemas.QuizCreate):
@@ -47,12 +18,12 @@ def test_create_duplicate(quiz_repo_empty: QuizRepository, valid_quiz_create: sc
 
 def test_find_by_type(quiz_repo_with_data: QuizRepository):
     result = quiz_repo_with_data.find_all(filters={
-        "topic": "Travel",
-        "audience": "AccountHoldersApprovingOfficials",
+        "topic": schemas.QuizTopic.Travel,
+        "audience": schemas.QuizAudience.AccountHoldersApprovingOfficials,
         "active": True
     })
     assert len(result) == 1
-    assert result[0].name == "Travel Training for Card/Account Holders and Approving Officials"
+    assert result[0].name == "Travel Training for Ministry of Magic"
 
 
 def test_find_by_nonexistent_type(quiz_repo_with_data: QuizRepository):
