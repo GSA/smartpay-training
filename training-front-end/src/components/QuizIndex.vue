@@ -2,16 +2,41 @@
   import { ref, onErrorCaptured, onBeforeMount } from 'vue';
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
-  import Alert from './Alert.vue';
-  import Quiz from './Quiz.vue';
-  import Loginless from './Loginless.vue';
+  import USWDSAlert from './USWDSAlert.vue'
+  import Quiz from './QuizMain.vue';
+  import Loginless from './LoginlessFlow.vue';
   import QuizIntro from './QuizIntro.vue';
   import QuizResults from './QuizResults.vue';
 
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const quiz = ref()
-  const props = defineProps(['topic', 'audience', 'page_id', 'title', 'header', 'subhead', 'hero_image'])
+  const props = defineProps({
+    'topic': {
+      type: String,
+      required: true,
+    },
+    'audience': {
+      type: String,
+      required: true,
+    }, 
+    'pageId': {
+      type: String,
+      required: true,
+    }, 
+    'title': {
+      type: String,
+      required: true,
+    },
+    'header': {
+      type: String,
+      required: true,
+    },
+    'subhead': {
+      type: String,
+      required: true,
+    }
+  })
 
   onBeforeMount(async () => {
     // import quiz_temp_json from '../dev_data/travel_a_opc.json'
@@ -107,26 +132,54 @@
 
 <template>
   <div class="bg-base-lightest padding-top-4 padding-bottom-4">
-  <div  class="grid-container" data-test="post-submit">
-    <div class="grid-row">
-      <div class="tablet:grid-col-12">
-        <Alert v-if="error" class="tablet:grid-col-8" status="warning" :heading="error.name">
-          {{ error.message }}
-        </Alert>
-        <Suspense>
-          <template #fallback>
-            …Loading
-          </template>
-          <Loginless @startLoading="startLoading"  @error="setError" :page_id="page_id" :title="title" :header="header">
-            <Quiz v-if="isStarted" :quiz="quiz" :title="title" @submitQuiz=submitQuiz class="grid-col-8"/>
-            <div v-else>
-              <QuizResults v-if="isSubmitted"  @reset_quiz="resetQuiz" :quizResults="quizResults" :quiz="quiz"/>
-              <QuizIntro v-else @start="startQuiz" />
-            </div>
-          </Loginless>
-        </Suspense>
+    <div
+      class="grid-container"
+      data-test="post-submit"
+    >
+      <div class="grid-row">
+        <div class="tablet:grid-col-12">
+          <USWDSAlert
+            v-if="error"
+            class="tablet:grid-col-8"
+            status="warning"
+            :heading="error.name"
+          >
+            {{ error.message }}
+          </USWDSAlert>
+          <Suspense>
+            <template #fallback>
+              …Loading
+            </template>
+            <Loginless
+              :page-id="pageId"
+              :title="title"
+              :header="header"
+              @start-loading="startLoading"
+              @error="setError"
+            >
+              <Quiz
+                v-if="isStarted"
+                :quiz="quiz"
+                :title="title"
+                class="grid-col-8"
+                @submit-quiz="submitQuiz"
+              />
+              <div v-else>
+                <QuizResults
+                  v-if="isSubmitted"
+                  :quiz-results="quizResults"
+                  :quiz="quiz"
+                  @reset_quiz="resetQuiz"
+                />
+                <QuizIntro
+                  v-else
+                  @start="startQuiz"
+                />
+              </div>
+            </Loginless>
+          </Suspense>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>

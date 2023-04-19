@@ -1,6 +1,6 @@
-import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
+import { describe, it, expect, afterEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import Quiz from '../Quiz.vue'
+import Quiz from '../QuizMain.vue'
 import quiz  from './fixtures/sample_quiz'
 
 
@@ -155,7 +155,7 @@ describe('Quiz', () => {
 
   it('should add window listeners on mount', async () => {
     const addEventListenerMock = vi.spyOn(global, 'addEventListener').mockImplementation(() => {})
-    const wrapper = await mount(Quiz, {props})
+    await mount(Quiz, {props})
 
     expect(addEventListenerMock).toBeCalled(2)
     expect(addEventListenerMock).toHaveBeenNthCalledWith(1, 'beforeunload', expect.any(Function))
@@ -173,7 +173,7 @@ describe('Quiz', () => {
   })
 
   it('handles beforeunload events', async () => {
-    const wrapper = await mount(Quiz, {props})
+    await mount(Quiz, {props})
     const preventMock = vi.fn()
     const event = new Event('beforeunload')
     event.preventDefault = preventMock

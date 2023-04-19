@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
+import { describe, it, expect, afterEach, vi} from 'vitest'
 
 import { cleanStores, keepMount } from 'nanostores'
 import { profile, getUserFromToken} from '../user'
@@ -30,7 +30,7 @@ describe('getUserFromToken', () => {
   })
 
   it('it sets the user in the store based on api value', async () => {
-    const fetch_spy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:201, json: () => Promise.resolve(fetchData) })
     })
     keepMount(profile)
@@ -43,14 +43,14 @@ describe('getUserFromToken', () => {
   })
 
   it('throws an error when the api does not return a 2xx value', async () => {
-    const fetch_spy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: false, status:404})
     })
     await expect(getUserFromToken(base_url, param_token)).rejects.toThrowError('This link is either expired');
   })
   
   it('throws an error when there is a server error', async () => {
-    const fetch_spy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.reject('Whoops, server error')
     })
     await expect(getUserFromToken(base_url, param_token)).rejects.toThrow('Sorry, we had an error connecting to the server');

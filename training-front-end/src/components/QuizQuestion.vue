@@ -1,5 +1,15 @@
 <script setup>
-  const props = defineProps(['question', 'selection'])
+  const props = defineProps({
+    'question': {
+      type: Object,
+      required: true
+    },
+    'selection': {
+      type: Object,
+      required: false,
+      default: undefined
+    }
+  })
   const emit = defineEmits(['select_answer'])
 
   function select_answer(event) {
@@ -8,21 +18,29 @@
   }
 </script>
 <template>
-  <h3 class="">{{ question.text }}</h3>
+  <h3 class="">
+    {{ question.text }}
+  </h3>
 
   <fieldset class="usa-fieldset margin-bottom-2">
-    <div class="usa-radio" v-for="({id, text}) in question.choices">
+    <div
+      v-for="({id, text}) in question.choices"
+      :key="id"
+      class="usa-radio"
+    >
       <input
-        class="usa-radio__input usa-radio__input--tile"
         :id="id"
+        class="usa-radio__input usa-radio__input--tile"
         type="radio"
         name="historical-figures"
         :checked="selection && selection.response_ids.includes(id)"
-        @change="select_answer"
         :value="id"
-      />
-      <label class="usa-radio__label" :for="id"
-      >{{text}}</label>
+        @change="select_answer"
+      >
+      <label
+        class="usa-radio__label"
+        :for="id"
+      >{{ text }}</label>
     </div>
   </fieldset>
 </template>

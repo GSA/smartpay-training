@@ -8,7 +8,7 @@ const valid_input = {
   'isInvalid': false,
   'name': 'first_name',
   'label': 'First name',
-  'error_message': 'Please enter your first name'
+  'errorMessage': 'Please enter your first name'
 }
 
 const invalid_input = {...valid_input, 'isInvalid': true}

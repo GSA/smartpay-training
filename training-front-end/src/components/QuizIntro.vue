@@ -1,5 +1,5 @@
 <script setup>
-  const props = defineEmits(['start'])
+  defineEmits(['start'])
 </script>
 <template>
   <section class="usa-prose margin-y-1 usa-prose">
@@ -9,7 +9,11 @@
     <p>
       <b>Note:</b> Your quiz progress will not be saved if you navigate away.
     </p>
-    <button class="usa-button" @click="$emit('start')">Start quiz</button>
+    <button
+      class="usa-button"
+      @click="$emit('start')"
+    >
+      Start quiz
+    </button>
   </section>
-
 </template>

@@ -1,9 +1,9 @@
-import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
+import { describe, it, expect, afterEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import sample_quiz from './fixtures/sample_quiz'
 import {passing_result, failing_result} from './fixtures/sample_quiz_response'
 import QuizIndex from '../QuizIndex.vue'
-import Quiz from '../Quiz.vue'
+import Quiz from '../QuizMain.vue'
 import QuizResults from '../QuizResults.vue'
 
 import { cleanStores } from 'nanostores'
@@ -13,7 +13,7 @@ const page_props = {
   header: "Fancy Pants",
   subhead: "for everyone",
   audience: "audience",
-  page_id: "training_travel",
+  pageId: "training_travel",
   topic: "tennis",
   title: "Eschaton Training"
 }

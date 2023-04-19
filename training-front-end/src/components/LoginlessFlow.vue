@@ -15,7 +15,20 @@
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
-  const props = defineProps(['page_id', 'title', 'header'])
+  const props = defineProps({
+    'pageId': {
+      type: String,
+      required: true
+    },
+    'title': {
+      type: String,
+      required: true
+    },
+    'header': {
+      type: String,
+      required: true
+    }
+  })
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
   const user = useStore(profile)
@@ -87,7 +100,7 @@
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
           user: user_input, 
-          dest: {page_id: props.page_id, title: props.title}
+          dest: {page_id: props.pageId, title: props.title}
         })
       })
     } catch (err) {
@@ -123,10 +136,16 @@
 
 <template>
   <div v-if="!isLoggedIn && isLoaded">
-    <div v-if="isFlowComplete" class="grid-row" data-test="post-submit">
+    <div 
+      v-if="isFlowComplete" 
+      class="grid-row" 
+      data-test="post-submit"
+    >
       <div class="tablet:grid-col-8 usa-prose margin-y-4">
-        <h2 class="usa-prose">Check your email</h2>
-        <p>We just sent you an email at <b>{{user_input.email}}</b> with a link to access the training quiz. This link is only active for 24 hours</p>
+        <h2 class="usa-prose">
+          Check your email
+        </h2>
+        <p>We just sent you an email at <b>{{ user_input.email }}</b> with a link to access the training quiz. This link is only active for 24 hours</p>
         
         <p>Not the right email? <a href="/user_input">Send another email</a></p>
             
@@ -136,74 +155,98 @@
         </p>
       </div>
     </div>
-    <div v-else class="grid-row" data-test="pre-submit">
-      <div  v-if="!emailValidated" class="usa-prose">
+    <div 
+      v-else 
+      class="grid-row"
+      data-test="pre-submit"
+    >
+      <div 
+        v-if="!emailValidated" 
+        class="usa-prose"
+      >
         <h2>Take the GSA SmartPay {{ header }} Quiz</h2>
         <p>Enter your email address to get access to the quiz. You'll receive an email with an access link.</p>
         <form
           class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
-          @submit.prevent="start_email_flow"
           data-test="email-submit-form"
-          >
+          @submit.prevent="start_email_flow"
+        >
           <fieldset class="usa-fieldset">
             <ValidatedInput 
-              client:load
               v-model="user_input.email" 
-              :isInvalid="v_email$.email.$error" 
+              client:load
+              :is-invalid="v_email$.email.$error" 
               label="Email Address (*Required)"
               name="email"
-              error_message="Please enter a valid email address"
+              error-message="Please enter a valid email address"
             />  
-            <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
+            <input 
+              class="usa-button"
+              type="submit"
+              value="Submit"
+              :disabled="isLoading"
+              data-test="submit"
+            >
           </fieldset>
         </form>
       </div>
-      <div  v-else class=" usa-prose">
+      <div 
+        v-else
+        class=" usa-prose"
+      >
         <h2>Welcome!</h2>
         <p>Before you can take a quiz, you'll need to create and complete your profile.</p>
         <form
           class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
-          @submit.prevent="start_email_flow"
           data-test="name-submit-form"
-          >
+          @submit.prevent="start_email_flow"
+        >
           <fieldset class="usa-fieldset">
             <ValidatedInput 
-              client:load
               v-model="user_input.email" 
-              :isInvalid="v_all_info$.email.$error" 
+              client:load
+              :is-invalid="v_all_info$.email.$error" 
               label="Email Address (*Required)"
               name="email"
-              error_message="Please enter a valid email address"
-              :readonly=true
+              error-message="Please enter a valid email address"
+              :readonly="true"
             />  
             <ValidatedInput 
-              client:load
               v-model="user_input.name" 
-              :isInvalid="v_all_info$.name.$error" 
+              client:load
+              :is-invalid="v_all_info$.name.$error" 
               label="Name (*Required)"
               name="name"
-              error_message="Please enter your full name"
+              error-message="Please enter your full name"
             />
             <Suspense>
-            <ValidatedSelect 
-              client:load
-              v-model="user_input.agency_id" 
-              :isInvalid="v_all_info$.agency_id.$error" 
-              label="Agency / organization (*Required)"
-              name="agency"
-              error_message="Please enter your agency"
-            />
+              <ValidatedSelect 
+                v-model="user_input.agency_id" 
+                client:load
+                :is-invalid="v_all_info$.agency_id.$error" 
+                label="Agency / organization (*Required)"
+                name="agency"
+                error-message="Please enter your agency"
+              />
             </Suspense>
-            <input class="usa-button" type="submit" value="Submit" :disabled='isLoading' data-test="submit"/>
+            <input
+              class="usa-button"
+              type="submit"
+              value="Submit"
+              :disabled="isLoading"
+              data-test="submit"
+            >
           </fieldset>
         </form>
 
         <p>Didn’t receive the access email?</p>
-
       </div>
     </div>
   </div>
-  <div v-else data-test="child-component">
-    <slot v-if="isLoaded"></slot>
+  <div 
+    v-else
+    data-test="child-component"
+  >
+    <slot v-if="isLoaded" />
   </div>
 </template>
