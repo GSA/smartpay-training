@@ -28,5 +28,3 @@ def test_create(
     assert db_quiz_completion.id
     assert db_quiz_completion.passed
     assert start <= db_quiz_completion.submit_ts <= end
-
-
