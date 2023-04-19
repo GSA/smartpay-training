@@ -1,6 +1,6 @@
 from collections.abc import Generator
 from fastapi import Depends
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository
+from training.repositories import AgencyRepository, UserRepository, QuizRepository, CertificateRepository
 from training.services import QuizService
 from training.database import SessionLocal
 from sqlalchemy.orm import Session
@@ -37,5 +37,5 @@ def quiz_service(db: Session = Depends(db)) -> QuizService:
     return QuizService(db)
 
 
-def quiz_completion_repository(db: Session = Depends(db)) -> QuizCompletionRepository:
-    return QuizCompletionRepository(db)
+def certificate_repository(db: Session = Depends(db)) -> CertificateRepository:
+    return CertificateRepository(db)

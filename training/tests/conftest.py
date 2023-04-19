@@ -7,7 +7,7 @@ from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository
+from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository
 from training.services import QuizService
 
 
@@ -267,6 +267,14 @@ def valid_quiz_create() -> schemas.QuizCreate:
             ]
         )
     )
+
+
+@pytest.fixture
+def cert_repo_with_data(db_with_data: Session) -> Generator[CertificateRepository, None, None]:
+    '''
+    Provides an CertificateRepository injected with a populated database.
+    '''
+    yield CertificateRepository(session=db_with_data)
 
 
 @pytest.fixture

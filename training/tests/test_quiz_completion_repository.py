@@ -30,9 +30,3 @@ def test_create(
     assert start <= db_quiz_completion.submit_ts <= end
 
 
-def test_get_certificate_by_id(quiz_completion_repo_with_data: QuizCompletionRepository, passed_quiz_completion_id):
-
-    id = passed_quiz_completion_id
-    result = quiz_completion_repo_with_data.get_certificate_by_id(id)
-    assert result is not None
-    assert result.id == passed_quiz_completion_id
