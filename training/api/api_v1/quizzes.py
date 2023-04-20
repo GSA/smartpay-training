@@ -1,5 +1,6 @@
-from typing import List
+from typing import Any
 from fastapi import APIRouter, status, HTTPException, Depends
+from training.api.auth import JWTUser
 from training.errors import IncompleteQuizResponseError, QuizNotFoundError
 from training.schemas import Quiz, QuizPublic, QuizGrade, QuizSubmission, QuizCreate
 from training.repositories import QuizRepository
@@ -16,7 +17,7 @@ def create_quiz(quiz: QuizCreate, repo: QuizRepository = Depends(quiz_repository
     return db_quiz
 
 
-@router.get("/quizzes", response_model=List[QuizPublic])
+@router.get("/quizzes", response_model=list[QuizPublic])
 def get_quizzes(
     topic: str | None = None,
     audience: str | None = None,
@@ -49,10 +50,11 @@ def get_quiz(id: int, repo: QuizRepository = Depends(quiz_repository)):
 def submit_quiz(
     id: int,
     submission: QuizSubmission,
-    quiz_service: QuizService = Depends(quiz_service)
+    quiz_service: QuizService = Depends(quiz_service),
+    user: dict[str, Any] = Depends(JWTUser())
 ):
     try:
-        grade = quiz_service.grade(quiz_id=id, user_id=1, submission=submission)
+        grade = quiz_service.grade(quiz_id=id, user_id=user["id"], submission=submission)
     except QuizNotFoundError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
