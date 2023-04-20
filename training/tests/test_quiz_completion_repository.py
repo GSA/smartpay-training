@@ -20,11 +20,9 @@ def test_create(
     quiz_completion_repo_with_data: QuizCompletionRepository,
     valid_quiz_completion_create: schemas.QuizCompletionCreate,
 ):
-    start = datetime.utcnow()
-    start = start.replace(second=(start.second - 1))
+    start = datetime.utcnow().replace(second=0)
     db_quiz_completion = quiz_completion_repo_with_data.create(valid_quiz_completion_create)
-    end = datetime.utcnow()
-    end = end.replace(second=(end.second + 1))
+    end = datetime.utcnow().replace(second=59)
     assert db_quiz_completion.id
     assert db_quiz_completion.passed
     assert start <= db_quiz_completion.submit_ts <= end
