@@ -11,6 +11,8 @@
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const quiz = ref()
+  const userSelections = ref([])
+
   const props = defineProps({
     'topic': {
       type: String,
@@ -89,6 +91,7 @@
   }
 
   async function submitQuiz(user_answers) {
+    userSelections.value = user_answers
     const url = `${base_url}/api/v1/quizzes/${quiz.value.id}/submission`
     
     let res
@@ -116,6 +119,7 @@
       e.name = "Server Error"
       setError(e)
     }
+    
     quizResults.value = await res.json()
     isStarted.value = false
     isSubmitted.value = true
@@ -131,7 +135,10 @@
 </script>
 
 <template>
-  <div class="bg-base-lightest padding-top-4 padding-bottom-4">
+  <div 
+    class="padding-top-4 padding-bottom-4" 
+    :class="{'bg-base-lightest': isStarted && !isSubmitted}"
+  >
     <div
       class="grid-container"
       data-test="post-submit"
