@@ -1,4 +1,5 @@
 from collections.abc import Generator
+import jwt
 from pydantic import parse_obj_as
 import pytest
 import yaml
@@ -9,6 +10,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository
 from training.services import QuizService
+from training.config import settings
 from . import factories
 
 
@@ -134,6 +136,16 @@ def valid_user_dict(testdata: dict) -> Generator[dict, None, None]:
     Provides a dict containing valid values for a user.
     '''
     yield testdata["users"][0]
+
+
+@pytest.fixture
+def valid_jwt(db_with_data: Session) -> str:
+    '''
+    Provides a JWT based on a test user in the database.
+    '''
+    db_user = db_with_data.query(models.User).first()
+    user = schemas.User.from_orm(db_user).dict()
+    return jwt.encode(user, settings.JWT_SECRET, algorithm="HS256")
 
 
 @pytest.fixture
