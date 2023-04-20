@@ -5,7 +5,7 @@ from training.repositories import QuizRepository
 def test_create(quiz_repo_empty: QuizRepository, valid_quiz_create: schemas.QuizCreate):
     db_quiz = quiz_repo_empty.create(valid_quiz_create)
     assert db_quiz.id
-    assert db_quiz.name == "New Quiz"
+    assert db_quiz.name == valid_quiz_create.name
 
 
 def test_create_duplicate(quiz_repo_empty: QuizRepository, valid_quiz_create: schemas.QuizCreate):
