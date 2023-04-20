@@ -4,6 +4,8 @@ from pydantic import BaseModel
 class QuizGradeQuestion(BaseModel):
     question_id: int
     correct: bool
+    selected_ids: list[int]
+    correct_ids: list[int]
 
 
 class QuizGrade(BaseModel):

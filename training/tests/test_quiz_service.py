@@ -23,6 +23,10 @@ def test_grade_passing(
     assert isinstance(result, schemas.QuizGrade)
     assert result.passed
     assert result.percentage == 1
+    assert result.questions[0].correct_ids == [0]
+    assert result.questions[0].selected_ids == [0]
+    assert result.questions[1].correct_ids == [1]
+    assert result.questions[1].selected_ids == [1]
 
 
 @patch.object(QuizRepository, "find_by_id")
@@ -42,6 +46,10 @@ def test_grade_failing(
     assert isinstance(result, schemas.QuizGrade)
     assert not result.passed
     assert result.percentage == 0.5
+    assert result.questions[0].correct_ids == []
+    assert result.questions[0].selected_ids == [1]
+    assert result.questions[1].correct_ids == []
+    assert result.questions[1].selected_ids == [1]
 
 
 @patch.object(QuizRepository, "find_by_id")

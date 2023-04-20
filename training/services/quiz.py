@@ -38,25 +38,35 @@ class QuizService():
             # Mark the question response as correct or incorrect
             questions.append({
                 "question_id": question.id,
-                "correct": response_correct
+                "correct": response_correct,
+                "selected_ids": response.response_ids,
+                "correct_ids": correct_ids,
             })
 
         if questions_without_responses:
             raise IncompleteQuizResponseError(questions_without_responses)
 
+        percentage = correct_count / question_count
+        passed = percentage >= 0.75
+
+        # Strip out the correct answers if the user didn't pass
+        if not passed:
+            for question in questions:
+                question["correct_ids"] = []
+
         grade = QuizGrade(
             quiz_id=quiz_id,
             correct_count=correct_count,
             question_count=question_count,
-            percentage=(correct_count / question_count),
-            passed=((correct_count / question_count) >= 0.75),
+            percentage=percentage,
+            passed=passed,
             questions=questions,
         )
 
         self.quiz_completion_repo.create(QuizCompletionCreate(
             quiz_id=quiz_id,
             user_id=user_id,
-            passed=grade.passed
+            passed=grade.passed,
         ))
 
         return grade
