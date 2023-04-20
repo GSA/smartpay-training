@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository
 from training.services import QuizService
+from . import factories
 
 
 @pytest.fixture
@@ -243,30 +244,7 @@ def valid_quiz_create() -> schemas.QuizCreate:
     '''
     Provides a valid QuizCreate schema object.
     '''
-    return schemas.QuizCreate(
-        name="New Quiz",
-        topic=schemas.QuizTopic.Travel,
-        audience=schemas.QuizAudience.AccountHoldersApprovingOfficials,
-        active=True,
-        content=schemas.QuizContentCreate(
-            questions=[
-                schemas.QuizQuestionCreate(
-                    type=schemas.QuizQuestionType.MultipleChoiceSingleSelect,
-                    text="Official ministry travel is performed via the floo network.",
-                    choices=[
-                        schemas.QuizChoiceCreate(
-                            text="True.",
-                            correct=True
-                        ),
-                        schemas.QuizChoiceCreate(
-                            text="True.",
-                            correct=True
-                        )
-                    ]
-                )
-            ]
-        )
-    )
+    return factories.QuizCreateSchemaFactory.build(active=True)
 
 
 @pytest.fixture
