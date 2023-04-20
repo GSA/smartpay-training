@@ -1,10 +1,5 @@
-from typing import Generator
-from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
 from fastapi import status
-import pytest
-from training.api.auth import JWTUser
-from training.api.deps import quiz_repository, quiz_service
 from training.errors import IncompleteQuizResponseError, QuizNotFoundError
 from training.main import app
 from training.repositories import QuizRepository
