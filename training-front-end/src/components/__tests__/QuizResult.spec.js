@@ -10,28 +10,24 @@ const passingProps_correct = {
   index: 1,
   question: quiz.content.questions[0], 
   result: passing_result.questions[0],
-  didPass: true
 }
 
 const passingProps_incorrect = {
   index: 1,
   question: quiz.content.questions[1], 
   result: passing_result.questions[3],
-  didPass: true
 }
 
 const failingProps_incorrect = {
   index: 1,
   question: quiz.content.questions[1], 
   result: failing_result.questions[1],
-  didPass: false
 }
 
 const failingProps_correct = {
   index: 1,
   question: quiz.content.questions[0], 
   result: failing_result.questions[0],
-  didPass: false
 }
 
 describe("QuizResult", () => {
