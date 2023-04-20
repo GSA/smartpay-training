@@ -62,7 +62,7 @@ describe('QuizIndex', () => {
     profile.set({name:"Hal Incandenza", jwt:"some-token-value"})
     const wrapper = await mount(QuizIndex, {props: page_props})
     await flushPromises()
-    expect(wrapper.text()).toContain("Now that you’ve reviewed the course material, you are ready to take the quiz.")
+    expect(wrapper.text()).toContain("Now that you have completed the training portion of the GSA Eschaton Training")
   })
 
   it('starts quiz when user clicks button', async () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import QuizResults from "../QuizResults.vue";
 import QuizResult from "../QuizResult.vue";
@@ -13,10 +13,6 @@ const userSelections = [
 ]
 
 describe("QuizResults", () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
   it('displays passing result', async () => {
     const wrapper = mount(QuizResults, {props: {quiz, quizResults: passing_result, userSelections}})
     expect(wrapper.text()).toContain('You passed the quiz!')

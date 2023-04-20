@@ -180,6 +180,7 @@
                 />
                 <QuizIntro
                   v-else
+                  :title="title"
                   @start="startQuiz"
                 />
               </div>

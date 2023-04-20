@@ -1,10 +1,17 @@
 <script setup>
+  const props = defineProps({
+    'title': {
+      type: String,
+      required: true
+    }
+  })
   defineEmits(['start'])
 </script>
+
 <template>
   <section class="usa-prose margin-y-1 usa-prose">
     <p>
-      Now that you’ve reviewed the course material, you are ready to take the quiz.
+      Now that you have completed the training portion of the GSA {{ title }}, you are ready to take the quiz.
     </p>
     <p>
       <b>You must score at least a 75% to pass.</b>
