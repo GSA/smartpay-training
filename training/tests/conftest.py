@@ -1,9 +1,11 @@
 from collections.abc import Generator
+from unittest.mock import MagicMock
 import jwt
 from pydantic import parse_obj_as
 import pytest
 import yaml
 import pathlib
+from training.api.deps import quiz_repository, quiz_service
 from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
@@ -12,6 +14,7 @@ from training.repositories import AgencyRepository, UserRepository, QuizReposito
 from training.services import QuizService
 from training.config import settings
 from . import factories
+from training.main import app
 
 
 @pytest.fixture
@@ -205,14 +208,6 @@ def quiz_repo_with_data(db_with_data: Session) -> Generator[QuizRepository, None
 
 
 @pytest.fixture
-def quiz_service(db_with_data: Session) -> Generator[QuizService, None, None]:
-    '''
-    Provides a QuizService injected with a populated database.
-    '''
-    yield QuizService(db=db_with_data)
-
-
-@pytest.fixture
 def valid_passing_submission(testdata: dict) -> Generator[schemas.QuizSubmission, None, None]:
     '''
     Provides a QuizSubmission schema object containing valid passing responses.
@@ -274,3 +269,19 @@ def passed_quiz_completion_id(db_with_data: Session) -> Generator[int, None, Non
     '''
     quiz_comletion_passed = db_with_data.query(models.QuizCompletion).filter(models.QuizCompletion.passed).first().id
     yield quiz_comletion_passed
+
+
+@pytest.fixture
+def mock_quiz_repo() -> Generator[QuizRepository, None, None]:
+    mock = MagicMock()
+    app.dependency_overrides[quiz_repository] = lambda: mock
+    yield mock
+    app.dependency_overrides = {}
+
+
+@pytest.fixture
+def mock_quiz_service() -> Generator[QuizService, None, None]:
+    mock = MagicMock()
+    app.dependency_overrides[quiz_service] = lambda: mock
+    yield mock
+    app.dependency_overrides = {}

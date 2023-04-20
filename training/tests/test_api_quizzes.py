@@ -16,30 +16,6 @@ from .factories import QuizCreateSchemaFactory, QuizGradeSchemaFactory, QuizSche
 client = TestClient(app)
 
 
-@pytest.fixture
-def mock_quiz_repo() -> Generator[QuizRepository, None, None]:
-    mock = MagicMock()
-    app.dependency_overrides[quiz_repository] = lambda: mock
-    yield mock
-    app.dependency_overrides = {}
-
-
-@pytest.fixture
-def mock_quiz_service() -> Generator[QuizService, None, None]:
-    mock = MagicMock()
-    app.dependency_overrides[quiz_service] = lambda: mock
-    yield mock
-    app.dependency_overrides = {}
-
-
-@pytest.fixture
-def mock_jwt() -> Generator[JWTUser, None, None]:
-    mock = MagicMock()
-    app.dependency_overrides[JWTUser()] = lambda: mock
-    yield mock
-    app.dependency_overrides = {}
-
-
 def test_create_quiz_valid(
     valid_quiz_create: QuizCreate,
     mock_quiz_repo: QuizRepository
