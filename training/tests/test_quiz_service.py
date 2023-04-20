@@ -4,6 +4,7 @@ from training import models, schemas
 from training.errors import IncompleteQuizResponseError
 from training.services import QuizService
 from training.repositories import QuizRepository, QuizCompletionRepository
+from sqlalchemy.orm import Session
 
 
 @patch.object(QuizRepository, "find_by_id")
@@ -11,10 +12,11 @@ from training.repositories import QuizRepository, QuizCompletionRepository
 def test_grade_passing(
     mock_quiz_completion_repo_create: MagicMock,
     mock_quiz_repo_find_by_id: MagicMock,
-    quiz_service: QuizService,
+    db_with_data: Session,
     valid_passing_submission: schemas.QuizSubmission,
     valid_quiz: models.Quiz
 ):
+    quiz_service = QuizService(db_with_data)
     mock_quiz_repo_find_by_id.return_value = valid_quiz
     mock_quiz_completion_repo_create.return_value = 0
 
@@ -34,10 +36,11 @@ def test_grade_passing(
 def test_grade_failing(
     mock_quiz_completion_repo_create: MagicMock,
     mock_quiz_repo_find_by_id: MagicMock,
-    quiz_service: QuizService,
+    db_with_data: Session,
     valid_failing_submission: schemas.QuizSubmission,
     valid_quiz: models.Quiz
 ):
+    quiz_service = QuizService(db_with_data)
     mock_quiz_repo_find_by_id.return_value = valid_quiz
     mock_quiz_completion_repo_create.return_value = 0
 
@@ -57,10 +60,11 @@ def test_grade_failing(
 def test_grade_invalid(
     mock_quiz_completion_repo_create: MagicMock,
     mock_quiz_repo_find_by_id: MagicMock,
-    quiz_service: QuizService,
+    db_with_data: Session,
     invalid_submission: schemas.QuizSubmission,
     valid_quiz: models.Quiz
 ):
+    quiz_service = QuizService(db_with_data)
     mock_quiz_repo_find_by_id.return_value = valid_quiz
     mock_quiz_completion_repo_create.return_value = 0
 
