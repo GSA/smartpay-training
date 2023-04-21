@@ -75,7 +75,7 @@
       :class="{'bg-base-lightest': isHighlighted(answer_index)}"
       data-test="answers"
     >
-      <div class="selection width-15 text-right display-inline-block">
+      <div class="flex-shrink-0 width-15 text-right display-inline-block">
         <b>
           {{ label(answer_index) }} 
         </b>
@@ -86,9 +86,3 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-  div.selection {
-    flex-shrink: 0;
-  }
-</style>
