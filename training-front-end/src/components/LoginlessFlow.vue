@@ -11,9 +11,10 @@
   import ValidatedInput from './ValidatedInput.vue';
   import ValidatedSelect from './ValidatedSelect.vue';
   import { useVuelidate } from '@markmeyer/vuelidate-core';
-  import { required, email } from '@markmeyer/vuelidate-validators';
+  import { required, email, helpers } from '@markmeyer/vuelidate-validators';
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
+  const { withMessage } = helpers
 
   const props = defineProps({
     'pageId': {
@@ -27,10 +28,14 @@
     'header': {
       type: String,
       required: true
+    },
+    'allowRegistration': {
+      type: Boolean,
+      required: false,
+      default: true
     }
   })
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
-
   const user = useStore(profile)
   const isLoggedIn = computed(() => Boolean(user.value.jwt))
 
@@ -39,26 +44,42 @@
     email: undefined,
     agency_id: undefined
   })
-
+  
+  /* Form validation for email alone */
+  const known_email = () => !unregisteredEmail.value || props.allowRegistration
   const validations_just_email = {
-    email: {email, required}
+    email: {
+      email: withMessage('Please enter a valid email address', email),
+      required: withMessage('Please enter a valid email address', required), 
+      known_email: withMessage(
+        'The email address you provided is not currently in the system. Please check that you have entered an email previously used and that the email address is entered correctly.', 
+        known_email
+      )
+    }
   }
-
   const v_email$ = useVuelidate(validations_just_email, user_input)
 
+  /* Form validation for additional information if we allow registation here */
+  const showAdditionalFormFields = computed(() => props.allowRegistration && unregisteredEmail.value)
   const validations_all_info = {
-    name: {required},
-    email: {email, required},
-    agency_id: {required}
+    name: {
+      required: withMessage('Please enter your full name', required)
+    },
+    email: {
+      email: withMessage('Please enter a valid email address', email),
+      required: withMessage('Please enter a valid email address', required), 
+    },
+    agency_id: {
+      required: withMessage('Please enter your agency', required),
+    }
   }
-
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
   const tempURL = ref('')
   const isLoaded = ref(false)
   const isLoading = ref(false)
   const isFlowComplete = ref(false)
-  const emailValidated = ref(false)
+  const unregisteredEmail = ref(false)
 
   function clearToken() {
     const url = new URL(window.location);
@@ -83,7 +104,7 @@
   })
 
   async function start_email_flow() {
-    const validation = emailValidated.value ? v_all_info$ : v_email$
+    const validation = unregisteredEmail.value ? v_all_info$ : v_email$
     const isFormValid = await validation.value.$validate() 
     if (!isFormValid) {
      return
@@ -127,7 +148,7 @@
     } else {
       // any other 2xx response should assume
       // it worked, but we need more info
-      emailValidated.value = true
+      unregisteredEmail.value = true
     }
     isLoading.value = false
     emit('endLoading')
@@ -161,41 +182,12 @@
       data-test="pre-submit"
     >
       <div 
-        v-if="!emailValidated" 
-        class="usa-prose"
-      >
-        <slot name="initial-greeting"></slot>
-        <form
-          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
-          data-test="email-submit-form"
-          @submit.prevent="start_email_flow"
-        >
-          <fieldset class="usa-fieldset">
-            <ValidatedInput 
-              v-model="user_input.email" 
-              client:load
-              :is-invalid="v_email$.email.$error" 
-              label="Email Address (*Required)"
-              name="email"
-              error-message="Please enter a valid email address"
-            />  
-            <input 
-              class="usa-button"
-              type="submit"
-              value="Submit"
-              :disabled="isLoading"
-              data-test="submit"
-            >
-          </fieldset>
-        </form>
-      </div>
-      <div 
-        v-else
+        v-if="showAdditionalFormFields"
         class=" usa-prose"
       >
-        <slot name="more-info"></slot>
+        <slot name="more-info" />
         <form
-          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
+          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-8"
           data-test="name-submit-form"
           @submit.prevent="start_email_flow"
         >
@@ -203,28 +195,25 @@
             <ValidatedInput 
               v-model="user_input.email" 
               client:load
-              :is-invalid="v_all_info$.email.$error" 
-              label="Email Address (*Required)"
+              :validator="v_all_info$.email"
+              label="Email Address"
               name="email"
-              error-message="Please enter a valid email address"
               :readonly="true"
             />  
             <ValidatedInput 
               v-model="user_input.name" 
               client:load
-              :is-invalid="v_all_info$.name.$error" 
-              label="Name (*Required)"
+              :validator="v_all_info$.name"
+              label="Name"
               name="name"
-              error-message="Please enter your full name"
             />
             <Suspense>
               <ValidatedSelect 
                 v-model="user_input.agency_id" 
                 client:load
-                :is-invalid="v_all_info$.agency_id.$error" 
-                label="Agency / organization (*Required)"
+                :validator="v_all_info$.agency_id"
+                label="Agency / organization"
                 name="agency"
-                error-message="Please enter your agency"
               />
             </Suspense>
             <input
@@ -236,8 +225,37 @@
             >
           </fieldset>
         </form>
+      </div>
+      <div 
+        v-else
+        class="usa-prose"
+      >
+        <slot name="initial-greeting" />
 
-        <p>Didn’t receive the access email?</p>
+        <form
+          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
+          data-test="email-submit-form"
+          @submit.prevent="start_email_flow"
+        >
+          <fieldset class="usa-fieldset">
+            <ValidatedInput 
+              v-model="user_input.email" 
+              client:load
+              :validator="v_email$.email"
+              :is-invalid="v_email$.email.$error" 
+              label="Email Address"
+              name="email"
+              :error-message="v_email$.email.$message" 
+            />  
+            <input 
+              class="usa-button"
+              type="submit"
+              value="Submit"
+              :disabled="isLoading"
+              data-test="submit"
+            >
+          </fieldset>
+        </form>
       </div>
     </div>
   </div>

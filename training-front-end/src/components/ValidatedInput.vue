@@ -6,8 +6,8 @@
       required: false,
       default: undefined
     },
-    'isInvalid': {
-      type: Boolean,
+    'validator': {
+      type: Object,
       required: true
     },
     'name': {
@@ -15,10 +15,6 @@
       required: true
     },
     'label': {
-      type: String,
-      required: true
-    },
-    'errorMessage': {
       type: String,
       required: true
     },
@@ -35,24 +31,27 @@
 <template>
   <div
     class="usa-form-group"
-    :class="{ 'usa-form-group--error':isInvalid}"
+    :class="{ 'usa-form-group--error':validator.$error}"
   >
     <label
       class="usa-label"
       :for="name"
-    >{{ label }}</label>
-    <span
-      v-if="isInvalid"
-      :id="error_id"
-      class="usa-error-message"
-      role="alert"
-    >
-      {{ errorMessage }}
+    >{{ label }} <span class="text-secondary-dark">(*Required)</span></label>
+    <span v-if="validator.$error">
+      <span
+        v-for="error in validator.$errors"
+        :id="error_id"
+        :key="error.$property"
+        class="usa-error-message"
+        role="alert"
+      >
+        {{ error.$message }}
+      </span>
     </span>
     <input
       :id="name"
       class="usa-input usa-input"
-      :class="{ 'usa-input--error':isInvalid, 'error-focus': isInvalid }"
+      :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
       :value="modelValue"
       :aria-describedby="error_id"
