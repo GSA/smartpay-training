@@ -5,7 +5,7 @@
     height="24"
     fill="currentColor"
     aria-hidden="true"
-    class="usa-icon"
+    class="usa-icon text-middle"
     role="img"
     viewBox="0 0 24 24"
   >
