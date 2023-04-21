@@ -164,8 +164,7 @@
         v-if="!emailValidated" 
         class="usa-prose"
       >
-        <h2>Take the GSA SmartPay {{ header }} Quiz</h2>
-        <p>Enter your email address to get access to the quiz. You'll receive an email with an access link.</p>
+        <slot name="initial-greeting"></slot>
         <form
           class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
           data-test="email-submit-form"
@@ -194,8 +193,7 @@
         v-else
         class=" usa-prose"
       >
-        <h2>Welcome!</h2>
-        <p>Before you can take a quiz, you'll need to create and complete your profile.</p>
+        <slot name="more-info"></slot>
         <form
           class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
           data-test="name-submit-form"

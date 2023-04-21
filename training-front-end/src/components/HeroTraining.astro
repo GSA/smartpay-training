@@ -1,9 +1,9 @@
 ---
-    const { hero_image } = Astro.props;
+    const { hero_image, background_class = 'bg-primary' } = Astro.props;
     const style = hero_image ? `background-image: url(${hero_image}`: 'background-image: none'
 ---
 
-<section class:list={['bg-primary', 'padding-y-4', { 'usa-hero': hero_image }]} style={style}>
+<section class:list={['padding-y-4', `${ background_class }`, { 'usa-hero': hero_image }]} style={style}>
   <div class="grid-container">
     <div class="grid-row">
       <p v-if="$slots.subheader" class="usa-hero__heading--alt margin-bottom-0 tablet:grid-col-8">
@@ -11,7 +11,7 @@
       </p>
     </div>
     <div class="grid-row">
-        <h1 class="usa-hero__heading font-heading-2xl tablet:grid-col-12">
+        <h1 class="usa-hero__heading font-heading-2xl tablet:grid-col-12 ">
         <span class="usa-hero__heading--alt">
             <slot></slot>
         </span>
