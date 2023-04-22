@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted } from "vue"
+  import { ref } from "vue"
   import Loginless from './LoginlessFlow.vue';
   import CertificateTable from "./CertificateTable.vue";
   import { useStore } from '@nanostores/vue'
@@ -7,13 +7,7 @@
   // import USWDSAlert from './USWDSAlert.vue'
 
   const user = useStore(profile)
-  const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  const certificates = ref([]) 
-  onMounted(async() => {
-    certificates.value = await fetch(`${base_url}/api/v1/certificates/${user.value.id}`).then((r) => r.json())
-    console.log(certificates)
 
-  })
   const error = ref()
 
   function startLoading() {
@@ -51,7 +45,7 @@
             <h2>
               Welcome {{ user.name }}!
             </h2>
-            <CertificateTable :certificates="certificates" />
+            <CertificateTable />
           </div>
         </Loginless>
       </div>

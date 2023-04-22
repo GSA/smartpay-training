@@ -5,7 +5,7 @@
 	 * to check their email.
 	 */
 
-  import { ref, reactive, computed, onMounted } from 'vue';
+  import { ref, reactive, computed, onMounted, watch } from 'vue';
   import { profile, getUserFromToken } from '../stores/user'
   import { useStore } from '@nanostores/vue'
   import ValidatedInput from './ValidatedInput.vue';
@@ -45,6 +45,7 @@
     agency_id: undefined
   })
   
+
   /* Form validation for email alone */
   const known_email = () => !unregisteredEmail.value || props.allowRegistration
   const validations_just_email = {
@@ -58,6 +59,10 @@
     }
   }
   const v_email$ = useVuelidate(validations_just_email, user_input)
+ 
+  watch(() => user_input.email, async() => {
+    unregisteredEmail.value = false
+  })
 
   /* Form validation for additional information if we allow registation here */
   const showAdditionalFormFields = computed(() => props.allowRegistration && unregisteredEmail.value)
@@ -106,6 +111,7 @@
   async function start_email_flow() {
     const validation = unregisteredEmail.value ? v_all_info$ : v_email$
     const isFormValid = await validation.value.$validate() 
+
     if (!isFormValid) {
      return
     }
