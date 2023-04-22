@@ -50,7 +50,7 @@
     </span>
     <input
       :id="name"
-      class="usa-input usa-input"
+      class="usa-input usa-input tablet:grid-col-8"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
       :value="modelValue"

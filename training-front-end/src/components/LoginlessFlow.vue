@@ -187,7 +187,7 @@
       >
         <slot name="more-info" />
         <form
-          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-8"
+          class="usa-form usa-form--large margin-bottom-3 "
           data-test="name-submit-form"
           @submit.prevent="start_email_flow"
         >
@@ -233,7 +233,7 @@
         <slot name="initial-greeting" />
 
         <form
-          class="usa-form usa-form--large margin-bottom-3 tablet:grid-col-6"
+          class="usa-form usa-form--large margin-bottom-3 "
           data-test="email-submit-form"
           @submit.prevent="start_email_flow"
         >
