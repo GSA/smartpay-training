@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 
 class UserCertificate(BaseModel):
+    id: int
     user_id: int
     user_name: str
     quiz_id: int
