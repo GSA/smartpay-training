@@ -2,6 +2,7 @@
   import { ref } from "vue"
   import Loginless from './LoginlessFlow.vue';
   import CertificateTable from "./CertificateTable.vue";
+  import CertificateUserTable from "./CertificateUserTable.vue";
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
   // import USWDSAlert from './USWDSAlert.vue'
@@ -28,6 +29,7 @@
           page-id="pageId"
           title="Access Certificates"
           header="header"
+          link-destination-text="your past certificates"
           :allow-registration="false"
           @start-loading="startLoading"
           @error="setError"
@@ -41,11 +43,14 @@
             <p>Before you can access the certificate page, you'll need to create and complete your profile.</p>
           </template>
 
-          <div>
+          <div class="usa-prose">
             <h2>
               Welcome {{ user.name }}!
             </h2>
-            <CertificateTable />
+            <CertificateUserTable />
+            <div class="margin-top-6">
+              <CertificateTable />
+            </div>
           </div>
         </Loginless>
       </div>

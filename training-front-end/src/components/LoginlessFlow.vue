@@ -33,6 +33,10 @@
       type: Boolean,
       required: false,
       default: true
+    },
+    'linkDestinationText': {
+      type: String,
+      required: true
     }
   })
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
@@ -53,7 +57,7 @@
       email: withMessage('Please enter a valid email address', email),
       required: withMessage('Please enter a valid email address', required), 
       known_email: withMessage(
-        'The email address you provided is not currently in the system. Please check that you have entered an email previously used and that the email address is entered correctly.', 
+        'You have not earned any certificates yet. Complete a training to earn a certificate', 
         known_email
       )
     }
@@ -172,7 +176,7 @@
         <h2 class="usa-prose">
           Check your email
         </h2>
-        <p>We just sent you an email at <b>{{ user_input.email }}</b> with a link to access the training quiz. This link is only active for 24 hours</p>
+        <p>We just sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
         
         <p>Not the right email? <a href="/user_input">Send another email</a></p>
             

@@ -31,5 +31,5 @@ def get_certificate_by_id(
         db_user_certificate.user_name,
         db_user_certificate.completion_date
     )
-    headers = {'Content-Disposition': 'inline; filename="out.pdf"'}
+    headers = {'Content-Disposition': 'attachment; filename="SmartPayTraining.pdf"'}
     return Response(pdf_bytes, headers=headers, media_type='application/pdf')

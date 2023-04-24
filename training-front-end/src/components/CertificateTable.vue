@@ -1,29 +1,31 @@
 <script setup>
-import { onMounted, ref } from "vue"
-import FileDownLoad from "./icons/FileDownload.vue"
-import { useStore } from '@nanostores/vue'
-import { profile} from '../stores/user'
+  import { onMounted, ref } from "vue"
+  import FileDownLoad from "./icons/FileDownload.vue"
+  import { useStore } from '@nanostores/vue'
+  import { profile} from '../stores/user'
 
-const base_url = import.meta.env.BASE_URL
-const api_url = import.meta.env.PUBLIC_API_BASE_URL
-const user = useStore(profile)
+  const base_url = import.meta.env.BASE_URL
+  const api_url = import.meta.env.PUBLIC_API_BASE_URL
+  const user = useStore(profile)
 
-const card_icons = {
-  'Travel Training for Card/Account Holders and Approving Officials': 'smartpay-blue-travel-plain.svg'
-}
+  const card_icons = {
+    'Travel Training for Card/Account Holders and Approving Officials': 'smartpay-blue-travel-plain.svg'
+  }
 
-const certificates = ref([]) 
+  const certificates = ref([]) 
 
-onMounted(async() => {
-    certificates.value = await fetch(`${api_url}/api/v1/certificates/${user.value.id}`).then((r) => r.json())
-    console.log(certificates)
+  onMounted(async() => {
+      certificates.value = await fetch(`${api_url}/api/v1/certificates/${user.value.id}`).then((r) => r.json())
+      console.log(certificates)
 
-  })
+    })
 
-const data_format = { year:"numeric", month:"long", day:"numeric"}
-const formatted_date = date => new Date(date).toLocaleDateString('en-US', data_format)
-const card_src = training => `${base_url}images/${card_icons[training]}`
+  const data_format = { year:"numeric", month:"long", day:"numeric"}
+  const formatted_date = date => new Date(date).toLocaleDateString('en-US', data_format)
+  const card_src = training => `${base_url}images/${card_icons[training]}`
+
 </script>
+
 <template>
   <table 
     v-if="certificates.length" 
@@ -63,15 +65,22 @@ const card_src = training => `${base_url}images/${card_icons[training]}`
           {{ formatted_date(cert.completion_date) }}
         </td>
         <td>
-          <button class="usa-button usa-button--unstyled">
+          <a 
+            :href="`${api_url}/api/v1/certificate/${cert.id}`" 
+            class="usa-button usa-button--unstyled" 
+            download="sample.pdf"
+          >
             <FileDownLoad /> Download
-          </button>
+          </a>
         </td>
       </tr>
     </tbody>
   </table>
   <div v-else>
-    <h2>Oh No!</h2>
-    👩🏻‍💻 It looks like you haven’t completed any training quizes! 👨‍💻
+    <h3>
+      Certificates
+    </h3>
+    <!--eslint-disable-next-line vue/max-attributes-per-line-->
+    You have not earned any certificates yet. <a href="/" class="usa-link">Take a training</a> to earn a certificate.
   </div>
 </template>

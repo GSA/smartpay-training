@@ -10,7 +10,7 @@ function submitEmail(wrapper, email) {
   wrapper.get('form').trigger('submit.prevent')
 }
 
-const props = {"pageId": "training", "header":"Some header", "title":"Training Title"}
+const props = {"pageId": "training", "header":"Some header", "title":"Training Title", 'linkDestinationText': "the training quiz"}
 const slots = {
   'initial-greeting': "Enter your email address to get access to the quiz"
 }
@@ -34,6 +34,7 @@ function makeAsyncComponent() {
           pageId="page-id"
           header="Some header"
           title="Training Title"
+          link-destination-text="the training quiz"
          />
       </Suspense>`
   })

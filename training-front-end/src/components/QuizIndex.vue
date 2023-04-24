@@ -161,6 +161,7 @@
               :page-id="pageId"
               :title="title"
               :header="header"
+              link-destination-text="the training quiz"
               @start-loading="startLoading"
               @error="setError"
             >
