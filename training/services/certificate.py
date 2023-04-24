@@ -9,7 +9,7 @@ certificates = {
     'Travel Training for Agency/Organization Program Coordinators': 'a_opc_travel.pdf',
     'Purchase Training for Card/Account Holders and Approving Officials': 'c_ah_ao_purchase.pdf',
     'Purchase Training For Program Coordinators': 'a_opc_purchase.pdf',
-    'Fleet Training For Program Coordinators': 'a_opc_fleet'
+    'Fleet Training For Program Coordinators': 'a_opc_fleet.pdf'
 }
 
 
@@ -18,7 +18,8 @@ class Certificate:
         pass
 
     def generate_pdf(self, training_name, name, date):
-        data = {'name': name, 'date': date.strftime('%B %d, %Y')}
+        date_string = '{dt:%B} {dt.day}, {dt.year}'.format(dt=date)
+        data = {'name': name, 'date': date_string}
         pdf = certificates[training_name]
         empty_pdf_path = os.path.join(SCRIPT_DIR, PDF_PATH, pdf)
 
