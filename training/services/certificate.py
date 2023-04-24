@@ -19,7 +19,7 @@ class Certificate:
         pdf = certificates[training_name]
         empty_pdf_path = os.path.join(SCRIPT_DIR, PDF_PATH, pdf)
 
-        doc = fitz.open(empty_pdf_path)
+        doc = fitz.open(empty_pdf_path)  # type: ignore
         page = doc.load_page(0)
 
         for field in page.widgets():
