@@ -5,7 +5,7 @@ from pydantic import parse_obj_as
 import pytest
 import yaml
 import pathlib
-from training.api.deps import quiz_repository, quiz_service
+from training.api.deps import quiz_repository, quiz_service, user_repository
 from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
@@ -283,5 +283,13 @@ def mock_quiz_repo() -> Generator[QuizRepository, None, None]:
 def mock_quiz_service() -> Generator[QuizService, None, None]:
     mock = MagicMock()
     app.dependency_overrides[quiz_service] = lambda: mock
+    yield mock
+    app.dependency_overrides = {}
+
+
+@pytest.fixture
+def mock_user_repo() -> Generator[UserRepository, None, None]:
+    mock = MagicMock()
+    app.dependency_overrides[user_repository] = lambda: mock
     yield mock
     app.dependency_overrides = {}
