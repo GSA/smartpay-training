@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytest
 from training import schemas
 from training.repositories import QuizCompletionRepository
@@ -20,11 +20,8 @@ def test_create(
     quiz_completion_repo_with_data: QuizCompletionRepository,
     valid_quiz_completion_create: schemas.QuizCompletionCreate,
 ):
-    start = datetime.utcnow()
-    start = start.replace(second=(start.second - 1))
+    dt = datetime.utcnow()
     db_quiz_completion = quiz_completion_repo_with_data.create(valid_quiz_completion_create)
-    end = datetime.utcnow()
-    end = end.replace(second=(end.second + 1))
     assert db_quiz_completion.id
     assert db_quiz_completion.passed
-    assert start <= db_quiz_completion.submit_ts <= end
+    assert (dt - timedelta(minutes=5)) <= db_quiz_completion.submit_ts <= (dt + timedelta(minutes=5))

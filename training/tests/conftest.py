@@ -1,14 +1,20 @@
 from collections.abc import Generator
+from unittest.mock import MagicMock
+import jwt
 from pydantic import parse_obj_as
 import pytest
 import yaml
 import pathlib
+from training.api.deps import agency_repository, quiz_repository, quiz_service, user_repository
 from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository
 from training.services import QuizService
+from training.config import settings
+from . import factories
+from training.main import app
 
 
 @pytest.fixture
@@ -136,6 +142,16 @@ def valid_user_dict(testdata: dict) -> Generator[dict, None, None]:
 
 
 @pytest.fixture
+def valid_jwt(db_with_data: Session) -> str:
+    '''
+    Provides a JWT based on a test user in the database.
+    '''
+    db_user = db_with_data.query(models.User).first()
+    user = schemas.User.from_orm(db_user).dict()
+    return jwt.encode(user, settings.JWT_SECRET, algorithm="HS256")
+
+
+@pytest.fixture
 def agency_repo_empty(db: Session) -> Generator[AgencyRepository, None, None]:
     '''
     Provides an AgencyRepository injected with an empty database.
@@ -192,14 +208,6 @@ def quiz_repo_with_data(db_with_data: Session) -> Generator[QuizRepository, None
 
 
 @pytest.fixture
-def quiz_service(db_with_data: Session) -> Generator[QuizService, None, None]:
-    '''
-    Provides a QuizService injected with a populated database.
-    '''
-    yield QuizService(db=db_with_data)
-
-
-@pytest.fixture
 def valid_passing_submission(testdata: dict) -> Generator[schemas.QuizSubmission, None, None]:
     '''
     Provides a QuizSubmission schema object containing valid passing responses.
@@ -243,30 +251,7 @@ def valid_quiz_create() -> schemas.QuizCreate:
     '''
     Provides a valid QuizCreate schema object.
     '''
-    return schemas.QuizCreate(
-        name="New Quiz",
-        topic=schemas.QuizTopic.Travel,
-        audience=schemas.QuizAudience.AccountHoldersApprovingOfficials,
-        active=True,
-        content=schemas.QuizContentCreate(
-            questions=[
-                schemas.QuizQuestionCreate(
-                    type=schemas.QuizQuestionType.MultipleChoiceSingleSelect,
-                    text="Official ministry travel is performed via the floo network.",
-                    choices=[
-                        schemas.QuizChoiceCreate(
-                            text="True.",
-                            correct=True
-                        ),
-                        schemas.QuizChoiceCreate(
-                            text="True.",
-                            correct=True
-                        )
-                    ]
-                )
-            ]
-        )
-    )
+    return factories.QuizCreateSchemaFactory.build(active=True)
 
 
 @pytest.fixture
@@ -284,3 +269,35 @@ def passed_quiz_completion_id(db_with_data: Session) -> Generator[int, None, Non
     '''
     quiz_comletion_passed = db_with_data.query(models.QuizCompletion).filter(models.QuizCompletion.passed).first().id
     yield quiz_comletion_passed
+
+
+@pytest.fixture
+def mock_quiz_repo() -> Generator[QuizRepository, None, None]:
+    mock = MagicMock()
+    app.dependency_overrides[quiz_repository] = lambda: mock
+    yield mock
+    app.dependency_overrides = {}
+
+
+@pytest.fixture
+def mock_quiz_service() -> Generator[QuizService, None, None]:
+    mock = MagicMock()
+    app.dependency_overrides[quiz_service] = lambda: mock
+    yield mock
+    app.dependency_overrides = {}
+
+
+@pytest.fixture
+def mock_user_repo() -> Generator[UserRepository, None, None]:
+    mock = MagicMock()
+    app.dependency_overrides[user_repository] = lambda: mock
+    yield mock
+    app.dependency_overrides = {}
+
+
+@pytest.fixture
+def mock_agency_repo() -> Generator[AgencyRepository, None, None]:
+    mock = MagicMock()
+    app.dependency_overrides[agency_repository] = lambda: mock
+    yield mock
+    app.dependency_overrides = {}

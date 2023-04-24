@@ -7,7 +7,7 @@ from training.repositories import UserRepository, AgencyRepository
 def test_create(user_repo_empty: UserRepository, agency_repo_with_data: AgencyRepository):
     agency_id = agency_repo_with_data.find_all()[0].id
     new_user = schemas.UserCreate(
-        email="new_user@example.com",
+        email="new_user@example.com",  # type: ignore
         name="New User",
         agency_id=agency_id
     )
@@ -19,7 +19,7 @@ def test_create(user_repo_empty: UserRepository, agency_repo_with_data: AgencyRe
 def test_create_duplicate(user_repo_with_data: UserRepository):
     existing_user = user_repo_with_data.find_all()[0]
     duplicate_user = schemas.UserCreate(
-        email=existing_user.email,
+        email=existing_user.email,  # type: ignore
         name="Duplicate User",
         agency_id=existing_user.agency_id
     )

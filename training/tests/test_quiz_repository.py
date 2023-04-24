@@ -5,7 +5,7 @@ from training.repositories import QuizRepository
 def test_create(quiz_repo_empty: QuizRepository, valid_quiz_create: schemas.QuizCreate):
     db_quiz = quiz_repo_empty.create(valid_quiz_create)
     assert db_quiz.id
-    assert db_quiz.name == "New Quiz"
+    assert db_quiz.name == valid_quiz_create.name
 
 
 def test_create_duplicate(quiz_repo_empty: QuizRepository, valid_quiz_create: schemas.QuizCreate):
@@ -54,6 +54,8 @@ def test_find_all(quiz_repo_with_data: QuizRepository, testdata: dict):
         assert valid_quiz["name"] in names
 
 
-def test_delete_by_id(quiz_repo_with_data: QuizRepository, valid_quiz_ids: list[int]):
-    quiz_repo_with_data.delete_by_id(valid_quiz_ids[0])
-    assert quiz_repo_with_data.find_by_id(valid_quiz_ids[0]) is None
+def test_delete_by_id(quiz_repo_with_data: QuizRepository, valid_quiz_create: schemas.QuizCreate):
+    db_quiz = quiz_repo_with_data.create(valid_quiz_create)
+    id = db_quiz.id
+    quiz_repo_with_data.delete_by_id(id)
+    assert quiz_repo_with_data.find_by_id(id) is None
