@@ -5,9 +5,11 @@ PDF_PATH = '../../data/blank_certificates'
 SCRIPT_DIR = os.path.dirname(__file__)
 
 certificates = {
-    'Travel Training for Card/Account Holders and Approving Officials': 'a_opc_travel.pdf',
-    'Travel Training for Agency/Organization Program Coordinators': 'c_ah_ao_travel.pdf'
-    # other certs go here. maybe we can have a better way to link each training to each cert
+    'Travel Training for Card/Account Holders and Approving Officials': 'c_ah_ao_travel.pdf',
+    'Travel Training for Agency/Organization Program Coordinators': 'a_opc_travel.pdf',
+    'Purchase Training for Card/Account Holders and Approving Officials': 'c_ah_ao_purchase.pdf',
+    'Purchase Training For Program Coordinators': 'a_opc_purchase.pdf',
+    'Fleet Training For Program Coordinators': 'a_opc_fleet'
 }
 
 
