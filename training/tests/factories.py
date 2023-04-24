@@ -24,3 +24,11 @@ class UserSchemaFactory(ModelFactory[schemas.User]):
 
 class UserCreateSchemaFactory(ModelFactory[schemas.UserCreate]):
     __model__ = schemas.UserCreate
+
+
+class AgencySchemaFactory(ModelFactory[schemas.Agency]):
+    __model__ = schemas.Agency
+
+
+class AgencyCreateSchemaFactory(ModelFactory[schemas.AgencyCreate]):
+    __model__ = schemas.AgencyCreate
