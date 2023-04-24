@@ -49,17 +49,26 @@ export function getStaticPaths() {
   return  quizes.map(({topic, audience, training_id, title, header, subhead}) => {
    return {
     params: {training_id},
-    props: {topic, audience, title, header, subhead}
+    props: {topic, audience, title, header, subhead, training_id}
   }});
 }
 
-const { training_id } = Astro.params;
-const { topic, audience, title, header, subhead } = Astro.props;
+const { topic, audience, title, header, subhead, training_id} = Astro.props;
 ---
 <BaseLayout title={title}>
   <HeroTraining>
     <span slot="subheader">{subhead}</span>
     {header} Quiz
   </HeroTraining>
-  <QuizIndex topic={topic} audience={audience} pageId={training_id} title={title} header={header} subhead={subhead} client:load />
+  
+  <QuizIndex 
+    topic={topic}
+    audience={audience}
+    pageId={training_id}
+    title={title}
+    header={header}
+    subhead={subhead}
+    client:load
+    client:only 
+  />
 </BaseLayout>

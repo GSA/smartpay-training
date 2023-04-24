@@ -1,6 +1,10 @@
 <script setup>
     import {computed, onMounted } from 'vue';
-    import Cancel from './icons/CancelIcon.vue';
+    import CheckCircleIcon from './icons/CheckCircleIcon.vue';
+    import ErrorIcon from './icons/ErrorIcon.vue';
+    import QuizResult from './QuizResult.vue';
+    import USWDS from "@uswds/uswds/js";
+    const { accordion } = USWDS;
 
     const props = defineProps({
       'quiz':{
@@ -12,59 +16,71 @@
         required: true
       }
     });
+
     defineEmits(['reset_quiz'])
 
-    const result_string = computed(() => `${props.quizResults.correct_count} correct out of ${props.quizResults.question_count}`)
+    const result_string = computed(() => `${props.quizResults.correct_count} of ${props.quizResults.question_count}`)
     const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
-    const questions_incorrect = computed(() => props.quiz.content.questions.filter((q, i) => !props.quizResults.questions[i].correct))
 
     function windowStateListener() {
       window.location = import.meta.env.BASE_URL
     }
 
     onMounted(() => {
-      // send to API
       window.addEventListener("popstate", windowStateListener)
+      accordion.init()
     })
-
 </script>
 
 <template>
   <div class="usa-prose">
-    <h3>Quiz Results</h3>
     <div v-if="quizResults.passed">
-      <h3>🎉 You passed 🎉</h3>
+      <div class="usa-prose">
+        <h2 class="usa-alert__heading">
+          <span class="text-green font-body-2xl">
+            <CheckCircleIcon />
+          </span>
+          You passed the quiz!
+        </h2>
+      </div>
       <p>
-        You answered {{ result_string }} for a score of {{ percentage }}%
+        You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which meets the 75% or higher requirement to pass.
       </p>
-      <p>Download a PDF of your training certificate [link: coming soon]</p>
+      <button
+        class="usa-button usa-button--outline margin-bottom-3"
+      >
+        View your certificate of completion
+      </button>
     </div>
     <div v-else>
-      <h3>😥 You did not pass 😥</h3>
+      <div class="usa-prose">
+        <h2 class="usa-alert__heading">
+          <span class="text-secondary-dark font-body-2xl">
+            <ErrorIcon />
+          </span>
+          You did not pass
+        </h2>
+      </div>
       <p>
-        You correctly answered {{ result_string }} for a score of {{ percentage }}% 
+        You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which does <b>not</b> meet the 75% or higher requirement to pass.
       </p>
-      <h3>You answered these questions incorrectly</h3>
-      <ul class="usa-icon-list">
-        <li
-          v-for="question in questions_incorrect"
-          :key="question.id"
-          class="usa-icon-list__item"
-        >
-          <div class="usa-icon-list__icon text-red">
-            <Cancel />
-          </div>
-          <div class="usa-icon-list__content">
-            {{ question.text }}
-          </div>
-        </li>
-      </ul>
       <button
-        class="usa-button margin-y-4"
+        class="usa-button margin-bottom-2"
         @click="$emit('reset_quiz')"
       >
-        Try again
+        Retake the quiz
       </button>
+    </div>
+    <div class="tablet:grid-col-8">
+      <div class="usa-accordion usa-accordion--bordered">
+        <QuizResult 
+          v-for="(question, index) in quiz.content.questions" 
+          :key="question.id"
+          :question="question"
+          :result="quizResults.questions[index]"
+          :index="index"
+        />
+      </div>
     </div>
   </div>
 </template>
