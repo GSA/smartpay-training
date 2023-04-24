@@ -10,7 +10,7 @@ class CertificateRepository(BaseRepository[models.QuizCompletion]):
         super().__init__(session, models.QuizCompletion)
 
     def get_certificate_by_id(self, id: int) -> UserCertificate | None:
-        
+
         result = (self._session.query(models.QuizCompletion.id.label("id"), models.User.id.label("user_id"),
                                       models.User.name.label("user_name"), models.Quiz.id.label("quiz_id"),
                                       models.Quiz.name.label("quiz_name"), models.QuizCompletion.submit_ts.label("completion_date")
