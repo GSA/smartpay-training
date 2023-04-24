@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Depends
-from training.schemas import UserCertificate, QuizCompletion
+from training.schemas import UserCertificate
 from training.repositories import CertificateRepository
 from training.api.deps import certificate_repository
 
@@ -16,7 +16,7 @@ def get_certificates_by_userid(user_id: int, repo: CertificateRepository = Depen
     return db_user_certificates
 
 
-@router.get("/certificate/{id}", response_model=QuizCompletion)
+@router.get("/certificate/{id}", response_model=UserCertificate)
 def get_certificate_by_id(id: int, repo: CertificateRepository = Depends(certificate_repository)):
     db_user_certificate = repo.get_certificate_by_id(id)
     if db_user_certificate is None:
