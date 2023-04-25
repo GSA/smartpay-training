@@ -5,6 +5,7 @@ from training.errors import IncompleteQuizResponseError
 from training.services import QuizService
 from training.repositories import QuizRepository, QuizCompletionRepository
 from sqlalchemy.orm import Session
+from .factories import QuizCompletionFactory
 
 
 @patch.object(QuizRepository, "find_by_id")
@@ -18,7 +19,7 @@ def test_grade_passing(
 ):
     quiz_service = QuizService(db_with_data)
     mock_quiz_repo_find_by_id.return_value = valid_quiz
-    mock_quiz_completion_repo_create.return_value = 0
+    mock_quiz_completion_repo_create.return_value = QuizCompletionFactory.build()
 
     result = quiz_service.grade(quiz_id=123, user_id=123, submission=valid_passing_submission)
 
@@ -42,7 +43,7 @@ def test_grade_failing(
 ):
     quiz_service = QuizService(db_with_data)
     mock_quiz_repo_find_by_id.return_value = valid_quiz
-    mock_quiz_completion_repo_create.return_value = 0
+    mock_quiz_completion_repo_create.return_value = QuizCompletionFactory.build()
 
     result = quiz_service.grade(quiz_id=123, user_id=123, submission=valid_failing_submission)
 
