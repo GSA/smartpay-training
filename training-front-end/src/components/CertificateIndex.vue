@@ -30,12 +30,12 @@
     <div class="grid-row">
       <div class="tablet:grid-col-12">
         <USWDSAlert
-            v-if="error"
-            class="tablet:grid-col-8"
-            status="warning"
-            :heading="error.name"
-          >
-            {{ error.message }}
+          v-if="error"
+          class="tablet:grid-col-8"
+          status="warning"
+          :heading="error.name"
+        >
+          {{ error.message }}
         </USWDSAlert>
 
         <Loginless
