@@ -6,6 +6,10 @@ class QuizGradeSchemaFactory(ModelFactory[schemas.QuizGrade]):
     __model__ = schemas.QuizGrade
 
 
+class QuizCompletionFactory(ModelFactory[schemas.QuizCompletion]):
+    __model__ = schemas.QuizCompletion
+
+
 class QuizCreateSchemaFactory(ModelFactory[schemas.QuizCreate]):
     __model__ = schemas.QuizCreate
 

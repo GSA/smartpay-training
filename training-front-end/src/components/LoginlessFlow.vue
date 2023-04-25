@@ -57,7 +57,7 @@
       email: withMessage('Please enter a valid email address', email),
       required: withMessage('Please enter a valid email address', required), 
       known_email: withMessage(
-        'You have not earned any certificates yet. Complete a training to earn a certificate', 
+        "We couldn’t find the email address you entered. Please check that you entered an email address you’ve used before and that you entered it correctly.", 
         known_email
       )
     }

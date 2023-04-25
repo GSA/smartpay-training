@@ -8,8 +8,13 @@
   const api_url = import.meta.env.PUBLIC_API_BASE_URL
   const user = useStore(profile)
 
+
   const card_icons = {
-    'Travel Training for Card/Account Holders and Approving Officials': 'smartpay-blue-travel-plain.svg'
+    'Travel Training for Card/Account Holders and Approving Officials': 'smartpay-blue-travel-plain.svg',
+    'Travel Training for Agency/Organization Program Coordinators': 'smartpay-blue-travel-plain.svg',
+    'Purchase Training for Card/Account Holders and Approving Officials': 'smartpay-red-purchase-plain.svg',
+    'Purchase Training For Program Coordinators': 'smartpay-red-purchase-plain.svg',
+    'Fleet Training For Program Coordinators': 'smartpay-green-fleet-plain.svg'
   }
 
   const certificates = ref([]) 
