@@ -17,7 +17,6 @@
   onMounted(async() => {
       certificates.value = await fetch(`${api_url}/api/v1/certificates/${user.value.id}`).then((r) => r.json())
       console.log(certificates)
-
     })
 
   const data_format = { year:"numeric", month:"long", day:"numeric"}
