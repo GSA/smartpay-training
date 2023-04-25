@@ -16,7 +16,6 @@
 
   onMounted(async() => {
       certificates.value = await fetch(`${api_url}/api/v1/certificates/${user.value.id}`).then((r) => r.json())
-      console.log(certificates)
     })
 
   const data_format = { year:"numeric", month:"long", day:"numeric"}
@@ -80,6 +79,6 @@
       Certificates
     </h3>
     <!--eslint-disable-next-line vue/max-attributes-per-line-->
-    You have not earned any certificates yet. <a href="/" class="usa-link">Take a training</a> to earn a certificate.
+    You have not earned any certificates yet. <a :href="base_url" class="usa-link">Take a training</a> to earn a certificate.
   </div>
 </template>

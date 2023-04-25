@@ -9,6 +9,7 @@ class QuizGradeQuestion(BaseModel):
 
 
 class QuizGrade(BaseModel):
+    quiz_completion_id: int | None
     quiz_id: int
     correct_count: int
     question_count: int

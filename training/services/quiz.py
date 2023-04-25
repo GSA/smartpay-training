@@ -61,12 +61,15 @@ class QuizService():
             percentage=percentage,
             passed=passed,
             questions=questions,
+            quiz_completion_id=None
         )
 
-        self.quiz_completion_repo.create(QuizCompletionCreate(
+        result = self.quiz_completion_repo.create(QuizCompletionCreate(
             quiz_id=quiz_id,
             user_id=user_id,
             passed=grade.passed,
         ))
+
+        grade.quiz_completion_id = result.id
 
         return grade
