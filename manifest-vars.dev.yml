@@ -1,0 +1,3 @@
+env: dev
+memory: 256M
+instances: 1

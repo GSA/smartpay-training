@@ -1,0 +1,59 @@
+name: Continuous deployment to cloud.gov
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure secrets
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_username: ${{ secrets.CG_USERNAME }}
+          cf_password: ${{ secrets.CG_PASSWORD }}
+          cf_org: gsa-smartpay
+          cf_space: dev
+          command: >-
+            cf update-user-provided-service smartpay-training-secrets -p '{
+              "JWT_SECRET": "${{ secrets.JWT_SECRET }}",
+              "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}"
+            }'
+
+      - name: Configure environment variables
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_username: ${{ secrets.CG_USERNAME }}
+          cf_password: ${{ secrets.CG_PASSWORD }}
+          cf_org: gsa-smartpay
+          cf_space: dev
+          command: >-
+            bin/cg-set-env.sh dev
+            BASE_URL=${{ vars.BASE_URL }}
+            SMTP_SERVER=${{ vars.SMTP_SERVER }}
+            SMTP_PORT=${{ vars.SMTP_PORT }}
+            SMTP_STARTTLS=${{ vars.SMTP_STARTTLS }}
+            SMTP_SSL_TLS=${{ vars.SMTP_SSL_TLS }}
+
+      - name: Run database migrations
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_username: ${{ secrets.CG_USERNAME }}
+          cf_password: ${{ secrets.CG_PASSWORD }}
+          cf_org: gsa-smartpay
+          cf_space: dev
+          command: cf run-task smartpay-training -c "alembic upgrade head"
+
+      - name: Deploy the application
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_username: ${{ secrets.CG_USERNAME }}
+          cf_password: ${{ secrets.CG_PASSWORD }}
+          cf_org: gsa-smartpay
+          cf_space: dev
+          cf_vars_file: manifest-vars.dev.yml
