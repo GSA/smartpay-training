@@ -10,7 +10,10 @@ function submitEmail(wrapper, email) {
   wrapper.get('form').trigger('submit.prevent')
 }
 
-const props = {"pageId": "training", "header":"Some header", "title":"Training Title"}
+const props = {"pageId": "training", "header":"Some header", "title":"Training Title", 'linkDestinationText': "the training quiz"}
+const slots = {
+  'initial-greeting': "Enter your email address to get access to the quiz"
+}
 const agency_api = [
   {
     "name": "Central Intelligence Agency",
@@ -31,6 +34,7 @@ function makeAsyncComponent() {
           pageId="page-id"
           header="Some header"
           title="Training Title"
+          link-destination-text="the training quiz"
          />
       </Suspense>`
   })
@@ -47,7 +51,7 @@ describe('Loginless', () => {
   })
 
   it('renders initial view, but not the response view', async () => {
-    const wrapper = await shallowMount(Loginless, {props})
+    const wrapper = await shallowMount(Loginless, {props, slots})
     expect(wrapper.text()).toContain('Enter your email address to get access to the quiz')
     const initial_div = wrapper.find('[data-test="pre-submit"]') 
     const confirmation_div = wrapper.find('[data-test="post-submit"]')
@@ -77,6 +81,20 @@ describe('Loginless', () => {
     expect(complete_form.exists()).toBe(true)
   })
 
+  it('does not ask for more information after an unknown email is submitted when allowRegistration is false', async () => {
+    const wrapper = await mount(Loginless, {props: {...props, allowRegistration:false}})
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(fetchData) })
+    })
+    await submitEmail(wrapper, 'test@example.com') 
+    await flushPromises()
+
+    const email_only_form = wrapper.find('[data-test="email-submit-form"]') 
+    const complete_form = wrapper.find('[data-test="name-submit-form"]')
+    expect(email_only_form.exists()).toBe(true)
+    expect(complete_form.exists()).toBe(false)
+  })
+
   it("does not call the api if the form is invalid", async () => {
     const wrapper = await mount(Loginless, {props})
     const fetchMock = vi.spyOn(global, 'fetch').mockImplementation(() => {
@@ -86,6 +104,18 @@ describe('Loginless', () => {
     await flushPromises()
 
     expect(fetchMock).not.toBeCalled()
+  })
+
+  it("shows message when email form is invalid", async () => {
+    const wrapper = await mount(Loginless, {props})
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(fetchData) })
+    })
+    await submitEmail(wrapper, 'bademail@') 
+    await flushPromises()
+    const element = wrapper.find('[id="email-input-error-message"]')
+    expect(element.exists()).toBe(true)
+    expect(element.text()).toBe('Please enter a valid email address')
   })
 
   it('after succesfully submitting the form, it shows confirmation', async () => {
@@ -217,6 +247,25 @@ describe('Loginless', () => {
     expect(content_div.exists()).toBe(false)
   })
 
+  it('loads agencies in select element', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(agency_api) })
+    })
+    // first fill out the email only form...
+    const wrapper = await mount(makeAsyncComponent())
+    await flushPromises()
+    await submitEmail(wrapper, 'test@example.com') 
+    await flushPromises()
+
+    const options = wrapper.findAll('option')
+
+    expect(options.length).toBe(3)  
+    expect(options[1].text()).toBe('Central Intelligence Agency')
+    expect(options[1].element.value).toBe('13')
+    expect(options[2].text()).toBe('General Services Administration')
+    expect(options[2].element.value).toBe('22')
+
+  })
   it('submits form to api with complete information', async () => {
     const fetchspy = vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(agency_api) })

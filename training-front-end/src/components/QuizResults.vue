@@ -49,7 +49,7 @@
       <button
         class="usa-button usa-button--outline margin-bottom-3"
       >
-        View your certificate of completion
+        Download your certificate of completion
       </button>
     </div>
     <div v-else>

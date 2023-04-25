@@ -161,9 +161,20 @@
               :page-id="pageId"
               :title="title"
               :header="header"
+              link-destination-text="the training quiz"
               @start-loading="startLoading"
               @error="setError"
             >
+              <template #initial-greeting>
+                <h2>Take the GSA SmartPay {{ header }} Quiz</h2>
+                <p>Enter your email address to get access to the quiz. You'll receive an email with an access link.</p>
+              </template>
+              
+              <template #more-info>
+                <h2>Welcome!</h2>
+                <p>Before you can take a quiz, you'll need to create and complete your profile.</p>
+              </template>
+
               <Quiz
                 v-if="isStarted"
                 :quiz="quiz"
