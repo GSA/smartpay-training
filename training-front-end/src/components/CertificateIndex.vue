@@ -39,7 +39,7 @@
           </template>
             
           <template #more-info>
-            <h2>Welcome ! </h2>
+            <h2>Welcome! </h2>
             <p>Before you can access the certificate page, you'll need to create and complete your profile.</p>
           </template>
 
