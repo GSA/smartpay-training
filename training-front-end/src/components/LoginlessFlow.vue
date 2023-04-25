@@ -143,7 +143,7 @@
     }
     
     if (! res.ok) { 
-      throw new Error(res)
+      throw new Error("Error contacting server")
     }
 
     const json = await res.json()
