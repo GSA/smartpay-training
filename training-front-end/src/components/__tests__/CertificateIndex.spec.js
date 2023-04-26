@@ -23,7 +23,6 @@ describe('CertificateIndex', async () => {
     vi.restoreAllMocks()
     cleanStores()
     profile.set({})
-
   })
 
   it('shows email input when user is unknown', async () => {
