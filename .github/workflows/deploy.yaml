@@ -40,15 +40,6 @@ jobs:
             SMTP_STARTTLS=${{ vars.SMTP_STARTTLS }}
             SMTP_SSL_TLS=${{ vars.SMTP_SSL_TLS }}
 
-      - name: Run database migrations
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          cf_username: ${{ secrets.CG_USERNAME }}
-          cf_password: ${{ secrets.CG_PASSWORD }}
-          cf_org: gsa-smartpay
-          cf_space: dev
-          command: cf run-task smartpay-training -c "alembic upgrade head"
-
       - name: Deploy the application
         uses: cloud-gov/cg-cli-tools@main
         with:
@@ -57,3 +48,12 @@ jobs:
           cf_org: gsa-smartpay
           cf_space: dev
           cf_vars_file: manifest-vars.dev.yml
+
+      - name: Run database migrations
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          cf_username: ${{ secrets.CG_USERNAME }}
+          cf_password: ${{ secrets.CG_PASSWORD }}
+          cf_org: gsa-smartpay
+          cf_space: dev
+          command: cf run-task smartpay-training -c "alembic upgrade head"
