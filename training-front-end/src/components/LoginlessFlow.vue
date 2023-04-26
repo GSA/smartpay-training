@@ -10,8 +10,8 @@
   import { useStore } from '@nanostores/vue'
   import ValidatedInput from './ValidatedInput.vue';
   import ValidatedSelect from './ValidatedSelect.vue';
-  import { useVuelidate } from '@markmeyer/vuelidate-core';
-  import { required, email, helpers } from '@markmeyer/vuelidate-validators';
+  import { useVuelidate } from '@vuelidate/core';
+  import { required, email, helpers } from '@vuelidate/validators';
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const { withMessage } = helpers
