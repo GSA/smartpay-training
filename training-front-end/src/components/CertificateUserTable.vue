@@ -8,7 +8,6 @@ const user = useStore(profile)
 const agency = ref('')
 
 onMounted(async () => {
-  console.log(`${api_url}/api/v1/agencies/${user.value.agency_id}`)
   let r = await fetch(`${api_url}/api/v1/agencies/${user.value.agency_id}`)
   .then(r => r.json())
   .catch(e => console.log("error hitting api: ", e))

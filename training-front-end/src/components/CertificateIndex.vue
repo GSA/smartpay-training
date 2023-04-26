@@ -1,11 +1,11 @@
 <script setup>
-  import { ref } from "vue"
+  import { ref, onErrorCaptured } from "vue"
   import Loginless from './LoginlessFlow.vue';
   import CertificateTable from "./CertificateTable.vue";
   import CertificateUserTable from "./CertificateUserTable.vue";
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
-  // import USWDSAlert from './USWDSAlert.vue'
+  import USWDSAlert from './USWDSAlert.vue'
 
   const user = useStore(profile)
 
@@ -16,15 +16,28 @@
   }
 
 	function setError(event){
-    console.log(event)
     error.value = event
 	}
+
+  onErrorCaptured((err) => {
+    setError(err)
+    return false
+  })
 </script>
 
 <template>
   <div class="padding-top-4 padding-bottom-4 grid-container">
     <div class="grid-row">
       <div class="tablet:grid-col-12">
+        <USWDSAlert
+          v-if="error"
+          class="tablet:grid-col-8"
+          status="warning"
+          :heading="error.name"
+        >
+          {{ error.message }}
+        </USWDSAlert>
+
         <Loginless
           page-id="pageId"
           title="Access Certificates"
