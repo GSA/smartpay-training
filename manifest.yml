@@ -3,9 +3,12 @@ applications:
   - name: smartpay-training
     buildpacks:
       - python_buildpack
-    memory: 256M
-    random-route: true
+    memory: ((memory))
+    routes:
+      - route: smartpay-training-((env)).app.cloud.gov
+    instances: ((instances))
     services:
       - smartpay-training-db
       - smartpay-training-redis
       - smartpay-training-secrets
+      - ((env))-deployer

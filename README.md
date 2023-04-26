@@ -81,88 +81,48 @@ To view the coverage report afterwards:
 coverage report
 ```
 
-## Deployment
+## Deployment on cloud.gov
 
-Follow these steps to deploy the application on cloud.gov. The following commands assume the app is named `smartpay-training`.
+Follow these steps to deploy the application on cloud.gov.
 
-### Prepare the cloud.gov space
+### Bootstrap the cloud.gov environment
 
-Configure cloud.gov to [permit egress from the app's space](https://cloud.gov/docs/management/space-egress/) to other services. Replace `ORG_NAME` and `SPACE_NAME` with the appropriate names for your environment:
-
-```
-cf bind-security-group trusted_local_networks_egress ORG_NAME --space SPACE_NAME
-cf bind-security-group public_networks_egress ORG_NAME --space SPACE_NAME
-```
-
-The `trusted_local_networks_egress` security group allows the app to connect to cloud.gov marketplace services such as Redis and RDS. The `public_networks_egress` security group allows the app to connect to external SMTP servers.
-
-### Provision the backend services
-
-The API uses Redis and PostgreSQL. To provision these services on cloud.gov:
+Before the first deployment, you need to run the bootstrap script, where `SPACE` is one of `dev`, `staging`, or `prod`. This will create all the necessary services that are required to deploy the app in that space.
 
 ```
-cf create-service aws-elasticache-redis redis-3node smartpay-training-redis
-cf create-service aws-rds small-psql smartpay-training-db
+bin/cg-bootstrap-space.sh SPACE
 ```
 
-You can monitor the deployment status with `cf services`. It might take a while to fully provision everything.
-
-### Set up required secrets
-
-Create a user-provided service to store secrets [in accordance with cloud.gov practices](https://cloud.gov/docs/deployment/production-ready/#protect-access-to-sensitive-credentials).
-
-The CLI will prompt you to enter each secret one by one:
+You can monitor the services deployment status with `cf services`. It can take quite a while to fully provision everything. Once the services are ready, you can bootstrap the application:
 
 ```
-cf cups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
+bin/cg-bootstrap-app.sh SPACE
 ```
 
-### Deploy the app
 
-After the services have been successfully created, deploy the training app but don't start it yet since we still have to set some environment variables:
+### Create cloud.gov service accounts
 
-```
-cf push --no-start
-```
-
-### Set required environment variables
-
-The app requires a number of environment variables. Refer to `.env_example` for information on necessary environment variables. You only have to set them once per deployment on cloud.gov, and you can change them later with another `cf set-env` command.
-
-Replace the example values with the appropriate ones and for each environment variable, run:
+Create a service account for each space. These accounts will be used by GitHub Actions to deploy the app.
 
 ```
-cf set-env smartpay-training ENV_VAR_NAME "env_var_value"
+bin/cg-service-account-create.sh SPACE
 ```
 
-Restart the app to ensure it picks up the environment variables.
+Take note of the username and password it creates for each space.
 
-```
-cf restart smartpay-training
-```
 
-## Updates
+### Configure the GitHub environments
 
-### App
+1. [Create environments in the GitHub repository](https://github.com/GSA/smartpay-training/settings/environments) that correspond with each space (i.e., `dev`, `staging`, and `prod`)
+2. Within each GitHub environment, configure:
+    * The app's secrets
+        * `CG_USERNAME`: The service account username for this space
+        * `CG_PASSWORD`: The service account password for this space
+        * `JWT_SECRET`: A randomly generated string
+        * `SMTP_PASSWORD`: Password for the SMTP relay server
+    * The app's environment variables (see `.env_example` for a full list of necessary variables)
 
-You can deploy any updates by simply pushing the app to cloud.gov again:
 
-```
-cf push
-```
+### Confirm GitHub Actions are working
 
-### Secrets
-
-You can update secrets by updating the user-provided service. Note that you will need to enter each secret one by one again.
-
-```
-cf uups smartpay-training-secrets -p "JWT_SECRET, SMTP_PASSWORD"
-```
-
-### Environment variables
-
-You can update environment variables simply by setting them again. For example:
-
-```
-cf set-env smartpay-training SMTP_USER "hello@example.com"
-```
+At this point, GitHub Actions should be able to deploy to all configured environments.
