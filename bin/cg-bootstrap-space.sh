@@ -39,6 +39,3 @@ cf create-service aws-rds $rds_plan smartpay-training-db
 
 # Secrets
 cf create-user-provided-service smartpay-training-secrets
-
-# Create the app but don't start it yet
-cf push --no-start --vars-file manifest-vars.${space}.yml
