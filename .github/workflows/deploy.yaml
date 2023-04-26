@@ -35,6 +35,7 @@ jobs:
           command: >-
             bin/cg-set-env.sh dev
             BASE_URL=${{ vars.BASE_URL }}
+            SMTP_USER=${{ vars.SMTP_USER }}
             SMTP_SERVER=${{ vars.SMTP_SERVER }}
             SMTP_PORT=${{ vars.SMTP_PORT }}
             SMTP_STARTTLS=${{ vars.SMTP_STARTTLS }}
