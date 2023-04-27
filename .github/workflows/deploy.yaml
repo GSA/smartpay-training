@@ -2,8 +2,8 @@ name: Continuous deployment to cloud.gov
 
 on:
   push:
-    branches:
-      - main
+    paths-ignore:
+      - training-front-end/**
 
 jobs:
   deploy:

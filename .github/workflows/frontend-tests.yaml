@@ -1,14 +1,16 @@
 name: Frontend tests and code coverage
 
 on:
-  - push
+  push:
+    paths:
+      - training-front-end/**
 
 jobs:
   unit-tests-and-lint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: 'training-front-end' 
+        working-directory: 'training-front-end'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -19,10 +21,10 @@ jobs:
           node-version: '18'
           cache: 'npm'
           cache-dependency-path: training-front-end/package-lock.json
-      
+
       - name: install dependencies
         run: npm ci
-      
+
       - name: run linter
         run: npm run lint
 
