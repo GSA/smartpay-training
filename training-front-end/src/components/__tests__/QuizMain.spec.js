@@ -4,7 +4,12 @@ import Quiz from '../QuizMain.vue'
 import quiz  from './fixtures/sample_quiz'
 
 
-const props = {"quiz":quiz, "title": "Astro Quiz!"}
+const props = {
+  "quiz":quiz,
+  "title": "Astro Quiz!",
+  "audience": "AccountHoldersApprovingOfficials",
+  "topic": "Fleet"
+}
 
 describe('Quiz', () => {
   afterEach(() => {
@@ -80,6 +85,71 @@ describe('Quiz', () => {
     expect(wrapper.text()).toContain('ACKNOWLEDGMENT STATEMENT')
     const button = wrapper.find('button')
     expect(button.element.disabled).toBe(true)
+  })
+
+  it('should display acknowledgement box with langauge specific to the card-holder/approving officls user', async () => {
+    const wrapper = await mount(Quiz, {props})
+    const selects = [1, 2]
+    for (const i of selects) {
+      const radioButtons = wrapper.findAll('input[type="radio"]')
+      await radioButtons[i].setChecked()
+      const button = wrapper.find('button')
+      button.trigger('click')
+      await flushPromises()
+    }
+    expect(wrapper.text()).toContain('responsibilities as a card/account holder or approving official as outlined')
+  })
+
+  it('should display acknowledgement box with langauge specific to the A/OPC user', async () => {
+    const wrapper = await mount(Quiz, {props:{...props, audience: "ProgramCoordinators" }})
+    const selects = [1, 2]
+    for (const i of selects) {
+      const radioButtons = wrapper.findAll('input[type="radio"]')
+      await radioButtons[i].setChecked()
+      const button = wrapper.find('button')
+      button.trigger('click')
+      await flushPromises()
+    }
+    expect(wrapper.text()).toContain('responsibilities as an agency/organization program coordinator (A/OPC) as outlined')
+  })
+
+  it('should display acknowledgement box with langauge specific to Travel card type', async () => {
+    const wrapper = await mount(Quiz, {props:{...props, topic: "Travel" }})
+    const selects = [1, 2]
+    for (const i of selects) {
+      const radioButtons = wrapper.findAll('input[type="radio"]')
+      await radioButtons[i].setChecked()
+      const button = wrapper.find('button')
+      button.trigger('click')
+      await flushPromises()
+    }
+    expect(wrapper.text()).toContain('GSA SmartPay® travel card/account')
+  })
+
+  it('should display acknowledgement box with langauge specific to Purchase card type', async () => {
+    const wrapper = await mount(Quiz, {props:{...props, topic: "Purchase" }})
+    const selects = [1, 2]
+    for (const i of selects) {
+      const radioButtons = wrapper.findAll('input[type="radio"]')
+      await radioButtons[i].setChecked()
+      const button = wrapper.find('button')
+      button.trigger('click')
+      await flushPromises()
+    }
+    expect(wrapper.text()).toContain('GSA SmartPay® purchase card/account')
+  })
+
+  it('should display acknowledgement box with langauge specific to Fleet card type', async () => {
+    const wrapper = await mount(Quiz, {props:{...props, topic: "Fleet" }})
+    const selects = [1, 2]
+    for (const i of selects) {
+      const radioButtons = wrapper.findAll('input[type="radio"]')
+      await radioButtons[i].setChecked()
+      const button = wrapper.find('button')
+      button.trigger('click')
+      await flushPromises()
+    }
+    expect(wrapper.text()).toContain('GSA SmartPay® fleet card/account')
   })
 
   it('should emit answers after quiz is submitted', async () => {
