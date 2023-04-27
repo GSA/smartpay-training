@@ -15,6 +15,10 @@
     'title': {
       type: String,
       required: true
+    },
+    'audience': {
+      type: String,
+      required: true
     }
   })
 
@@ -28,6 +32,10 @@
   const is_current_unanswered = computed(() => user_answers[question_index.value] === undefined )
   const show_acknowledge = computed(() => is_quiz_complete.value && (question_index.value >= number_of_questions.value))
 
+  const user_string_lookup = {
+    "AccountHoldersApprovingOfficials": "a card/account holder or approving official",
+    "ProgramCoordinators": "an agency/organization program coordinator (A/OPC)"
+  }
  
   function exit_warning(event) {
     event.preventDefault()
@@ -95,7 +103,7 @@
       <label
         class="usa-checkbox__label"
         for="check-historical-truth"
-      >ACKNOWLEDGMENT STATEMENT<br>“I acknowledge that I’ve read and understand the policies and regulations that govern the use of the GSA SmartPay® travel account, as well as understand my role and responsibilities as a Card/Account Holder or Approving Official as outlined in this training course.” </label>
+      >ACKNOWLEDGMENT STATEMENT<br>“I acknowledge that I’ve read and understand the policies and regulations that govern the use of the GSA SmartPay® travel account, as well as understand my role and responsibilities as {{ user_string_lookup[audience] }} as outlined in this training course.” </label>
     </div>
     <div class="grid-row">
       <button
