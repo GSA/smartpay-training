@@ -181,7 +181,7 @@
                 :title="title"
                 :topic="topic"
                 :audience="audience"
-                class="tabler:grid-col-8"
+                class="desktop:grid-col-8"
                 @submit-quiz="submitQuiz"
               />
               <div v-else>

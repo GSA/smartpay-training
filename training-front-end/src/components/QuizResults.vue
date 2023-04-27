@@ -74,7 +74,7 @@
         Retake the quiz
       </button>
     </div>
-    <div class="tablet:grid-col-8">
+    <div class="desktop:grid-col-8">
       <div class="usa-accordion usa-accordion--bordered">
         <QuizResult 
           v-for="(question, index) in quiz.content.questions" 
