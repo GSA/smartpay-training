@@ -16,6 +16,10 @@
       type: String,
       required: true
     },
+    'topic': {
+      type: String,
+      required: true
+    },
     'audience': {
       type: String,
       required: true
@@ -103,7 +107,7 @@
       <label
         class="usa-checkbox__label"
         for="check-historical-truth"
-      >ACKNOWLEDGMENT STATEMENT<br>“I acknowledge that I’ve read and understand the policies and regulations that govern the use of the GSA SmartPay® travel account, as well as understand my role and responsibilities as {{ user_string_lookup[audience] }} as outlined in this training course.” </label>
+      >ACKNOWLEDGMENT STATEMENT<br>“I acknowledge that I’ve read and understand the policies and regulations that govern the use of the GSA SmartPay® {{ topic.toLowerCase() }} card/account, as well as understand my role and responsibilities as {{ user_string_lookup[audience] }} as outlined in this training course.” </label>
     </div>
     <div class="grid-row">
       <button

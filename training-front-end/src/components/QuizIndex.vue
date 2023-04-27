@@ -179,6 +179,7 @@
                 v-if="isStarted"
                 :quiz="quiz"
                 :title="title"
+                :topic="topic"
                 :audience="audience"
                 class="grid-col-8"
                 @submit-quiz="submitQuiz"
