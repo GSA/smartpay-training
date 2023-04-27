@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - training-front-end/**
+      - .github/**
 
 jobs:
   unit-tests-and-lint:
