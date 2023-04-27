@@ -9,6 +9,10 @@
         status:  {
             type: String,
             default: "informative"
+        },
+        hasHeading: {
+          type: Boolean,
+          default: true
         }
     })
 
@@ -32,6 +36,7 @@
   >
     <div class="usa-alert__body">
       <h4 
+        v-if="hasHeading"
         class="usa-alert__heading" 
         data-test="heading"
       >

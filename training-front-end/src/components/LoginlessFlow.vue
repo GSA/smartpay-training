@@ -10,6 +10,7 @@
   import { useStore } from '@nanostores/vue'
   import ValidatedInput from './ValidatedInput.vue';
   import ValidatedSelect from './ValidatedSelect.vue';
+  import USWDSAlert from './USWDSAlert.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, email, helpers } from '@vuelidate/validators';
 
@@ -240,6 +241,13 @@
         v-else
         class="usa-prose"
       >
+        <USWDSAlert 
+          status="warning"
+          class="usa-alert--slim"
+          :has-heading="false"
+        >
+          This is a U.S. Federal Government system. Use of this system and issued certificates is for federal employees, tribal government organizations, and other authorized users only.
+        </USWDSAlert>
         <slot name="initial-greeting" />
 
         <form

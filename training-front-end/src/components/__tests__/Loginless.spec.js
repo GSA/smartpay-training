@@ -67,6 +67,22 @@ describe('Loginless', () => {
     expect(complete_form.exists()).toBe(false)
   })
 
+  it('shows warning alert regarding authorized users at the start of the flow ', async () => {
+    const wrapper = await mount(Loginless, {props})
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(fetchData) })
+    })
+    let alert = wrapper.find('[data-test="alert-container"]')
+    expect(alert.exists()).toBe(true)
+    expect(alert.text()).toContain('authorized users only')
+    
+    await submitEmail(wrapper, 'test@example.com') 
+    await flushPromises()
+
+    alert = wrapper.find('[data-test="alert-container"]')
+    expect(alert.exists()).toBe(false)
+  })
+
   it('asks for more information after an unknown email is submitted', async () => {
     const wrapper = await mount(Loginless, {props})
     vi.spyOn(global, 'fetch').mockImplementation(() => {
