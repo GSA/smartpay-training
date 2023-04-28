@@ -35,7 +35,9 @@
     "@vue/test-utils": "^2.3.2",
     "eslint": "^8.38.0",
     "eslint-plugin-astro": "^0.26.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-vue": "^9.11.0",
+    "eslint-plugin-vuejs-accessibility": "^2.1.0",
     "jsdom": "^21.1.1",
     "vitest": "^0.30.1"
   },
