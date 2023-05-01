@@ -16,7 +16,7 @@ router = APIRouter()
 
 
 @router.post("/get-link", status_code=status.HTTP_201_CREATED)
-async def send_link(
+def send_link(
     response: Response,
     user: Union[TempUser, IncompleteTempUser],
     dest: WebDestination,
@@ -47,7 +47,7 @@ async def send_link(
     # we may have the users going to pages other than quizes
     url = f"{settings.BASE_URL}/quiz/{dest.page_id}/?t={token}"
     try:
-        res = await send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
+        res = send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
     except Exception as e:
         logging.error("Error sending mail", e)
         raise HTTPException(

@@ -24,7 +24,7 @@ def vcap_services_settings(settings: BaseSettings) -> Dict[str, Any]:
     secrets = appenv.get_service(label="user-provided")
     if secrets and secrets.credentials["JWT_SECRET"]:
         config["JWT_SECRET"] = secrets.credentials["JWT_SECRET"]
-    if secrets and secrets.credentials["SMTP_PASSWORD"]:
+    if secrets and secrets.credentials.get("SMTP_PASSWORD", None):
         config["SMTP_PASSWORD"] = secrets.credentials["SMTP_PASSWORD"]
 
     return config
@@ -46,18 +46,16 @@ class Settings(BaseSettings):
 
     # for local dev, email setting should be added to .env
     # see .env_example for example
-    SMTP_USER: str
+    SMTP_USER: str | None
     SMTP_SERVER: str
     SMTP_PORT: int
-    EMAIL_FROM: EmailStr = "smartpay-noreply@gsa.gov"
+    EMAIL_FROM: EmailStr = EmailStr("smartpay-noreply@gsa.gov")
     EMAIL_FROM_NAME: str = "GSA SmartPay"
     EMAIL_SUBJECT: str = "GSA SmartPay Training"
-    SMTP_STARTTLS: bool
-    SMTP_SSL_TLS: bool
 
     # These are normally parsed from VCAP_SERVICES in Cloud Foundry, but can
     # be overridden locally by using the .env file.
-    SMTP_PASSWORD: str
+    SMTP_PASSWORD: str | None
     REDIS_HOST: str
     REDIS_PORT: int
     REDIS_PASSWORD: str
