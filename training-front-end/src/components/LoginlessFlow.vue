@@ -202,39 +202,37 @@
           data-test="name-submit-form"
           @submit.prevent="start_email_flow"
         >
-          <fieldset class="usa-fieldset">
-            <ValidatedInput 
-              v-model="user_input.email" 
+          <ValidatedInput 
+            v-model="user_input.email" 
+            client:load
+            :validator="v_all_info$.email"
+            label="Email Address"
+            name="email"
+            :readonly="true"
+          />  
+          <ValidatedInput 
+            v-model="user_input.name" 
+            client:load
+            :validator="v_all_info$.name"
+            label="Name"
+            name="name"
+          />
+          <Suspense>
+            <ValidatedSelect 
+              v-model="user_input.agency_id" 
               client:load
-              :validator="v_all_info$.email"
-              label="Email Address"
-              name="email"
-              :readonly="true"
-            />  
-            <ValidatedInput 
-              v-model="user_input.name" 
-              client:load
-              :validator="v_all_info$.name"
-              label="Name"
-              name="name"
+              :validator="v_all_info$.agency_id"
+              label="Agency / organization"
+              name="agency"
             />
-            <Suspense>
-              <ValidatedSelect 
-                v-model="user_input.agency_id" 
-                client:load
-                :validator="v_all_info$.agency_id"
-                label="Agency / organization"
-                name="agency"
-              />
-            </Suspense>
-            <input
-              class="usa-button"
-              type="submit"
-              value="Submit"
-              :disabled="isLoading"
-              data-test="submit"
-            >
-          </fieldset>
+          </Suspense>
+          <input
+            class="usa-button"
+            type="submit"
+            value="Submit"
+            :disabled="isLoading"
+            data-test="submit"
+          >
         </form>
       </div>
       <div 
@@ -255,24 +253,22 @@
           data-test="email-submit-form"
           @submit.prevent="start_email_flow"
         >
-          <fieldset class="usa-fieldset">
-            <ValidatedInput 
-              v-model="user_input.email" 
-              client:load
-              :validator="v_email$.email"
-              :is-invalid="v_email$.email.$error" 
-              label="Email Address"
-              name="email"
-              :error-message="v_email$.email.$message" 
-            />  
-            <input 
-              class="usa-button"
-              type="submit"
-              value="Submit"
-              :disabled="isLoading"
-              data-test="submit"
-            >
-          </fieldset>
+          <ValidatedInput 
+            v-model="user_input.email" 
+            client:load
+            :validator="v_email$.email"
+            :is-invalid="v_email$.email.$error" 
+            label="Email Address"
+            name="email"
+            :error-message="v_email$.email.$message" 
+          />  
+          <input 
+            class="usa-button"
+            type="submit"
+            value="Submit"
+            :disabled="isLoading"
+            data-test="submit"
+          >
         </form>
       </div>
     </div>

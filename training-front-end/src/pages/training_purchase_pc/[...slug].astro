@@ -19,10 +19,10 @@ const { Content } = await entry.render();
 <TrainingLayout 
   entry={entry}
   pages={pages}
-  training_category="training_travel"
-  header="Travel Training"
-  subheader="Card/Account Holders and Approving Officials"
-  quiz_title="GSA SmartPay Travel Training (Account Holder / AOs)"
+  training_category="training_purchase"
+  header="Purchase Training"
+  subheader="Agency/Organization Program Coordinators (A/OPCs)"
+  quiz_title="GSA SmartPay Purchase Training (Account Holder / AOs)"
   >
   <div
     class="
@@ -32,7 +32,7 @@ const { Content } = await entry.render();
     "
   >
     <Content />
-    <TrainingLinks pages={pages} index={index}  training_category="training_travel"/>
+    <TrainingLinks pages={pages} index={index}  training_category="training_purchase"/>
 </div>
 </TrainingLayout>
 

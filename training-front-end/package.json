@@ -10,10 +10,17 @@
     "astro": "astro",
     "test:unit": "vitest --environment jsdom --root .",
     "test:coverage": "vitest --coverage",
-    "lint": "eslint 'src' --ext .vue,.js,.astro"
+    "lint": "eslint 'src' --ext .vue,.js,.astro",
+    "serve": "npm run build && npm run preview -- --port 8080",
+    "pa11y-ci": "npm run pa11y-ci:desktop && npm run pa11y-ci:mobile",
+    "pa11y-ci:desktop": "pa11y-ci --config ./.pa11yci-desktop --sitemap http://localhost:8080/sitemap-0.xml   --sitemap-find \"^https://training.smartpay.gsa.gov/\" --sitemap-replace \"http://localhost:8080/\"",
+    "pa11y-ci:mobile": "pa11y-ci --config ./.pa11yci-mobile --sitemap http://localhost:8080/sitemap-0.xml   --sitemap-find \"^https://training.smartpay.gsa.gov\" --sitemap-replace \"http://localhost:8080/\"",
+    "pa11y-ci:gh": "npx start-server-and-test serve http://localhost:8080 pa11y-ci"
+
   },
   "dependencies": {
     "@astrojs/mdx": "^0.19.0",
+    "@astrojs/sitemap": "^1.2.2",
     "@astrojs/vue": "^2.1.0",
     "@nanostores/persistent": "^0.8.0",
     "@nanostores/vue": "^0.7.0",
@@ -39,6 +46,8 @@
     "eslint-plugin-vue": "^9.11.0",
     "eslint-plugin-vuejs-accessibility": "^2.1.0",
     "jsdom": "^21.1.1",
+    "pa11y-ci": "^3.0.1",
+    "start-server-and-test": "^2.0.0",
     "vitest": "^0.30.1"
   },
   "overrides": {
