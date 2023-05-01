@@ -28,7 +28,7 @@ email us at gsa_smartpay@gsa.gov.
 ''')
 
 
-async def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> JSONResponse:
+def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> JSONResponse:
     body = EMAIL_TEMPLATE.substitute({"name": name, "link": link, "training_title": training_title})
 
     message = EmailMessage()
