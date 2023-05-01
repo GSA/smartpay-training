@@ -5,7 +5,7 @@ import TrainingLinks from '@components/TrainingLinks.astro'
 
 
 export async function getStaticPaths() {
-  const pages = await getCollection('training_travel');
+  const pages = await getCollection('training_puchase_pc');
   return pages.map((entry, index) => {
     const slug = entry.slug == './' ? undefined : entry.slug
     return {params: {slug: slug }, props: { entry, pages, index }}
@@ -22,7 +22,7 @@ const { Content } = await entry.render();
   training_category="training_purchase"
   header="Purchase Training"
   subheader="Agency/Organization Program Coordinators (A/OPCs)"
-  quiz_title="GSA SmartPay Purchase Training (Account Holder / AOs)"
+  quiz_title="GSA SmartPay Purchase Training (Program Coordinators)"
   >
   <div
     class="
