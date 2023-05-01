@@ -1,6 +1,8 @@
+import logging
 from string import Template
 from pydantic import EmailStr
-from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
+from smtplib import SMTP
+from email.message import EmailMessage
 from starlette.responses import JSONResponse
 
 from training.config import settings
@@ -25,30 +27,27 @@ email us at gsa_smartpay@gsa.gov.
 </p>
 ''')
 
-conf = ConnectionConfig(
-    MAIL_USERNAME=settings.SMTP_USER,
-    MAIL_PASSWORD=settings.SMTP_PASSWORD,
-    MAIL_FROM=settings.EMAIL_FROM,
-    MAIL_PORT=settings.SMTP_PORT,
-    MAIL_FROM_NAME=settings.EMAIL_FROM_NAME,
-    MAIL_SERVER=settings.SMTP_SERVER,
-    MAIL_STARTTLS=settings.SMTP_STARTTLS,
-    MAIL_SSL_TLS=settings.SMTP_SSL_TLS,
-    USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True
-)
-
 
 async def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> JSONResponse:
     body = EMAIL_TEMPLATE.substitute({"name": name, "link": link, "training_title": training_title})
 
-    message = MessageSchema(
-        subject=settings.EMAIL_SUBJECT,
-        recipients=[to_email],
-        body=body,
-        subtype=MessageType.html,
-    )
-    fm = FastMail(conf)
-    await fm.send_message(message)
+    message = EmailMessage()
+    message.set_content(body, subtype="html")
+    message["Subject"] = settings.EMAIL_SUBJECT
+    message["From"] = f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM}>"
+    message["To"] = to_email
 
-    return JSONResponse(status_code=200, content={"message": "email sent"})
+    with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT) as smtp:
+        smtp.starttls()
+        if settings.SMTP_USER and settings.SMTP_PASSWORD:
+            smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
+        try:
+            smtp.send_message(message)
+            result = JSONResponse(status_code=200, content={"message": "email sent"})
+        except Exception as e:
+            logging.error("Error sending email", e)
+            result = JSONResponse(status_code=500, content={"message": "error sending email"})
+        finally:
+            smtp.quit()
+
+    return result
