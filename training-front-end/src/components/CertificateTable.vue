@@ -61,6 +61,7 @@
             class="text-middle margin-right-1" 
             :style="{height:'1.5rem'}" 
             aria-hidden="true" 
+            alt=""
           >
           {{ cert.quiz_name }}
         </td>

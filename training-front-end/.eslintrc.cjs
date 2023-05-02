@@ -20,16 +20,28 @@ module.exports = {
       files: ['*.astro'],
       plugins: ["astro"],
       parser: 'astro-eslint-parser',
-      extends: ['eslint:recommended', 'plugin:astro/recommended']
+      extends: ['eslint:recommended', 'plugin:astro/recommended', 'plugin:astro/jsx-a11y-strict'],
+      rules: {
+        'astro/jsx-a11y/anchor-is-valid': 'off'
+      }
     },
     {
       files: ['*.vue'],
       parser: 'vue-eslint-parser',
-      extends: ['plugin:vue/vue3-recommended'],
+      extends: ['plugin:vue/vue3-recommended', 'plugin:vuejs-accessibility/recommended'],
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module'
       },
+      rules: {
+        // default rule requires nested label/inputs 
+        // which uswds does not do. id is sufficient
+        "vuejs-accessibility/label-has-for": ["error", {
+          "required": {
+            "some": ["id"]
+          }
+        }]
+      }
     }
   ],
 }
