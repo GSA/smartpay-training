@@ -11,4 +11,3 @@ applications:
       - smartpay-training-db
       - smartpay-training-redis
       - smartpay-training-secrets
-      - ((env))-deployer
