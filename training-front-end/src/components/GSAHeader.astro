@@ -6,7 +6,7 @@ import ExitMenu from './ExitMenu.vue';
 <header class="usa-header usa-header--extended">
     <div class="usa-navbar">
       <div class="usa-logo" id="header-logo">
-          <a href={import.meta.env.BASE_URL}>
+          <a href={`${import.meta.env.BASE_URL}`}>
               <img class="usa-logo-img" src={GSALogo} alt="GSA SmartPay Logo" title="U.S. General Services Administration">
           </a>
       </div>
@@ -15,7 +15,7 @@ import ExitMenu from './ExitMenu.vue';
     <nav aria-label="Primary navigation" class="usa-nav">
       <div class="usa-nav__inner">
         <button type="button" class="usa-nav__close">
-          <img src={ closeIcon } role="img" alt="Close" />
+          <img src={ closeIcon } alt="Close" />
         </button>
         <ul class="usa-nav__primary usa-accordion">
           <li class="usa-nav__primary-item">

@@ -97,17 +97,19 @@
   >
     <div class="usa-checkbox padding-4">
       <input
-        id="check-historical-truth"
+        id="acknowledge"
         v-model="acknowledge"
         class="usa-checkbox__input"
         type="checkbox"
-        name="historical-figures"
+        name="acknowledge"
         value="sojourner-truth"
       >
       <label
         class="usa-checkbox__label"
-        for="check-historical-truth"
-      >ACKNOWLEDGMENT STATEMENT<br>“I acknowledge that I’ve read and understand the policies and regulations that govern the use of the GSA SmartPay® {{ topic.toLowerCase() }} card/account, as well as understand my role and responsibilities as {{ user_string_lookup[audience] }} as outlined in this training course.” </label>
+        for="acknowledge"
+      >
+        ACKNOWLEDGMENT STATEMENT<br>“I acknowledge that I’ve read and understand the policies and regulations that govern the use of the GSA SmartPay® {{ topic.toLowerCase() }} card/account, as well as understand my role and responsibilities as {{ user_string_lookup[audience] }} as outlined in this training course.” 
+      </label>
     </div>
     <div class="grid-row">
       <button

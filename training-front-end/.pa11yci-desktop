@@ -1,0 +1,10 @@
+{
+  "defaults": {
+    "concurrency": 1,
+    "standard": "WCAG2AA",
+    "timeout": 10000,
+    "chromeLaunchConfig": {
+        "args": ["--no-sandbox"]
+    }
+  }
+}

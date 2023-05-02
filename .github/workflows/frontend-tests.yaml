@@ -31,3 +31,6 @@ jobs:
 
       - name: code run coverage > 90 %
         run: npm run test:coverage -- --watch=false
+
+      - name: Run pa11y 
+        run: npm run pa11y-ci:gh 
