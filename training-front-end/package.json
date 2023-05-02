@@ -16,7 +16,6 @@
     "pa11y-ci:desktop": "pa11y-ci --config ./.pa11yci-desktop --sitemap http://localhost:8080/sitemap-0.xml   --sitemap-find \"^https://training.smartpay.gsa.gov/\" --sitemap-replace \"http://localhost:8080/\"",
     "pa11y-ci:mobile": "pa11y-ci --config ./.pa11yci-mobile --sitemap http://localhost:8080/sitemap-0.xml   --sitemap-find \"^https://training.smartpay.gsa.gov\" --sitemap-replace \"http://localhost:8080/\"",
     "pa11y-ci:gh": "npx start-server-and-test serve http://localhost:8080 pa11y-ci"
-
   },
   "dependencies": {
     "@astrojs/mdx": "^0.19.0",
@@ -31,6 +30,7 @@
     "install": "^0.13.0",
     "nanostores": "^0.8.0",
     "npm": "^9.6.3",
+    "remark-custom-heading-id": "^1.0.1",
     "vue": "^3.2.47"
   },
   "devDependencies": {
