@@ -29,7 +29,7 @@ const entries = await Promise.all(content_components)
 
         {entries.map(item => (  
             <div class="page_section">
-              <h1 class="text-primary">{item.data.title}</h1> 
+              <h1 class="text-primary" style="break-before:always;">{item.data.title}</h1> 
               <item.Content />
             </div>
         ))}
@@ -54,13 +54,18 @@ const entries = await Promise.all(content_components)
     main {margin-top: 33%}
     div.page_section{
       border-bottom: 1px solid black;
-      page-break-before: always;
+      
+      
+    }
+    div h1.text-primary{
+      padding-top: 1em;
       color: yellow;
+      break-before: always;
     }
     section.bg-primary {
       background-color: white;
       border-bottom: 1px solid black;
-      break-after: page;
+    
       
     }
     section.bg-primary h1 {
