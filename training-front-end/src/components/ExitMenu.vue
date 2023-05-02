@@ -1,7 +1,8 @@
 <script setup>
   import { useStore } from '@nanostores/vue'
   import { hasActiveSession} from '../stores/user'
-
+  import FileDownload from './icons/FileDownload.vue'
+  
   const isActice = useStore(hasActiveSession)
  
   const exit = () => {
@@ -14,10 +15,10 @@
     class="usa-nav__primary-item"
   >
     <button
-      class="usa-nav-link cursor-pointer"
+      class="smartpay-sign-out"
       @click="exit"
     >
-      exit
+      Exit
     </button>
   </li>
 </template>

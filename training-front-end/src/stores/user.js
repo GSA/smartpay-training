@@ -7,10 +7,7 @@ export const profile = persistentAtom('user', {},
   decode: JSON.parse
 })
 
-export const hasActiveSession = computed(profile, user =>  {
-  console.log("User:", user)
-  return Boolean(user.jwt)
-})
+export const hasActiveSession = computed(profile, user => Boolean(user.jwt))
 
 export const clearUser = action(profile, 'clearUser', store => store.set({}))
 
