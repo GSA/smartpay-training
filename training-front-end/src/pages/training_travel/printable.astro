@@ -28,8 +28,10 @@ const entries = await Promise.all(content_components)
         </button>
 
         {entries.map(item => (  
-            <h1 class="text-primary">{item.data.title}</h1> 
-            <item.Content />
+            <div class="page_section">
+              <h1 class="text-primary">{item.data.title}</h1> 
+              <item.Content />
+            </div>
         ))}
        </section>
     </div>
@@ -47,10 +49,16 @@ const entries = await Promise.all(content_components)
     nav.usa-nav {display: none;}
     div.usa-navbar {border: none;}
     .usa-banner {display: none;}
+    
     button.usa-menu-btn {display: none;}
     main {margin-top: 33%}
+    div.page_section{
+    
+      border-bottom: 1px solid black;
+      break-before: page;
+    }
     section.bg-primary {
-      background-color: white ;
+      background-color: white;
       border-bottom: 1px solid black;
       break-after: page;
     }
@@ -62,10 +70,10 @@ const entries = await Promise.all(content_components)
     }
     table {break-inside: avoid; }
     @page {
-      margin-top: 1in;
+      margin-top: 2in;
       margin-left: .75in;
       margin-right: .75in;
-      margin-bottom: 1in;
+      margin-bottom: 2in;
     }
   
 }
