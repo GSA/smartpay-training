@@ -1,10 +1,15 @@
 import { persistentAtom } from '@nanostores/persistent'
-import { action } from 'nanostores'
+import { action, computed} from 'nanostores'
 
 export const profile = persistentAtom('user', {},
 {
   encode: JSON.stringify,
   decode: JSON.parse
+})
+
+export const hasActiveSession = computed(profile, user =>  {
+  console.log("User:", user)
+  return Boolean(user.jwt)
 })
 
 export const clearUser = action(profile, 'clearUser', store => store.set({}))
