@@ -28,8 +28,11 @@ const entries = await Promise.all(content_components)
         </button>
 
         {entries.map(item => (  
+          <div style="page-break-after: auto;">
             <h1 class="text-primary">{item.data.title}</h1> 
             <item.Content />
+            <p style="page-break-after: auto;" />
+          </div>
         ))}
        </section>
     </div>
@@ -52,7 +55,7 @@ const entries = await Promise.all(content_components)
     main {margin-top: 33%}
     div h1.text-primary{
       padding-top: 1em;
-      break-before: always;
+      page-break-after: auto;
     }
     section.bg-primary {
       background-color: white;
@@ -66,7 +69,7 @@ const entries = await Promise.all(content_components)
     }
     table {break-inside: avoid; }
     @page {
-      size: 210mm 297mm;
+     
       margin-top: 0.5in;
       margin-left: .75in;
       margin-right: .75in;
