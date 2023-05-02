@@ -28,7 +28,7 @@ const entries = await Promise.all(content_components)
         </button>
 
         {entries.map(item => (  
-            <h1 class="text-primary" style="break-before:always;">{item.data.title}</h1> 
+            <h1 class="text-primary">{item.data.title}</h1> 
             <item.Content />
         ))}
        </section>
@@ -51,6 +51,7 @@ const entries = await Promise.all(content_components)
     button.usa-menu-btn {display: none;}
     main {margin-top: 33%}
     div h1.text-primary{
+      padding-top: 1em;
       break-before: always;
     }
     section.bg-primary {
@@ -65,10 +66,10 @@ const entries = await Promise.all(content_components)
     }
     table {break-inside: avoid; }
     @page {
-      padding-top: 2em;
+      margin-top: 0.5in;
       margin-left: .75in;
       margin-right: .75in;
-      margin-bottom: 0.5in;
+      margin-bottom: 0.6in;
     }
   
 }
