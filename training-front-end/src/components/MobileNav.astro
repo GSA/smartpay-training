@@ -1,0 +1,12 @@
+---
+const { id, pages, training_category, quiz_title } = Astro.props;
+---
+<label class="usa-label text-bold" for="course_nav">Course navigation</label>
+<select class="usa-select" name="course_nav" id="course_nav" onchange="window.location.href=this.value;">
+    {pages.map(page => (
+      <option value={`${import.meta.env.BASE_URL}${training_category}/${page.slug}`} selected={id === page.id ? true : false }>
+        {page.data.title}
+      </option>
+    ))}
+    <option value={`${import.meta.env.BASE_URL}quiz/${training_category}`}>QUIZ: {quiz_title}</option>
+</select>
