@@ -1,0 +1,3 @@
+env: staging
+memory: 256M
+instances: 2

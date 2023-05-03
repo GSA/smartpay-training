@@ -1,0 +1,12 @@
+name: Deploy to cloud.gov prod space
+
+on:
+  push:
+    tags:
+      - release-*
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: prod

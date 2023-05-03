@@ -1,0 +1,14 @@
+name: Deploy to cloud.gov staging space
+
+on:
+  push:
+    branches:
+      - prod
+    paths-ignore:
+      - training-front-end/**
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: staging
