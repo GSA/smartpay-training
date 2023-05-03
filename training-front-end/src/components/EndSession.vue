@@ -4,6 +4,9 @@
  
   onMounted(() => {
     clearUser()
-    window.location.href  = "/"
+    window.location.replace("/")
   })
 </script>
+<template>
+  <span />
+</template>

@@ -1,24 +1,25 @@
 <script setup>
   import { useStore } from '@nanostores/vue'
   import { hasActiveSession} from '../stores/user'
-  import FileDownload from './icons/FileDownload.vue'
+  import LogoutIcon from './icons/LogoutIcon.vue'
   
-  const isActice = useStore(hasActiveSession)
- 
+  const isActive = useStore(hasActiveSession)
+
   const exit = () => {
-    window.location.href  = "/exit"
+    window.location.replace(`${import.meta.env.BASE_URL}exit`)
   }
 </script>
 <template>
   <li 
-    v-if="isActice"
-    class="usa-nav__primary-item"
+    v-if="isActive"
+    class="margin-left-auto"
   >
     <button
-      class="smartpay-sign-out"
+      data-test="exit-button"
+      class="cursor-pointer exit"
       @click="exit"
     >
-      Exit
+      <LogoutIcon /> Exit
     </button>
   </li>
 </template>

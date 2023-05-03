@@ -1,3 +1,10 @@
+.usa-nav__primary button.exit {
+  color: color($theme-color-primary);
+  &:hover {
+    color: color($theme-color-base-dark);
+  }
+}
+
 .usa-header--extended {  
   .usa-logo {
     margin: 1rem 0 0.5rem;
