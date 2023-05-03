@@ -1,16 +1,16 @@
 name: Continuous deployment to cloud.gov
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - training-front-end/**
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v2
 
@@ -20,7 +20,7 @@ jobs:
           cf_username: ${{ secrets.CG_USERNAME }}
           cf_password: ${{ secrets.CG_PASSWORD }}
           cf_org: gsa-smartpay
-          cf_space: dev
+          cf_space: ${{ inputs.environment }}
           command: >-
             cf update-user-provided-service smartpay-training-secrets -p '{
               "JWT_SECRET": "${{ secrets.JWT_SECRET }}",
@@ -33,9 +33,9 @@ jobs:
           cf_username: ${{ secrets.CG_USERNAME }}
           cf_password: ${{ secrets.CG_PASSWORD }}
           cf_org: gsa-smartpay
-          cf_space: dev
+          cf_space: ${{ inputs.environment }}
           command: >-
-            bin/cg-set-env.sh dev
+            bin/cg-set-env.sh ${{ inputs.environment }}
             BASE_URL=${{ vars.BASE_URL }}
             SMTP_USER=${{ vars.SMTP_USER }}
             SMTP_SERVER=${{ vars.SMTP_SERVER }}
@@ -49,8 +49,8 @@ jobs:
           cf_username: ${{ secrets.CG_USERNAME }}
           cf_password: ${{ secrets.CG_PASSWORD }}
           cf_org: gsa-smartpay
-          cf_space: dev
-          cf_vars_file: manifest-vars.dev.yml
+          cf_space: ${{ inputs.environment }}
+          cf_vars_file: manifest-vars.${{ inputs.environment }}.yml
 
       - name: Run database migrations
         uses: cloud-gov/cg-cli-tools@main
@@ -58,5 +58,5 @@ jobs:
           cf_username: ${{ secrets.CG_USERNAME }}
           cf_password: ${{ secrets.CG_PASSWORD }}
           cf_org: gsa-smartpay
-          cf_space: dev
+          cf_space: ${{ inputs.environment }}
           command: cf run-task smartpay-training -c "alembic upgrade head"

@@ -1,0 +1,14 @@
+name: Deploy to cloud.gov dev space
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - training-front-end/**
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: dev
