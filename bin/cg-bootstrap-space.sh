@@ -19,6 +19,7 @@ else
   redis_plan="redis-dev"
 fi
 
+echo "Bootstrapping space: $space"
 echo "Using RDS plan: $rds_plan"
 echo "Using Redis plan: $redis_plan"
 echo
