@@ -11,7 +11,7 @@ org="gsa-smartpay"
 app_name="smartpay-training"
 space=$1
 
-if [ "$space" == "prod" ] ; then
+if [[ "$space" == "prod" || "$space" == "staging" ]]; then
   rds_plan="large-gp-psql-redundant"
   redis_plan="redis-3node"
 else
