@@ -2,6 +2,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import HeroTraining from "@components/HeroTraining.astro"
 import SideNav from "@components/SideNav.astro"
+import MobileNav from "@components/MobileNav.astro"
 
 const {hero_image, entry, pages, training_category, header, subheader, quiz_title} = Astro.props;
 ---
@@ -13,9 +14,36 @@ const {hero_image, entry, pages, training_category, header, subheader, quiz_titl
   <div class="usa-section">
     <div class="grid-container">
       <div class="grid-row grid-gap flex-align-start">
-        <SideNav id={entry.id} pages={pages} training_category={training_category} quiz_title={quiz_title} />
+        <div class="mobile-only margin-bottom-2">
+          <MobileNav id={entry.id} pages={pages} training_category={training_category} quiz_title={quiz_title} />
+        </div>
+       <div class="usa-layout-docs__sidenav desktop:grid-col-3 desktop-only">
+          <SideNav class="desktop-only" id={entry.id} pages={pages} training_category={training_category} quiz_title={quiz_title} />
+        </div>
         <slot />
       </div>
     </div>
   </div>
 </BaseLayout>
+<style>
+
+  /* show side nav for desktop only, show dropdown list for mobile device only */
+
+  .mobile-only {
+    display: none;
+  }
+  .desktop-only{
+    display: block;
+  }
+  
+  @media only screen and (max-width: 767px) {
+    .mobile-only {
+      display: block;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    .desktop-only{
+      display:none;
+    }
+  }
+</style>
