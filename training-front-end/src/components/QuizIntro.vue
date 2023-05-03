@@ -11,7 +11,7 @@
 <template>
   <section class="usa-prose margin-y-1 usa-prose">
     <p>
-      Now that you have completed the training portion of the GSA {{ title }}, you are ready to take the quiz.
+      Now that you’ve completed the training portion of the GSA SmartPay® {{ title }}, you are ready to take the quiz.
     </p>
     <p>
       <b>You must score at least a 75% to pass.</b>
