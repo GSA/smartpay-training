@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Configure secrets
         uses: cloud-gov/cg-cli-tools@main

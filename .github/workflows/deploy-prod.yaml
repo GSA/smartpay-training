@@ -10,3 +10,4 @@ jobs:
     uses: ./.github/workflows/deploy.yaml
     with:
       environment: prod
+    secrets: inherit
