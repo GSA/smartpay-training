@@ -87,7 +87,7 @@ Follow these steps to deploy the application on cloud.gov.
 
 ### Bootstrap the cloud.gov environment
 
-Before the first deployment, you need to run the bootstrap script, where `SPACE` is one of `dev`, `staging`, or `prod`. This will create all the necessary services that are required to deploy the app in that space.
+Before the first deployment, you need to run the bootstrap script, where `SPACE` is one of `dev`, `test`, `staging`, or `prod`. This will create all the necessary services that are required to deploy the app in that space.
 
 ```
 bin/cg-bootstrap-space.sh SPACE
@@ -102,7 +102,7 @@ bin/cg-bootstrap-app.sh SPACE
 
 ### Create cloud.gov service accounts
 
-Create a service account for each space. These accounts will be used by GitHub Actions to deploy the app.
+Create a service account for each space. These accounts will be used by GitHub Actions to deploy the app. Since we are currently manually deploying to the `test` space, we do not need a service account for that space.
 
 ```
 bin/cg-service-account-create.sh SPACE
@@ -113,7 +113,7 @@ Take note of the username and password it creates for each space.
 
 ### Configure the GitHub environments
 
-1. [Create environments in the GitHub repository](https://github.com/GSA/smartpay-training/settings/environments) that correspond with each space (i.e., `dev`, `staging`, and `prod`)
+1. [Create environments in the GitHub repository](https://github.com/GSA/smartpay-training/settings/environments) that correspond with each space that GitHub Actions will deploy to (i.e., `dev`, `staging`, and `prod`)
 2. Within each GitHub environment, configure:
     * The app's secrets
         * `CG_USERNAME`: The service account username for this space
