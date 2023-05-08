@@ -126,3 +126,12 @@ Take note of the username and password it creates for each space.
 ### Confirm GitHub Actions are working
 
 At this point, GitHub Actions should be able to deploy to all configured environments.
+
+### Notes for the test space
+
+We treat the `test` space differently:
+
+* We configure and push to it manually and not via GitHub Actions, which allows us to customize the space a bit for user testing
+* You can bootstrap the `test` space following the space and app bootstrap steps above, but the `test` space does not need a service account
+* You need to set the environment variables and secrets yourself using the `bin/cg-set-env.sh` and `bin/cg-set-secret.sh` scripts rather than configuring them via GitHub environments
+* You need to run the database migrations and database seed using `cf run-task`
