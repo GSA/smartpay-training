@@ -2,6 +2,8 @@
 
 # Sets environment variables in cloud.gov
 
+set -e
+
 if [ -z "$1" ] ; then
   echo "Usage: $0 SPACE [VAR_NAME=value ...]"
   exit 1

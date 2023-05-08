@@ -3,6 +3,8 @@
 # Creates a cloud.gov deployer service account for a given space
 # https://cloud.gov/docs/services/cloud-gov-service-account/
 
+set -e
+
 if [ -z "$1" ] ; then
   echo "Usage: $0 SPACE"
   exit 1
