@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build --mode user_test",
     "preview": "astro preview",
     "astro": "astro",
     "test:unit": "vitest --environment jsdom --root .",
