@@ -83,7 +83,7 @@ coverage report
 
 ## Deployment on cloud.gov
 
-Follow these steps to deploy the application on cloud.gov.
+Follow these steps to deploy the application on cloud.gov. Your cloud.gov account must have the `SpaceDeveloper` role in each space in order to run these scripts.
 
 ### Bootstrap the cloud.gov environment
 
