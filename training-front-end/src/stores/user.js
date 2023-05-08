@@ -1,7 +1,7 @@
 import { persistentAtom } from '@nanostores/persistent'
 import { action, computed} from 'nanostores'
 
-export const profile = persistentAtom('user', {},
+export const profile = persistentAtom('user_test', {},
 {
   encode: JSON.stringify,
   decode: JSON.parse
