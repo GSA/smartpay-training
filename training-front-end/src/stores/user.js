@@ -1,11 +1,30 @@
-import { persistentAtom } from '@nanostores/persistent'
-import { action, computed} from 'nanostores'
+import { persistentAtom, setPersistentEngine } from '@nanostores/persistent'
+import { action, computed, onMount } from 'nanostores'
 
 export const profile = persistentAtom('user', {},
 {
   encode: JSON.stringify,
   decode: JSON.parse
 })
+
+/* 
+ * Change default to use sessionStorage instead of localStorage,
+ * which will cause the session to be cleared when the tab closers
+ */
+
+let listeners = []
+
+const events = {
+  addEventListener(key, callback) {
+    listeners.push(callback)
+  },
+  removeEventListener(key, callback) {
+    listeners = listeners.filter(i => i != callback)
+  },
+  perKey: false
+}
+
+onMount(profile, () => setPersistentEngine(window.sessionStorage, events))
 
 export const hasActiveSession = computed(profile, user => Boolean(user.jwt))
 
