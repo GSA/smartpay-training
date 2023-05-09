@@ -83,11 +83,11 @@ coverage report
 
 ## Deployment on cloud.gov
 
-Follow these steps to deploy the application on cloud.gov.
+Follow these steps to deploy the application on cloud.gov. Your cloud.gov account must have the `SpaceDeveloper` role in each space in order to run these scripts.
 
 ### Bootstrap the cloud.gov environment
 
-Before the first deployment, you need to run the bootstrap script, where `SPACE` is one of `dev`, `staging`, or `prod`. This will create all the necessary services that are required to deploy the app in that space.
+Before the first deployment, you need to run the bootstrap script, where `SPACE` is one of `dev`, `test`, `staging`, or `prod`. This will create all the necessary services that are required to deploy the app in that space.
 
 ```
 bin/cg-bootstrap-space.sh SPACE
@@ -102,7 +102,7 @@ bin/cg-bootstrap-app.sh SPACE
 
 ### Create cloud.gov service accounts
 
-Create a service account for each space. These accounts will be used by GitHub Actions to deploy the app.
+Create a service account for each space. These accounts will be used by GitHub Actions to deploy the app. Since we are currently manually deploying to the `test` space, we do not need a service account for that space.
 
 ```
 bin/cg-service-account-create.sh SPACE
@@ -113,7 +113,7 @@ Take note of the username and password it creates for each space.
 
 ### Configure the GitHub environments
 
-1. [Create environments in the GitHub repository](https://github.com/GSA/smartpay-training/settings/environments) that correspond with each space (i.e., `dev`, `staging`, and `prod`)
+1. [Create environments in the GitHub repository](https://github.com/GSA/smartpay-training/settings/environments) that correspond with each space that GitHub Actions will deploy to (i.e., `dev`, `staging`, and `prod`)
 2. Within each GitHub environment, configure:
     * The app's secrets
         * `CG_USERNAME`: The service account username for this space
@@ -126,3 +126,12 @@ Take note of the username and password it creates for each space.
 ### Confirm GitHub Actions are working
 
 At this point, GitHub Actions should be able to deploy to all configured environments.
+
+### Notes for the test space
+
+We treat the `test` space differently:
+
+* We configure and push to it manually and not via GitHub Actions, which allows us to customize the space a bit for user testing
+* You can bootstrap the `test` space following the space and app bootstrap steps above, but the `test` space does not need a service account
+* You need to set the environment variables and secrets yourself using the `bin/cg-set-env.sh` and `bin/cg-set-secret.sh` scripts rather than configuring them via GitHub environments
+* You need to run the database migrations and database seed using `cf run-task`

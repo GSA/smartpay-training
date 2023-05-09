@@ -3,6 +3,8 @@
 # Rotates the credentials for a cloud.gov deployer service account
 # https://cloud.gov/docs/services/cloud-gov-service-account/#rotating-credentials
 
+set -e
+
 if [ -z "$1" ] ; then
   echo "Usage: $0 SPACE"
   exit 1

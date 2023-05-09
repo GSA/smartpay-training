@@ -2,6 +2,8 @@
 
 # Bootstraps the app in a given space in cloud.gov
 
+set -e
+
 if [ -z "$1" ] ; then
   echo "Usage: $0 SPACE"
   exit 1
