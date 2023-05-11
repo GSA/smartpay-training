@@ -23,6 +23,7 @@ i.e.
 @use "uswds-core" as *;
 @import '_components/header';
 @import '_components/banner';
+@import '_components/spinner';
 
 html, body {
     height: 100%;
