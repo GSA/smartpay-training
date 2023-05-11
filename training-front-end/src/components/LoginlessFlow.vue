@@ -13,6 +13,8 @@
   import USWDSAlert from './USWDSAlert.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, email, helpers } from '@vuelidate/validators';
+  import Spinner from './Spinner.vue'
+ 
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const { withMessage } = helpers
@@ -90,6 +92,7 @@
   const isLoading = ref(false)
   const isFlowComplete = ref(false)
   const unregisteredEmail = ref(false)
+  const showSpinner = ref(false)
 
   function clearToken() {
     const url = new URL(window.location);
@@ -108,9 +111,11 @@
         clearToken();
       } catch(e) {
         emit('error', e)
+        showSpinner.value = false;
       }
     } 
     isLoaded.value = true
+    showSpinner.value = false;
   })
 
   async function start_email_flow() {
@@ -118,11 +123,13 @@
     const isFormValid = await validation.value.$validate() 
 
     if (!isFormValid) {
+      showSpinner.value = false;
      return
     }
 
     emit('startLoading')
     isLoading.value = true
+    showSpinner.value = true
     
     const apiURL = new URL(`${base_url}/api/v1/get-link`)
     let res
@@ -137,6 +144,7 @@
       })
     } catch (err) {
       isLoading.value = false
+      showSpinner.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
       e.name = "Server Error"
       emit('endLoading')
@@ -144,6 +152,7 @@
     }
     
     if (! res.ok) { 
+      showSpinner.value = false;
       throw new Error("Error contacting server")
     }
 
@@ -156,17 +165,23 @@
       const token = new URL(json.token)
       tempURL.value = `${window.location.href}${token.search}` // this is just temporary while in Dev
       isFlowComplete.value = true
+      
     } else {
       // any other 2xx response should assume
       // it worked, but we need more info
       unregisteredEmail.value = true
+      
     }
     isLoading.value = false
+    showSpinner.value = false
     emit('endLoading')
   }
 </script>
 
 <template>
+  <div v-if="showSpinner">
+    <Spinner  />
+  </div>
   <div v-if="!isLoggedIn && isLoaded">
     <div 
       v-if="isFlowComplete" 
