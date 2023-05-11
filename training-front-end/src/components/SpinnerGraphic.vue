@@ -4,7 +4,7 @@
       <div class="margin-top-1 margin-left-1">Processing...</div>
     </div>
 </template>
- <style scoped>
+ <style is:global>
  .spinner {
   width: 40px;
   height: 40px;
