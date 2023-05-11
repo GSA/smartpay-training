@@ -13,7 +13,7 @@
   import USWDSAlert from './USWDSAlert.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, email, helpers } from '@vuelidate/validators';
-  import Spinner from './Spinner.vue'
+  import SpinnerGraphic from './SpinnerGraphic.vue'
  
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
@@ -180,7 +180,7 @@
 
 <template>
   <div v-if="showSpinner">
-    <Spinner  />
+    <SpinnerGraphic  />
   </div>
   <div v-if="!isLoggedIn && isLoaded">
     <div 
