@@ -1,7 +1,7 @@
 <script setup>
   import { useStore } from '@nanostores/vue'
   import { hasActiveSession } from '../stores/user'
-  import { willTimeOut, continueSession } from '../stores/session_manager'
+  import { willTimeOut, continueSession, exit } from '../stores/session_manager'
   import ExitModal from './ExitModal.vue'
   import ExitMenu from './ExitMenu.vue'
 
@@ -23,7 +23,7 @@
   <Teleport to="body">
     <ExitModal 
       v-if="isActive && isModalDisplayed"
-      @exit="exit_redirect" 
+      @exit="exit" 
       @continue-session="continueSession"
     />
   </Teleport>
