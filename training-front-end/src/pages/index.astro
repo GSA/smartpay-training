@@ -2,6 +2,8 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import TrainingAccounts from '@components/TrainingAccounts.astro';
 import Hero from '@components/Hero.astro';
+import GlobalMessages from '@components/GlobalMessages.vue'
+
 const pageTitle = "GSA Training";
 
 const card_holders = [
@@ -24,6 +26,8 @@ const coordinators = [
     </Hero>
 
     <div class="grid-container" data-test="pre-submit">
+      <GlobalMessages client:only/>
+
         <h2>Select Your Training Course</h2>
         <p>
           Each training course takes approximately 45 minutes to complete and is worth 1 CLP. To receive credit and your certificate, you must pass your quiz with a score of 75% or higher.

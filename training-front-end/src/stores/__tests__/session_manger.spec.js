@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi} from 'vitest'
 
 import { cleanStores, keepMount } from 'nanostores'
 import { willTimeOut, continueSession } from '../session_manager'
-import { profile, hasActiveSession, setUser } from '../user'
+import { profile, hasActiveSession } from '../user'
 
 const SESSION_TIME_OUT = import.meta.env.PUBLIC_SESSION_TIME_OUT * 60 * 1000
 const SESSION_WARNING_TIME = import.meta.env.PUBLIC_SESSION_WARNING_TIME * 60 * 1000

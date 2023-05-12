@@ -14,5 +14,4 @@
       <LogoutIcon /> Exit
     </button>
   </li>
- 
 </template>

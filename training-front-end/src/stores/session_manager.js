@@ -1,5 +1,6 @@
 import { atom, onMount, action } from 'nanostores'
 import { clearUser, hasActiveSession } from './user.js'
+import { setMessage } from './message_manager.js'
 
 const SESSION_TIME_OUT = import.meta.env.PUBLIC_SESSION_TIME_OUT * 60 * 1000
 const SESSION_WARNING_TIME = import.meta.env.PUBLIC_SESSION_WARNING_TIME * 60 * 1000
@@ -13,7 +14,7 @@ let session_timeout
 export const willTimeOut = atom(false)
 export const didTimeOut = atom(false)
 
-export const resetDidTimeOut = action(didTimeOut, 'resetDidTimeOut', () => didTimeOut.set(false))
+export const resetDidTimeOut = action(didTimeOut, 'resetDidTimeOut', store => store.set(false))
 export const continueSession = action(willTimeOut, 'continueSession', prevent_session_end)
 
 const setWindowListeners = () => LISTEN_EVENTS.forEach(
@@ -23,9 +24,8 @@ const unSetWindowListeners = () => LISTEN_EVENTS.forEach(
   event => window.removeEventListener(event, reset_timeout)
 )
 
-function exit() {
+export function exit() {
   clearUser()
-  didTimeOut.set(true)
   window.location.replace(import.meta.env.BASE_URL)
 }
 
@@ -46,7 +46,10 @@ function prevent_session_end() {
 
 function set_timeout() {
   warn_interval = setTimeout(set_warn_before_exit, SESSION_TIME_OUT - SESSION_WARNING_TIME)
-  session_timeout  = setTimeout(exit, SESSION_TIME_OUT)
+  session_timeout  = setTimeout(() => {
+    setMessage('Your session has timed out due to inactivity. Start a new session to take a training or access past certificates.')
+    exit()
+  }, SESSION_TIME_OUT)
 }
 
 function reset_timeout() {
