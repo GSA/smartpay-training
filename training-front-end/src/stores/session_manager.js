@@ -1,4 +1,4 @@
-import { atom, onMount, action } from 'nanostores'
+import { atom, onMount, action} from 'nanostores'
 import { hasActiveSession } from './user.js'
 import { setMessage } from './message_manager.js'
 
@@ -54,7 +54,7 @@ function prevent_session_end() {
 
 function set_timeout() {
   warn_interval = setTimeout(set_warn_before_exit, SESSION_TIME_OUT - SESSION_WARNING_TIME)
-  session_timeout  = setTimeout(() => {
+  session_timeout = setTimeout(async () => {
     setMessage('Your session has timed out due to inactivity.')
     exit()
   }, SESSION_TIME_OUT)

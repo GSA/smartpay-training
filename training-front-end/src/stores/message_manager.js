@@ -1,5 +1,5 @@
 import { action } from 'nanostores'
-import { persistentAtom } from '@nanostores/persistent'
+import { persistentAtom, setPersistentEngine } from '@nanostores/persistent'
 
 /**
  * This is a simple message bus which stores a message in the brower's storage
@@ -7,9 +7,22 @@ import { persistentAtom } from '@nanostores/persistent'
  * by the GlobalMessage component on the index page to allow a message about 
  * a previously expired session to be displayed to the user.
  */
+let listeners = []
+
+const events = {
+  addEventListener(key, callback) {
+    listeners.push(callback)
+  },
+  removeEventListener(key, callback) {
+    listeners = listeners.filter(i => i != callback)
+  },
+  perKey: false
+}
+setPersistentEngine(window.sessionStorage, events)
 
 export const message = persistentAtom('message', undefined,
 {
+  listen: false,
   encode: JSON.stringify,
   decode: JSON.parse
 })
