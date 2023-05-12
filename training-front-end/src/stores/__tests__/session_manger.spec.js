@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi} from 'vitest'
-
 import { cleanStores, keepMount } from 'nanostores'
 import { willTimeOut, continueSession } from '../session_manager'
 import { profile, hasActiveSession } from '../user'
@@ -14,6 +13,8 @@ const user = {
 }
 
 describe('Manage Session', () => {
+  const originalLocation = global.location
+
   beforeEach(() => {
     vi.useFakeTimers()
   })
@@ -21,6 +22,7 @@ describe('Manage Session', () => {
   afterEach(() => {
     vi.restoreAllMocks()
     vi.useRealTimers()
+    global.location = originalLocation
     cleanStores(willTimeOut)
     cleanStores(profile)
     cleanStores(hasActiveSession)
@@ -68,11 +70,16 @@ describe('Manage Session', () => {
     expect(willTimeOut.get()).toBe(true)
   })
 
-  it('clears the user after the session_time_out completes', async () => {
+  it('redirects to /exit after session_time_out completes', async () => {
+    const setMock = vi.fn();
+    delete global.location
+    global.location = { replace: setMock }
     profile.set(user)
     keepMount(willTimeOut)
+    
     vi.advanceTimersByTime(SESSION_TIME_OUT)
-    expect(profile.get()).toEqual({})
+
+    expect(setMock).toHaveBeenCalledWith(`${import.meta.env.BASE_URL}exit`)
   })
 
   it('does not clear the user before the session_time_out completes', async () => {

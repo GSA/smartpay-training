@@ -1,5 +1,5 @@
 import { atom, onMount, action } from 'nanostores'
-import { clearUser, hasActiveSession } from './user.js'
+import { hasActiveSession } from './user.js'
 import { setMessage } from './message_manager.js'
 
 const SESSION_TIME_OUT = import.meta.env.PUBLIC_SESSION_TIME_OUT * 60 * 1000
@@ -24,9 +24,17 @@ const unSetWindowListeners = () => LISTEN_EVENTS.forEach(
   event => window.removeEventListener(event, reset_timeout)
 )
 
+export function exit_warning(event) {
+  event.preventDefault()
+  return event.returnValue = "Are you sure you want to exit?";
+}
+
 export function exit() {
-  clearUser()
-  window.location.replace(import.meta.env.BASE_URL)
+  // exit session without displaying the navigation warning
+  // this allows users to click the modal's 'exit' button
+  // without an additional warning
+  window.removeEventListener('beforeunload', exit_warning)
+  window.location.replace(`${import.meta.env.BASE_URL}exit`)
 }
 
 function set_warn_before_exit() {
