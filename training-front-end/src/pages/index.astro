@@ -2,7 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import TrainingAccounts from '@components/TrainingAccounts.astro';
 import Hero from '@components/Hero.astro';
-import GlobalMessages from '@components/GlobalMessages.vue'
+import GlobalMessage from '@components/GlobalMessage.vue'
 
 const pageTitle = "GSA Training";
 
@@ -26,7 +26,7 @@ const coordinators = [
     </Hero>
 
     <div class="grid-container" data-test="pre-submit">
-      <GlobalMessages client:only/>
+      <GlobalMessage client:only/>
 
         <h2>Select Your Training Course</h2>
         <p>

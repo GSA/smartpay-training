@@ -47,7 +47,7 @@ function prevent_session_end() {
 function set_timeout() {
   warn_interval = setTimeout(set_warn_before_exit, SESSION_TIME_OUT - SESSION_WARNING_TIME)
   session_timeout  = setTimeout(() => {
-    setMessage('Your session has timed out due to inactivity. Start a new session to take a training or access past certificates.')
+    setMessage('Your session has timed out due to inactivity.')
     exit()
   }, SESSION_TIME_OUT)
 }
