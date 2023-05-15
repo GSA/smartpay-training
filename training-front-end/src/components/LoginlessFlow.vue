@@ -179,9 +179,7 @@
 </script>
 
 <template>
-  <div v-if="showSpinner">
-    <SpinnerGraphic  />
-  </div>
+ 
   <div v-if="!isLoggedIn && isLoaded">
     <div 
       v-if="isFlowComplete" 
@@ -262,6 +260,7 @@
           This is a U.S. Federal Government system. Use of this system and issued certificates is for federal employees, tribal government organizations, and other authorized users only.
         </USWDSAlert>
         <slot name="initial-greeting" />
+        
 
         <form
           class="usa-form usa-form--large margin-bottom-3 "
@@ -276,15 +275,23 @@
             label="Email Address"
             name="email"
             :error-message="v_email$.email.$message" 
-          />  
-          <input 
-            class="usa-button"
-            type="submit"
-            value="Submit"
-            :disabled="isLoading"
-            data-test="submit"
-          >
+          /> 
+          <div class="display-flex">
+            <div>
+              <input 
+                class="usa-button"
+                type="submit"
+                value="Submit"
+                :disabled="isLoading"
+                data-test="submit"
+              >
+            </div>
+            <div v-if="showSpinner" class="margin-left-1 margin-top-3" >
+              <SpinnerGraphic  />
+            </div>
+          </div>
         </form>
+       
       </div>
     </div>
   </div>
