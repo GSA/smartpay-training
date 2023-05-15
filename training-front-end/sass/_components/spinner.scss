@@ -1,29 +1,6 @@
-/*
-.spinner {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #005ea2;
-  animation: spin 1s infinite linear;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-*/
 .spinner {
   animation: rotate 2s linear infinite;
   z-index: 2;
-  //position: absolute;
-  //top: 50%;
-  //left: 50%;
-  //margin: -25px 0 0 -25px;
   width: 40px;
   height: 40px;
   

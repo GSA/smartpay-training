@@ -286,7 +286,7 @@
                 data-test="submit"
               >
             </div>
-            <div v-if="showSpinner" class=" margin-left-1 grid-col padding-top-1 tablet:grid-col-1 tablet:padding-top-3 tablet:padding-left-0"  >
+            <div v-if="showSpinner" class=" margin-left-1 grid-col padding-top-1 tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"  >
               <SpinnerGraphic  />
             </div>
           </div>
