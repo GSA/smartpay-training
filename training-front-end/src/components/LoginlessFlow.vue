@@ -13,6 +13,8 @@
   import USWDSAlert from './USWDSAlert.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, email, helpers } from '@vuelidate/validators';
+  import SpinnerGraphic from './SpinnerGraphic.vue'
+ 
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const { withMessage } = helpers
@@ -90,6 +92,7 @@
   const isLoading = ref(false)
   const isFlowComplete = ref(false)
   const unregisteredEmail = ref(false)
+  const showSpinner = ref(false)
 
   function clearToken() {
     const url = new URL(window.location);
@@ -108,9 +111,11 @@
         clearToken();
       } catch(e) {
         emit('error', e)
+        showSpinner.value = false;
       }
     } 
     isLoaded.value = true
+    showSpinner.value = false;
   })
 
   async function start_email_flow() {
@@ -118,11 +123,13 @@
     const isFormValid = await validation.value.$validate() 
 
     if (!isFormValid) {
+      showSpinner.value = false;
      return
     }
 
     emit('startLoading')
     isLoading.value = true
+    showSpinner.value = true
     
     const apiURL = new URL(`${base_url}/api/v1/get-link`)
     let res
@@ -137,6 +144,7 @@
       })
     } catch (err) {
       isLoading.value = false
+      showSpinner.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
       e.name = "Server Error"
       emit('endLoading')
@@ -144,6 +152,7 @@
     }
     
     if (! res.ok) { 
+      showSpinner.value = false;
       throw new Error("Error contacting server")
     }
 
@@ -156,17 +165,21 @@
       const token = new URL(json.token)
       tempURL.value = `${window.location.href}${token.search}` // this is just temporary while in Dev
       isFlowComplete.value = true
+      
     } else {
       // any other 2xx response should assume
       // it worked, but we need more info
       unregisteredEmail.value = true
+      
     }
     isLoading.value = false
+    showSpinner.value = false
     emit('endLoading')
   }
 </script>
 
 <template>
+ 
   <div v-if="!isLoggedIn && isLoaded">
     <div 
       v-if="isFlowComplete" 
@@ -247,6 +260,7 @@
           This is a U.S. Federal Government system. Use of this system and issued certificates is for federal employees, tribal government organizations, and other authorized users only.
         </USWDSAlert>
         <slot name="initial-greeting" />
+        
 
         <form
           class="usa-form usa-form--large margin-bottom-3 "
@@ -261,15 +275,23 @@
             label="Email Address"
             name="email"
             :error-message="v_email$.email.$message" 
-          />  
-          <input 
-            class="usa-button"
-            type="submit"
-            value="Submit"
-            :disabled="isLoading"
-            data-test="submit"
-          >
+          /> 
+          <div class="grid-row">
+            <div class="grid-col tablet:grid-col-3 ">
+              <input 
+                class="usa-button"
+                type="submit"
+                value="Submit"
+                :disabled="isLoading"
+                data-test="submit"
+              >
+            </div>
+            <div v-if="showSpinner" class=" margin-left-1 grid-col padding-top-1 tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"  >
+              <SpinnerGraphic  />
+            </div>
+          </div>
         </form>
+       
       </div>
     </div>
   </div>

@@ -148,7 +148,7 @@
           <USWDSAlert
             v-if="error"
             class="tablet:grid-col-8"
-            status="warning"
+            status="error"
             :heading="error.name"
           >
             {{ error.message }}
