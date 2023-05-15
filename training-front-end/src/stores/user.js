@@ -1,5 +1,22 @@
-import { persistentAtom } from '@nanostores/persistent'
-import { action, computed} from 'nanostores'
+import { persistentAtom, setPersistentEngine } from '@nanostores/persistent'
+import { action, computed } from 'nanostores'
+
+/* 
+ * Change default to use sessionStorage instead of localStorage,
+ * which will cause the session to be cleared when the tab closers
+ */
+let listeners = []
+
+const events = {
+  addEventListener(key, callback) {
+    listeners.push(callback)
+  },
+  removeEventListener(key, callback) {
+    listeners = listeners.filter(i => i != callback)
+  },
+  perKey: false
+}
+setPersistentEngine(window.sessionStorage, events)
 
 export const profile = persistentAtom('user', {},
 {

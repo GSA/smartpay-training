@@ -1,7 +1,6 @@
 ---
 import GSALogo from '../assets/images/gsa-smartpay-training-logo.svg'
 import closeIcon from '../assets/images/usa-icons/close.svg'
-import ExitMenu from './ExitMenu.vue';
 ---
 <header class="usa-header usa-header--extended">
     <div class="usa-navbar">
@@ -17,7 +16,7 @@ import ExitMenu from './ExitMenu.vue';
         <button type="button" class="usa-nav__close">
           <img src={ closeIcon } alt="Close" />
         </button>
-        <ul class="usa-nav__primary usa-accordion">
+        <ul id='header_main_menu' class="usa-nav__primary usa-accordion">
           <li class="usa-nav__primary-item">
             <button
               type="button"
@@ -60,7 +59,7 @@ import ExitMenu from './ExitMenu.vue';
           <li class="usa-nav__primary-item">
             <a href={`${import.meta.env.BASE_URL}certificates`} class="usa-nav-link"><span>Access Past Certificates</span></a>
           </li>
-          <ExitMenu client:only></ExitMenu>
+          
         </ul>
       </div>
     </nav>
