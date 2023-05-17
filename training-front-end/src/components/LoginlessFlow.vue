@@ -179,7 +179,6 @@
 </script>
 
 <template>
- 
   <div v-if="!isLoggedIn && isLoaded">
     <div 
       v-if="isFlowComplete" 
@@ -286,12 +285,22 @@
                 data-test="submit"
               >
             </div>
-            <div v-if="showSpinner" class=" margin-left-1 grid-col padding-top-1 tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"  >
-              <SpinnerGraphic  />
+            <!--display spinner along with submit button in one row for desktop-->
+            <div 
+              v-if="showSpinner" 
+              class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
+            >
+              <SpinnerGraphic />
             </div>
           </div>
+          <!--display spinner under submit button for mobile view-->
+          <div 
+            v-if="showSpinner" 
+            class="tablet:display-none margin-top-1 text-center"
+          >
+            <SpinnerGraphic />
+          </div>
         </form>
-       
       </div>
     </div>
   </div>
