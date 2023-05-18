@@ -27,8 +27,9 @@ onMounted(async () => {
         <th scope="col">
           Email
         </th>
+        <!--wbr will create soft break for mobile view-->
         <th scope="col">
-          Agency/Organization
+          Agency/<wbr>Organization
         </th>
       </tr>
     </thead>
@@ -37,7 +38,7 @@ onMounted(async () => {
         <td>
           {{ user.name }}
         </td>
-        <td>
+        <td class="mobile_view">
           {{ user.email }}
         </td>
         <td>
@@ -47,3 +48,13 @@ onMounted(async () => {
     </tbody>
   </table>
 </template>
+<style scoped>
+/* 
+have to make the email address word break for mobile view, 
+otherwise it will stick out of container because email address is treated as one word
+ */
+.mobile_view{
+  word-break:break-word;
+  width:35%
+}
+</style>
