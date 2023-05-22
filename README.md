@@ -119,7 +119,7 @@ Take note of the username and password it creates for each space.
         * `CG_USERNAME`: The service account username for this space
         * `CG_PASSWORD`: The service account password for this space
         * `JWT_SECRET`: A randomly generated string
-        * `SMTP_PASSWORD`: Password for the SMTP relay server
+        * `SMTP_PASSWORD`: Password for the SMTP relay server (optional depending on the SMTP server being used)
     * The app's environment variables (see `.env_example` for a full list of necessary variables)
 
 
