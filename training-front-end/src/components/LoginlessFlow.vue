@@ -14,7 +14,7 @@
   import { useVuelidate } from '@vuelidate/core';
   import { required, email, helpers } from '@vuelidate/validators';
   import SpinnerGraphic from './SpinnerGraphic.vue'
- 
+
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const { withMessage } = helpers
@@ -51,22 +51,22 @@
     email: undefined,
     agency_id: undefined
   })
-  
+
 
   /* Form validation for email alone */
   const known_email = () => !unregisteredEmail.value || props.allowRegistration
   const validations_just_email = {
     email: {
       email: withMessage('Please enter a valid email address', email),
-      required: withMessage('Please enter a valid email address', required), 
+      required: withMessage('Please enter a valid email address', required),
       known_email: withMessage(
-        "We couldn’t find the email address you entered. Please check that you entered an email address you’ve used before and that you entered it correctly.", 
+        "We couldn’t find the email address you entered. Please check that you entered an email address you’ve used before and that you entered it correctly.",
         known_email
       )
     }
   }
   const v_email$ = useVuelidate(validations_just_email, user_input)
- 
+
   watch(() => user_input.email, async() => {
     unregisteredEmail.value = false
   })
@@ -79,7 +79,7 @@
     },
     email: {
       email: withMessage('Please enter a valid email address', email),
-      required: withMessage('Please enter a valid email address', required), 
+      required: withMessage('Please enter a valid email address', required),
     },
     agency_id: {
       required: withMessage('Please enter your agency', required),
@@ -113,14 +113,14 @@
         emit('error', e)
         showSpinner.value = false;
       }
-    } 
+    }
     isLoaded.value = true
     showSpinner.value = false;
   })
 
   async function start_email_flow() {
     const validation = unregisteredEmail.value ? v_all_info$ : v_email$
-    const isFormValid = await validation.value.$validate() 
+    const isFormValid = await validation.value.$validate()
 
     if (!isFormValid) {
       showSpinner.value = false;
@@ -130,7 +130,7 @@
     emit('startLoading')
     isLoading.value = true
     showSpinner.value = true
-    
+
     const apiURL = new URL(`${base_url}/api/v1/get-link`)
     let res
     try {
@@ -138,7 +138,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
-          user: user_input, 
+          user: user_input,
           dest: {page_id: props.pageId, title: props.title}
         })
       })
@@ -150,27 +150,27 @@
       emit('endLoading')
       throw e
     }
-    
-    if (! res.ok) { 
+
+    if (! res.ok) {
       showSpinner.value = false;
       throw new Error("Error contacting server")
     }
 
     const json = await res.json()
     const status = res.status
-      
+
     if (status == 201) {
       // the api sends a 201 if the token was created
       // in the cache and an email was sent
       const token = new URL(json.token)
       tempURL.value = `${window.location.href}${token.search}` // this is just temporary while in Dev
       isFlowComplete.value = true
-      
+
     } else {
       // any other 2xx response should assume
       // it worked, but we need more info
       unregisteredEmail.value = true
-      
+
     }
     isLoading.value = false
     showSpinner.value = false
@@ -180,9 +180,9 @@
 
 <template>
   <div v-if="!isLoggedIn && isLoaded">
-    <div 
-      v-if="isFlowComplete" 
-      class="grid-row" 
+    <div
+      v-if="isFlowComplete"
+      class="grid-row"
       data-test="post-submit"
     >
       <div class="tablet:grid-col-8 usa-prose margin-y-4">
@@ -190,21 +190,21 @@
           Check your email
         </h2>
         <p>We just sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
-        
+
         <p>Not the right email? <a href="/user_input">Send another email</a></p>
-            
+
         <p><b>Temp for development</b></p>
         <p>
           URL that was emailed: <a :href="tempURL">{{ tempURL }}</a>
         </p>
       </div>
     </div>
-    <div 
-      v-else 
+    <div
+      v-else
       class="grid-row"
       data-test="pre-submit"
     >
-      <div 
+      <div
         v-if="showAdditionalFormFields"
         class=" usa-prose"
       >
@@ -214,24 +214,24 @@
           data-test="name-submit-form"
           @submit.prevent="start_email_flow"
         >
-          <ValidatedInput 
-            v-model="user_input.email" 
+          <ValidatedInput
+            v-model="user_input.email"
             client:load
             :validator="v_all_info$.email"
             label="Email Address"
             name="email"
             :readonly="true"
-          />  
-          <ValidatedInput 
-            v-model="user_input.name" 
+          />
+          <ValidatedInput
+            v-model="user_input.name"
             client:load
             :validator="v_all_info$.name"
             label="Name"
             name="name"
           />
           <Suspense>
-            <ValidatedSelect 
-              v-model="user_input.agency_id" 
+            <ValidatedSelect
+              v-model="user_input.agency_id"
               client:load
               :validator="v_all_info$.agency_id"
               label="Agency / organization"
@@ -247,11 +247,11 @@
           >
         </form>
       </div>
-      <div 
+      <div
         v-else
         class="usa-prose"
       >
-        <USWDSAlert 
+        <USWDSAlert
           status="warning"
           class="usa-alert--slim"
           :has-heading="false"
@@ -259,25 +259,25 @@
           This is a U.S. Federal Government system. Use of this system and issued certificates is for federal employees, tribal government organizations, and other authorized users only.
         </USWDSAlert>
         <slot name="initial-greeting" />
-        
+
 
         <form
           class="usa-form usa-form--large margin-bottom-3 "
           data-test="email-submit-form"
           @submit.prevent="start_email_flow"
         >
-          <ValidatedInput 
-            v-model="user_input.email" 
+          <ValidatedInput
+            v-model="user_input.email"
             client:load
             :validator="v_email$.email"
-            :is-invalid="v_email$.email.$error" 
+            :is-invalid="v_email$.email.$error"
             label="Email Address"
             name="email"
-            :error-message="v_email$.email.$message" 
-          /> 
+            :error-message="v_email$.email.$message"
+          />
           <div class="grid-row">
             <div class="grid-col tablet:grid-col-3 ">
-              <input 
+              <input
                 class="usa-button"
                 type="submit"
                 value="Submit"
@@ -286,16 +286,16 @@
               >
             </div>
             <!--display spinner along with submit button in one row for desktop-->
-            <div 
-              v-if="showSpinner" 
+            <div
+              v-if="showSpinner"
               class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
             >
               <SpinnerGraphic />
             </div>
           </div>
           <!--display spinner under submit button for mobile view-->
-          <div 
-            v-if="showSpinner" 
+          <div
+            v-if="showSpinner"
             class="tablet:display-none margin-top-1 text-center"
           >
             <SpinnerGraphic />
@@ -304,7 +304,7 @@
       </div>
     </div>
   </div>
-  <div 
+  <div
     v-else
     data-test="child-component"
   >
