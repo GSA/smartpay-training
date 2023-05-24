@@ -191,7 +191,7 @@
         </h2>
         <p>We just sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
 
-        <p>Not the right email? <a href="/user_input">Send another email</a></p>
+        <p>Not the right email? <a href=".">Send another email</a></p>
 
         <p><b>Temp for development</b></p>
         <p>
