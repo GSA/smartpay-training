@@ -87,7 +87,6 @@
   }
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
-  const tempURL = ref('')
   const isLoaded = ref(false)
   const isLoading = ref(false)
   const isFlowComplete = ref(false)
@@ -156,14 +155,11 @@
       throw new Error("Error contacting server")
     }
 
-    const json = await res.json()
     const status = res.status
 
     if (status == 201) {
       // the api sends a 201 if the token was created
       // in the cache and an email was sent
-      const token = new URL(json.token)
-      tempURL.value = `${window.location.href}${token.search}` // this is just temporary while in Dev
       isFlowComplete.value = true
 
     } else {
@@ -192,11 +188,6 @@
         <p>We just sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
 
         <p>Not the right email? <a href=".">Send another email</a></p>
-
-        <p><b>Temp for development</b></p>
-        <p>
-          URL that was emailed: <a :href="tempURL">{{ tempURL }}</a>
-        </p>
       </div>
     </div>
     <div

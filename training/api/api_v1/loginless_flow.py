@@ -47,15 +47,13 @@ def send_link(
     # we may have the users going to pages other than quizes
     url = f"{settings.BASE_URL}/quiz/{dest.page_id}/?t={token}"
     try:
-        res = send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
+        send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
     except Exception as e:
         logging.error("Error sending mail", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Server Error"
         )
-    # TODO: don't send the token once we can send email
-    return {"token": url, "response": res}
 
 
 @router.get("/user-info")
