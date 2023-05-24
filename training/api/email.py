@@ -3,9 +3,9 @@ from string import Template
 from pydantic import EmailStr
 from smtplib import SMTP
 from email.message import EmailMessage
-from starlette.responses import JSONResponse
 
 from training.config import settings
+from training.errors import SendEmailError
 
 # We also use jinja template.
 # See: https://sabuhish.github.io/fastapi-mail/example/#using-jinja2-html-templates
@@ -28,7 +28,7 @@ email us at gsa_smartpay@gsa.gov.
 ''')
 
 
-def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> JSONResponse:
+def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
     body = EMAIL_TEMPLATE.substitute({"name": name, "link": link, "training_title": training_title})
 
     message = EmailMessage()
@@ -43,11 +43,8 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
             smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
         try:
             smtp.send_message(message)
-            result = JSONResponse(status_code=200, content={"message": "email sent"})
         except Exception as e:
             logging.error("Error sending email", e)
-            result = JSONResponse(status_code=500, content={"message": "error sending email"})
+            raise SendEmailError
         finally:
             smtp.quit()
-
-    return result
