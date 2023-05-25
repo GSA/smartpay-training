@@ -4,7 +4,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import HeroTraining from "@components/HeroTraining.astro"
 import PrintIcon from "@components/icons/PrintIcon.vue"
 
-const pages = await getCollection('training_purchase');
+const pages = await getCollection('training_purchase_pc');
 const content_components = pages.map(async entry => (
   {...entry, Content: (await entry.render()).Content}
 ))
@@ -13,7 +13,7 @@ const entries = await Promise.all(content_components)
 ---
 <BaseLayout title="Training Travel">
   <HeroTraining>
-    <span slot="subheader">Card / Account Holders and Approving Officials Purchase Training</span>
+    <span slot="subheader">Agency/Organization Program Coordinators (A/OPCs) Purchase Training</span>
     Purchase Training
   </HeroTraining>
 
