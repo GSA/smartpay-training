@@ -25,9 +25,11 @@ def upgrade() -> None:
     op.execute("""
                DROP INDEX IF EXISTS ix_agencies_name;
                """)
+    op.create_index(op.f('ix_agencies_name_bureau'), 'agencies', ['name', 'bureau'], unique=True)
 
 
 def downgrade() -> None:
+    op.drop_index("ix_agencies_name_bureau")
     op.execute("""
                delete from agencies
                where bureau is not null
