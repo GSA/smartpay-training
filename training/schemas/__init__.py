@@ -1,4 +1,4 @@
-from .agency import Agency, AgencyCreate
+from .agency import Agency, AgencyCreate, AgencyWithBureaus
 from .temp_user import TempUser, IncompleteTempUser, WebDestination
 from .user import User, UserCreate
 from .quiz_choice import QuizChoice, QuizChoiceCreate, QuizChoicePublic
