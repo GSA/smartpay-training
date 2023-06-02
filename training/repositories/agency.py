@@ -24,13 +24,11 @@ class AgencyRepository(BaseRepository[models.Agency]):
 
     def get_agencies_with_bureaus(self) -> list[AgencyWithBureaus]:
         db_results = self.find_all()
-        transform_angecies = []
+        transform_angecies = {}
         for record in db_results:
-            agency = AgencyWithBureaus(id=record.id, name=record.name, bureaus=[])
-            if record.bureau:
-                for obj in transform_angecies:
-                    if obj.name == record.name:
-                        obj.bureaus.append(Bureau(id=record.id, name=record.bureau))
-            else:
-                transform_angecies.append(agency)
-        return transform_angecies
+            transform_angecies.setdefault(record.name, {'id': record.id, 'name': record.name, 'bureaus': []})
+        if record.bureau:
+            transform_angecies[record.name]['bureaus'].append(Bureau(id=record.id, name=record.bureau))
+        else:
+            transform_angecies[record.name]['id'] = record.id
+        return list(transform_angecies.values())
