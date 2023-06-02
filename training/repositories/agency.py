@@ -18,7 +18,7 @@ class AgencyRepository(BaseRepository[models.Agency]):
         return self.save(models.Agency(name=agency.name, bureau=bureau_value))
 
     def find_by_name(self, agency: schemas.AgencyCreate) -> models.Agency | None:
-        return self._session.query(models.Agency).filter(models.Agency.name == agency.name and models.Agency.bureau == agency.bureau).first()
+        return self._session.query(models.Agency).filter(models.Agency.name == agency.name, models.Agency.bureau == agency.bureau).first()
 
     def get_agencies_with_bureaus(self) -> list[AgencyWithBureaus]:
         db_results = self.find_all()
