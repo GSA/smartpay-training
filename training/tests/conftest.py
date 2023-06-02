@@ -65,7 +65,7 @@ def db_with_data(db: Session, testdata: dict):
         db.commit()
         db.refresh(agency)
         agency_ids.append(agency.id)
-    
+
     for index, user in enumerate(testdata["users"]):
         user = models.User(email=user["email"], name=user["name"], agency_id=agency_ids[index % 2])
         db.add(user)
