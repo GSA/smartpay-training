@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach, vi} from 'vitest'
 
 import { cleanStores, keepMount, allTasks } from 'nanostores'
 import { agencyList, setSelectedAgencyId, bureauList} from '../agencies'
-import * as agencyListRequest from '../getAgencies'
+import * as agencyListRequest from '../helpers/getAgencies'
 
 const agency_api = [
   { 'id': 1, 'name': 'General Services Administration', 'bureaus': []},

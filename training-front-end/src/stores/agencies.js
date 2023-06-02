@@ -1,5 +1,5 @@
 import { atom, onMount, action, task, computed} from 'nanostores'
-import { fetchAgencyList } from './getAgencies'
+import { fetchAgencyList } from './helpers/getAgencies'
 
 export const agencyList = atom([])
 export const selectedAgencyId = atom(undefined)

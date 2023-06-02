@@ -5,7 +5,7 @@ import CertificateTable from '../CertificateTable.vue'
 
 import { cleanStores } from 'nanostores'
 import { profile } from '../../stores/user.js'
-import * as agencyList from '../../stores/getAgencies.js'
+import * as agencyList from '../../stores/helpers/getAgencies.js'
 
 
 const API_RESPONSE = [

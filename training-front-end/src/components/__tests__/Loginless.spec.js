@@ -4,7 +4,7 @@ import { mount, shallowMount, flushPromises } from '@vue/test-utils'
 import { cleanStores, keepMount, allTasks } from 'nanostores'
 import Loginless from '../LoginlessFlow.vue'
 import { profile } from '../../stores/user.js'
-import * as agencyList from '../../stores/getAgencies'
+import * as agencyList from '../../stores/helpers/getAgencies'
 
 function submitEmail(wrapper, email) {
   wrapper.get('[data-test="email-submit-form"] [name="email"]').setValue(email)
