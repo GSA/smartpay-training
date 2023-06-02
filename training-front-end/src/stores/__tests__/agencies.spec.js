@@ -16,7 +16,7 @@ const agency_api = [
   { 'id': 5, 'name': 'Department of the Interior', 'bureaus': []}
 ]
 
-describe('getUserFromToken', () => {
+describe('Agency Store', () => {
   afterEach(() => {
     vi.restoreAllMocks()
     cleanStores(agencyList)
