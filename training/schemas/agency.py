@@ -1,8 +1,10 @@
 from pydantic import BaseModel
+from pydantic.schema import Optional
 
 
 class AgencyBase(BaseModel):
     name: str
+    bureau: Optional[str]
 
 
 class AgencyCreate(AgencyBase):
@@ -14,3 +16,14 @@ class Agency(AgencyBase):
 
     class Config:
         orm_mode = True
+
+
+class Bureau(BaseModel):
+    id: int
+    name: str
+
+
+class AgencyWithBureaus(BaseModel):
+    id: int
+    name: str
+    bureaus: list[Bureau]
