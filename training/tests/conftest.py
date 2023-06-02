@@ -11,6 +11,7 @@ from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository
+from training.schemas import AgencyCreate
 from training.services import QuizService
 from training.config import settings
 from . import factories
@@ -57,13 +58,14 @@ def db_with_data(db: Session, testdata: dict):
     agency_ids = []
     user_ids = []
     quiz_ids = []
-    for name in testdata["agencies"]:
-        agency = models.Agency(name=name)
+
+    for data in testdata["agencies"]:
+        agency = models.Agency(name=data["name"], bureau=data["bureau"])
         db.add(agency)
         db.commit()
         db.refresh(agency)
         agency_ids.append(agency.id)
-
+    
     for index, user in enumerate(testdata["users"]):
         user = models.User(email=user["email"], name=user["name"], agency_id=agency_ids[index % 2])
         db.add(user)
@@ -126,11 +128,13 @@ def valid_quiz_ids(db_with_data: Session) -> Generator[list[int], None, None]:
 
 
 @pytest.fixture
-def valid_agency_name(testdata: dict) -> Generator[str, None, None]:
+def valid_agency(testdata: dict) -> Generator[AgencyCreate, None, None]:
     '''
-    Provides a valid agency name.
+    Provides a valid agency.
     '''
-    yield testdata["agencies"][0]
+    jsondata = testdata["agencies"][0]
+    agency = AgencyCreate(name=jsondata["name"], bureau=jsondata["bureau"])
+    yield agency
 
 
 @pytest.fixture

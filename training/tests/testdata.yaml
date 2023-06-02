@@ -1,7 +1,10 @@
 agencies:
-  - Department of Mysteries
-  - Department of Magical Law Enforcement
-  - Department of Magical Accidents and Catastrophes
+  - name: Department of Mysteries
+    bureau: null
+  - name: Department of Magical Law Enforcement
+    bureau: null
+  - name: Department of Magical Accidents and Catastrophes
+    bureau: null
 
 users:
   - email: test1@example.com

@@ -10,8 +10,10 @@ class AgencyRepository(BaseRepository[models.Agency]):
         super().__init__(session, models.Agency)
 
     def create(self, agency: schemas.AgencyCreate) -> models.Agency:
-
-        if agency.bureau.strip() == '':
+        db_agency = self.find_by_name(agency)
+        if db_agency:
+            raise Exception("record already exists in DB")
+        if agency.bureau and agency.bureau.strip() == '':
             bureau_value = None
         else:
             bureau_value = agency.bureau
