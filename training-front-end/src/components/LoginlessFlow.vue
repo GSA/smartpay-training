@@ -3,16 +3,22 @@
 	 * Responsible for handling the form that generates and email link.
 	 * After the form is submitted it displays a message telling the user
 	 * to check their email.
+   * 
+   * The prop `allowRegistration` determines whether this component
+   * will prompt the user for registration details if the api does 
+   * not recognize their email. When set to false, it will only
+   * allow known address to proceed.
 	 */
 
   import { ref, reactive, computed, onMounted, watch } from 'vue';
   import { profile, getUserFromToken } from '../stores/user'
+  import { bureauList, agencyList, setSelectedAgencyId} from '../stores/agencies'
   import { useStore } from '@nanostores/vue'
   import ValidatedInput from './ValidatedInput.vue';
   import ValidatedSelect from './ValidatedSelect.vue';
   import USWDSAlert from './USWDSAlert.vue';
   import { useVuelidate } from '@vuelidate/core';
-  import { required, email, helpers } from '@vuelidate/validators';
+  import { required, requiredIf, email, helpers } from '@vuelidate/validators';
   import SpinnerGraphic from './SpinnerGraphic.vue'
 
 
@@ -42,16 +48,24 @@
       required: true
     }
   })
+
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
   const user = useStore(profile)
+  const agency_options = useStore(agencyList)
+  const bureaus = useStore(bureauList)
   const isLoggedIn = computed(() => Boolean(user.value.jwt))
-
+   
   const user_input = reactive({
     name: undefined,
     email: undefined,
-    agency_id: undefined
+    agency_id: undefined,
+    bureau_id: undefined
   })
 
+  watch(() => user_input.agency_id, async() => {
+    setSelectedAgencyId(user_input.agency_id)
+    user_input.bureau_id = undefined
+  })
 
   /* Form validation for email alone */
   const known_email = () => !unregisteredEmail.value || props.allowRegistration
@@ -83,6 +97,9 @@
     },
     agency_id: {
       required: withMessage('Please enter your agency', required),
+    },
+    bureau_id: {
+      requiredIf: withMessage('Please enter your Sub-Agency, Organization, or Bureau', requiredIf(() => bureaus.value.length)),
     }
   }
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
@@ -100,7 +117,6 @@
   }
 
   onMounted(async () => {
-    // Handle token in url query if it exists
     const urlParams = new URLSearchParams(window.location.search);
     const parm_token = urlParams.get('t')
 
@@ -132,12 +148,17 @@
 
     const apiURL = new URL(`${base_url}/api/v1/get-link`)
     let res
+    // When user has choosen a bureau use that id instead of the agency
+    let {bureau_id, ...user_data} = user_input
+    if (bureau_id) {
+      user_data.agency_id = bureau_id
+    }
     try {
        res = await fetch(apiURL,  {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
-          user: user_input,
+          user: user_data,
           dest: {page_id: props.pageId, title: props.title}
         })
       })
@@ -220,15 +241,23 @@
             label="Name"
             name="name"
           />
-          <Suspense>
-            <ValidatedSelect
-              v-model="user_input.agency_id"
-              client:load
-              :validator="v_all_info$.agency_id"
-              label="Agency / organization"
-              name="agency"
-            />
-          </Suspense>
+          <ValidatedSelect
+            v-model="user_input.agency_id"
+            client:load
+            :validator="v_all_info$.agency_id"
+            :options="agency_options"
+            label="Agency / organization"
+            name="agency"
+          />
+          <ValidatedSelect
+            v-if="bureaus.length"
+            v-model="user_input.bureau_id"
+            client:load
+            :validator="v_all_info$.bureau_id"
+            :options="bureaus"
+            label="Sub-Agency, Organization, or Bureau"
+            name="bureau"
+          />
           <input
             class="usa-button"
             type="submit"

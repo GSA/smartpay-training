@@ -5,6 +5,8 @@ import CertificateTable from '../CertificateTable.vue'
 
 import { cleanStores } from 'nanostores'
 import { profile } from '../../stores/user.js'
+import * as agencyList from '../../stores/helpers/getAgencies.js'
+
 
 const API_RESPONSE = [
   {
@@ -17,6 +19,7 @@ const API_RESPONSE = [
   },
 ]
 
+vi.spyOn(agencyList, 'fetchAgencyList').mockImplementation(() => Promise.resolve([]))
 
 describe('CertificateIndex', async () => {
   afterEach(() => {
