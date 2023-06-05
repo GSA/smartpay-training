@@ -23,7 +23,7 @@ class AgencyRepository(BaseRepository[models.Agency]):
         return self._session.query(models.Agency).filter(models.Agency.name == agency.name, models.Agency.bureau == agency.bureau).first()
 
     def get_agencies_with_bureaus(self) -> list[AgencyWithBureaus]:
-        db_results = self.find_all()
+        db_results = self._session.query(models.Agency).order_by(models.Agency.name.asc()).all()
         parent_agencies = [record for record in db_results if record.bureau is None]
         transform_angecies = []
         for record in parent_agencies:
