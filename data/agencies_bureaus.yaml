@@ -30,7 +30,7 @@
   bureau: null
 - name: Defense Nuclear Facilities Safety Board (DNFSB)
   bureau: null
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: null
 - name: Department of Commerce
   bureau: null
@@ -368,65 +368,69 @@
   bureau: Office of the Chief Information Officer (GSA IT)
 - name: General Services Administration
   bureau: Office of the Chief Financial Officer
-- name: Department of Agriculture
+- name: General Services Administration
+  bureau: Other
+- name: U.S. Department of Agriculture
   bureau: Agriculture Marketing Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Agriculture Research Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Animal and Plant Health Inspection Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Departmental Administration
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Economic Research Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Farm Production and Conservation
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Farm Service Agency
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Food Safety and Inspection Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Foreign Agricultural Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Forest Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: National Agricultural Statistics Service
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: National Appeals Division
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: National Institute of Food and Agriculture
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Natural Resources Conservation Services
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of Budget and Program Analysis
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of Communications
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of Congressional Relations
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of External and Intergovernmental Affairs
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of Hearings and Appeals
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of Inspector General
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of Partnerships and Public Engagement
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of the Assistant Secretary for Civil Rights
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of the Chief Economist
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of the Chief Financial Officer
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of the Chief Information Officer
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of the Chief Scientist
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of the Executive Secretariat
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Office of Tribal Relations
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Risk Management Agency
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: Rural Development
-- name: Department of Agriculture
+- name: U.S. Department of Agriculture
   bureau: The White House Liaison Office
+- name: U.S. Department of Agriculture
+  bureau: Other
