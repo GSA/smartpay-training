@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from training import models, schemas
 from training.schemas.agency import AgencyWithBureaus, Bureau
 from .base import BaseRepository
+from sqlalchemy.sql.expression import collate
 
 
 class AgencyRepository(BaseRepository[models.Agency]):
@@ -23,7 +24,7 @@ class AgencyRepository(BaseRepository[models.Agency]):
         return self._session.query(models.Agency).filter(models.Agency.name == agency.name, models.Agency.bureau == agency.bureau).first()
 
     def get_agencies_with_bureaus(self) -> list[AgencyWithBureaus]:
-        db_results = self._session.query(models.Agency).order_by(models.Agency.name.asc()).all()
+        db_results = self._session.query(models.Agency).order_by(collate(models.Agency.name, 'C')).all()
         parent_agencies = [record for record in db_results if record.bureau is None]
         transform_angecies = []
         for record in parent_agencies:
