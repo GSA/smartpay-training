@@ -1,5 +1,5 @@
 
-from fastapi import Request, HTTPException
+from fastapi import Request, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 from training.config import settings
@@ -23,3 +23,20 @@ class JWTUser(HTTPBearer):
             return jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
         except jwt.exceptions.InvalidTokenError:
             return
+
+
+class RequireRole:
+    def __init__(self, required_roles: list[str]) -> None:
+        self.required_roles = set(required_roles)
+
+    def __call__(self, user=Depends(JWTUser())):
+        try:
+            user_roles = user['roles']
+        except KeyError:
+            raise HTTPException(status_code=401, detail="Not Authorized")
+
+        if all(role in user_roles for role in self.required_roles):
+            return user
+        else:
+            print("**** here ****")
+            raise HTTPException(status_code=401, detail="Not Authorized")
