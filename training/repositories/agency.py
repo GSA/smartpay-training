@@ -31,7 +31,8 @@ class AgencyRepository(BaseRepository[models.Agency]):
             agency_with_bureaus = [obj for obj in db_results if obj.bureau and obj.name == record.name]
             bureaus = []
             if len(agency_with_bureaus) > 0:
-                for obj in agency_with_bureaus:
+                sorted_bureaus = sorted(agency_with_bureaus, key=lambda x: x.bureau)
+                for obj in sorted_bureaus:
                     bureau = Bureau(id=obj.id, name=obj.bureau)
                     bureaus.append(bureau)
 
