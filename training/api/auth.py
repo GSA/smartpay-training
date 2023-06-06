@@ -38,5 +38,4 @@ class RequireRole:
         if all(role in user_roles for role in self.required_roles):
             return user
         else:
-            print("**** here ****")
             raise HTTPException(status_code=401, detail="Not Authorized")
