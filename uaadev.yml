@@ -1,0 +1,90 @@
+# This is to emulate UAA in development (see the docker-compose.yaml file).
+#
+# Edit the scim.users section to configure users. The fields are:
+# username|password|email|firstname|lastname|scope
+#
+# Edit the oauth.clients.test_client_id to configure the OAuth client if needed.
+
+spring_profiles: hsqldb
+
+scim:
+  groups:
+    zones.read: Read identity zones
+    zones.write: Create and update identity zones
+    idps.read: Retrieve identity providers
+    idps.write: Create and update identity providers
+    clients.admin: Create, modify and delete OAuth clients
+    clients.write: Create and modify OAuth clients
+    clients.read: Read information about OAuth clients
+    clients.secret: Change the password of an OAuth client
+    scim.write: Create, modify and delete SCIM entities, i.e. users and groups
+    scim.read: Read all SCIM entities, i.e. users and groups
+    scim.create: Create users
+    scim.userids: Read user IDs and retrieve users by ID
+    scim.zones: Control a user's ability to manage a zone
+    scim.invite: Send invitations to users
+    password.write: Change your password
+    oauth.approval: Manage approved scopes
+    oauth.login: Authenticate users outside of the UAA
+    openid: Access profile information, i.e. email, first and last name, and phone number
+    groups.update: Update group information and memberships
+    uaa.user: Act as a user in the UAA
+    uaa.resource: Serve resources protected by the UAA
+    uaa.admin: Act as an administrator throughout the UAA
+    uaa.none: Forbid acting as a user
+    uaa.offline_token: Allow offline access
+  username_pattern: '[a-z0-9+\-_.@]+'
+  users:
+    - paul|wombat|paul@uaa.test|Paul|Smith|openid
+    - stefan|wallaby|stefan@uaa.test|Stefan|Schmidt|openid
+
+oauth:
+  user:
+    authorities:
+      - openid
+      - scim.me
+      - cloud_controller.read
+      - cloud_controller.write
+      - cloud_controller_service_permissions.read
+      - password.write
+      - scim.userids
+      - uaa.user
+      - approvals.me
+      - oauth.approvals
+      - profile
+      - roles
+      - user_attributes
+      - uaa.offline_token
+  client:
+    override: true
+    autoapprove:
+      - test_client_id
+  clients:
+    test_client_id:
+      secret: my_client_secret
+      authorized-grant-types: authorization_code,refresh_token
+      scope: openid
+      authorities: uaa.none
+      redirect-uri: http://localhost:3000/callback
+      allowpublic: true
+
+issuer:
+  uri: http://localhost:8080/uaa
+
+login:
+  url: http://localhost:8080/uaa
+
+uaa:
+  url: http://localhost:8080/uaa
+  token:
+    url: http://localhost:8080/uaa/oauth/token
+  approvals:
+    url: http://localhost:8080/uaa/approvals
+  login:
+    url: http://localhost:8080/uaa/authenticate
+
+encryption:
+  active_key_label: CHANGE-THIS-KEY
+  encryption_keys:
+  - label: CHANGE-THIS-KEY
+    passphrase: CHANGEME
