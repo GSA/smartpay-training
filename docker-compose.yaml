@@ -16,6 +16,14 @@ services:
       - "8432:8080"
     depends_on:
       - db
+  uaa:
+    build:
+      context: .
+      dockerfile: Dockerfile.uaadev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./uaadev.yml:/tmp/uaa/uaa/src/main/resources/uaa.yml:ro
   # api:
   #   build:
   #     context: .
