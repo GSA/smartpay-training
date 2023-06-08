@@ -73,5 +73,9 @@ def test_find_all(user_repo_with_data: UserRepository, testdata: dict):
 
 
 def test_delete_by_id(user_repo_with_data: UserRepository, valid_user_ids: List[int]):
+    db_user = user_repo_with_data.find_by_id(valid_user_ids[0])
+    db_user.roles = []
+    db_user.report_agencies = []
+    user_repo_with_data._session.commit()
     user_repo_with_data.delete_by_id(valid_user_ids[0])
     assert user_repo_with_data.find_by_id(valid_user_ids[0]) is None
