@@ -65,7 +65,7 @@ oauth:
       authorized-grant-types: authorization_code,refresh_token
       scope: openid
       authorities: uaa.none
-      redirect-uri: http://localhost:3000/callback
+      redirect-uri: http://localhost:3000/auth_callback
       allowpublic: true
 
 issuer:
