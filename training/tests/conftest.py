@@ -141,7 +141,6 @@ def valid_agency(testdata: dict) -> Generator[AgencyCreate, None, None]:
     yield agency
 
 
-
 @pytest.fixture
 def valid_user_dict(testdata: dict) -> Generator[dict, None, None]:
     '''
@@ -318,13 +317,15 @@ def role_repo_empty(db: Session) -> Generator[RoleRepository, None, None]:
     Provides an RoleRepository injected with an empty database.
     '''
     yield RoleRepository(session=db)
-    
+
+
 @pytest.fixture
 def role_repo_with_data(db_with_data: Session) -> Generator[RoleRepository, None, None]:
     '''
     Provides an RoleRepository injected with a populated database.
     '''
     yield RoleRepository(session=db_with_data)
+
 
 @pytest.fixture
 def valid_role(testdata: dict) -> Generator[RoleCreate, None, None]:
