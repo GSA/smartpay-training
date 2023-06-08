@@ -35,3 +35,8 @@ def get_user(id: int, repo: UserRepository = Depends(user_repository)):
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return db_user
+
+
+@router.put("/users/edit_user_roles", response_model=User)
+def edit_user_roles(user_id: int, role_id_list: list[int], repo: UserRepository = Depends(user_repository)):
+    return repo.edit_user_roles(user_id, role_id_list)
