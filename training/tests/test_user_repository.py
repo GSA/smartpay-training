@@ -1,6 +1,7 @@
 from typing import List
 import pytest
 from training import models, schemas
+from training.models.agency import Agency
 from training.repositories import UserRepository, AgencyRepository
 
 
@@ -79,3 +80,26 @@ def test_delete_by_id(user_repo_with_data: UserRepository, valid_user_ids: List[
     user_repo_with_data._session.commit()
     user_repo_with_data.delete_by_id(valid_user_ids[0])
     assert user_repo_with_data.find_by_id(valid_user_ids[0]) is None
+
+
+def test_edit_user_for_reporting(user_repo_with_data: UserRepository, valid_user_ids: List[int]):
+    valid_user_id = valid_user_ids[0]
+    valid_agency = user_repo_with_data._session.query(models.Agency).first()
+    valid_agency_list = [valid_agency.id]
+    report_role_exisit = user_repo_with_data._session.query(models.Role).filter(models.Role.name == "Report").first()
+    if report_role_exisit is None:
+        role = models.Role(name="Report")
+        user_repo_with_data.add(role)
+        user_repo_with_data.commit()
+    result = user_repo_with_data.edit_user_for_reporting(valid_user_id, valid_agency_list)
+    assert result is not None
+    assert result.roles is not None and any(role.name == "Report" for role in result.roles)
+    assert result.report_agencies is not None and any(agency.id == valid_agency.id for agency in result.report_agencies)
+
+
+def test_invalid_edit_user_for_reporting(user_repo_with_data: UserRepository):
+    invalid_user_id = 0
+    invalid_agency_id_list = [0]
+
+    with pytest.raises(Exception):
+        user_repo_with_data.create(invalid_user_id, invalid_agency_id_list)
