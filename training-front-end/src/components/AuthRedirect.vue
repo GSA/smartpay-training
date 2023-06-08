@@ -8,11 +8,11 @@
   import AuthService from '../services/auth'
   import USWDSAlert from './USWDSAlert.vue'
   import { useStore } from '@nanostores/vue'
-  import { $redirectTarget } from '../stores/auth'
+  import { redirectTarget } from '../stores/auth'
 
   const auth = new AuthService()
   const error = ref(null)
-  const authRedirectTarget = useStore($redirectTarget)
+  const authRedirectTarget = useStore(redirectTarget)
 
   auth.loginCallback().then(() => {
     window.location.href = authRedirectTarget.value

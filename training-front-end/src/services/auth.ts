@@ -1,4 +1,4 @@
-import { UserManager, WebStorageStateStore, User, UserManagerSettings } from 'oidc-client-ts'
+import { UserManager, User, UserManagerSettings } from 'oidc-client-ts'
 
 export default class AuthService {
   private userManager: UserManager
