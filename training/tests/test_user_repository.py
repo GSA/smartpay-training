@@ -85,11 +85,6 @@ def test_edit_user_for_reporting(user_repo_with_data: UserRepository, valid_user
     valid_user_id = valid_user_ids[0]
     valid_agency = user_repo_with_data._session.query(models.Agency).first()
     valid_agency_list = [valid_agency.id]
-    report_role_exisit = user_repo_with_data._session.query(models.Role).filter(models.Role.name == "Report").first()
-    if report_role_exisit is None:
-        role = models.Role(name="Report")
-        user_repo_with_data.add(role)
-        user_repo_with_data.commit()
     result = user_repo_with_data.edit_user_for_reporting(valid_user_id, valid_agency_list)
     assert result is not None
     assert result.roles is not None and any(role.name == "Report" for role in result.roles)

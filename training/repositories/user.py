@@ -20,14 +20,20 @@ class UserRepository(BaseRepository[models.User]):
     def edit_user_for_reporting(self, user_id: int, report_agencies_list: list[int]) -> models.User:
         db_user = self._session.query(models.User).filter(models.User.id == user_id).first()
         if db_user is None:
-            raise Exception("invalid user id")
+            raise ValueError("invalid user id")
         report_role_exist = [obj for obj in db_user.roles if obj.name == "Report"]
-        if report_agencies_list:
-            if report_role_exist is not None:
+        if len(report_agencies_list) > 0:
+            if len(report_role_exist) == 0:
                 report_role = self._session.query(models.Role).filter(models.Role.name == "Report").first()
-                db_user.roles.append(report_role)
+                if report_role:
+                    db_user.roles.append(report_role)
+                else:
+                    role = models.Role(name="Report")
+                    self._session.add(role)
+                    self._session.commit()
+                    db_user.roles.append(role)
         else:
-            if report_role_exist:
+            if len(report_role_exist) > 0:
                 db_user.roles = [obj for obj in db_user.roles if obj.name != "Report"]
         db_user.report_agencies.clear()
         for agency_id in report_agencies_list:
@@ -35,6 +41,6 @@ class UserRepository(BaseRepository[models.User]):
             if agency:
                 db_user.report_agencies.append(agency)
             else:
-                raise Exception("invalid agency associated with this user")
+                raise ValueError("invalid agency associated with this user")
         self._session.commit()
         return db_user
