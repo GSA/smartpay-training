@@ -1,19 +1,17 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/Hero.astro';
-import GlobalMessage from '@components/GlobalMessage.vue'
-import AuthTest from '@components/AuthTest.vue';
+import AuthRequired from '@components/AuthRequired.vue';
 
 const pageTitle = "Administration Dashboard";
 
 ---
 <BaseLayout title={pageTitle}>
   <Hero>
-    Administration Dashboard
+    {pageTitle}
   </Hero>
 
-  <div class="grid-container">
-    <GlobalMessage client:only/>
-    <AuthTest client:only/>
-  </div>
+  <AuthRequired client:only>
+    <p>This is some content that requires auth</p>
+  </AuthRequired>
 </BaseLayout>
