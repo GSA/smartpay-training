@@ -1,7 +1,6 @@
 from typing import List
 import pytest
 from training import models, schemas
-from training.models.agency import Agency
 from training.repositories import UserRepository, AgencyRepository
 
 
