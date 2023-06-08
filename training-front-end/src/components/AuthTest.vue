@@ -26,8 +26,12 @@
 
 <template>
   <div class="padding-top-4 padding-bottom-4 grid-container">
-    <button @click="handleLogin">Login</button>
-    <button @click="handleLogout">Logout</button>
+    <button @click="handleLogin">
+      Login
+    </button>
+    <button @click="handleLogout">
+      Logout
+    </button>
     <p>Authenticated: {{ isAuthenticated }}</p>
     <div v-if="isAuthenticated">
       <p>User: {{ userEmail }}</p>

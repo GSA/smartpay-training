@@ -1,12 +1,12 @@
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref } from 'vue';
   import AuthService from '../services/auth'
 
   const auth = new AuthService()
 
   const error = ref(null)
 
-  auth.loginCallback().then((user) => {
+  auth.loginCallback().then(() => {
     window.location.href = '../admin'
   }).catch(function (err) {
     console.log(err)
