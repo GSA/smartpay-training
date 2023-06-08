@@ -1,4 +1,9 @@
 ---
+import BaseLayout from '@layouts/BaseLayout.astro';
 import AuthRedirect from '@components/AuthRedirect.vue';
+
+const pageTitle = "Login";
 ---
-<AuthRedirect client:only />
+<BaseLayout title={pageTitle}>
+  <AuthRedirect client:only />
+</BaseLayout>
