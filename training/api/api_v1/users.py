@@ -37,6 +37,11 @@ def get_user(id: int, repo: UserRepository = Depends(user_repository)):
     return db_user
 
 
-@router.put("/users/edit_user_roles", response_model=User)
-def edit_user_roles(user_id: int, role_id_list: list[int], repo: UserRepository = Depends(user_repository)):
-    return repo.edit_user_roles(user_id, role_id_list)
+@router.put("/users/edit-user-by-id", response_model=User)
+def edit_user_by_id(user_id: int, role_id_list: list[int], agency_id_list: list[int], repo: UserRepository = Depends(user_repository)):
+    return repo.edit_user_by_id(user_id, role_id_list, agency_id_list)
+
+
+@router.put("/users/edit-user", response_model=User)
+def edit_user(edit_user: User, repo: UserRepository = Depends(user_repository)):
+    return repo.edit_user(edit_user)
