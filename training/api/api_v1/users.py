@@ -35,3 +35,14 @@ def get_user(id: int, repo: UserRepository = Depends(user_repository)):
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return db_user
+
+
+@router.put("/users/edit-user-for-reporting", response_model=User)
+def edit_user_by_id(user_id: int, agency_id_list: list[int], repo: UserRepository = Depends(user_repository)):
+    try:
+        return repo.edit_user_for_reporting(user_id, agency_id_list)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid user id or agencies ids"
+        )
