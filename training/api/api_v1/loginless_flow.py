@@ -14,19 +14,21 @@ from training.api.auth import JWTUser
 
 router = APIRouter()
 
+
 # This lookup table allows the front-end to send a simple pageID
 # but be redirected to a more complex path. It also allows the
-# backend provide errors if the user does not have the appropriate
-# role for a page (although the data itself is secured by the API)
-page_id_lookup = {
-    'certificates': {'path': '/certificates/', 'required_roles': []},
-    'training_reports': {'path': '/training_reports', 'required_roles': ['Report']},
-    'training_travel': {'path': '/quiz/training_travel/', 'required_roles': []},
-    'training_purchase': {'path': '/quiz/training_purchase/', 'required_roles': []},
-    'training_travel_pc': {'path': '/quiz/training_travel_pc/', 'required_roles': []},
-    'training_purchase_pc': {'path': '/quiz/training_purchase_pc/', 'required_roles': []},
-    'training_fleet_pc': {'path': '/quiz/training_fleet_pc/', 'required_roles': []},
-}
+# backend to provide errors if the user does not have the appropriate
+# role for a front-end page (although the data itself is secured by the API)
+def page_lookup():
+    return {
+        'certificates': {'path': '/certificates/', 'required_roles': []},
+        'training_reports': {'path': '/training_reports', 'required_roles': ['Report']},
+        'training_travel': {'path': '/quiz/training_travel/', 'required_roles': []},
+        'training_purchase': {'path': '/quiz/training_purchase/', 'required_roles': []},
+        'training_travel_pc': {'path': '/quiz/training_travel_pc/', 'required_roles': []},
+        'training_purchase_pc': {'path': '/quiz/training_purchase_pc/', 'required_roles': []},
+        'training_fleet_pc': {'path': '/quiz/training_fleet_pc/', 'required_roles': []},
+    }
 
 
 @router.post("/get-link", status_code=status.HTTP_201_CREATED)
@@ -35,7 +37,8 @@ def send_link(
     user: Union[TempUser, IncompleteTempUser],
     dest: WebDestination,
     repo: UserRepository = Depends(user_repository),
-    cache: UserCache = Depends(UserCache)
+    cache: UserCache = Depends(UserCache),
+    page_id_lookup: dict = Depends(page_lookup)
 ):
     try:
         required_roles = page_id_lookup[dest.page_id]['required_roles']
@@ -61,7 +64,6 @@ def send_link(
                 "name": user_from_db.name,
                 "email": user_from_db.email,
                 "agency_id": user_from_db.agency_id,
-                "roles": user_from_db.roles
             })
     try:
         token = cache.set(user)

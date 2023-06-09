@@ -9,7 +9,6 @@ class TempUser(BaseModel):
     email: EmailStr
     name: str
     agency_id: int
-    roles: list
 
     class Config:
         orm_mode = True
