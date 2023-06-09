@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/Hero.astro';
 import AuthRequired from '@components/AuthRequired.vue';
+import AdminIndex from '@components/AdminIndex.vue';
 
 const pageTitle = "Administration Dashboard";
 
@@ -12,6 +13,6 @@ const pageTitle = "Administration Dashboard";
   </Hero>
 
   <AuthRequired client:only>
-    <p>This is some content that requires auth</p>
+    <AdminIndex client:only />
   </AuthRequired>
 </BaseLayout>

@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Depends
+from training.api.auth import JWTUser
 from training.schemas import User, UserCreate
 from training.repositories import UserRepository
 from training.api.deps import user_repository
@@ -21,7 +22,11 @@ def create_user(user: UserCreate, repo: UserRepository = Depends(user_repository
 
 
 @router.get("/users", response_model=List[User])
-def get_users(agency_id: int | None = None, repo: UserRepository = Depends(user_repository)):
+def get_users(
+    agency_id: int | None = None,
+    repo: UserRepository = Depends(user_repository),
+    user=Depends(JWTUser())
+):
     if agency_id:
         return repo.find_by_agency(agency_id)
     else:

@@ -27,6 +27,10 @@ def vcap_services_settings(settings: BaseSettings) -> Dict[str, Any]:
     if secrets and secrets.credentials.get("SMTP_PASSWORD", None):
         config["SMTP_PASSWORD"] = secrets.credentials["SMTP_PASSWORD"]
 
+    idp = appenv.get_service(label="cloud-gov-identity-provider")
+    if idp and idp.credentials["client_id"]:
+        config["AUTH_CLIENT_ID"] = idp.credentials["client_id"]
+
     return config
 
 
@@ -61,6 +65,12 @@ class Settings(BaseSettings):
     REDIS_PASSWORD: str
     REDIS_TLS: bool = False
     DB_URI: str
+
+    # Authentication settings. The client ID is normally parsed from
+    # VCAP_SERVICES in Cloud Foundry. The authority URL should be set in the
+    # environment or the .env file.
+    AUTH_CLIENT_ID: str
+    AUTH_AUTHORITY_URL: str
 
     class Config:
         env_file = '.env'
