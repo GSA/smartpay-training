@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Depends
-from training.schemas import User, UserCreate
+from training.schemas import User, UserCreate, UserQuizCompletionReportData
 from training.repositories import UserRepository
 from training.api.deps import user_repository
 
@@ -45,4 +45,15 @@ def edit_user_by_id(user_id: int, agency_id_list: list[int], repo: UserRepositor
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="invalid user id or agencies ids"
+        )
+
+
+@router.get("/users/user-quiz-report-data/{report_user_id}", response_model=List[UserQuizCompletionReportData])
+def get_user_quiz_completion_report(report_user_id: int | None = None, repo: UserRepository = Depends(user_repository)):
+    try:
+        return repo.get_user_quiz_completion_report(report_user_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid report user id"
         )

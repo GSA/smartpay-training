@@ -1,5 +1,7 @@
+from sqlalchemy import nullsfirst
 from sqlalchemy.orm import Session
 from training import models, schemas
+from training.schemas import UserQuizCompletionReportData
 from .base import BaseRepository
 
 
@@ -44,3 +46,25 @@ class UserRepository(BaseRepository[models.User]):
                 raise ValueError("invalid agency associated with this user")
         self._session.commit()
         return db_user
+
+    def get_admins_users(self) -> list[models.User]:
+        return self._session.query(models.User).filter(models.User.roles.any(name='Admin')).all()
+
+    def get_report_users(self) -> list[models.User]:
+        return self._session.query(models.User).filter(models.User.roles.any(name='Report')).all()
+
+    def get_user_quiz_completion_report(self, report_user_id: int) -> list[UserQuizCompletionReportData]:
+        report_user = self.find_by_id(report_user_id)
+        if report_user and report_user.report_agencies:
+            allowed_agency_ids = [obj.id for obj in report_user.report_agencies]
+            results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"),
+                                           models.Agency.name.label("agency"), models.Agency.bureau.label("bureau"),
+                                           models.Quiz.name.label("quiz"), models.QuizCompletion.submit_ts.label("completion_date"))
+                       .select_from(models.User)
+                       .join(models.Agency)
+                       .join(models.QuizCompletion)
+                       .join(models.Quiz).filter(models.QuizCompletion.passed, models.User.agency_id.in_(allowed_agency_ids))
+                       .order_by(models.Agency.name.asc(), nullsfirst(models.Agency.bureau.asc()), models.QuizCompletion.submit_ts.desc()).all())
+            return results
+        else:
+            raise ValueError("Invalid Report User")
