@@ -88,3 +88,57 @@ encryption:
   encryption_keys:
   - label: CHANGE-THIS-KEY
     passphrase: CHANGEME
+
+jwt:
+  token:
+    signing-key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIICWgIBAAKBgQCUsdm5Ckv/dYaUWinBceT4UvXvWbFrKi1MJoeBrkzFM/t8U0RH
+      SKfrxaXecYdgeLnQqn2f+HklFCwIdKusc+wF+XGOARqleCg4slHBcBZm+Q92txtR
+      G0Q9qr83/Hx0mToQpbbLGdAEO6SUHijMMvsYG482aIMM4XJfLihh40ePhQIDAQAB
+      AoGAIR3LI88LRgXixz+ddRvspvGzHG+ZeAiYthEOtO8g4frF09anqkigPX5zhqs6
+      P14j5DlUaUBpmrx3Yhq58VqQAh0XrwQZYq2JrmjNnJrptFTJwA7FaZ64b+osckz9
+      gDAMK5iCzAjFyrE4sHTPRpM1Ij+Vpd2GEpeRx/NWe9dMAYECQQDb+kIu2kW0ZsKj
+      gVypU5a5MEdbwC7k+CiXMjLTralqZ7edepNZtP3YWPM7mSKHI2c9AuNLZBFsF7O+
+      4njhb0e9AkEArQtS6S985fxSucjKxjq5Q8OZSJk3C9ENYjCLw5NrvkjrA+nqPEAB
+      tGgnEUo4C3h2oIgo9uMRG54rGW3p41RfaQJAUZE5a0AaaqtT7ubv4gWRtPd27kmT
+      2ek+u9msSRty33a3+hfSfYgEPG23O1ksGWoCRPhGKdVgNHGRf+1gH09xDQI/dEMn
+      cYR2Zg8hhbFii8zorJ6+XgiS812BoHb9cGmb+j0DqZ1/wvs+KffQR82V2h8VlMXm
+      v/nPhL7ANlWizxnhAkA/7STHNWHKWJ08jhWvV0OSXSLrmwnf0CZkZliw1tL38FVf
+      UH3qIxZUJSV4gqcwgsIu/PFU0HzK9lPgH28xTSmz
+      -----END RSA PRIVATE KEY-----
+    claims:
+      exclude:
+        - authorities
+    policy:
+      # Will override global validity policies for the default zone only.
+      accessTokenValiditySeconds: 3600
+      refreshTokenValiditySeconds: 3600
+      activeKeyId: key-id-1
+      keys:
+        key-id-1:
+          signingKey: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIICWgIBAAKBgQCUsdm5Ckv/dYaUWinBceT4UvXvWbFrKi1MJoeBrkzFM/t8U0RH
+            SKfrxaXecYdgeLnQqn2f+HklFCwIdKusc+wF+XGOARqleCg4slHBcBZm+Q92txtR
+            G0Q9qr83/Hx0mToQpbbLGdAEO6SUHijMMvsYG482aIMM4XJfLihh40ePhQIDAQAB
+            AoGAIR3LI88LRgXixz+ddRvspvGzHG+ZeAiYthEOtO8g4frF09anqkigPX5zhqs6
+            P14j5DlUaUBpmrx3Yhq58VqQAh0XrwQZYq2JrmjNnJrptFTJwA7FaZ64b+osckz9
+            gDAMK5iCzAjFyrE4sHTPRpM1Ij+Vpd2GEpeRx/NWe9dMAYECQQDb+kIu2kW0ZsKj
+            gVypU5a5MEdbwC7k+CiXMjLTralqZ7edepNZtP3YWPM7mSKHI2c9AuNLZBFsF7O+
+            4njhb0e9AkEArQtS6S985fxSucjKxjq5Q8OZSJk3C9ENYjCLw5NrvkjrA+nqPEAB
+            tGgnEUo4C3h2oIgo9uMRG54rGW3p41RfaQJAUZE5a0AaaqtT7ubv4gWRtPd27kmT
+            2ek+u9msSRty33a3+hfSfYgEPG23O1ksGWoCRPhGKdVgNHGRf+1gH09xDQI/dEMn
+            cYR2Zg8hhbFii8zorJ6+XgiS812BoHb9cGmb+j0DqZ1/wvs+KffQR82V2h8VlMXm
+            v/nPhL7ANlWizxnhAkA/7STHNWHKWJ08jhWvV0OSXSLrmwnf0CZkZliw1tL38FVf
+            UH3qIxZUJSV4gqcwgsIu/PFU0HzK9lPgH28xTSmz
+            -----END RSA PRIVATE KEY-----
+      # Sets the default validity for all zones
+      global:
+        accessTokenValiditySeconds: 3600
+        refreshTokenValiditySeconds: 3600
+    # This is a feature flag to turn on/off the refresh token issuance behavior. If set to true, the refresh token is only granted to clients with a scope of refresh_token for offline access.
+    refresh:
+      restrict_grant: true
+      unique: false
+      format: jwt
