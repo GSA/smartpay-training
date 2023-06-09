@@ -6,7 +6,6 @@
 
   const user = useStore(profile)
   const isReportUser = computed(() => user.value.roles.some(role => role.name == 'Report'))
-  console.log(isReportUser.value)
 
 </script>
 <template>
@@ -24,7 +23,6 @@
     </button>
   </section>
   <section v-else>
-
     <USWDSAlert      
       status="error"
       class="usa-alert"
@@ -32,6 +30,5 @@
     >
       Your email account is not authorized to access training reports. If you should be authorized, you can contact the SmartPay team to gain access.
     </USWDSAlert>
-
   </section>
 </template>

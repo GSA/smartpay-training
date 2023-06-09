@@ -2,11 +2,7 @@
   import { ref, onErrorCaptured } from "vue"
   import Loginless from './LoginlessFlow.vue';
   import TrainingReportDownload from "./TrainingReportDownload.vue";
-  import { useStore } from '@nanostores/vue'
-  import { profile} from '../stores/user'
   import USWDSAlert from './USWDSAlert.vue'
-
-  const user = useStore(profile)
 
   const error = ref()
 
@@ -63,7 +59,6 @@
           </template>
 
           <TrainingReportDownload />
-
         </Loginless>
       </div>
     </div>
