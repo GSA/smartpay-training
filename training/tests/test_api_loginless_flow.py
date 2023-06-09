@@ -32,12 +32,12 @@ def user_email():
 
 @pytest.fixture
 def user_complete():
-    return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3}
+    return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3, "roles": []}
 
 
 @pytest.fixture
 def page_dest():
-    return {"page_id": "travel_test", "title": "Amazing Training"}
+    return {"page_id": "training_travel", "title": "Amazing Training"}
 
 
 class TestAuth:
@@ -59,7 +59,6 @@ class TestAuth:
         send_email.return_value = "email response"
         fake_cache.set.return_value = 'some_token'
         fake_user_repo.find_by_email.return_value = user_complete
-
         client.post(
             "/api/v1/get-link",
             json={"user": user_complete, "dest": page_dest},

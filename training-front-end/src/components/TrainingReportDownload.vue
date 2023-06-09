@@ -1,0 +1,37 @@
+<script setup>
+  import { computed } from "vue"
+  import { useStore } from '@nanostores/vue'
+  import { profile} from '../stores/user'
+  import USWDSAlert from './USWDSAlert.vue'
+
+  const user = useStore(profile)
+  const isReportUser = computed(() => user.value.roles.some(role => role.name == 'Report'))
+  console.log(isReportUser.value)
+
+</script>
+<template>
+  <section 
+    v-if="isReportUser"  
+    class="usa-prose"
+  >
+    <h2>Download Your Report</h2>
+    <p>
+      We’ve created a report for you in CSV format. You can open it in the spreadsheet 
+      application of your choice (e.g. Microsoft Excel, Google Sheets, Apple Numbers).
+    </p>
+    <button class="usa-button">
+      Download Report
+    </button>
+  </section>
+  <section v-else>
+
+    <USWDSAlert      
+      status="error"
+      class="usa-alert"
+      heading="You are not authorized to receive reports."
+    >
+      Your email account is not authorized to access training reports. If you should be authorized, you can contact the SmartPay team to gain access.
+    </USWDSAlert>
+
+  </section>
+</template>

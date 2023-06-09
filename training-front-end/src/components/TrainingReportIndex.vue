@@ -1,8 +1,7 @@
 <script setup>
   import { ref, onErrorCaptured } from "vue"
   import Loginless from './LoginlessFlow.vue';
-  import CertificateTable from "./CertificateTable.vue";
-  import CertificateUserTable from "./CertificateUserTable.vue";
+  import TrainingReportDownload from "./TrainingReportDownload.vue";
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
   import USWDSAlert from './USWDSAlert.vue'
@@ -20,7 +19,13 @@
 	}
 
   onErrorCaptured((err) => {
-    setError(err)
+    if (err.message == 'Unauthorized'){
+      err = {
+        name: 'You are not authorized to receive reports.',
+        message: 'Your email account is not authorized to access training reports. If you should be authorized, you can contact the SmartPay team to gain access.'
+      }
+      setError(err)
+    }
     return false
   })
 </script>
@@ -31,15 +36,15 @@
       <div class="tablet:grid-col-12">
         <USWDSAlert
           v-if="error"
-          class="tablet:grid-col-8"
-          status="warning"
+          class="tablet:grid-col-12 margin-bottom-4"
+          status="error"
           :heading="error.name"
         >
           {{ error.message }}
         </USWDSAlert>
 
         <Loginless
-          page-id="pageId"
+          page-id="training_reports"
           title="Training Reprts"
           header="header"
           link-destination-text="the training reports you are eligible to receive"
@@ -57,15 +62,8 @@
             <p>Before you can access reports, you'll need to create and complete your profile.</p>
           </template>
 
-          <div class="usa-prose">
-            <h2>
-              Welcome {{ user.name }}!
-            </h2>
-            <CertificateUserTable />
-            <div class="margin-top-6">
-              
-            </div>
-          </div>
+          <TrainingReportDownload />
+
         </Loginless>
       </div>
     </div>
