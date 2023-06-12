@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 class Quiz(Base):
     __tablename__ = "quizzes"
 
-    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column()
     topic: Mapped[str] = mapped_column()
     audience: Mapped[str] = mapped_column()

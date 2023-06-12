@@ -73,5 +73,27 @@ def test_find_all(user_repo_with_data: UserRepository, testdata: dict):
 
 
 def test_delete_by_id(user_repo_with_data: UserRepository, valid_user_ids: List[int]):
+    db_user = user_repo_with_data.find_by_id(valid_user_ids[0])
+    db_user.roles = []
+    db_user.report_agencies = []
+    user_repo_with_data._session.commit()
     user_repo_with_data.delete_by_id(valid_user_ids[0])
     assert user_repo_with_data.find_by_id(valid_user_ids[0]) is None
+
+
+def test_edit_user_for_reporting(user_repo_with_data: UserRepository, valid_user_ids: List[int]):
+    valid_user_id = valid_user_ids[0]
+    valid_agency = user_repo_with_data._session.query(models.Agency).first()
+    valid_agency_list = [valid_agency.id]
+    result = user_repo_with_data.edit_user_for_reporting(valid_user_id, valid_agency_list)
+    assert result is not None
+    assert result.roles is not None and any(role.name == "Report" for role in result.roles)
+    assert result.report_agencies is not None and any(agency.id == valid_agency.id for agency in result.report_agencies)
+
+
+def test_invalid_edit_user_for_reporting(user_repo_with_data: UserRepository):
+    invalid_user_id = 0
+    invalid_agency_id_list = [0]
+
+    with pytest.raises(Exception):
+        user_repo_with_data.create(invalid_user_id, invalid_agency_id_list)

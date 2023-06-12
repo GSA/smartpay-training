@@ -10,8 +10,8 @@ from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository
-from training.schemas import AgencyCreate
+from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository, RoleRepository
+from training.schemas import AgencyCreate, RoleCreate
 from training.services import QuizService
 from training.config import settings
 from . import factories
@@ -93,6 +93,10 @@ def db_with_data(db: Session, testdata: dict):
     quiz_completion_fail = models.QuizCompletion(user_id=user_ids[-1], quiz_id=quiz_ids[-1], passed=False)
     db.add(quiz_completion_fail)
     db.commit()
+    for role in testdata["roles"]:
+        role = models.Role(name=role["name"])
+        db.add(role)
+        db.commit()
     yield db
 
 
@@ -305,3 +309,29 @@ def mock_agency_repo() -> Generator[AgencyRepository, None, None]:
     app.dependency_overrides[agency_repository] = lambda: mock
     yield mock
     app.dependency_overrides = {}
+
+
+@pytest.fixture
+def role_repo_empty(db: Session) -> Generator[RoleRepository, None, None]:
+    '''
+    Provides an RoleRepository injected with an empty database.
+    '''
+    yield RoleRepository(session=db)
+
+
+@pytest.fixture
+def role_repo_with_data(db_with_data: Session) -> Generator[RoleRepository, None, None]:
+    '''
+    Provides an RoleRepository injected with a populated database.
+    '''
+    yield RoleRepository(session=db_with_data)
+
+
+@pytest.fixture
+def valid_role(testdata: dict) -> Generator[RoleCreate, None, None]:
+    '''
+    Provides a valid agency.
+    '''
+    jsondata = testdata["roles"][0]
+    role = RoleCreate(name=jsondata["name"])
+    yield role
