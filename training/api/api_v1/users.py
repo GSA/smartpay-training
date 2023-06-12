@@ -1,8 +1,10 @@
 from typing import List
-from fastapi import APIRouter, status, HTTPException, Depends
-from training.schemas import User, UserCreate, UserQuizCompletionReportData
+from fastapi import APIRouter, status, HTTPException, Response, Depends
+from training.schemas import User, UserCreate
 from training.repositories import UserRepository
 from training.api.deps import user_repository
+from io import StringIO
+import csv
 
 
 router = APIRouter()
@@ -48,12 +50,25 @@ def edit_user_by_id(user_id: int, agency_id_list: list[int], repo: UserRepositor
         )
 
 
-@router.get("/users/user-quiz-report-data/{report_user_id}", response_model=List[UserQuizCompletionReportData])
-def get_user_quiz_completion_report(report_user_id: int | None = None, repo: UserRepository = Depends(user_repository)):
+@router.post("/users/download-user-quiz-completion-report/{report_user_id}")
+def download_report_csv(report_user_id: int | None = None, repo: UserRepository = Depends(user_repository)):
     try:
-        return repo.get_user_quiz_completion_report(report_user_id)
+        results = repo.get_user_quiz_completion_report(report_user_id)
+
+        output = StringIO()
+        writer = csv.writer(output)
+
+        # header row
+        writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Date'])
+        for item in results:
+            # data row
+            writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y")])
+
+        headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingQuizCompletionReport.csv"'}
+        return Response(output.getvalue(), headers=headers, media_type='application/csv')
+
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="invalid report user id"
+            detail="invalid report user"
         )
