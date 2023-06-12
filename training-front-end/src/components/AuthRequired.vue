@@ -1,3 +1,7 @@
+<!--
+  This component can be wrapped around anything that requires authentication.
+-->
+
 <script setup>
   import { ref, onMounted } from 'vue'
   import AuthService from '../services/auth'
