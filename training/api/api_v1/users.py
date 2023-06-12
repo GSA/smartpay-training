@@ -4,7 +4,6 @@ from training.schemas import User, UserCreate
 from training.repositories import UserRepository
 from training.api.deps import user_repository
 
-
 router = APIRouter()
 
 
