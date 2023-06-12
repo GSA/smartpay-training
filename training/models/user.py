@@ -13,5 +13,5 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True, index=True)
     name: Mapped[str] = mapped_column()
     agency_id: Mapped[int] = mapped_column(ForeignKey("agencies.id"))
-    roles: Mapped[Role] = relationship(secondary="users_x_roles")
+    roles: Mapped[list[Role]] = relationship(secondary="users_x_roles")
     report_agencies: Mapped[Agency] = relationship(secondary="report_users_x_agencies")

@@ -1,10 +1,11 @@
+import csv
+from io import StringIO
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Response, Depends
 from training.schemas import User, UserCreate
 from training.repositories import UserRepository
 from training.api.deps import user_repository
-from io import StringIO
-import csv
+from training.api.auth import user_from_form
 
 
 router = APIRouter()
@@ -50,25 +51,24 @@ def edit_user_by_id(user_id: int, agency_id_list: list[int], repo: UserRepositor
         )
 
 
-@router.post("/users/download-user-quiz-completion-report/{report_user_id}")
-def download_report_csv(report_user_id: int | None = None, repo: UserRepository = Depends(user_repository)):
+@router.post("/users/download-user-quiz-completion-report")
+def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Depends(user_repository)):
     try:
-        results = repo.get_user_quiz_completion_report(report_user_id)
-
-        output = StringIO()
-        writer = csv.writer(output)
-
-        # header row
-        writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Date'])
-        for item in results:
-            # data row
-            writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y")])
-
-        headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingQuizCompletionReport.csv"'}
-        return Response(output.getvalue(), headers=headers, media_type='application/csv')
-
+        results = repo.get_user_quiz_completion_report(user['id'])
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="invalid report user"
         )
+
+    output = StringIO()
+    writer = csv.writer(output)
+
+    # header row
+    writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Date'])
+    for item in results:
+        # data row
+        writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y")])  # noqa 501
+
+    headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingQuizCompletionReport.csv"'}
+    return Response(output.getvalue(), headers=headers, media_type='application/csv')

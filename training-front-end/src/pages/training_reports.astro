@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroTraining from '@components/HeroTraining.astro';
+import TrainingReportIndex from '@components/TrainingReportIndex.vue';
+
+const pageTitle = "Training Reports";
+---
+<BaseLayout title={pageTitle}>
+    <HeroTraining background_class='bg_smartpay_cool_grey'>
+      Training Reports
+      <span slot="subheader">
+          A/OPCs
+      </span>
+    </HeroTraining>
+    <TrainingReportIndex client:only />
+</BaseLayout>

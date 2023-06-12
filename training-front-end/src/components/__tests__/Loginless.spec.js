@@ -172,6 +172,28 @@ describe('Loginless', () => {
     expect(error_handler).toBeCalledTimes(1)
   })
 
+  it('throws specific error on 401 response code', async () => {
+    /* this error should be handled by parent component */
+    const error_handler =  vi.fn()
+    const wrapper = await mount(Loginless, { 
+      props,
+      global: {
+        config: {
+          errorHandler: error_handler
+        }
+      }
+    })
+    
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: false, status:401, json: () => Promise.resolve(fetchData) })
+    })
+    await submitEmail(wrapper, 'test@example.com') 
+    await flushPromises()
+
+    expect(error_handler).toBeCalledTimes(1)
+    expect(error_handler.mock.calls[0][0]).toEqual(Error("Unauthorized"))
+  })
+
   it('confirms the user email on the confirmation page', async () => {
     const wrapper = await mount(Loginless, {props})
     vi.spyOn(global, 'fetch').mockImplementation(() => {

@@ -1,5 +1,5 @@
 redis==4.4.4
-fastapi==0.89.1
+fastapi==0.97.0
 uvicorn[standard]==0.20.0
 pyjwt==2.6.0
 fastapi_mail==1.2.5
@@ -8,3 +8,4 @@ SQLAlchemy==2.0.5.post1
 psycopg2==2.9.5
 alembic==1.10.2
 PyMuPDF==1.21.1
+python-multipart==0.0.6
