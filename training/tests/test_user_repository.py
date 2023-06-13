@@ -97,3 +97,20 @@ def test_invalid_edit_user_for_reporting(user_repo_with_data: UserRepository):
 
     with pytest.raises(Exception):
         user_repo_with_data.create(invalid_user_id, invalid_agency_id_list)
+
+
+def test_search_users_by_name(user_repo_with_data: UserRepository, valid_user_ids: List[int]):
+    valid_user_id = valid_user_ids[0]
+    db_user = user_repo_with_data.find_by_id(valid_user_id)
+    search_criteria = db_user.name[:-1]
+    results = user_repo_with_data.search_users_by_name(search_criteria)
+    assert len(results) >= 1
+    for item in results:
+        assert search_criteria in item.name
+
+
+def test_invalid_search_users_by_name(user_repo_with_data: UserRepository):
+    search_criteria = None
+
+    with pytest.raises(Exception):
+        user_repo_with_data.search_users_by_name(search_criteria)
