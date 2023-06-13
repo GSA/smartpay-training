@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from training.main import app
 from training.api.api_v1.loginless_flow import page_lookup
 from training.data import UserCache
-from training.schemas import User, TempUser, Role
+from training.schemas import User, TempUser, Role, Agency
 from training.api.deps import user_repository
 from training.config import settings
 
@@ -47,16 +47,19 @@ def fake_user_repo():
 
 @pytest.fixture
 def user_complete():
-    return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3, "roles": [], "report_agencies": []}
+    return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3, "agency": {"name": 'test name', "id": 3}, "roles": [],
+            "report_agencies": []}
 
 
 @pytest.fixture
 def authorized_complete():
+
     return User(
         id=100,
         name="Stephen Dedalus",
         email=EmailStr("test@example.com"),
         agency_id=3,
+        agency=Agency(id=3, name='test name', bureau="test"),
         roles=[Role(id=1, name='Wizard')],
         report_agencies=[]
     )
