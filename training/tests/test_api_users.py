@@ -66,11 +66,11 @@ def test_get_user_invalid_id(mock_user_repo: UserRepository):
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_search_users(mock_user_repo: UserRepository):
+def test_search_users_by_name(mock_user_repo: UserRepository):
     users = [UserSchemaFactory.build(name="test name") for x in range(2)]
-    mock_user_repo.search_users.return_value = users
+    mock_user_repo.search_users_by_name.return_value = users
     response = client.get(
-        "/api/v1/users/search-users/test"
+        "/api/v1/users/search-users-by-name/test"
     )
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == 2

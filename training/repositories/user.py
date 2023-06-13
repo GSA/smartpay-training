@@ -66,8 +66,8 @@ class UserRepository(BaseRepository[models.User]):
         else:
             raise ValueError("Invalid Report User")
 
-    def search_users(self, search_criteria: str) -> list[models.User]:
-        if (search_criteria and search_criteria.strip() != ''):
-            return self._session.query(models.User).filter(models.User.name.ilike(f"%{search_criteria}%")).all()
+    def search_users_by_name(self, name: str) -> list[models.User]:
+        if (name and name.strip() != ''):
+            return self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).all()
         else:
             raise ValueError("Invalid search criteria")
