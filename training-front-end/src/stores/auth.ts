@@ -22,8 +22,12 @@ const events = {
 }
 setPersistentEngine(window.sessionStorage, events)
 
-export const redirectTarget = persistentAtom<string>("authRedirectTarget", "")
+export const redirectTarget = persistentAtom<string | undefined>("authRedirectTarget", "")
 
 export const setRedirectTarget = action(redirectTarget, "setRedirectTarget", (store, target) => {
   store.set(target)
+})
+
+export const clearRedirectTarget = action(redirectTarget, "clearRedirectTarget", (store) => {
+  store.set(undefined)
 })

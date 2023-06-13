@@ -1,41 +1,43 @@
 <script setup>
-  import { onBeforeMount, onMounted, ref } from 'vue'
-  import AuthService from '../services/auth'
+  import { onBeforeMount, ref } from 'vue'
+  import { useStore } from '@nanostores/vue'
+  import { profile } from '../stores/user'
+  import USWDSAlert from './USWDSAlert.vue'
 
-  const auth = new AuthService()
-  const users = ref([])
-  let token = ""
-
-  const base_url = import.meta.env.PUBLIC_API_BASE_URL
+  const authUser = useStore(profile)
+  const userList = ref([])
+  const error = ref()
 
   function loadUsers() {
-    const url = `${base_url}/api/v1/users`
+    const usersEndpoint = `${import.meta.env.PUBLIC_API_BASE_URL}/api/v1/users`
 
-    fetch(url, {
+    fetch(usersEndpoint, {
       method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
+      headers: { "Authorization": `Bearer ${authUser.value.jwt}` }
     }).then((res) => {
       res.json().then((data) => {
-        users.value = data
+        userList.value = data
       })
     }).catch((err) => {
-      console.log("ERROR", err)
+      error.value = err
     })
   }
 
   onBeforeMount(() => {
-    auth.getAccessToken().then((data) => {
-      token = data
-      loadUsers()
-    })
+    loadUsers()
   })
 
 </script>
 
 <template>
+  <USWDSAlert
+    v-if="error"
+    status="warning"
+    :heading="error.name"
+  >
+    {{ error.message }}
+  </USWDSAlert>
+
   <table class="usa-table">
     <thead>
       <th>Name</th>
@@ -43,7 +45,7 @@
       <th>Agency</th>
     </thead>
     <tbody>
-      <tr v-for="user in users">
+      <tr v-for="user in userList">
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.agency_id }}</td>

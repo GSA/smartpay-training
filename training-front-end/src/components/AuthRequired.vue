@@ -3,30 +3,19 @@
 -->
 
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { useStore } from '@nanostores/vue'
   import AuthService from '../services/auth'
   import USWDSAlert from './USWDSAlert.vue'
   import { setRedirectTarget } from '../stores/auth'
+  import { profile } from '../stores/user'
 
   const auth = new AuthService()
-  const isAuthenticated = ref(false)
-
-  onMounted(() => {
-    auth.getUser().then(user => {
-      if (user) {
-        isAuthenticated.value = true
-      } else {
-        setRedirectTarget(window.location.href)
-      }
-    })
-  })
+  const user = useStore(profile)
+  const isAuthenticated = !!user.value.jwt
 
   const handleLogin = () => {
+    setRedirectTarget(window.location.href)
     auth.login()
-  }
-
-  const handleLogout = () => {
-    auth.logout()
   }
 </script>
 
@@ -41,10 +30,6 @@
         Sign in using SecureAuth
       </button>
     </div>
-
-    <button v-if="isAuthenticated" class="usa-button" @click="handleLogout">
-      Logout
-    </button>
     <slot v-if="isAuthenticated"/>
   </div>
 </template>
