@@ -17,6 +17,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     agency_id: int
+    agency: Agency
     roles: list[Role]
     report_agencies: list[Agency]
 

@@ -50,9 +50,6 @@ class UserRepository(BaseRepository[models.User]):
     def get_admins_users(self) -> list[models.User]:
         return self._session.query(models.User).filter(models.User.roles.any(name='Admin')).all()
 
-    def get_report_users(self) -> list[models.User]:
-        return self._session.query(models.User).filter(models.User.roles.any(name='Report')).all()
-
     def get_user_quiz_completion_report(self, report_user_id: int) -> list[UserQuizCompletionReportData]:
         report_user = self.find_by_id(report_user_id)
         if report_user and report_user.report_agencies:
@@ -68,3 +65,9 @@ class UserRepository(BaseRepository[models.User]):
             return results
         else:
             raise ValueError("Invalid Report User")
+
+    def search_users(self, search_criteria: str) -> list[models.User]:
+        if (search_criteria and search_criteria.strip() != ''):
+            return self._session.query(models.User).filter(models.User.name.ilike(f"%{search_criteria}%")).all()
+        else:
+            raise ValueError("Invalid search criteria")
