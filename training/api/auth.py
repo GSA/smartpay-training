@@ -1,14 +1,37 @@
-
 from fastapi import Request, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
+import json
 from jwt.exceptions import InvalidTokenError
 from training.config import settings
-from urllib import request
-import json
+from urllib.request import urlopen
 
 
 class JWTUser(HTTPBearer):
+    # Represents a JWT issued by our API.
+
+    async def __call__(self, request: Request):
+        credentials: HTTPAuthorizationCredentials | None = await super().__call__(request)
+        if credentials:
+            if not credentials.scheme == "Bearer":
+                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
+            user = self.decode_jwt(credentials.credentials)
+            if user is None:
+                raise HTTPException(status_code=403, detail="Invalid or expired token.")
+            return user
+        else:
+            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+
+    def decode_jwt(self, token: str):
+        try:
+            return jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
+        except InvalidTokenError:
+            return
+
+
+class UAAJWTUser(HTTPBearer):
+    # Represents a JWT issued by an OAuth server.
+
     async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials | None = await super().__call__(request)
         if credentials:
@@ -24,23 +47,8 @@ class JWTUser(HTTPBearer):
     def decode_jwt(self, token: str):
         token_header = jwt.get_unverified_header(token)
         key_id = token_header.get("kid")
-
-        # Determine if the token is loginless or from an authentication service
-        if key_id is None:
-            # Loginless token
-            return self.decode_loginless_jwt(token)
-        else:
-            # Authentication token
-            return self.decode_auth_jwt(token, key_id)
-
-    def decode_loginless_jwt(self, token: str):
-        try:
-            return jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
-        except InvalidTokenError:
-            return
-
-    def decode_auth_jwt(self, token: str, key_id: str):
         jwk = self.get_jwks().get(key_id)
+
         if jwk is None:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -51,7 +59,7 @@ class JWTUser(HTTPBearer):
                 token,
                 jwk.get("key"),
                 algorithms=[jwk.get("alg")],
-                audience="test_client_id"
+                audience=settings.AUTH_CLIENT_ID
             )
         except InvalidTokenError:
             return
@@ -67,7 +75,7 @@ class JWTUser(HTTPBearer):
 
         jwks_endpoint = self.discover_jwks_endpoint()
 
-        with request.urlopen(jwks_endpoint) as res:
+        with urlopen(jwks_endpoint) as res:
             jwks = json.load(res)
 
         if jwks.get("keys") is None:
@@ -96,7 +104,7 @@ class JWTUser(HTTPBearer):
         url_components = [settings.AUTH_AUTHORITY_URL, "/.well-known/openid-configuration"]
         config_endpoint = '/'.join(s.strip('/') for s in url_components)
 
-        with request.urlopen(config_endpoint) as res:
+        with urlopen(config_endpoint) as res:
             data = json.load(res)
             jwks_endpoint_uri = data.get("jwks_uri")
 
