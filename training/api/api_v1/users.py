@@ -2,7 +2,7 @@ import csv
 from io import StringIO
 from typing import List
 from fastapi import APIRouter, status, HTTPException, Response, Depends
-from training.schemas import User, UserCreate
+from training.schemas import User, UserCreate, UserSearchResult
 from training.repositories import UserRepository
 from training.api.deps import user_repository
 from training.api.auth import user_from_form
@@ -74,7 +74,7 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
     return Response(output.getvalue(), headers=headers, media_type='application/csv')
 
 
-@router.get("/users/search-users-by-name/{name}", response_model=List[User])
+@router.get("/users/search-users-by-name/{name}", response_model=UserSearchResult)
 def search_users_by_name(name: str, page_number: int, repo: UserRepository = Depends(user_repository)):
     try:
         return repo.search_users_by_name(name, page_number)

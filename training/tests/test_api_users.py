@@ -3,6 +3,7 @@ from fastapi import status
 from training.main import app
 from training.repositories import UserRepository
 from .factories import UserCreateSchemaFactory, UserSchemaFactory
+from training.schemas import UserSearchResult
 
 
 client = TestClient(app)
@@ -68,9 +69,12 @@ def test_get_user_invalid_id(mock_user_repo: UserRepository):
 
 def test_search_users_by_name(mock_user_repo: UserRepository):
     users = [UserSchemaFactory.build(name="test name") for x in range(2)]
-    mock_user_repo.search_users_by_name.return_value = users
+    user_search_result = UserSearchResult(users=users, total_count=2)
+    mock_user_repo.search_users_by_name.return_value = user_search_result
     response = client.get(
         "/api/v1/users/search-users-by-name/test?page_number=1"
     )
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == 2
+    assert response.json()["total_count"] == 2
+    assert response.json()["users"] == users

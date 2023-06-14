@@ -103,9 +103,9 @@ def test_search_users_by_name(user_repo_with_data: UserRepository, valid_user_id
     valid_user_id = valid_user_ids[0]
     db_user = user_repo_with_data.find_by_id(valid_user_id)
     search_criteria = db_user.name[:-1]
-    results = user_repo_with_data.search_users_by_name(search_criteria, 1)
-    assert len(results) >= 1
-    for item in results:
+    result = user_repo_with_data.search_users_by_name(search_criteria, 1)
+    assert result is not None
+    for item in result.users:
         assert search_criteria in item.name
 
 
