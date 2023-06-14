@@ -34,7 +34,7 @@
       heading="You are not authorized to receive reports."
     >
       Your email account is not authorized to access training reports. If you should be authorized, you can 
-      <a class="usa-link" href="mailto:gsa_smartpay@gsa.gov">contact the SmartPay team to gain access.</a>
+      <a class="usa-link" href="mailto:gsa_smartpay@gsa.gov">contact the SmartPay team</a> to gain access.
     </USWDSAlert>
   </section>
 </template>
