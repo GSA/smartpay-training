@@ -1,4 +1,4 @@
-from fastapi import Request, HTTPException, status
+from fastapi import Request, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Annotated
 import jwt
@@ -117,6 +117,23 @@ class UAAJWTUser(HTTPBearer):
             )
 
         return jwks_endpoint_uri
+
+
+class RequireRole:
+    def __init__(self, required_roles: list[str]) -> None:
+        self.required_roles = set(required_roles)
+
+    def __call__(self, user=Depends(JWTUser())):
+        try:
+            user_roles = user['roles']
+        except KeyError:
+            raise HTTPException(status_code=401, detail="Not Authorized")
+
+        if all(role in user_roles for role in self.required_roles):
+            return user
+        else:
+            raise HTTPException(status_code=401, detail="Not Authorized")
+
 
 def user_from_form(jwtToken: Annotated[str, Form()]):
     try:

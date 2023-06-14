@@ -33,3 +33,11 @@ class UserQuizCompletionReportData(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserSearchResult(BaseModel):
+    users: list[User]
+    total_count: int
+
+    class Config:
+        orm_mode = True
