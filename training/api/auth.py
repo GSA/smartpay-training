@@ -1,8 +1,10 @@
 
 from fastapi import Request, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Annotated
 import jwt
 from training.config import settings
+from fastapi import Form
 
 
 class JWTUser(HTTPBearer):
@@ -39,3 +41,10 @@ class RequireRole:
             return user
         else:
             raise HTTPException(status_code=401, detail="Not Authorized")
+
+
+def user_from_form(jwtToken: Annotated[str, Form()]):
+    try:
+        return jwt.decode(jwtToken, settings.JWT_SECRET, algorithms=["HS256"])
+    except jwt.exceptions.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Not Authorized")

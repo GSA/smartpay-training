@@ -1,13 +1,8 @@
 <script setup>
   import { ref, onErrorCaptured } from "vue"
   import Loginless from './LoginlessFlow.vue';
-  import CertificateTable from "./CertificateTable.vue";
-  import CertificateUserTable from "./CertificateUserTable.vue";
-  import { useStore } from '@nanostores/vue'
-  import { profile} from '../stores/user'
+  import TrainingReportDownload from "./TrainingReportDownload.vue";
   import USWDSAlert from './USWDSAlert.vue'
-
-  const user = useStore(profile)
 
   const error = ref()
 
@@ -20,7 +15,13 @@
 	}
 
   onErrorCaptured((err) => {
-    setError(err)
+    if (err.message == 'Unauthorized'){
+      err = {
+        name: 'You are not authorized to receive reports.',
+        message: 'Your email account is not authorized to access training reports. If you should be authorized, you can contact the SmartPay team to gain access.'
+      }
+      setError(err)
+    }
     return false
   })
 </script>
@@ -31,40 +32,33 @@
       <div class="tablet:grid-col-12">
         <USWDSAlert
           v-if="error"
-          class="tablet:grid-col-8"
-          status="warning"
+          class="tablet:grid-col-12 margin-bottom-4"
+          status="error"
           :heading="error.name"
         >
           {{ error.message }}
         </USWDSAlert>
 
         <Loginless
-          page-id="certificates"
-          title="Access Certificates"
+          page-id="training_reports"
+          title="Training Reprts"
           header="header"
-          link-destination-text="your past certificates"
+          link-destination-text="the training reports you are eligible to receive"
           :allow-registration="false"
           @start-loading="startLoading"
           @error="setError"
         >
           <template #initial-greeting>
-            <p>Enter your email address to get access to your previously earned certificates. You'll receive an email with an access link.</p>
+            <h2>Confirm your email to gain report access</h2>
+            <p>Enter your email address to get access to reports. You'll receive an email with an access link.</p>
           </template>
             
           <template #more-info>
             <h2>Welcome! </h2>
-            <p>Before you can access the certificate page, you'll need to create and complete your profile.</p>
+            <p>Before you can access reports, you'll need to create and complete your profile.</p>
           </template>
 
-          <div class="usa-prose">
-            <h2>
-              Welcome {{ user.name }}!
-            </h2>
-            <CertificateUserTable />
-            <div class="margin-top-6">
-              <CertificateTable />
-            </div>
-          </div>
+          <TrainingReportDownload />
         </Loginless>
       </div>
     </div>

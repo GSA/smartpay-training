@@ -1,8 +1,11 @@
+import csv
+from io import StringIO
 from typing import List
-from fastapi import APIRouter, status, HTTPException, Depends
+from fastapi import APIRouter, status, HTTPException, Response, Depends
 from training.schemas import User, UserCreate
 from training.repositories import UserRepository
 from training.api.deps import user_repository
+from training.api.auth import user_from_form
 
 
 router = APIRouter()
@@ -35,3 +38,49 @@ def get_user(id: int, repo: UserRepository = Depends(user_repository)):
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return db_user
+
+
+@router.put("/users/edit-user-for-reporting", response_model=User)
+def edit_user_by_id(user_id: int, agency_id_list: list[int], repo: UserRepository = Depends(user_repository)):
+    try:
+        return repo.edit_user_for_reporting(user_id, agency_id_list)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid user id or agencies ids"
+        )
+
+
+@router.post("/users/download-user-quiz-completion-report")
+def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Depends(user_repository)):
+    try:
+        results = repo.get_user_quiz_completion_report(user['id'])
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid report user"
+        )
+
+    output = StringIO()
+    writer = csv.writer(output)
+
+    # header row
+    writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Date'])
+    for item in results:
+        # data row
+        writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y")])  # noqa 501
+
+    headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingQuizCompletionReport.csv"'}
+    return Response(output.getvalue(), headers=headers, media_type='application/csv')
+
+
+@router.get("/users/search-users-by-name/{name}", response_model=List[User])
+def search_users_by_name(name: str, repo: UserRepository = Depends(user_repository)):
+    try:
+        return repo.search_users_by_name(name)
+
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid search criteria"
+        )

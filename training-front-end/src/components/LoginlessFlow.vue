@@ -109,6 +109,7 @@
   const isFlowComplete = ref(false)
   const unregisteredEmail = ref(false)
   const showSpinner = ref(false)
+  const showFedWarning = ref(true)
 
   function clearToken() {
     const url = new URL(window.location);
@@ -134,6 +135,7 @@
   })
 
   async function start_email_flow() {
+    showFedWarning.value = true
     const validation = unregisteredEmail.value ? v_all_info$ : v_email$
     const isFormValid = await validation.value.$validate()
 
@@ -163,6 +165,7 @@
         })
       })
     } catch (err) {
+      showFedWarning.value = false
       isLoading.value = false
       showSpinner.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
@@ -171,8 +174,13 @@
       throw e
     }
 
-    if (! res.ok) {
+    if (!res.ok) {
+      showFedWarning.value = false
+      isLoading.value = false
       showSpinner.value = false;
+      if (res.status == 401) {
+        throw new Error("Unauthorized")
+      }
       throw new Error("Error contacting server")
     }
 
@@ -187,7 +195,6 @@
       // any other 2xx response should assume
       // it worked, but we need more info
       unregisteredEmail.value = true
-
     }
     isLoading.value = false
     showSpinner.value = false
@@ -206,7 +213,7 @@
         <h2 class="usa-prose">
           Check your email
         </h2>
-        <p>We just sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
+        <p>We sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
 
         <p>Not the right email? <a href=".">Send another email</a></p>
       </div>
@@ -272,6 +279,7 @@
         class="usa-prose"
       >
         <USWDSAlert
+          v-if="showFedWarning"
           status="warning"
           class="usa-alert--slim"
           :has-heading="false"
