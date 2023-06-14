@@ -75,9 +75,9 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
 
 
 @router.get("/users/search-users-by-name/{name}", response_model=List[User])
-def search_users_by_name(name: str, repo: UserRepository = Depends(user_repository)):
+def search_users_by_name(name: str, page_number: int, repo: UserRepository = Depends(user_repository)):
     try:
-        return repo.search_users_by_name(name)
+        return repo.search_users_by_name(name, page_number)
 
     except ValueError:
         raise HTTPException(

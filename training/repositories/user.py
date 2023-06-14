@@ -66,8 +66,10 @@ class UserRepository(BaseRepository[models.User]):
         else:
             raise ValueError("Invalid Report User")
 
-    def search_users_by_name(self, name: str) -> list[models.User]:
-        if (name and name.strip() != ''):
-            return self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).all()
+    def search_users_by_name(self, name: str, page_number: int) -> list[models.User]:
+        if (name and name.strip() != '' and page_number > 0):
+            page_size = 25
+            offset = (page_number - 1) * page_size
+            return self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).limit(page_size).offset(offset).all()
         else:
             raise ValueError("Invalid search criteria")

@@ -70,7 +70,7 @@ def test_search_users_by_name(mock_user_repo: UserRepository):
     users = [UserSchemaFactory.build(name="test name") for x in range(2)]
     mock_user_repo.search_users_by_name.return_value = users
     response = client.get(
-        "/api/v1/users/search-users-by-name/test"
+        "/api/v1/users/search-users-by-name/test?page_number=1"
     )
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == 2
