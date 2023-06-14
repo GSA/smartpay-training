@@ -1,6 +1,5 @@
 import { persistentAtom, setPersistentEngine } from '@nanostores/persistent'
 import { action, computed } from 'nanostores'
-import AuthService from '../services/auth'
 
 /*
  * Change default to use sessionStorage instead of localStorage,

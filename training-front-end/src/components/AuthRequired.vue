@@ -22,14 +22,20 @@
 <template>
   <div class="padding-top-4 padding-bottom-4 grid-container">
     <div v-if="!isAuthenticated">
-      <USWDSAlert :hasHeading="false" status="error">
+      <USWDSAlert
+        :has-heading="false"
+        status="error"
+      >
         You need to sign in to use this feature.
       </USWDSAlert>
 
-      <button class="usa-button" @click="handleLogin">
+      <button
+        class="usa-button"
+        @click="handleLogin"
+      >
         Sign in using SecureAuth
       </button>
     </div>
-    <slot v-if="isAuthenticated"/>
+    <slot v-if="isAuthenticated" />
   </div>
 </template>

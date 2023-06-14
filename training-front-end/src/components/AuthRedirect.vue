@@ -30,7 +30,8 @@
     <div v-if="error">
       <USWDSAlert
         heading="Sorry, we encountered a problem while attempting to log in"
-        status="error">
+        status="error"
+      >
         {{ error }}
       </USWDSAlert>
       <p><a href="/">Return to Home</a></p>

@@ -45,7 +45,10 @@
       <th>Agency</th>
     </thead>
     <tbody>
-      <tr v-for="user in userList">
+      <tr
+        v-for="user in userList"
+        :key="user.id"
+      >
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.agency_id }}</td>
