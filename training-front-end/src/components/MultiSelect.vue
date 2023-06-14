@@ -15,6 +15,10 @@
     }
   })
   const emit = defineEmits(['checkItem'])
+  
+  function isChecked(id) {
+    return props.values.some(item => item.id == id)
+  }
 
   const filtereditems = computed(() => props.items && props.items.filter(
     item => item
@@ -43,7 +47,7 @@
               type="checkbox" 
               name="agencies[]" 
               :value="item.id"
-              :checked="values.hasOwnProperty(item.id)"
+              :checked="isChecked(item.id)"
               @change="$emit('checkItem', item, $event.target.checked)"
             >
             <label class="usa-checkbox__label agency-name" :for="item.id">{{ item.name }}</label>

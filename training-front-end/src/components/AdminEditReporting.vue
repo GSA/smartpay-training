@@ -8,36 +8,14 @@
   import { required, requiredIf, helpers } from '@vuelidate/validators';
   const { withMessage } = helpers
 
-
-const user = reactive({
-    "email": "mark.meyer@gsa.gov",
-    "name": "Mark Meyer",
-    "id": 1,
-    "agency_id": 51,
-    "agency": {
-      "name": "General Services Administration",
-      "bureau": null,
-      "id": 51
-    },
-    "roles": [
-      {
-        "name": "Report",
-        "id": 1
-      }
-    ],
-    "report_agencies": {
-      51: {
-        "name": "General Services Administration",
-        "bureau": null,
-        "id": 51
-      },
-      135: {
-        "name": "Department of Education",
-        "bureau": "Office of Career, Technical, and Adult Education",
-        "id": 135
-      }
+  const props = defineProps({
+    user: {
+      type: Object,
+      required: true,
     }
   })
+
+  const emit = defineEmits(['addAgency', 'deleteAgency'])
 
   const agency_options = useStore(agencyList)
   const bureaus = useStore(bureauList)
@@ -51,16 +29,16 @@ const user = reactive({
   function editUserAgencies(e, checked) {
     if (checked) {
       const agency = agency_options.value.find(agency => agency.id == agencyId.value)
-      user.report_agencies[e.id] = {
+      emit("addAgency",  {
         id: e.id,
         name: agency.name,
         bureau: e.name
-      }
+      })
     } else {
-      delete user.report_agencies[e.id]
+      emit('deleteAgency', e.id)
     }
-    console.log("Event: ", e, checked)
   }
+
   watch(() => user_input.agency_id, async() => {
     setSelectedAgencyId(user_input.agency_id)
     user_input.bureau_id = undefined
@@ -75,8 +53,11 @@ const user = reactive({
 
 </script>
 <template>
-  <div v-for="agency in user.report_agencies">
-    x {{agency.name}} | {{ agency.bureau }}
+  <div>
+    {{ user.name }} | {{ user.email }} 
+  </div>
+  <div v-for="agency in user.report_agencies" :key="agency.id">
+    <button @click="$emit('deleteAgency',agency.id)">[X]</button> {{ agency.name }} {{ agency.bureau }}
   </div>
 
   <ValidatedSelect
