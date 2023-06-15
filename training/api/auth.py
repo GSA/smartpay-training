@@ -140,4 +140,3 @@ def user_from_form(jwtToken: Annotated[str, Form()]):
         return jwt.decode(jwtToken, settings.JWT_SECRET, algorithms=["HS256"])
     except jwt.exceptions.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Not Authorized")
-
