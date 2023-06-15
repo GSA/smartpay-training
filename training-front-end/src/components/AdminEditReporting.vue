@@ -1,5 +1,5 @@
 <script setup>
-  import { reactive, watch } from "vue"
+  import { reactive, watch, ref } from "vue"
   import MultiSelect from '@components/MultiSelect.vue';
   import { bureauList, agencyList, setSelectedAgencyId, selectedAgencyId} from '../stores/agencies'
   import { useStore } from '@nanostores/vue'
@@ -15,7 +15,11 @@
     }
   })
 
-  const emit = defineEmits(['addAgency', 'deleteAgency'])
+  // we want to be able to cancel edits so
+  // avoid modifying parent prop.
+  const agencies = ref([...props.user.report_agencies])
+
+  const emit = defineEmits(['addAgency', 'deleteAgency', 'cancel'])
 
   const agency_options = useStore(agencyList)
   const bureaus = useStore(bureauList)
@@ -29,13 +33,15 @@
   function editUserAgencies(e, checked) {
     if (checked) {
       const agency = agency_options.value.find(agency => agency.id == agencyId.value)
-      emit("addAgency",  {
+      agencies.value.push({
         id: e.id,
         name: agency.name,
         bureau: e.name
       })
     } else {
-      emit('deleteAgency', e.id)
+      console.log(e, agencies.value)
+      agencies.value = agencies.value.filter(agency => agency.id != e.id)
+      //emit('deleteAgency', e.id)
     }
   }
 
@@ -56,8 +62,8 @@
   <div>
     {{ user.name }} | {{ user.email }} 
   </div>
-  <div v-for="agency in user.report_agencies" :key="agency.id">
-    <button @click="$emit('deleteAgency',agency.id)">[X]</button> {{ agency.name }} {{ agency.bureau }}
+  <div v-for="agency in agencies" :key="agency.id">
+    <button @click="editUserAgencies(agency, false)">[X]</button> {{ agency.name }} {{ agency.bureau }}
   </div>
 
   <ValidatedSelect
@@ -67,5 +73,12 @@
     label="Agency / organization"
     name="agency"
   />
-  <MultiSelect :items="bureaus" :values="user.report_agencies" @checkItem="editUserAgencies"/>
+  <MultiSelect :items="bureaus" :values="agencies" @checkItem="editUserAgencies"/>
+  <button 
+    @click="$emit('cancel')"
+    type="button"
+    class="usa-button usa-button--unstyled margin-y-2"
+  >
+    Cancel and return to search results
+  </button>
 </template>

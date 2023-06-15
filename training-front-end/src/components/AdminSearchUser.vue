@@ -1,17 +1,36 @@
 <script setup>
-  import {ref} from "vue";
+  import { ref, computed } from "vue";
   import AdminUserSearchTable from "./AdminUserSearchTable.vue";
   import AdminEditReporting from "./AdminEditReporting.vue";
+  import USWDSPagination from "./USWDSPagination.vue";
+
+  const PAGE_SIZE = 25
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const report_url = `${base_url}/api/v1/users/search-users-by-name/`
 
+  const currentPage = ref(0)
+  const numberOfResults = ref(0)
+  const numberOfPages = computed(() => Math.ceil(numberOfResults.value/PAGE_SIZE))
+
   const searchTerm = ref('')
   const selectedUser = ref()
   const searchResults = ref([])
+  const noResults = ref(false)
+
+  async function setPage(page) {
+    currentPage.value = page
+    await search()
+  }
 
   async function search() {
-    searchResults.value = await fetch(`${report_url}${searchTerm.value}`).then((r) => r.json())
+    noResults.value = false
+    const url = new URL(`${report_url}${searchTerm.value}`)
+    url.search = new URLSearchParams({page_number: currentPage.value + 1})
+    let search_results = await fetch(url).then((r) => r.json())
+    searchResults.value = search_results.users
+    numberOfResults.value = search_results.total_count
+    noResults.value = search_results.total_count === 0
   }
  
   function setCurrentUser(e) {
@@ -44,15 +63,30 @@
           </form>
         </section>
       </div>
-      <AdminUserSearchTable :searchResults="searchResults" @selectItem="setCurrentUser" />
+      <div v-if="numberOfPages"  class=" border-top-1px margin-top-6 tablet:grid-col-12">
+        <AdminUserSearchTable 
+          :numberOfResults="numberOfResults"
+          :searchResults="searchResults" 
+          @selectItem="setCurrentUser"
+        />
+        <USWDSPagination 
+          :currentPage="currentPage"
+          :numberOfPages="numberOfPages" 
+          @gotoPage="setPage"
+        /> 
+      </div>
+      <div v-if="noResults">
+      Your search returned zero results.
+      </div>
+
     </div>
     <div v-else>
       <AdminEditReporting 
         :user="selectedUser"
         @addAgency="addAgency"
         @deleteAgency="deleteAgency"
+        @cancel="setCurrentUser(undefined)"
       />
     </div>
-    
 </div>
 </template>

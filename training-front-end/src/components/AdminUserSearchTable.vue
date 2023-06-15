@@ -1,28 +1,31 @@
 <script setup>
-  defineProps({
+  import { computed } from "vue";
+  const props = defineProps({
     searchResults: {
       type: Array,
-      required: false,
-      default() {
-        return []
-      }
+      required: true
+    },
+    numberOfResults: {
+      type: Number,
+      required: true
     }
   })
 
   defineEmits(['selectItem'])
+
+  const resultCount = computed(() => props.numberOfResults == 1 ? "1 Result" : `${props.numberOfResults} Results`)
 
   function hasReporting(user) {
     return user.report_agencies.length > 0
   }
 </script>
 <template>
-  <div v-if="searchResults.length"  class=" border-top-1px margin-top-6">
     <table 
       
       class="usa-table usa-table--borderless width-full"
     >
       <caption>
-        <span class="font-sans-lg">Results</span>
+        <span class="font-sans-lg">{{resultCount}}</span>
       </caption>
       <thead>
         <tr>
@@ -48,12 +51,12 @@
           v-for="(user, index) in searchResults" 
           :key="index"
         >
-          <td>
+          <td class="text-no-wrap">
             <button @click="$emit('selectItem', user)" type="button" class="usa-button usa-button--unstyled">
               {{ user.name }}
             </button>
           </td>
-          <td>
+          <td class="text-no-wrap">
             {{ user.email }}
           </td>
           <td>
@@ -68,5 +71,4 @@
         </tr>
       </tbody>
     </table>
-  </div>
 </template>
