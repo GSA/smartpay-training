@@ -33,9 +33,8 @@
 
 <template>
   <div id="item-container" class="usa-prose">
-    Search: {{ filtertext }}
     <fieldset id="agencies" class="usa-fieldset">
-      <label for="agency-search">Filter by sub-agency name</label>
+      <label class="usa-label" for="agency-search">Filter by sub-agency name</label>
       <input v-model="filtertext" id="agency-search" class="agency-filter usa-input" name="agency-search" type="text" />
       <div id="agency-filter-help-text" class="usa-prose" aria-live="polite" aria-atomic="true"></div>
 

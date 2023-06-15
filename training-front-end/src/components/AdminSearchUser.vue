@@ -3,6 +3,7 @@
   import AdminUserSearchTable from "./AdminUserSearchTable.vue";
   import AdminEditReporting from "./AdminEditReporting.vue";
   import USWDSPagination from "./USWDSPagination.vue";
+  import { setSelectedAgencyId} from '../stores/agencies'
 
   const PAGE_SIZE = 25
 
@@ -43,6 +44,11 @@
 
   function deleteAgency(id) {
     selectedUser.value.report_agencies = selectedUser.value.report_agencies.filter(agency => agency.id != id)
+  }
+
+  function cancelEdit(){
+    setCurrentUser(undefined)
+    setSelectedAgencyId(undefined)
   }
 </script>
 
@@ -85,7 +91,7 @@
         :user="selectedUser"
         @addAgency="addAgency"
         @deleteAgency="deleteAgency"
-        @cancel="setCurrentUser(undefined)"
+        @cancel="cancelEdit"
       />
     </div>
 </div>

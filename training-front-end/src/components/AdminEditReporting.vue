@@ -1,11 +1,12 @@
 <script setup>
   import { reactive, watch, ref } from "vue"
   import MultiSelect from '@components/MultiSelect.vue';
+  import USWDSComboBox from "./USWDSComboBox.vue";
   import { bureauList, agencyList, setSelectedAgencyId, selectedAgencyId} from '../stores/agencies'
   import { useStore } from '@nanostores/vue'
   import ValidatedSelect from './ValidatedSelect.vue';
   import { useVuelidate } from '@vuelidate/core';
-  import { required, requiredIf, helpers } from '@vuelidate/validators';
+  import { required, helpers } from '@vuelidate/validators';
   const { withMessage } = helpers
 
   const props = defineProps({
@@ -39,9 +40,7 @@
         bureau: e.name
       })
     } else {
-      console.log(e, agencies.value)
       agencies.value = agencies.value.filter(agency => agency.id != e.id)
-      //emit('deleteAgency', e.id)
     }
   }
 
@@ -59,21 +58,53 @@
 
 </script>
 <template>
-  <div>
-    {{ user.name }} | {{ user.email }} 
+  <div class="usa-prose">
+    <h3>
+      Edit User
+    </h3>
   </div>
-  <div v-for="agency in agencies" :key="agency.id">
+  <div class="grid-row grid-gap">
+    <div class="tablet:grid-col">
+      <label class="usa-label" for="input-full-name">Full Name</label>
+      <input class="usa-input bg-base-lightest" id="input-full-name" name="input-full-name" :value="user.name" disabled/>
+    </div>
+    <div class="tablet:grid-col">
+      <label class="usa-label" for="input-email">Full Name</label>
+      <input class="usa-input bg-base-lightest" id="input-email" name="input-email" :value="user.email" disabled/>
+    </div>
+  </div>
+  <div class="grid-row grid-gap">
+    <div class="tablet:grid-col">
+      <label class="usa-label" for="input-agency">Agency / Organization</label>
+      <input class="usa-input bg-base-lightest" id="input-agency" name="input-agency" :value="user.agency.name" disabled/>
+    </div>
+    <div class="tablet:grid-col">
+      <label class="usa-label" for="input-bureau">Sub-Agency, Organization, or Bureau</label>
+      <input class="usa-input bg-base-lightest" id="input-bureau" name="input-bureau" :value="user.agency.bureau" disabled/>
+    </div>
+  </div>
+  <div v-for="agency in agencies" :key="agency.id" class="margin-y-2">
     <button @click="editUserAgencies(agency, false)">[X]</button> {{ agency.name }} {{ agency.bureau }}
   </div>
 
-  <ValidatedSelect
-    v-model="user_input.agency_id"
-    :validator="v_all_info$.agency_id"
-    :options="agency_options"
-    label="Agency / organization"
-    name="agency"
-  />
-  <MultiSelect :items="bureaus" :values="agencies" @checkItem="editUserAgencies"/>
+  <div class="grid-row grid-gap">
+    <div class="tablet:grid-col">
+      <USWDSComboBox 
+        v-model="user_input.agency_id"
+        :items="agency_options"
+        name="agency"
+        label="Agency / Organization"
+      />
+    </div>
+    <div class="tablet:grid-col">
+      <MultiSelect :items="bureaus" :values="agencies" @checkItem="editUserAgencies"/>
+    </div>
+  </div>
+  <div class="margin-top-3">
+    <button class="usa-button">
+      Update
+    </button>
+  </div>
   <button 
     @click="$emit('cancel')"
     type="button"

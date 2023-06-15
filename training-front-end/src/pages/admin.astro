@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import HeroTraining from '@components/HeroTraining.astro';
-import AdminEditReporting from '@components/AdminEditReporting.vue';
+import AdminSearchUser from '@components/AdminSearchUser.vue';
 // import AuthRequired from '@components/AuthRequired.vue';
 // import AdminIndex from '@components/AdminIndex.vue';
 
@@ -15,9 +15,7 @@ const pageTitle = "Administration Dashboard";
         Administrators
     </span>
   </HeroTraining>
-  <div class="margin-5">
-    <AdminEditReporting client:only />
-  </div>
+  <AdminSearchUser client:only />
   <!-- <AuthRequired client:only>
     <AdminIndex client:only />
   </AuthRequired>
