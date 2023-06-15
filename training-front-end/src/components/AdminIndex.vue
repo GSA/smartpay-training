@@ -7,6 +7,7 @@
   const authUser = useStore(profile)
   const userList = ref([])
   const error = ref()
+  const isAuthorized = ref(true)
 
   function loadUsers() {
     const usersEndpoint = `${import.meta.env.PUBLIC_API_BASE_URL}/api/v1/users`
@@ -15,9 +16,17 @@
       method: "GET",
       headers: { "Authorization": `Bearer ${authUser.value.jwt}` }
     }).then((res) => {
-      res.json().then((data) => {
-        userList.value = data
-      })
+      if (res.status === 401) {
+        isAuthorized.value = false
+        error.value = {
+          name: "Unauthorized",
+          message: "You are not authorized to access this feature."
+        }
+      } else {
+        res.json().then((data) => {
+          userList.value = data
+        })
+      }
     }).catch((err) => {
       error.value = err
     })
@@ -38,21 +47,23 @@
     {{ error.message }}
   </USWDSAlert>
 
-  <table class="usa-table">
-    <thead>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Agency</th>
-    </thead>
-    <tbody>
-      <tr
-        v-for="user in userList"
-        :key="user.id"
-      >
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.agency_id }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div v-if="isAuthorized">
+    <table class="usa-table">
+      <thead>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Agency</th>
+      </thead>
+      <tbody>
+        <tr
+          v-for="user in userList"
+          :key="user.id"
+        >
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.agency_id }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
