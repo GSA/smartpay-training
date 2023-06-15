@@ -11,7 +11,7 @@
   import { redirectTarget, clearRedirectTarget } from '../stores/auth'
   import { getUserFromTokenExchange } from '../stores/user'
 
-  const auth = new AuthService()
+  const auth = await AuthService.instance()
   const error = ref(null)
   const authRedirectTarget = useStore(redirectTarget)
 

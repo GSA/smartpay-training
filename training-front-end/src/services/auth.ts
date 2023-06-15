@@ -3,15 +3,34 @@ import { UserManager, User, UserManagerSettings } from 'oidc-client-ts'
 export default class AuthService {
   private userManager: UserManager
 
-  constructor() {
+  private constructor(metadata: any) {
+    const baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
     const settings: UserManagerSettings = {
-      authority: import.meta.env.PUBLIC_AUTH_AUTHORITY_URL,
-      client_id: import.meta.env.PUBLIC_AUTH_CLIENT_ID,
-      redirect_uri: import.meta.env.PUBLIC_AUTH_REDIRECT_URL,
-      post_logout_redirect_uri: import.meta.env.PUBLIC_AUTH_POST_LOGOUT_URL,
+      authority: metadata["authority"] || "",
+      client_id: metadata["client_id"] || "",
+      redirect_uri: `${baseUrl}/auth_callback`,
+      post_logout_redirect_uri: `${baseUrl}`,
       scope: 'openid',
     }
     this.userManager = new UserManager(settings)
+  }
+
+  static async instance(): Promise<AuthService> {
+    let authMetadata = window.localStorage.getItem("authMetadata")
+
+    if (authMetadata) {
+      authMetadata = JSON.parse(authMetadata)
+    } else {
+      const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL
+      const metadataUrl = `${apiBaseUrl}/api/v1/auth/metadata`
+      const metadataResponse = await fetch(metadataUrl)
+      authMetadata = await metadataResponse.json()
+      if (authMetadata) {
+        window.localStorage.setItem("authMetadata", JSON.stringify(authMetadata))
+      }
+    }
+
+    return new AuthService(authMetadata)
   }
 
   public getUser(): Promise<User | null> {

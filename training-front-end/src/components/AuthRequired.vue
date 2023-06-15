@@ -9,7 +9,7 @@
   import { setRedirectTarget } from '../stores/auth'
   import { profile } from '../stores/user'
 
-  const auth = new AuthService()
+  const auth = await AuthService.instance()
   const user = useStore(profile)
   const isAuthenticated = !!user.value.jwt
 
