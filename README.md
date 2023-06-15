@@ -93,6 +93,16 @@ Before the first deployment, you need to run the bootstrap script, where `SPACE`
 bin/cg-bootstrap-space.sh SPACE
 ```
 
+You'll also have to set up an identity provider service so that app administrators can log in via cloud.gov UAA. For each space, where `FRONT_END_BASE_URL` is the base URL of the front end website that will be running on cloud.gov Pages:
+
+```
+bin/cg-create-identity-service.sh SPACE FRONT_END_BASE_URL
+
+# Examples:
+#   bin/cg-create-identity-service.sh dev https://federalist-2e11f2c8-970f-44f5-acc8-b47ef6c741ad.sites.pages.cloud.gov/site/gsa/smartpay-training
+#   bin/cg-create-identity-service.sh prod https://training.smartpay.gsa.gov
+```
+
 You can monitor the services deployment status with `cf services`. It can take quite a while to fully provision everything. Once the services are ready, you can bootstrap the application:
 
 ```
