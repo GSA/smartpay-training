@@ -10,12 +10,15 @@ from training.api.auth import user_from_form
 
 
 router = APIRouter()
-require_admin = RequireRole(["Admin"])
 
 
 @router.post("/users", response_model=User, status_code=status.HTTP_201_CREATED)
-def create_user(user: UserCreate, repo: UserRepository = Depends(user_repository)):
-    db_user = repo.find_by_email(user.email)
+def create_user(
+    new_user: UserCreate,
+    repo: UserRepository = Depends(user_repository),
+    user=Depends(RequireRole(["Admin"]))
+):
+    db_user = repo.find_by_email(new_user.email)
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -29,7 +32,7 @@ def create_user(user: UserCreate, repo: UserRepository = Depends(user_repository
 def get_users(
     agency_id: int | None = None,
     repo: UserRepository = Depends(user_repository),
-    user=Depends(require_admin)
+    user=Depends(RequireRole(["Admin"]))
 ):
     if agency_id:
         return repo.find_by_agency(agency_id)
@@ -81,7 +84,12 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
 
 
 @router.get("/users/search-users-by-name/{name}", response_model=UserSearchResult)
-def search_users_by_name(name: str, page_number: int, repo: UserRepository = Depends(user_repository)):
+def search_users_by_name(
+    name: str,
+    page_number: int,
+    repo: UserRepository = Depends(user_repository),
+    user=Depends(RequireRole(["Admin"]))
+):
     try:
         return repo.search_users_by_name(name, page_number)
 
