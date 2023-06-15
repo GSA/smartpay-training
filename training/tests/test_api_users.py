@@ -1,12 +1,26 @@
 from fastapi.testclient import TestClient
 from fastapi import status
+from training.api.auth import JWTUser
 from training.main import app
 from training.repositories import UserRepository
 from .factories import UserCreateSchemaFactory, UserSchemaFactory
 from training.schemas import UserSearchResult
+from training.api.api_v1.users import require_admin
+
+
+def admin_user():
+    return {
+        'name': 'Albus Dumbledore',
+        'email': 'dumbledore@hogwarts.edu',
+        'roles': ['Admin']
+    }
 
 
 client = TestClient(app)
+
+
+app.dependency_overrides[JWTUser] = admin_user
+app.dependency_overrides[require_admin] = admin_user
 
 
 def test_create_user(mock_user_repo: UserRepository):

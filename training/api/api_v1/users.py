@@ -1,7 +1,7 @@
 import csv
 from io import StringIO
 from typing import List
-from training.api.auth import JWTUser
+from training.api.auth import RequireRole
 from fastapi import APIRouter, status, HTTPException, Response, Depends
 from training.schemas import User, UserCreate, UserSearchResult
 from training.repositories import UserRepository
@@ -10,6 +10,7 @@ from training.api.auth import user_from_form
 
 
 router = APIRouter()
+require_admin = RequireRole(["Admin"])
 
 
 @router.post("/users", response_model=User, status_code=status.HTTP_201_CREATED)
@@ -28,7 +29,7 @@ def create_user(user: UserCreate, repo: UserRepository = Depends(user_repository
 def get_users(
     agency_id: int | None = None,
     repo: UserRepository = Depends(user_repository),
-    user=Depends(JWTUser())
+    user=Depends(require_admin)
 ):
     if agency_id:
         return repo.find_by_agency(agency_id)
