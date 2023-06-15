@@ -5,11 +5,10 @@ export default class AuthService {
 
   constructor() {
     const settings: UserManagerSettings = {
-      // TODO: retrieve these values from a metadata endpoint?
-      authority: 'http://localhost:8080/uaa',
-      client_id: 'test_client_id',
-      redirect_uri: 'http://localhost:3000/auth_callback',
-      post_logout_redirect_uri: 'http://localhost:3000',
+      authority: import.meta.env.PUBLIC_AUTH_AUTHORITY_URL,
+      client_id: import.meta.env.PUBLIC_AUTH_CLIENT_ID,
+      redirect_uri: import.meta.env.PUBLIC_AUTH_REDIRECT_URL,
+      post_logout_redirect_uri: import.meta.env.PUBLIC_AUTH_POST_LOGOUT_URL,
       scope: 'openid',
     }
     this.userManager = new UserManager(settings)
