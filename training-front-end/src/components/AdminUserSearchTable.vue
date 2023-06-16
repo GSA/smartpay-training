@@ -1,5 +1,6 @@
 <script setup>
   import { computed } from "vue";
+  import DocumentIcon from "./icons/DocumentIcon.vue";
   const props = defineProps({
     searchResults: {
       type: Array,
@@ -69,7 +70,13 @@
           {{ user.agency.bureau }}
         </td>
         <td>
-          <span v-if="hasReporting(user)">
+          <span 
+            v-if="hasReporting(user)"
+            class="text-no-wrap"
+          >
+            <span class="font-serif-lg">
+              <DocumentIcon /> 
+            </span>
             Reporting
           </span>
         </td>

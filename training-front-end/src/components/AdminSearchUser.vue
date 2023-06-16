@@ -120,11 +120,14 @@
         />
         <USWDSPagination 
           :current-page="currentPage"
-          :number-or-pages="numberOfPages" 
+          :number-of-pages="numberOfPages" 
           @goto-page="setPage"
         /> 
       </div>
-      <div v-if="noResults">
+      <div 
+        v-if="noResults"
+        class="margin-top-3"
+      >
         Your search returned zero results.
       </div>
     </div>

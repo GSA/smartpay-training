@@ -13,8 +13,7 @@
     }
   })
 
-  // we want to be able to cancel edits so
-  // avoid modifying parent prop.
+  // Avoid modifying parent prop to allow cancelling edits 
   const agencies = ref([...props.user.report_agencies])
 
   const emit = defineEmits(['cancel', 'save'])
@@ -28,31 +27,25 @@
   })
 
   const selectedAgency = computed(() => agency_options.value.find(agency => agency.id == agencyId.value))
+  // const bureaus_with_parent = computed(() => [selectedAgency.value, ...bureaus.value])
 
   function editUserAgencies(e, checked) {
     if (checked) {
-      const bureau_name = agencyId.value == e.id ?
-      ''
-      : e.name
       agencies.value.push({
         id: e.id,
         name: selectedAgency.value.name,
-        bureau: bureau_name
+        bureau: agencyId.value == e.id ? undefined : e.name
       })
     } else {
       agencies.value = agencies.value.filter(agency => agency.id != e.id)
     }
   }
 
-  function saveUser() {
-    emit('save', props.user.id, agencies.value, )
-  }
-
   watch(() => user_input.agency_id, async() => {
     setSelectedAgencyId(user_input.agency_id)
   })
-
 </script>
+
 <template>
   <div class="usa-prose">
     <h3>
@@ -150,6 +143,21 @@
             @check-item="editUserAgencies"
           />
         </div>
+        <div class="margin-top-3">
+          <button 
+            class="usa-button"
+            @click="$emit('save', user.id, agencies)"
+          >
+            Update
+          </button>
+        </div>
+        <button 
+          type="button"
+          class="usa-button usa-button--unstyled margin-y-2"
+          @click="$emit('cancel')"
+        >
+          Cancel and return to search results
+        </button>
       </div>
       <div class="tablet:grid-col">
         <table class="usa-table usa-table--borderless width-full">
@@ -182,9 +190,9 @@
                   <div>
                     {{ agency.bureau }}
                   </div>
-                  <div>
+                  <div class="flex-align-self-center">
                     <button 
-                      class="usa-button usa-button--unstyled"
+                      class="usa-button usa-button--unstyled font-serif-lg"
                       @click="editUserAgencies(agency, false)"
                     >
                       <DeleteIcon />
@@ -197,20 +205,6 @@
         </table>
       </div>
     </div>
-    <div class="margin-top-3">
-      <button 
-        class="usa-button"
-        @click="saveUser"
-      >
-        Update
-      </button>
-    </div>
-    <button 
-      type="button"
-      class="usa-button usa-button--unstyled margin-y-2"
-      @click="$emit('cancel')"
-    >
-      Cancel and return to search results
-    </button>
+    
   </section>
 </template>

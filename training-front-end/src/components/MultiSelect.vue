@@ -79,7 +79,7 @@
             class="usa-checkbox__label agency-name"
             :for="all.id"
           >
-            All {{ all.name }}
+            {{ all.name }} [no bureau]
           </label>
         </div>
         <div 
