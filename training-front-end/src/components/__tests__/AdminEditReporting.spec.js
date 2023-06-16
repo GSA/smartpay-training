@@ -1,27 +1,10 @@
 import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
 import { mount } from '@vue/test-utils'
 import AdminEditReporting from '../AdminEditReporting.vue'
-import AdminAgencySelect from "../AdminAgencySelect.vue";
 
 import users from './fixtures/sample_users'
+import agencies from './fixtures/sample_agency_response'
 
-const agencies = [
-  {
-    "id": 20,
-    "name": "Department of Education",
-    "bureaus": [
-      {
-        "id": 132,
-        "name": "Enfield Tennis Academy"
-      },
-    ]
-  },
-  {
-    "id": 10,
-    "name": "Ennet House",
-    "bureaus": []
-  }
-]
 describe('AdminAgencySelect', async () => {
   beforeEach(() => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {

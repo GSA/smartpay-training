@@ -44,12 +44,12 @@
         method: "PUT", 
         headers: { 
           'Content-Type': 'application/json',
-        //  'Authorization': `Bearer ${user.value.jwt}`
+          // this will be needed when admin auth is in place
+          // 'Authorization': `Bearer ${user.value.jwt}` 
         },
         body:  JSON.stringify(agencies) 
       }
     ).then((r) => r.json())
-    console.log("user", selectedUser)
     selectedUser.value.report_agencies = updatedUser.report_agencies
     setCurrentUser(undefined)
     setSelectedAgencyId(undefined)
