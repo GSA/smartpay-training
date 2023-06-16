@@ -41,7 +41,7 @@
 
         <Loginless
           page-id="training_reports"
-          title="Training Reprts"
+          title="Training Reports"
           header="header"
           link-destination-text="the training reports you are eligible to receive"
           :allow-registration="false"
