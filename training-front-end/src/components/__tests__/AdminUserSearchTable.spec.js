@@ -1,49 +1,8 @@
 import { describe, it, expect, afterEach, vi} from 'vitest'
-import { mount, flushPromises } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import AdminUserSearchTableVue from '../AdminUserSearchTable.vue'
 import DocumentIconVue from '../icons/DocumentIcon.vue'
-
-
-const USERS = [
-  {
-    "email": "helen.steeply@ous.gov",
-    "name": "Hugh Steeply",
-    "id": 1,
-    "agency_id": 27,
-    "agency": {
-      "name": "Office of Unspecified Services",
-      "bureau": null,
-      "id": 27
-    },
-    "roles": [
-      {
-        "name": "Report",
-        "id": 2
-      }
-    ],
-    "report_agencies": [
-      {
-        "name": "Office of Unspecified Services",
-        "bureau": null,
-        "id": 27
-      }
-    ]
-  },
-  {
-    "email": "remy@afr.gov",
-    "name": "Rémy Marathe",
-    "id": 2,
-    "agency_id": 60,
-    "agency": {
-      "name": "Office of Unspecified Services",
-      "bureau": "Les Assassins des Fauteuils Rollents",
-      "id": 60
-    },
-    "roles": [],
-    "report_agencies": []
-  }
-]
-
+import USERS from './fixtures/sample_users'
 
 describe('AdminUserSearchTable', async () => {
   afterEach(() => {

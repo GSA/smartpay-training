@@ -1,6 +1,7 @@
 <script setup>
   import { ref, computed} from "vue"
-  const filtertext = ref('')
+
+  defineEmits(['checkItem'])
 
   const props = defineProps({
     'items': {
@@ -12,24 +13,23 @@
       type: Object,
       required: true
     },
-    'all': {
+    'parent': {
       type: Object,
       required: true
     }
   })
   
-  defineEmits(['checkItem'])
-  
+  const filtertext = ref('')
+
   function isChecked(id) {
     return props.values.some(item => item.id == id)
   }
-
   const hasSubAgencies = computed(() => props.items && props.items.length > 0)
   const filtereditems = computed(() => props.items && props.items.filter(
     item => item
       .name
       .toLowerCase()
-      .split(/[ ,]+/)
+      .split(/\W+/)
       .some(word => word
         .toLowerCase()
         .startsWith(filtertext.value.toLowerCase()))
@@ -46,40 +46,42 @@
       class="usa-fieldset"
     >
       <label
+        v-if="hasSubAgencies"
         class="usa-label margin-top-0"
         for="agency-search"
       >
         Filter by sub-agency name
       </label>
       <input
+        v-if="hasSubAgencies"
         id="agency-search"
         v-model="filtertext"
-        class="agency-filter usa-input"
+        class="agency-filter usa-input margin-bottom-2"
         name="agency-search"
         type="text" 
       >
       <div
         id="selected-agencies"
-        class="list maxh-card-lg overflow-y-scroll margin-top-2 padding-bottom-1"
+        class="list maxh-card-lg overflow-y-scroll padding-bottom-1"
       >
         <div
           v-if="!hasSubAgencies"
-          class="usa-checkbox padding-bottom-2"
+          class="usa-checkbox"
         >
           <input 
-            :id="all.id"
+            :id="parent.id"
             class="usa-checkbox__input" 
             type="checkbox" 
             name="agencies[]" 
-            :value="all.id"
-            :checked="isChecked(all.id)"
-            @change="$emit('checkItem', all, $event.target.checked)"
+            :value="parent.id"
+            :checked="isChecked(parent.id)"
+            @change="$emit('checkItem', parent, $event.target.checked)"
           >
           <label 
             class="usa-checkbox__label agency-name"
-            :for="all.id"
+            :for="parent.id"
           >
-            {{ all.name }} [no bureau]
+            {{ parent.name }}
           </label>
         </div>
         <div 

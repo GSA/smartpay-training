@@ -1,6 +1,6 @@
 <script setup>
   import { reactive, watch, ref, computed } from "vue"
-  import MultiSelect from '@components/MultiSelect.vue';
+  import AdminAgencySelect from "./AdminAgencySelect.vue";
   import DeleteIcon from "./icons/DeleteIcon.vue";
   import USWDSComboBox from "./USWDSComboBox.vue";
   import { bureauList, agencyList, setSelectedAgencyId, selectedAgencyId} from '../stores/agencies'
@@ -13,10 +13,10 @@
     }
   })
 
-  // Avoid modifying parent prop to allow cancelling edits 
+  // Copy to avoid modifying parent prop and allow cancelling edits 
   const agencies = ref([...props.user.report_agencies])
 
-  const emit = defineEmits(['cancel', 'save'])
+  defineEmits(['cancel', 'save'])
 
   const agency_options = useStore(agencyList)
   const bureaus = useStore(bureauList)
@@ -27,7 +27,6 @@
   })
 
   const selectedAgency = computed(() => agency_options.value.find(agency => agency.id == agencyId.value))
-  // const bureaus_with_parent = computed(() => [selectedAgency.value, ...bureaus.value])
 
   function editUserAgencies(e, checked) {
     if (checked) {
@@ -136,15 +135,16 @@
           v-if="user_input.agency_id"
           class="border-1px padding-2 margin-top-2"
         >
-          <MultiSelect 
+          <AdminAgencySelect 
             :items="bureaus"
             :values="agencies"
-            :all="selectedAgency"
+            :parent="selectedAgency"
             @check-item="editUserAgencies"
           />
         </div>
         <div class="margin-top-3">
           <button 
+            id="update-user"
             class="usa-button"
             @click="$emit('save', user.id, agencies)"
           >
@@ -152,6 +152,7 @@
           </button>
         </div>
         <button 
+          id="cancel"
           type="button"
           class="usa-button usa-button--unstyled margin-y-2"
           @click="$emit('cancel')"
@@ -205,6 +206,5 @@
         </table>
       </div>
     </div>
-    
   </section>
 </template>

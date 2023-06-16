@@ -43,7 +43,6 @@
     <select 
       :id="name"
       class="usa-select" 
-      test="hello"
       :name="name"
       :value="modelValue"
       @change="selected"
