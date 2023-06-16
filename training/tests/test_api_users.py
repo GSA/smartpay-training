@@ -3,7 +3,7 @@ from fastapi import status
 from training.main import app
 from training.repositories import UserRepository
 from .factories import UserCreateSchemaFactory, UserSchemaFactory
-from training.schemas import UserSearchResult
+from training.schemas import UserSearchResult, Agency, Role
 
 
 client = TestClient(app)
@@ -78,3 +78,21 @@ def test_search_users_by_name(mock_user_repo: UserRepository):
     assert len(response.json()) == 2
     assert response.json()["total_count"] == 2
     assert response.json()["users"] == users
+
+
+def test_edit_user_for_reporting(mock_user_repo: UserRepository):
+    user = UserSchemaFactory.build(roles=[])
+    mock_user_repo.create(user)
+    agency = Agency(id=3, name='test agency')
+    user.report_agencies.append(agency)
+    role = Role(id=2, name="Report")
+    user.roles.append(role)
+
+    mock_user_repo.edit_user_for_reporting.return_value = user
+    user_id = user.id
+    URL = f"/api/v1/users/edit-user-for-reporting?user_id={user_id}"
+    response = client.put(
+        URL,
+        json=[3]
+    )
+    assert response.status_code == status.HTTP_200_OK
