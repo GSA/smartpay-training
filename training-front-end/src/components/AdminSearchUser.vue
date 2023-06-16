@@ -9,6 +9,7 @@
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const report_url = `${base_url}/api/v1/users/search-users-by-name/`
+  const update_url = `${base_url}/api/v1/users/edit-user-for-reporting/`
 
   const currentPage = ref(0)
   const numberOfResults = ref(0)
@@ -34,16 +35,28 @@
     noResults.value = search_results.total_count === 0
   }
  
+  async function updateUserReports(userId, agencyIds) {
+    const agencies = agencyIds.map(a => a.id)
+    const url = new URL(update_url)
+    url.search = new URLSearchParams({user_id: userId})
+    let updatedUser = await fetch(
+      url, { 
+        method: "PUT", 
+        headers: { 
+          'Content-Type': 'application/json',
+        //  'Authorization': `Bearer ${user.value.jwt}`
+        },
+        body:  JSON.stringify(agencies) 
+      }
+    ).then((r) => r.json())
+    console.log("user", selectedUser)
+    selectedUser.value.report_agencies = updatedUser.report_agencies
+    setCurrentUser(undefined)
+    setSelectedAgencyId(undefined)
+  }
+
   function setCurrentUser(e) {
     selectedUser.value = e
-  }
-
-  function addAgency(e) {
-    selectedUser.value.report_agencies.push(e)
-  }
-
-  function deleteAgency(id) {
-    selectedUser.value.report_agencies = selectedUser.value.report_agencies.filter(agency => agency.id != id)
   }
 
   function cancelEdit(){
@@ -53,46 +66,74 @@
 </script>
 
 <template>
-   <div class="padding-top-4 padding-bottom-4 grid-container">
-
-    <div v-if="!selectedUser" class=" grid-row">
+  <div class="padding-top-4 padding-bottom-4 grid-container">
+    <div 
+      v-if="!selectedUser"
+      class="grid-row"
+    >
       <div class="usa-prose tablet:grid-col-12">
         <h3>Search for a user</h3>
-        <section aria-label="Search component" class="tablet:grid-col-8">
-          <label for="search-field">Name</label>
-          <div class="usa-hint margin-bottom-1" id="gnHint">Full or partial</div>
-          <form @submit.prevent="search" class="usa-search" role="search">
-            <input v-model="searchTerm" class="usa-input" id="search-field" type="search" name="search" />
-            <button class="usa-button" type="submit">
-              <span class="usa-search__submit-text">Search </span>
+        <section
+          aria-label="Search component"
+          class="tablet:grid-col-8"
+        >
+          <label for="search-field">
+            Name
+          </label>
+          <div 
+            id="gnHint"
+            class="usa-hint margin-bottom-1"
+          >
+            Full or partial
+          </div>
+          <form 
+            class="usa-search"
+            role="search"
+            @submit.prevent="search"
+          >
+            <input 
+              id="search-field"
+              v-model="searchTerm"
+              class="usa-input"
+              type="search"
+              name="search"
+            >
+            <button 
+              class="usa-button"
+              type="submit"
+            >
+              <span class="usa-search__submit-text">
+                Search
+              </span>
             </button>
           </form>
         </section>
       </div>
-      <div v-if="numberOfPages"  class=" border-top-1px margin-top-6 tablet:grid-col-12">
+      <div 
+        v-if="numberOfPages"
+        class="border-top-1px margin-top-6 tablet:grid-col-12"
+      >
         <AdminUserSearchTable 
-          :numberOfResults="numberOfResults"
-          :searchResults="searchResults" 
-          @selectItem="setCurrentUser"
+          :number-of-results="numberOfResults"
+          :search-results="searchResults" 
+          @select-item="setCurrentUser"
         />
         <USWDSPagination 
-          :currentPage="currentPage"
-          :numberOfPages="numberOfPages" 
-          @gotoPage="setPage"
+          :current-page="currentPage"
+          :number-or-pages="numberOfPages" 
+          @goto-page="setPage"
         /> 
       </div>
       <div v-if="noResults">
-      Your search returned zero results.
+        Your search returned zero results.
       </div>
-
     </div>
     <div v-else>
       <AdminEditReporting 
         :user="selectedUser"
-        @addAgency="addAgency"
-        @deleteAgency="deleteAgency"
+        @save="updateUserReports"
         @cancel="cancelEdit"
       />
     </div>
-</div>
+  </div>
 </template>

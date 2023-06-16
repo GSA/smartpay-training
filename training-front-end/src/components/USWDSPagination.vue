@@ -12,8 +12,15 @@
     defineEmits(['gotoPage'])
 
     const props = defineProps({
-        'numberOfPages': Number,
-        'currentPage': Number // zero-indexed
+        'numberOfPages': {
+          type: Number,
+          required: true
+        },
+        'currentPage': {  // zero-indexed
+          type: Number,
+          required: false,
+          default: 0
+        }
     })
 
     const showPrevious = computed(() => props.numberOfPages && props.currentPage > 0)
@@ -37,82 +44,92 @@
     })
 </script>
 <template>
-    <nav v-if="numberOfPages" aria-label="Pagination" class="usa-pagination">
-    <ul class="usa-pagination__list" data-test="page-navigation-list">
-        <li  class="usa-pagination__item usa-pagination__arrow">
+  <nav
+    v-if="numberOfPages"
+    class="usa-pagination"
+    aria-label="Pagination"
+  >
+    <ul 
+      class="usa-pagination__list"
+      data-test="page-navigation-list"
+    >
+      <li class="usa-pagination__item usa-pagination__arrow">
         <a
-            :style="{visibility: showPrevious ? 'visible' : 'hidden'}" 
-            data-test="previous-page-link"
-            href="javascript:void(0);"
-            @click.prevent="$emit('gotoPage', currentPage - 1)"
-            class="usa-pagination__link usa-pagination__previous-page"
-            aria-label="Previous page"
-            ><NavigateBack />
-            <span class="usa-pagination__link-text">Previous</span></a
-        >
-        </li>
-        <li class="usa-pagination__item usa-pagination__page-no">
-            <a
-                href="javascript:void(0);"
-                @click.prevent="$emit('gotoPage', 0)"
-                data-test="page-link"
-                :class="{'usa-current': currentPage == 0}"
-                class="usa-pagination__button"
-                aria-label="Page 1"
-                >1</a
-            >
-        </li>
-        <li
-            v-if='interiorIndexStart != 2'
-            class="usa-pagination__item usa-pagination__overflow"
-            role="presentation"
-            data-test="first-ellipsis"
-            >
-            <span>…</span>
-        </li>
-        <li v-for="page in range(interiorIndexStart, interiorIndexEnd)" class="usa-pagination__item usa-pagination__page-no">
-            <a
-                href="javascript:void(0);"
-                @click.prevent="$emit('gotoPage', page - 1)"
-                data-test="page-link"
-                :class="{'usa-current': page == currentPage + 1 }"
-                class="usa-pagination__button"
-                aria-label="Page {{page}}"
-                >{{page}}</a
-            >
-        </li>
-        <li
-            v-if='interiorIndexEnd != numberOfPages - 1 '
-            class="usa-pagination__item usa-pagination__overflow"
-            role="presentation"
-            data-test="last-ellipsis"
-            >
-            <span>…</span>
-        </li>
-        <li v-if='numberOfPages > 1' class="usa-pagination__item usa-pagination__page-no">
-            <a
-                href="javascript:void(0);"
-                @click.prevent="$emit('gotoPage', numberOfPages - 1)"
-                data-test="page-link"
-                :class="{'usa-current': currentPage == numberOfPages - 1}"
-                class="usa-pagination__button"
-                aria-label="Last Page, page {{numberOfPages}}"
-                >{{numberOfPages}}</a
-            >
-        </li>
-        
-        <li  class="usa-pagination__item usa-pagination__arrow">
-        <a   
-            :style="{visibility: beforeLastPage ? 'visible' : 'hidden'}" 
-            data-test="next-page-link"
-            @click.prevent="$emit('gotoPage', currentPage + 1)"
-            href="javascript:void(0);"
-            class="usa-pagination__link usa-pagination__next-page"
-            aria-label="Next page"
-            ><span class="usa-pagination__link-text">Next </span
-            ><NavigateNext />
+          :style="{visibility: showPrevious ? 'visible' : 'hidden'}" 
+          data-test="previous-page-link"
+          href="javascript:void(0);"
+          class="usa-pagination__link usa-pagination__previous-page"
+          aria-label="Previous page"
+          @click.prevent="$emit('gotoPage', currentPage - 1)"
+        ><NavigateBack />
+          <span class="usa-pagination__link-text">Previous</span>
         </a>
-        </li>
+      </li>
+      <li class="usa-pagination__item usa-pagination__page-no">
+        <a
+          href="javascript:void(0);"
+          class="usa-pagination__button"
+          data-test="page-link"
+          :class="{'usa-current': currentPage == 0}"
+          aria-label="Page 1"
+          @click.prevent="$emit('gotoPage', 0)"
+        >1</a>
+      </li>
+      <li
+        v-if="interiorIndexStart != 2"
+        class="usa-pagination__item usa-pagination__overflow"
+        role="presentation"
+        data-test="first-ellipsis"
+      >
+        <span>…</span>
+      </li>
+      <li 
+        v-for="page in range(interiorIndexStart, interiorIndexEnd)"
+        :key="page"
+        class="usa-pagination__item usa-pagination__page-no"
+      >
+        <a
+          href="javascript:void(0);"
+          class="usa-pagination__button"
+          data-test="page-link"
+          :class="{'usa-current': page == currentPage + 1 }"
+          aria-label="Page {{page}}"
+          @click.prevent="$emit('gotoPage', page - 1)"
+        >{{ page }}</a>
+      </li>
+      <li
+        v-if="interiorIndexEnd != numberOfPages - 1"
+        class="usa-pagination__item usa-pagination__overflow"
+        role="presentation"
+        data-test="last-ellipsis"
+      >
+        <span>…</span>
+      </li>
+      <li
+        v-if="numberOfPages > 1"
+        class="usa-pagination__item usa-pagination__page-no"
+      >
+        <a
+          href="javascript:void(0);"
+          class="usa-pagination__button"
+          data-test="page-link"
+          :class="{'usa-current': currentPage == numberOfPages - 1}"
+          aria-label="Last Page, page {{numberOfPages}}"
+          @click.prevent="$emit('gotoPage', numberOfPages - 1)"
+        >{{ numberOfPages }}</a>
+      </li>
+      
+      <li class="usa-pagination__item usa-pagination__arrow">
+        <a   
+          href="javascript:void(0);"
+          class="usa-pagination__link usa-pagination__next-page"
+          :style="{visibility: beforeLastPage ? 'visible' : 'hidden'}" 
+          data-test="next-page-link"
+          aria-label="Next page"
+          @click.prevent="$emit('gotoPage', currentPage + 1)"
+        ><span class="usa-pagination__link-text">Next </span><NavigateNext />
+        </a>
+      </li>
     </ul>
-    </nav>
+  </nav>
 </template>

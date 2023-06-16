@@ -27,17 +27,24 @@
     comboBox.init()
   })
   function selected(event) {
-    console.log(event)
     emit('update:modelValue', event.target.value)
   }
 </script>
 <template>
-  <label class="usa-label" :for="name">{{ label }}</label>
+  <label
+    class="usa-label"
+    :for="name"
+  >
+    {{ label }}
+  </label>
   <div class="usa-combo-box">
-    <select class="usa-select" 
+    <!-- uswds changes the select element in such a way that neither onblur or oninput work -->
+    <!-- eslint-disable-next-line vuejs-accessibility/no-onchange -->
+    <select 
+      :id="name"
+      class="usa-select" 
       test="hello"
       :name="name"
-      :id="name"
       :value="modelValue"
       @change="selected"
     >

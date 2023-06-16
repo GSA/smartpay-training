@@ -20,9 +20,19 @@
       We’ve created a report for you in CSV format. You can open it in the spreadsheet 
       application of your choice (e.g. Microsoft Excel, Google Sheets, Apple Numbers).
     </p>
-    <form :action="report_url" method="post">
-      <input type="hidden" name="jwtToken" :value="user.jwt" />
-      <button class="usa-button" type="submit">
+    <form
+      :action="report_url"
+      method="post"
+    >
+      <input 
+        type="hidden"
+        name="jwtToken"
+        :value="user.jwt"
+      >
+      <button
+        class="usa-button"
+        type="submit"
+      >
         Download Report
       </button>
     </form>

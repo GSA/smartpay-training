@@ -1,14 +1,11 @@
 <script setup>
-  import { reactive, watch, ref } from "vue"
+  import { reactive, watch, ref, computed } from "vue"
   import MultiSelect from '@components/MultiSelect.vue';
+  import DeleteIcon from "./icons/DeleteIcon.vue";
   import USWDSComboBox from "./USWDSComboBox.vue";
   import { bureauList, agencyList, setSelectedAgencyId, selectedAgencyId} from '../stores/agencies'
   import { useStore } from '@nanostores/vue'
-  import ValidatedSelect from './ValidatedSelect.vue';
-  import { useVuelidate } from '@vuelidate/core';
-  import { required, helpers } from '@vuelidate/validators';
-  const { withMessage } = helpers
-
+  
   const props = defineProps({
     user: {
       type: Object,
@@ -20,7 +17,7 @@
   // avoid modifying parent prop.
   const agencies = ref([...props.user.report_agencies])
 
-  const emit = defineEmits(['addAgency', 'deleteAgency', 'cancel'])
+  const emit = defineEmits(['cancel', 'save'])
 
   const agency_options = useStore(agencyList)
   const bureaus = useStore(bureauList)
@@ -28,33 +25,32 @@
 
   const user_input = reactive({
     agency_id: undefined,
-    bureau_id: undefined
   })
+
+  const selectedAgency = computed(() => agency_options.value.find(agency => agency.id == agencyId.value))
 
   function editUserAgencies(e, checked) {
     if (checked) {
-      const agency = agency_options.value.find(agency => agency.id == agencyId.value)
+      const bureau_name = agencyId.value == e.id ?
+      ''
+      : e.name
       agencies.value.push({
         id: e.id,
-        name: agency.name,
-        bureau: e.name
+        name: selectedAgency.value.name,
+        bureau: bureau_name
       })
     } else {
       agencies.value = agencies.value.filter(agency => agency.id != e.id)
     }
   }
 
+  function saveUser() {
+    emit('save', props.user.id, agencies.value, )
+  }
+
   watch(() => user_input.agency_id, async() => {
     setSelectedAgencyId(user_input.agency_id)
-    user_input.bureau_id = undefined
   })
-
-  const validations_all_info = {
-    agency_id: {
-      required: withMessage('Please enter your agency', required),
-    }
-  }
-  const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
 </script>
 <template>
@@ -65,51 +61,156 @@
   </div>
   <div class="grid-row grid-gap">
     <div class="tablet:grid-col">
-      <label class="usa-label" for="input-full-name">Full Name</label>
-      <input class="usa-input bg-base-lightest" id="input-full-name" name="input-full-name" :value="user.name" disabled/>
+      <label
+        for="input-full-name"
+        class="usa-label"
+      >
+        Full Name
+      </label>
+      <input 
+        id="input-full-name"
+        class="usa-input bg-base-lightest"
+        name="input-full-name"
+        :value="user.name"
+        disabled
+      >
     </div>
     <div class="tablet:grid-col">
-      <label class="usa-label" for="input-email">Full Name</label>
-      <input class="usa-input bg-base-lightest" id="input-email" name="input-email" :value="user.email" disabled/>
+      <label
+        for="input-email"
+        class="usa-label" 
+      >
+        Full Name
+      </label>
+      <input
+        id="input-email"
+        class="usa-input bg-base-lightest"
+        name="input-email"
+        :value="user.email" 
+        disabled
+      >
     </div>
   </div>
   <div class="grid-row grid-gap">
     <div class="tablet:grid-col">
-      <label class="usa-label" for="input-agency">Agency / Organization</label>
-      <input class="usa-input bg-base-lightest" id="input-agency" name="input-agency" :value="user.agency.name" disabled/>
+      <label 
+        for="input-agency"
+        class="usa-label"
+      >
+        Agency / Organization
+      </label>
+      <input
+        id="input-agency"
+        class="usa-input bg-base-lightest"
+        name="input-agency" 
+        :value="user.agency.name"
+        disabled
+      >
     </div>
     <div class="tablet:grid-col">
-      <label class="usa-label" for="input-bureau">Sub-Agency, Organization, or Bureau</label>
-      <input class="usa-input bg-base-lightest" id="input-bureau" name="input-bureau" :value="user.agency.bureau" disabled/>
+      <label
+        class="usa-label"
+        for="input-bureau"
+      >
+        Sub-Agency, Organization, or Bureau
+      </label>
+      <input
+        id="input-bureau"
+        class="usa-input bg-base-lightest"
+        name="input-bureau"
+        :value="user.agency.bureau"
+        disabled
+      >
     </div>
   </div>
-  <div v-for="agency in agencies" :key="agency.id" class="margin-y-2">
-    <button @click="editUserAgencies(agency, false)">[X]</button> {{ agency.name }} {{ agency.bureau }}
-  </div>
+  
+  <section class="margin-top-5">
+    <div class="usa-prose">
+      <h3>
+        Add Agency/Organization Reporting Access
+      </h3>
+    </div>
+    <div class="grid-row grid-gap">
+      <div class="tablet:grid-col">
+        <USWDSComboBox 
+          v-model="user_input.agency_id"
+          :items="agency_options"
+          name="agency"
+          label="Search for an agency"
+        />
 
-  <div class="grid-row grid-gap">
-    <div class="tablet:grid-col">
-      <USWDSComboBox 
-        v-model="user_input.agency_id"
-        :items="agency_options"
-        name="agency"
-        label="Agency / Organization"
-      />
+        <div 
+          v-if="user_input.agency_id"
+          class="border-1px padding-2 margin-top-2"
+        >
+          <MultiSelect 
+            :items="bureaus"
+            :values="agencies"
+            :all="selectedAgency"
+            @check-item="editUserAgencies"
+          />
+        </div>
+      </div>
+      <div class="tablet:grid-col">
+        <table class="usa-table usa-table--borderless width-full">
+          <thead>
+            <tr>
+              <th 
+                scope="col" 
+                class="text-no-wrap"
+              >
+                Agency/Organization
+              </th>
+              <th
+                scope="col"
+                class="text-no-wrap"
+              >
+                Sub-Agency, Org, or Bureau
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr 
+              v-for="agency in agencies" 
+              :key="agency.id"
+            >
+              <td>
+                {{ agency.name }}
+              </td>
+              <td>
+                <div class="display-flex flex-justify">
+                  <div>
+                    {{ agency.bureau }}
+                  </div>
+                  <div>
+                    <button 
+                      class="usa-button usa-button--unstyled"
+                      @click="editUserAgencies(agency, false)"
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="tablet:grid-col">
-      <MultiSelect :items="bureaus" :values="agencies" @checkItem="editUserAgencies"/>
+    <div class="margin-top-3">
+      <button 
+        class="usa-button"
+        @click="saveUser"
+      >
+        Update
+      </button>
     </div>
-  </div>
-  <div class="margin-top-3">
-    <button class="usa-button">
-      Update
+    <button 
+      type="button"
+      class="usa-button usa-button--unstyled margin-y-2"
+      @click="$emit('cancel')"
+    >
+      Cancel and return to search results
     </button>
-  </div>
-  <button 
-    @click="$emit('cancel')"
-    type="button"
-    class="usa-button usa-button--unstyled margin-y-2"
-  >
-    Cancel and return to search results
-  </button>
+  </section>
 </template>
