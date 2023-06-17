@@ -1,7 +1,7 @@
 <script setup>
   import { ref, computed} from "vue"
 
-  defineEmits(['checkItem'])
+  const emit = defineEmits(['checkItem'])
 
   const props = defineProps({
     'items': {
@@ -10,7 +10,7 @@
       default: undefined
     },
     'values': {
-      type: Object,
+      type: Array,
       required: true
     },
     'parent': {
@@ -24,6 +24,15 @@
   function isChecked(id) {
     return props.values.some(item => item.id == id)
   }
+  function selectAllBureaus(){
+    for (const item of filtereditems.value) {
+      // don't add items twice
+      if (!props.values.some(p => p.id ==item.id)){
+        emit('checkItem', item, true)
+      }
+    }
+  }
+  
   const hasSubAgencies = computed(() => props.items && props.items.length > 0)
   const filtereditems = computed(() => props.items && props.items.filter(
     item => item
@@ -60,6 +69,14 @@
         name="agency-search"
         type="text" 
       >
+      <button 
+        id="select-all"
+        v-if="hasSubAgencies"
+        class="usa-button usa-button--unstyled margin-bottom-2"
+        @click="selectAllBureaus"
+      >
+        select all
+      </button>
       <div
         id="selected-agencies"
         class="list maxh-card-lg overflow-y-scroll padding-bottom-1"

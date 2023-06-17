@@ -116,4 +116,30 @@ describe('AdminAgencySelect', async () => {
     expect(wrapper.emitted()['checkItem'][0][0]).toEqual(parent)
     expect(wrapper.emitted()['checkItem'][0][1]).toEqual(true)
   })
+
+  it('does not emit checked items when select-all is clicked', async () => {
+    const props = {items: agencies, values: selected, parent: parent}
+    const wrapper = mount(AdminAgencySelectVue, {props})
+    const selectAllButton = wrapper.find('button[id="select-all"]')
+    await selectAllButton.trigger('click')
+    expect(wrapper.emitted()['checkItem'].length).toEqual(1)
+  })
+
+  it('emits all unchecked items when select-all is clicked', async () => {
+    const props = {items: agencies, values: selected, parent: parent}
+    const wrapper = mount(AdminAgencySelectVue, {props})
+    const selectedCheckBox = wrapper.find('input[id="20"]')
+    await selectedCheckBox.setChecked(false)
+
+    const selectAllButton = wrapper.find('button[id="select-all"]')
+    await selectAllButton.trigger('click')
+    expect(wrapper.emitted()['checkItem'].length).toEqual(2)
+  })
+
+  it('does not show select all when there are no sub agencies', async () => {
+    const props = {values: selected, parent: parent}
+    const wrapper = mount(AdminAgencySelectVue, {props})
+    const selectAllButton = wrapper.find('button[id="select-all"]')
+    expect(selectAllButton.exists()).toBe(false)
+  })
 })
