@@ -24,6 +24,7 @@ describe('AdminAgencySelect', async () => {
 
     expect(name.element.value).toBe('Hugh Steeply')
     expect(email.element.value).toBe('helen.steeply@ous.gov')
+    expect(agency.element.value).toBe('Office of Unspecified Services')
     expect(bureau.element.value).toBe('Secret Service')
   })
 

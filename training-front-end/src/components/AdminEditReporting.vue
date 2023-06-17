@@ -180,7 +180,9 @@
           </thead>
           <tbody>
             <tr v-if="agencies.length == 0">
-              <td colspan="4">None</td>         
+              <td colspan="4">
+                None
+              </td>
             </tr>
             <tr 
               v-for="agency in agencies" 

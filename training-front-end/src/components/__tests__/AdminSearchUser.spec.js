@@ -6,7 +6,6 @@ import USWDSPagination from "../USWDSPagination.vue";
 
 import users from './fixtures/sample_users'
 import agencies from './fixtures/sample_agency_response'
-const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
 describe('AdminAgencySelect', async () => {
   afterEach(() => {
@@ -71,7 +70,7 @@ describe('AdminAgencySelect', async () => {
   })
 
   it('allows user to cancel update', async () => {
-    let fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve({'total_count': 2, 'users':users}) })
     })
     let wrapper = await mount(AdminSearchUserVue)
@@ -81,7 +80,7 @@ describe('AdminAgencySelect', async () => {
     await wrapper.get('form').trigger('submit.prevent')
     await flushPromises()
 
-    fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(agencies)})
     })
     const row = wrapper.findAll('tr')[1]
@@ -115,7 +114,7 @@ describe('AdminAgencySelect', async () => {
   })
 
   it('displays no results message', async () => {
-    let fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve({'total_count': 0, 'users':[]}) })
     })
     let wrapper = await mount(AdminSearchUserVue)
@@ -129,6 +128,4 @@ describe('AdminAgencySelect', async () => {
     expect(adminReporting.exists()).toBe(false)
     expect(wrapper.text()).toContain("zero results")
   })
-  
-
 })

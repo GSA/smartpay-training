@@ -70,8 +70,8 @@
         type="text" 
       >
       <button 
-        id="select-all"
         v-if="hasSubAgencies"
+        id="select-all"
         class="usa-button usa-button--unstyled margin-bottom-2"
         @click="selectAllBureaus"
       >
