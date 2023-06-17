@@ -118,9 +118,9 @@
   
   <section class="margin-top-5">
     <div class="usa-prose">
-      <h3>
+      <h4>
         Add Agency/Organization Reporting Access
-      </h3>
+      </h4>
     </div>
     <div class="grid-row grid-gap">
       <div class="tablet:grid-col">
@@ -128,7 +128,7 @@
           v-model="user_input.agency_id"
           :items="agency_options"
           name="agency"
-          label="Search for an agency"
+          label="Which agency or organization should this person receive reports for?"
         />
 
         <div 
@@ -179,6 +179,9 @@
             </tr>
           </thead>
           <tbody>
+            <tr v-if="agencies.length == 0">
+              <td colspan="4">None</td>         
+            </tr>
             <tr 
               v-for="agency in agencies" 
               :key="agency.id"

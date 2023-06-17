@@ -51,6 +51,23 @@ describe('AdminAgencySelect', async () => {
     expect(table_rows[1].text()).toContain('A.T.F')
   })
 
+  it('displays none when the user is not associated with an agency', async () => {
+    const props = {user: users[0]}
+    const wrapper = mount(AdminEditReporting, {props})
+    let table_rows = wrapper.findAll('tr')
+    
+    const delete_button_row_1 = table_rows[1].find('button')
+    const delete_button_row_2 = table_rows[2].find('button')
+
+    await delete_button_row_1.trigger('click')
+    await delete_button_row_2.trigger('click')
+
+
+    table_rows = wrapper.findAll('tr')
+    expect(table_rows.length).toBe(2)
+    expect(table_rows[1].text()).toContain('None')
+  })
+
   it("emits user id and user's updated agencies on save", async () => {
     const props = {user: users[0]}
     const wrapper = mount(AdminEditReporting, {props})
