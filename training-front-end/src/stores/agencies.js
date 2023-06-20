@@ -18,7 +18,7 @@ export const setSelectedAgencyId = action(selectedAgencyId, 'set', (store, id) =
 
 export const bureauList = computed(
   selectedAgencyId, 
-  id => id === undefined 
+  id => !id
     ? [] 
     : agencyList.get().find(agency => agency.id == id ).bureaus 
   )
