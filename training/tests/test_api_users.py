@@ -96,3 +96,5 @@ def test_edit_user_for_reporting(mock_user_repo: UserRepository):
         json=[3]
     )
     assert response.status_code == status.HTTP_200_OK
+    assert role in response.json()["roles"]
+    assert agency in response.json()["report_agencies"]
