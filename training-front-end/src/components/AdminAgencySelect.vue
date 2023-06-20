@@ -75,7 +75,7 @@
         class="usa-button usa-button--unstyled margin-bottom-2"
         @click="selectAllBureaus"
       >
-        select all
+        Select all
       </button>
       <div
         id="selected-agencies"

@@ -36,7 +36,8 @@
           status="error"
           :heading="error.name"
         >
-          <span v-html="error.message"></span>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span v-html="error.message" />
         </USWDSAlert>
 
         <Loginless
