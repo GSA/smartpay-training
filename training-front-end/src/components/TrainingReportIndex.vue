@@ -18,7 +18,7 @@
     if (err.message == 'Unauthorized'){
       err = {
         name: 'You are not authorized to receive reports.',
-        message: 'Your email account is not authorized to access training reports. If you should be authorized, you can contact the SmartPay team to gain access.'
+        message: 'Your email account is not authorized to access training reports. If you should be authorized, you can <a class="usa-link" href="mailto:gsa_smartpay@gsa.gov">contact the SmartPay team</a> to gain access.'
       }
       setError(err)
     }
@@ -36,12 +36,13 @@
           status="error"
           :heading="error.name"
         >
-          {{ error.message }}
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span v-html="error.message" />
         </USWDSAlert>
 
         <Loginless
           page-id="training_reports"
-          title="Training Reprts"
+          title="Training Reports"
           header="header"
           link-destination-text="the training reports you are eligible to receive"
           :allow-registration="false"
