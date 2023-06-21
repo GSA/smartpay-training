@@ -172,7 +172,7 @@ describe('AdminAgencySelect', async () => {
   it('displays error on server failure during update', async () => {
     profile.set({name:"Ortho Stice", jwt:"some-token-value"})
 
-    let fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve({'total_count': 2, 'users':users}) })
     })
     let wrapper = await mount(AdminSearchUserVue)
@@ -182,7 +182,7 @@ describe('AdminAgencySelect', async () => {
     await wrapper.get('form').trigger('submit.prevent')
     await flushPromises()
 
-    fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(agencies)})
     })
     const row = wrapper.findAll('tr')[1]
@@ -190,7 +190,7 @@ describe('AdminAgencySelect', async () => {
     await nameLink.trigger('click')
     const adminReporting = wrapper.findComponent(AdminEditReporting)
 
-    fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: false, status:403, text: () => Promise.resolve('Office of Unspecified Services is not a real agency')})
     })
     await adminReporting.vm.$emit('save', "1", [{id: 10}])
