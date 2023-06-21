@@ -155,7 +155,7 @@ def valid_jwt(db_with_data: Session) -> str:
     Provides a JWT based on a test user in the database.
     '''
     db_user = db_with_data.query(models.User).first()
-    user = schemas.User.from_orm(db_user).dict()
+    user = schemas.UserJWT.from_orm(db_user).dict()
     return jwt.encode(user, settings.JWT_SECRET, algorithm="HS256")
 
 

@@ -10,5 +10,4 @@
       "@layouts/*": ["src/layouts/*"]
     }
   }
-  
 }

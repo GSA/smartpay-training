@@ -3,7 +3,7 @@ import jwt
 from typing import Union
 
 from fastapi import APIRouter, status, Response, HTTPException, Depends
-from training.schemas import TempUser, IncompleteTempUser, WebDestination, User
+from training.schemas import TempUser, IncompleteTempUser, WebDestination, UserJWT
 from training.data import UserCache
 from training.repositories import UserRepository
 from training.api.deps import user_repository
@@ -114,6 +114,6 @@ async def get_user(
     db_user = repo.find_by_email(user.email)
     if not db_user:
         db_user = repo.create(user)
-    user_return = User.from_orm(db_user)
+    user_return = UserJWT.from_orm(db_user)
     encoded_jwt = jwt.encode(user_return.dict(), settings.JWT_SECRET, algorithm="HS256")
     return {'user': user_return, 'jwt': encoded_jwt}
