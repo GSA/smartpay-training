@@ -1,8 +1,7 @@
-import { describe, it, expect, afterEach, beforeEach, vi} from 'vitest'
+import { describe, it, expect, afterEach, vi} from 'vitest'
 
 import { cleanStores, keepMount } from 'nanostores'
 import { profile, getUserFromToken, getUserFromTokenExchange} from '../user'
-import AuthService from '../../services/auth'
 
 const fetchData = {
   user: {
@@ -16,9 +15,7 @@ const base_url = "http://www.example.com"
 const param_token = "123-abc-xzy"
 
 describe('getUserFromToken', () => {
-  beforeEach(() => {
-    vi.spyOn(AuthService.prototype, 'logout').mockImplementation(() => {})
-  })
+
   afterEach(() => {
     vi.restoreAllMocks()
     cleanStores(profile)
