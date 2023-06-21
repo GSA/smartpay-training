@@ -29,9 +29,9 @@ Install NPM dependencies for the Vue frontend:
 npm run build:frontend
 ```
 
-### Redis and PostgreSQL
+### Service dependencies
 
-This app depends on Redis to support the temporary tokens used for verification emails. It also uses PostgreSQL as a main data store. To start up local services:
+This app depends on Redis to support the temporary tokens used for verification emails. It also uses PostgreSQL as a main data store. For administrator logins, the app requires an OAuth server. To start up local services:
 
 ```sh
 docker-compose up
@@ -41,6 +41,7 @@ docker-compose up -d
 
 This will start:
 
+* A local UAA instance listening on port 8080
 * A local Redis cache listening on port 6379
 * A local PostgreSQL database listening on port 5432
 * An Adminer instance listening on port 8432
@@ -91,16 +92,6 @@ Before the first deployment, you need to run the bootstrap script, where `SPACE`
 
 ```
 bin/cg-bootstrap-space.sh SPACE
-```
-
-You'll also have to set up an identity provider service so that app administrators can log in via cloud.gov UAA. For each space, where `FRONT_END_BASE_URL` is the base URL of the front end website that will be running on cloud.gov Pages:
-
-```
-bin/cg-create-identity-service.sh SPACE FRONT_END_BASE_URL
-
-# Examples:
-#   bin/cg-create-identity-service.sh dev https://federalist-2e11f2c8-970f-44f5-acc8-b47ef6c741ad.sites.pages.cloud.gov/site/gsa/smartpay-training
-#   bin/cg-create-identity-service.sh prod https://training.smartpay.gsa.gov
 ```
 
 You can monitor the services deployment status with `cf services`. It can take quite a while to fully provision everything. Once the services are ready, you can bootstrap the application:
