@@ -5,8 +5,6 @@ import AdminEditReporting  from  '../AdminEditReporting.vue'
 import USWDSPagination from "../USWDSPagination.vue";
 import { cleanStores } from 'nanostores'
 import { profile } from '../../stores/user.js'
-
-
 import users from './fixtures/sample_users'
 import agencies from './fixtures/sample_agency_response'
 
