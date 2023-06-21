@@ -1,3 +1,6 @@
 env: test
 memory: 256M
 instances: 1
+oauth_redirect_uri:
+  - https://training.smartpay.gsa.gov
+  - https://training.smartpay.gsa.gov/auth_callback
