@@ -1,0 +1,57 @@
+@startuml smartpay_training_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title SmartPay Training System
+
+note as ConnectionNote
+All connections depicted are encrypted with TLS 1.2 unless otherwise noted. 
+All connextions are on port 443 and use https unles otherwise noted.
+All connections use TCP. 
+end note
+
+Boundary(pages_boundary, "Cloud.gov Pages") {
+    System(training_front_end, "SmartPay Training Front-end")
+    System(cloud_pages, "Cloud.gov pages core")
+    System(previews, "Preview Branches", "https://federalist-<token>.sites.pages.cloud.gov") 
+}
+
+Boundary(cloud_gov, "Cloud.gov ", "") {
+    Boundary(ato, "ATO Boundary") {
+        System(sp_backend, "SmartPay API (8000)", "FastAPI/Python") 
+    }
+    System(cloud_api,"cloud.gov API")
+    Boundary(cloudgov-services,"Cloud.gov brokered services") {
+        SystemDb_Ext(db, "Database (5432)", "Brokered postgreSQL")
+        SystemDb_Ext(redis, "Redis Cache", "Brokered Redis")
+    } 
+} 
+
+Boundary(cicd, "CI/CD") {
+  System_Ext(github, "Github", "GSA controlled code repository")
+}
+
+Person(SP_Admin, "SmartPay Admin")
+Person(Public, "Public User")
+Person(Developer, "Developer")
+
+System_Ext(uaa, "Secure Auth", "MFA login")
+System_Ext(smtp, "Google SMTP Proxy", "SMTP email service")
+
+Rel(SP_Admin, uaa, "MFA Authentication")
+Rel(SP_Admin, training_front_end, "Edit A/OPC reporting access")
+Rel(training_front_end, sp_backend, "Save / retrieve training data")
+
+Rel(Developer, github, "Publish code", "git ssh/https")
+Rel(github, cloud_api, "Deploy app", "Auth: Service Account, https: 443")
+Rel(cloud_pages, github, "Watches for changes and builds/deploys front-end static assets")
+
+Rel(smtp, Public, "Send confirmation email")
+Rel(sp_backend, smtp, "Send confirmstion email")
+Rel(Public, training_front_end, "Takes Quiz/Accesses Certificate")
+Rel(sp_backend, redis, "set/retrieve cached url tokens", "port 6379")
+Rel(sp_backend, db, "save/retrieve Quiz results")
+Rel(cloud_pages, training_front_end, "Deploys")
+Rel(cloud_pages, previews, "Deploys")
+
+SHOW_LEGEND()
+@enduml
