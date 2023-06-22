@@ -29,7 +29,7 @@ export function exit_warning(event) {
   return event.returnValue = "Are you sure you want to exit?";
 }
 
-export function exit() {
+export async function exit() {
   // exit session without displaying the navigation warning
   // this allows users to click the modal's 'exit' button
   // without an additional warning

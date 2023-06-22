@@ -1,6 +1,7 @@
 import { persistentAtom, setPersistentEngine } from '@nanostores/persistent'
 import { action, computed } from 'nanostores'
 
+
 /*
  * Change default to use sessionStorage instead of localStorage,
  * which will cause the session to be cleared when the tab closers
@@ -26,7 +27,9 @@ export const profile = persistentAtom('user', {},
 
 export const hasActiveSession = computed(profile, user => Boolean(user.jwt))
 
-export const clearUser = action(profile, 'clearUser', store => store.set({}))
+export const clearUser = action(profile, 'clearUser', async store => {
+  store.set({})
+})
 
 export const getUserFromToken = action(profile, 'getUserFromToken', async (store, base_url, token) => {
   const url = `${base_url}/api/v1/get-user/${token}`

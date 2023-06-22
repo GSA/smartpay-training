@@ -3,10 +3,8 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import HeroTraining from '@components/HeroTraining.astro';
 import AdminSearchUser from '@components/AdminSearchUser.vue';
 import AuthRequired from '@components/AuthRequired.vue';
-import AdminIndex from '@components/AdminIndex.vue';
 
 const pageTitle = "Admin Panel";
-
 ---
 <BaseLayout title={pageTitle}>
   <HeroTraining background_class='bg_smartpay_cool_grey'>
@@ -15,8 +13,8 @@ const pageTitle = "Admin Panel";
         Administrators
     </span>
   </HeroTraining>
-  <AdminSearchUser client:only />
+  
   <AuthRequired client:only>
-    <AdminIndex client:only />
+    <AdminSearchUser client:only />
   </AuthRequired>
 </BaseLayout>

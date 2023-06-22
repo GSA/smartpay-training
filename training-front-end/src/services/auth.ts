@@ -46,7 +46,7 @@ export default class AuthService {
   }
 
   public logout(): Promise<void> {
-    return this.userManager.signoutRedirect()
+    return this.userManager.signoutSilent()
   }
 
   public async getAccessToken(): Promise<string> {

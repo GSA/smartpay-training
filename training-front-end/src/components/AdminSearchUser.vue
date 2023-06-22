@@ -3,7 +3,12 @@
   import AdminUserSearchTable from "./AdminUserSearchTable.vue";
   import AdminEditReporting from "./AdminEditReporting.vue";
   import USWDSPagination from "./USWDSPagination.vue";
+  import USWDSAlert from './USWDSAlert.vue'
   import { setSelectedAgencyId} from '../stores/agencies'
+  import { useStore } from '@nanostores/vue'
+  import { profile} from '../stores/user'
+
+  const user = useStore(profile)
 
   const PAGE_SIZE = 25
 
@@ -19,6 +24,7 @@
   const selectedUser = ref()
   const searchResults = ref([])
   const noResults = ref(false)
+  const error = ref()
 
   async function setPage(page) {
     currentPage.value = page
@@ -29,30 +35,54 @@
     noResults.value = false
     const url = new URL(`${report_url}${searchTerm.value}`)
     url.search = new URLSearchParams({page_number: currentPage.value + 1})
-    let search_results = await fetch(url).then((r) => r.json())
-    searchResults.value = search_results.users
-    numberOfResults.value = search_results.total_count
-    noResults.value = search_results.total_count === 0
+    try {
+      const response = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${user.value.jwt}`
+          }
+        }
+      )
+      if (! response.ok) {
+        const message = await response.text()
+        throw new Error(message)
+      }
+      let search_results = await response.json()
+      searchResults.value = search_results.users
+      numberOfResults.value = search_results.total_count
+      noResults.value = search_results.total_count === 0
+    } catch (err) {
+      error.value = err
+    }
   }
  
   async function updateUserReports(userId, agencyIds) {
     const agencies = agencyIds.map(a => a.id)
     const url = new URL(update_url)
     url.search = new URLSearchParams({user_id: userId})
-    let updatedUser = await fetch(
-      url, { 
-        method: "PUT", 
-        headers: { 
-          'Content-Type': 'application/json',
-          // this will be needed when admin auth is in place
-          // 'Authorization': `Bearer ${user.value.jwt}` 
-        },
-        body:  JSON.stringify(agencies) 
+    try {
+      const response = await fetch(
+        url, { 
+          method: "PUT", 
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.value.jwt}` 
+          },
+          body:  JSON.stringify(agencies) 
+        }
+      )
+      if (!response.ok) {
+        const message = await response.text()
+        throw new Error(message)
       }
-    ).then((r) => r.json())
-    selectedUser.value.report_agencies = updatedUser.report_agencies
-    setCurrentUser(undefined)
-    setSelectedAgencyId(undefined)
+      let updatedUser = await response.json()
+      selectedUser.value.report_agencies = updatedUser.report_agencies
+      setCurrentUser(undefined)
+      setSelectedAgencyId(undefined)
+    } catch (err){
+      error.value = err
+    }
   }
 
   function setCurrentUser(e) {
@@ -67,6 +97,13 @@
 
 <template>
   <div class="padding-top-4 padding-bottom-4 grid-container">
+    <USWDSAlert
+      v-if="error"
+      status="error"
+      :heading="error.name"
+    >
+      {{ error.message }}
+    </USWDSAlert>
     <div 
       v-if="!selectedUser"
       class="grid-row"

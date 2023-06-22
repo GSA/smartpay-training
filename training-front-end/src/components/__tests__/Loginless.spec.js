@@ -4,6 +4,7 @@ import { mount, shallowMount, flushPromises } from '@vue/test-utils'
 import { cleanStores, keepMount, allTasks } from 'nanostores'
 import Loginless from '../LoginlessFlow.vue'
 import { profile } from '../../stores/user.js'
+
 import * as agencyList from '../../stores/helpers/getAgencies'
 
 function submitEmail(wrapper, email) {
@@ -51,6 +52,7 @@ describe('Loginless', () => {
   afterEach(() => {
     vi.restoreAllMocks()
     cleanStores(profile)
+    profile.set({})
   })
 
   it('renders initial view, but not the response view', async () => {
@@ -230,12 +232,14 @@ describe('Loginless', () => {
 
   it('gets the user from the api using the token from the url and sets it in the store', async () => {
     vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
+
     keepMount(profile)
 
     const token_response = {
       user: {name: "Molly Bloom"},
       jwt: 'abcd'
     }
+
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, json: () => Promise.resolve(token_response) })
     })
@@ -262,7 +266,7 @@ describe('Loginless', () => {
 
   it("emits error when api can't find the token", async () => {
     vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '7348244d-76c7-4535-94f7-5929e039af97')
-    
+
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: false })
     })

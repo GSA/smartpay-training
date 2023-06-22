@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach, vi} from 'vitest'
 
 import { cleanStores, keepMount } from 'nanostores'
-import { profile, getUserFromToken} from '../user'
+import { profile, getUserFromToken, getUserFromTokenExchange} from '../user'
 
 const fetchData = {
   user: {
@@ -15,6 +15,7 @@ const base_url = "http://www.example.com"
 const param_token = "123-abc-xzy"
 
 describe('getUserFromToken', () => {
+
   afterEach(() => {
     vi.restoreAllMocks()
     cleanStores(profile)
@@ -54,5 +55,49 @@ describe('getUserFromToken', () => {
       return Promise.reject('Whoops, server error')
     })
     await expect(getUserFromToken(base_url, param_token)).rejects.toThrow('Sorry, we had an error connecting to the server');
+  })
+
+  it('sets token from token exchange', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(fetchData) })
+    })
+    keepMount(profile)
+    await getUserFromTokenExchange(base_url, param_token)
+    expect(profile.get()).toEqual({ 
+      name: 'Gaspara Stampa', 
+      id: 123, 
+      jwt: "test-token-123"
+    })
+  })
+
+  it('calls the api to perform token exchange', async () => {
+    const fetch_spy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(fetchData) })
+    })
+    keepMount(profile)
+    await getUserFromTokenExchange(base_url, param_token)
+    expect(fetch_spy).toHaveBeenCalledWith(
+      `${base_url}/api/v1/auth/exchange`, 
+      {
+        headers: {
+          Authorization: 'Bearer 123-abc-xzy'
+        },
+        method: "POST"
+      }
+    )
+  })
+  
+  it('throws an error when there is a server error on token exchange', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.reject('Whoops, server error')
+    })
+    await expect(getUserFromTokenExchange(base_url, param_token)).rejects.toThrow('We were unable to log you in (exchange error).');
+  })
+
+  it('throws an error when the server returns 403 on token exchange', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: false, status:403, json: () => Promise.resolve("Unauthorized") })
+    })
+    await expect(getUserFromTokenExchange(base_url, param_token)).rejects.toThrow('Your account is not authorized to access this feature.');
   })
 })
