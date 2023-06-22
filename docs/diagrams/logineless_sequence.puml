@@ -1,8 +1,8 @@
 @startuml loginless_sequence
 title Loginless Flow for SmartPay Training
 actor User as user
-entity FrontEnd as frontend
-entity Backend as backend
+entity "FrontEnd SPA on browser" as frontend
+entity "Backend FastAPI" as backend
 database Redis as redis
 database PostgreSQL as database
 == Initialize Loginless Flow ==
@@ -19,7 +19,7 @@ backend -> smtp: send email unique link
 user <-- smtp: send email with unique link
 == Use System ==
 alt valid / non-expired link
-  user -> frontend: request linked page
+  user -> frontend: request page linked in email
   frontend -> backend: api request with link token
   backend -> redis: query token and retrieve user info
   backend <-- redis: return user email/name
