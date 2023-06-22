@@ -17,7 +17,7 @@ Boundary(pages_boundary, "Cloud.gov Pages") {
 
 Boundary(cloud_gov, "Cloud.gov ", "") {
     Boundary(ato, "ATO Boundary") {
-        System(sp_backend, "SmartPay API (8000)", "FastAPI/Python") 
+        System(sp_backend, "SmartPay API", "FastAPI/Python") 
     }
     System(cloud_api,"cloud.gov API")
     Boundary(cloudgov-services,"Cloud.gov brokered services") {

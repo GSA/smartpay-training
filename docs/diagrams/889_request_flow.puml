@@ -1,0 +1,12 @@
+@startuml 889_request_flow
+title Loginless Flow for SmartPay Training
+actor User as user
+entity "Frontend SPA on browser" as frontend
+entity "Backend FastAPI" as backend
+entity "Sam.gov Entity API" as sam
+user -> frontend: enter search term
+frontend -> backend: post request with search term
+backend -> sam: post request with search term and API key
+backend <-- sam: send JSON entity data
+frontend <-- backend: filter unneaded data and send json
+user <-- frontend: present results, generate PDF

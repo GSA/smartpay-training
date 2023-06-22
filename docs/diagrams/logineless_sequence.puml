@@ -1,7 +1,7 @@
 @startuml loginless_sequence
 title Loginless Flow for SmartPay Training
 actor User as user
-entity "FrontEnd SPA on browser" as frontend
+entity "Frontend SPA on browser" as frontend
 entity "Backend FastAPI" as backend
 database Redis as redis
 database PostgreSQL as database
