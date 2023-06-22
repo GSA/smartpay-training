@@ -1,4 +1,4 @@
-@startuml SmartPay_Website_Context
+@startuml smartpay_website_context
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
