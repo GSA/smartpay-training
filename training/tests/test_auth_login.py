@@ -36,7 +36,14 @@ def regular_user_uaa_jwt(regular_user_data):
 
 @pytest.fixture
 def invalid_jwt(admin_user_data: dict):
-    return jwt.encode(admin_user_data, 'hakzors', algorithm="HS256")
+    payload = admin_user_data.copy()
+    payload["aud"] = [settings.AUTH_CLIENT_ID, "openid"]
+    return jwt.encode(
+        payload,
+        "hakzors",
+        algorithm="HS256",
+        headers={"kid": "test_key_id"}
+    )
 
 
 def test_auth_metadata():
@@ -87,7 +94,17 @@ def test_auth_exchange_valid_jwt_nonexistent_user(decode_jwt, find_by_email, reg
     assert response.status_code == 401
 
 
-def test_auth_exchange_invalid_jwt(invalid_jwt):
+@patch("training.repositories.UserRepository.find_by_email")
+@patch("training.api.auth.UAAJWTUser.get_jwks")
+def test_auth_exchange_invalid_jwt(get_jwks, find_by_email, invalid_jwt, admin_user_data):
+    get_jwks.return_value = {
+        "test_key_id": {
+            "key": "test_uaa_key",
+            "alg": "HS256",
+        }
+    }
+    find_by_email.return_value = models.User(**admin_user_data)
+
     response = client.post(
         "/api/v1/auth/exchange",
         headers={"Authorization": f"Bearer {invalid_jwt}"}
