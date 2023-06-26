@@ -4,6 +4,8 @@
 
 title SmartPay 889 Tool
 
+AddSystemTag('ATO_component', $legendText="Component in ATO Boundary", $bgColor="red")
+
 note as ConnectionNote
 All connections depicted are encrypted with TLS 1.2 unless otherwise noted. 
 All connextions are on port 443 and use https unles otherwise noted.
@@ -11,32 +13,31 @@ All connections use TCP.
 end note
 
 System_Boundary(cloud_gov_pages, "Cloud.gov Pages", "") {
-
   System(889_front_end, "889 front-end", "https://889.smartpay.gsa.gov\nStatic HTML/javascript single page application") 
   System(cloud_pages, "Cloud.gov pages core")
 }
 
 System_Boundary(cloud_gov, "Cloud.gov") {
   Boundary(ato, "ATO Boundary") {
-      System(889, "889 tool backend", "FastAPI/Python")            
+      System(889, "889 tool backend", "FastAPI/Python", $tags="ATO_component")            
   }  
   System(cloud_api,"cloud.gov API")
 
 } 
 
 Boundary(cicd, "CI/CD") {
-  System_Ext(github, "Github", "GSA controlled code repository")
+  System_Ext(github, "Github", "GSA controlled code repositor [Requires MFA]")
 }
 
 
 Person_Ext(Public, "Public User")
 Person(Developer, "Developer")
 
-System(samgov, "SAM.gov", "889 API Source Data")
+System_Ext(samgov, "SAM.gov", "889 API Source Data")
 
 Rel(cloud_pages, github, "Watches for changes and deploys front-end static assets")
-Rel(Developer, github, "Publish code", "git ssh/https")
-Rel(github, cloud_api, "Deploy app", "Auth: Service Account, https: 443")
+Rel(Developer, github, "Publish code", "git ssh[22]/https[443]")
+Rel(github, cloud_api, "Deploy app", "Auth: Service Account, https[443]")
 Rel(889, samgov, "Request entity information via API with System API key")
 Rel(889_front_end,  889, "Requests entity information via HTTPS api call")    
 Rel(Public, 889_front_end, "Searches Entity Information")

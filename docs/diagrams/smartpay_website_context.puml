@@ -19,7 +19,7 @@ Boundary(cloud_gov_pages, "Cloud.gov Pages", "") {
 }
 
 Boundary(cicd, "CI/CD") {
-  System_Ext(github, "Github", "GSA controlled code repository")
+  System_Ext(github, "Github", "GSA controlled code repository [Requires MFA]")
 }
 
 

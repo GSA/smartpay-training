@@ -9,6 +9,8 @@ All connextions are on port 443 and use https unles otherwise noted.
 All connections use TCP. 
 end note
 
+AddSystemTag('ATO_component', $legendText="Component in ATO Boundary", $bgColor="red")
+
 Boundary(pages_boundary, "Cloud.gov Pages") {
     System(training_front_end, "SmartPay Training Front-end")
     System(cloud_pages, "Cloud.gov pages core")
@@ -17,17 +19,17 @@ Boundary(pages_boundary, "Cloud.gov Pages") {
 
 Boundary(cloud_gov, "Cloud.gov ", "") {
     Boundary(ato, "ATO Boundary") {
-        System(sp_backend, "SmartPay API", "FastAPI/Python") 
+        System(sp_backend, "SmartPay API", "FastAPI/Python", $tags="ATO_component") 
     }
     System(cloud_api,"cloud.gov API")
     Boundary(cloudgov-services,"Cloud.gov brokered services") {
-        SystemDb_Ext(db, "Database (5432)", "Brokered postgreSQL")
-        SystemDb_Ext(redis, "Redis Cache", "Brokered Redis")
+        SystemDb(db, "Database (5432)", "Brokered postgreSQL")
+        SystemDb(redis, "Redis Cache", "Brokered Redis")
     } 
 } 
 
 Boundary(cicd, "CI/CD") {
-  System_Ext(github, "Github", "GSA controlled code repository")
+  System_Ext(github, "Github", "GSA controlled code repository [requires MFA]")
 }
 
 Person(SP_Admin, "SmartPay Admin")
