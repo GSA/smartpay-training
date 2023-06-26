@@ -1,0 +1,40 @@
+@startuml SmartPay_Admin_Login
+title Multi-Factor Authentication for SmartPay Admin
+actor Admin as user
+entity "Frontend SPA on browser" as frontend
+database "GSA Secure Auth" as auth
+entity "Backend FastAPI" as backend
+database PostgreSQL as database
+== Login ==
+
+user -> frontend: clicks login button
+user <-- frontend: redirect to SecureAuth
+user -> auth: start auth [name/password/MFA]
+alt invalid login
+  auth -> auth: retry
+end
+
+user <-- auth: send signed JWT with contact inlcuding email address
+user -> backend: authenticate with SecureAuth token
+backend -> database: check if user has 'admin' role
+
+alt user is recognized with admin role
+  backend <-- database: has user role
+  frontend <-- backend: send signed JWT token
+  user <-- frontend: present data / interface
+else non-admin user
+  backend <-- database: not found or does not have user role
+  frontend <--[#red] backend: HTTP Error: Unauthorized
+  user <--[#red] frontend: error message
+end
+== Use System ==
+user -> frontend: click links / submit form
+frontend -> backend: API request access/update with JWT in auth header
+alt valid jwt
+  frontend <-- backend: send data
+  user <-- frontend: present results
+else invalid jwt
+  frontend <--[#red] backend: HTTP Error: Unauthorized
+  user x--[#red] frontend: error message
+end
+@enduml
