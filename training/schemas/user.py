@@ -6,7 +6,7 @@ from training.schemas.role import Role
 
 def convert_roles(cls, input) -> list[str]:
     # Converts roles from a list of dicts to a simple list of role name strings.
-    return list(map(lambda role: role.name, input))
+    return [role["name"] for role in input]
 
 
 class UserBase(BaseModel):
@@ -25,6 +25,10 @@ class User(UserBase):
     agency: Agency
     roles: list[Role]
     report_agencies: list[Agency]
+
+    def is_admin(self) -> bool:
+        role_names = [role.name.upper() for role in self.roles]
+        return "Admin".upper() in role_names
 
     class Config:
         orm_mode = True
