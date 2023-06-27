@@ -2,9 +2,9 @@ import jwt
 import pytest
 from unittest.mock import patch
 from fastapi.testclient import TestClient
-from training import models
 from training.main import app
 from training.config import settings
+from training.schemas.user import User
 from training.tests.factories import RoleSchemaFactory, UserSchemaFactory
 
 
@@ -12,31 +12,31 @@ client = TestClient(app)
 
 
 @pytest.fixture
-def admin_user_data() -> dict:
-    admin_role = RoleSchemaFactory.build(name="Admin")
-    admin_user = UserSchemaFactory.build(roles=[admin_role], report_agencies=[])
-    return admin_user.dict()
+def admin_user() -> User:
+    role = RoleSchemaFactory.build(name="Admin")
+    user = UserSchemaFactory.build(roles=[role], report_agencies=[])
+    return user
 
 
 @pytest.fixture
-def regular_user_data() -> dict:
-    regular_user = UserSchemaFactory.build(report_agencies=[])
-    return regular_user.dict()
+def regular_user() -> User:
+    user = UserSchemaFactory.build(roles=[], report_agencies=[])
+    return user
 
 
 @pytest.fixture
-def admin_user_uaa_jwt(admin_user_data):
-    return jwt.encode(admin_user_data, "test_uaa_key", algorithm="HS256")
+def admin_user_uaa_jwt(admin_user: User):
+    return jwt.encode(admin_user.dict(), "test_uaa_key", algorithm="HS256")
 
 
 @pytest.fixture
-def regular_user_uaa_jwt(regular_user_data):
-    return jwt.encode(regular_user_data, "test_uaa_key", algorithm="HS256")
+def regular_user_uaa_jwt(regular_user: User):
+    return jwt.encode(regular_user.dict(), "test_uaa_key", algorithm="HS256")
 
 
 @pytest.fixture
-def invalid_jwt(admin_user_data: dict):
-    payload = admin_user_data.copy()
+def invalid_jwt(admin_user: User):
+    payload = admin_user.dict()
     payload["aud"] = [settings.AUTH_CLIENT_ID, "openid"]
     return jwt.encode(
         payload,
@@ -57,9 +57,9 @@ def test_auth_metadata():
 
 @patch("training.repositories.UserRepository.find_by_email")
 @patch("training.api.auth.UAAJWTUser.decode_jwt")
-def test_auth_exchange_valid_jwt_admin_user(decode_jwt, find_by_email, admin_user_data, admin_user_uaa_jwt):
-    decode_jwt.return_value = dict(admin_user_data)
-    find_by_email.return_value = models.User(**admin_user_data)
+def test_auth_exchange_valid_jwt_admin_user(decode_jwt, find_by_email, admin_user, admin_user_uaa_jwt):
+    decode_jwt.return_value = admin_user.dict()
+    find_by_email.return_value = admin_user
 
     response = client.post(
         "/api/v1/auth/exchange",
@@ -70,9 +70,9 @@ def test_auth_exchange_valid_jwt_admin_user(decode_jwt, find_by_email, admin_use
 
 @patch("training.repositories.UserRepository.find_by_email")
 @patch("training.api.auth.UAAJWTUser.decode_jwt")
-def test_auth_exchange_valid_jwt_regular_user(decode_jwt, find_by_email, regular_user_data, regular_user_uaa_jwt):
-    decode_jwt.return_value = dict(regular_user_data)
-    find_by_email.return_value = models.User(**regular_user_data)
+def test_auth_exchange_valid_jwt_regular_user(decode_jwt, find_by_email, regular_user, regular_user_uaa_jwt):
+    decode_jwt.return_value = regular_user.dict()
+    find_by_email.return_value = regular_user
 
     response = client.post(
         "/api/v1/auth/exchange",
@@ -83,8 +83,8 @@ def test_auth_exchange_valid_jwt_regular_user(decode_jwt, find_by_email, regular
 
 @patch("training.repositories.UserRepository.find_by_email")
 @patch("training.api.auth.UAAJWTUser.decode_jwt")
-def test_auth_exchange_valid_jwt_nonexistent_user(decode_jwt, find_by_email, regular_user_data, regular_user_uaa_jwt):
-    decode_jwt.return_value = dict(regular_user_data)
+def test_auth_exchange_valid_jwt_nonexistent_user(decode_jwt, find_by_email, regular_user, regular_user_uaa_jwt):
+    decode_jwt.return_value = regular_user.dict()
     find_by_email.return_value = None
 
     response = client.post(
@@ -96,14 +96,14 @@ def test_auth_exchange_valid_jwt_nonexistent_user(decode_jwt, find_by_email, reg
 
 @patch("training.repositories.UserRepository.find_by_email")
 @patch("training.api.auth.UAAJWTUser.get_jwks")
-def test_auth_exchange_invalid_jwt(get_jwks, find_by_email, invalid_jwt, admin_user_data):
+def test_auth_exchange_invalid_jwt(get_jwks, find_by_email, invalid_jwt, admin_user):
     get_jwks.return_value = {
         "test_key_id": {
             "key": "test_uaa_key",
             "alg": "HS256",
         }
     }
-    find_by_email.return_value = models.User(**admin_user_data)
+    find_by_email.return_value = admin_user
 
     response = client.post(
         "/api/v1/auth/exchange",

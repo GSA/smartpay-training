@@ -6,7 +6,7 @@ from training.schemas.role import Role
 
 def convert_roles(cls, input) -> list[str]:
     # Converts roles from a list of dicts to a simple list of role name strings.
-    return [role["name"] for role in input]
+    return [role.name for role in input]
 
 
 class UserBase(BaseModel):
