@@ -26,7 +26,7 @@ System_Boundary(cloud_gov, "Cloud.gov") {
 } 
 
 Boundary(cicd, "CI/CD") {
-  System_Ext(github, "Github", "GSA controlled code repositor [Requires MFA]")
+  System_Ext(github, "Github", "GSA controlled code repositor")
 }
 
 
@@ -36,7 +36,7 @@ Person(Developer, "Developer")
 System_Ext(samgov, "SAM.gov", "889 API Source Data")
 
 Rel(cloud_pages, github, "Watches for changes and deploys front-end static assets")
-Rel(Developer, github, "Publish code", "git ssh[22]/https[443]")
+Rel(Developer, github, "Publish code \n MFA login enforced by GSA", "git ssh[22]/https[443]")
 Rel(github, cloud_api, "Deploy app", "Auth: Service Account, https[443]")
 Rel(889, samgov, "Request entity information via API with System API key")
 Rel(889_front_end,  889, "Requests entity information via HTTPS api call")    

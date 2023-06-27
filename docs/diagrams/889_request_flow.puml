@@ -1,9 +1,9 @@
 @startuml 889_request_flow
-title SmartPay 889 tool flow
+title SmartPay 889 tool flow \n (see context diagram for boundary / data flow) \n
 actor User as user
-entity "Frontend SPA on browser" as frontend
-entity "Backend FastAPI" as backend
-entity "Sam.gov Entity API" as sam
+entity "Frontend SPA on browser \n cloud.gov pages [https]" as frontend
+entity "Backend FastAPI  \n cloud.gov [https]" as backend
+entity "Sam.gov Entity API \n external API [https]" as sam
 user -> frontend: enters search term
 frontend -> backend: post request with search term
 backend -> sam: post request with search term and API key

@@ -1,13 +1,14 @@
 @startuml loginless_sequence
-title Loginless Flow for SmartPay Training
+title Loginless Flow for SmartPay Training \n (see context diagram for boundary / data flow) \n
 actor User as user
-entity "Frontend SPA on browser" as frontend
-entity "Backend FastAPI" as backend
-database Redis as redis
-database PostgreSQL as database
-== Initialize Loginless Flow ==
+entity "Frontend SPA on browser \n cloud.gov pages [https]" as frontend
+entity "Backend FastAPI  \n cloud.gov [https]" as backend
+database "Brokered Redis Service \n cloud.gov [port 6379]" as redis
+database "Brokered PostgreSQL Service \n cloud.gov [port 5432]" as database
+entity "Gmail SMTP Relay \n google [port 587]" as smtp
 
-entity SMTP_Relay as smtp
+
+== Initialize Loginless Flow ==
 user -> frontend: complete form email/name
 frontend -> backend: post contact information
 backend -> redis: create uuid token, cache with user info

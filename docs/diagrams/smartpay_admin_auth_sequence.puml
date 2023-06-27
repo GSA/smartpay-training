@@ -1,10 +1,10 @@
 @startuml SmartPay_Admin_Login
-title Multi-Factor Authentication for SmartPay Admin
+title Multi-Factor Authentication for SmartPay Admin \n (see context diagram for boundary / data flow) \n
 actor Admin as user
-entity "Frontend SPA on browser" as frontend
-database "GSA Secure Auth" as auth
-entity "Backend FastAPI" as backend
-database PostgreSQL as database
+entity "Frontend SPA on browser \n cloud.gov pages [https]" as frontend
+database "GSA Secure Auth \n GSA Service [https]" as auth
+entity "Backend FastAPI  \n cloud.gov [https]" as backend
+database "Brokered PostgreSQL Service \n cloud.gov [port 5432]" as database
 == Login ==
 
 user -> frontend: clicks login button
@@ -19,11 +19,11 @@ user -> backend: authenticate with SecureAuth token
 backend -> database: check if user has 'admin' role
 
 alt user is recognized with admin role
-  backend <-- database: has user role
+  backend <-- database: has 'admin' role
   frontend <-- backend: send signed JWT token
   user <-- frontend: present data / interface
 else non-admin user
-  backend <-- database: not found or does not have user role
+  backend <-- database: not found or does not have 'admin' role
   frontend <--[#red] backend: HTTP Error: Unauthorized
   user <--[#red] frontend: error message
 end

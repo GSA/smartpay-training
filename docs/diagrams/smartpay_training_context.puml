@@ -23,7 +23,7 @@ Boundary(cloud_gov, "Cloud.gov ", "") {
     }
     System(cloud_api,"cloud.gov API")
     Boundary(cloudgov-services,"Cloud.gov brokered services") {
-        SystemDb(db, "Database (5432)", "Brokered postgreSQL")
+        SystemDb(db, "Database", "Brokered PostgreSQL")
         SystemDb(redis, "Redis Cache", "Brokered Redis")
     } 
 } 
@@ -43,7 +43,7 @@ Rel(SP_Admin, uaa, "MFA Authentication")
 Rel(SP_Admin, training_front_end, "Edit A/OPC reporting access")
 Rel(training_front_end, sp_backend, "Save / retrieve training data")
 
-Rel(Developer, github, "Publish code", "git ssh/https")
+Rel(Developer, github, "Publish code \n MFA login enforced by GSA", "git ssh[22]/https[443]")
 Rel(github, cloud_api, "Deploy app", "Auth: Service Account, https: 443")
 Rel(cloud_pages, github, "Watches for changes and builds/deploys front-end static assets")
 
@@ -51,7 +51,7 @@ Rel(smtp, Public, "Send confirmation email")
 Rel(sp_backend, smtp, "Send confirmstion email")
 Rel(Public, training_front_end, "Takes Quiz/Accesses Certificate")
 Rel(sp_backend, redis, "set/retrieve cached url tokens", "port 6379")
-Rel(sp_backend, db, "save/retrieve Quiz results")
+Rel(sp_backend, db, "save/retrieve Quiz results", "port 5432")
 Rel(cloud_pages, training_front_end, "Deploys")
 Rel(cloud_pages, previews, "Deploys")
 

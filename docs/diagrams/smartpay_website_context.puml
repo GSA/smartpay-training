@@ -19,7 +19,7 @@ Boundary(cloud_gov_pages, "Cloud.gov Pages", "") {
 }
 
 Boundary(cicd, "CI/CD") {
-  System_Ext(github, "Github", "GSA controlled code repository [Requires MFA]")
+  System_Ext(github, "Github", "GSA controlled code repository")
 }
 
 
@@ -31,7 +31,7 @@ Rel(cloud_pages, github, "Watches for changes and deploys front-end static asset
 Rel(cloud_pages, smartpay, "Deploys")
 Rel(cloud_pages, previews, "Deploys")
 
-Rel(Developer, github, "Publish code", "git ssh/https")
+Rel(Developer, github, "Publish code \n MFA login enforced by GSA", "git ssh[22]/https[443]")
 Rel(Public, smartpay, "Requests Webpage")
 
 SHOW_LEGEND()
