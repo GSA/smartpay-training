@@ -27,7 +27,7 @@ def auth_exchange(
     if not db_user:
         # TODO: Log token exchange failure
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid user."
         )
 
