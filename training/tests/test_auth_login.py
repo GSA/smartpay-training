@@ -91,7 +91,7 @@ def test_auth_exchange_valid_jwt_nonexistent_user(decode_jwt, find_by_email, reg
         "/api/v1/auth/exchange",
         headers={"Authorization": f"Bearer {regular_user_uaa_jwt}"}
     )
-    assert response.status_code == 401
+    assert response.status_code == 403
 
 
 @patch("training.repositories.UserRepository.find_by_email")
