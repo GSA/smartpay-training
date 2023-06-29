@@ -48,6 +48,8 @@ class Settings(BaseSettings):
 
     API_V1_STR: str = "/api/v1"
 
+    LOG_LEVEL: str = "INFO"
+
     # for local dev, email setting should be added to .env
     # see .env_example for example
     SMTP_USER: str | None
