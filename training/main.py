@@ -24,4 +24,7 @@ app.add_middleware(
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-logging.basicConfig(level=settings.LOG_LEVEL)
+logging.basicConfig(
+    level=settings.LOG_LEVEL,
+    format="%(levelname)s: %(module)s.%(funcName)s:%(lineno)d: %(message)s"
+)
