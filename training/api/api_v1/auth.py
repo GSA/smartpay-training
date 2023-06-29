@@ -3,7 +3,7 @@ import jwt
 from training.api.auth import UAAJWTUser
 from training.config import settings
 from training.repositories import UserRepository
-from training.schemas import UserJWT
+from training.schemas import UserJWT, User
 from training.api.deps import user_repository
 
 
@@ -30,6 +30,15 @@ def auth_exchange(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid user."
         )
+
+    user = User.from_orm(db_user)
+    if not user.is_admin():
+        # TODO: Log failure
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to login."
+        )
+
     jwt_user = UserJWT.from_orm(db_user)
     encoded_jwt = jwt.encode(jwt_user.dict(), settings.JWT_SECRET, algorithm="HS256")
     # TODO: Log token exchange success

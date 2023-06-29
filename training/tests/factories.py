@@ -36,3 +36,7 @@ class AgencySchemaFactory(ModelFactory[schemas.Agency]):
 
 class AgencyCreateSchemaFactory(ModelFactory[schemas.AgencyCreate]):
     __model__ = schemas.AgencyCreate
+
+
+class RoleSchemaFactory(ModelFactory[schemas.Role]):
+    __model__ = schemas.Role

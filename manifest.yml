@@ -14,3 +14,4 @@ applications:
       - name: smartpay-training-oauth-client
         parameters:
           redirect_uri: ((oauth_redirect_uri))
+          allowpublic: true
