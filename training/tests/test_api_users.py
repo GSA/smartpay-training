@@ -108,7 +108,7 @@ def test_search_users_by_name(goodJWT, mock_user_repo: UserRepository):
     assert response.json()["users"] == users
 
 
-def test_edit_user_for_reporting(mock_user_repo: UserRepository):
+def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
     user = UserSchemaFactory.build(roles=[])
     mock_user_repo.create(user)
     agency = Agency(id=3, name='test agency')
@@ -121,7 +121,8 @@ def test_edit_user_for_reporting(mock_user_repo: UserRepository):
     URL = f"/api/v1/users/edit-user-for-reporting?user_id={user_id}"
     response = client.put(
         URL,
-        json=[3]
+        json=[3],
+        headers={"Authorization": f"Bearer {goodJWT}"}
     )
     assert response.status_code == status.HTTP_200_OK
     assert role in response.json()["roles"]

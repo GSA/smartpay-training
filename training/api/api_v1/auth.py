@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 import jwt
 from training.api.auth import UAAJWTUser
@@ -25,7 +26,9 @@ def auth_exchange(
 ):
     db_user = user_repo.find_by_email(uaa_user.get("email"))
     if not db_user:
-        # TODO: Log token exchange failure
+        logging.info(
+            f"UAA authenticated, but not found in database: {uaa_user['email']}"
+        )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid user."
@@ -33,7 +36,7 @@ def auth_exchange(
 
     user = User.from_orm(db_user)
     if not user.is_admin():
-        # TODO: Log failure
+        logging.info(f"UAA authenticated, but not an admin: {uaa_user['email']}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to login."
@@ -41,5 +44,5 @@ def auth_exchange(
 
     jwt_user = UserJWT.from_orm(db_user)
     encoded_jwt = jwt.encode(jwt_user.dict(), settings.JWT_SECRET, algorithm="HS256")
-    # TODO: Log token exchange success
+    logging.info(f"Token exchange success for {db_user.email}")
     return {'user': jwt_user, 'jwt': encoded_jwt}

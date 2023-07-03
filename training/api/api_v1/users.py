@@ -1,5 +1,6 @@
 import csv
 from io import StringIO
+import logging
 from typing import List
 from training.api.auth import RequireRole
 from fastapi import APIRouter, status, HTTPException, Response, Depends
@@ -25,6 +26,7 @@ def create_user(
             detail="User email address already exists"
         )
     db_user = repo.create(user)
+    logging.info(f"{user['email']} created user {new_user.email}")
     return db_user
 
 
@@ -50,9 +52,16 @@ def get_user(id: int, repo: UserRepository = Depends(user_repository)):
 
 
 @router.put("/users/edit-user-for-reporting", response_model=User)
-def edit_user_by_id(user_id: int, agency_id_list: list[int], repo: UserRepository = Depends(user_repository)):
+def edit_user_by_id(
+    user_id: int,
+    agency_id_list: list[int],
+    repo: UserRepository = Depends(user_repository),
+    user=Depends(RequireRole(["Admin"]))
+):
     try:
-        return repo.edit_user_for_reporting(user_id, agency_id_list)
+        updated_user = repo.edit_user_for_reporting(user_id, agency_id_list)
+        logging.info(f"{user['email']} granted user {updated_user.email} reporting for agencies: {agency_id_list}")
+        return updated_user
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -92,7 +101,6 @@ def search_users_by_name(
 ):
     try:
         return repo.search_users_by_name(name, page_number)
-
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
