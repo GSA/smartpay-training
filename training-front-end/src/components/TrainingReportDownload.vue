@@ -5,7 +5,7 @@
   import USWDSAlert from './USWDSAlert.vue'
 
   const user = useStore(profile)
-  const isReportUser = computed(() => user.value.roles.some(role => role.name == 'Report'))
+  const isReportUser = computed(() => user.value.roles.includes('Report'))
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const report_url = `${base_url}/api/v1/users/download-user-quiz-completion-report`
 

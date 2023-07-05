@@ -20,13 +20,13 @@ describe("TrainingReportIndex", async () => {
   })
 
   it('Shows download screen', async () => {
-    profile.set({name:"Amelia Sedley", jwt:"some-token-value", roles:[{'name': "Report"}]})
+    profile.set({name:"Amelia Sedley", jwt:"some-token-value", roles:["Report"]})
     const wrapper = await mount(TrainingReportIndex)
     expect(wrapper.text()).toContain('Download Your Report')
   })
 
   it('shows error when user is know but does not have correct roles', async () => {
-    profile.set({name:"Amelia Sedley", jwt:"some-token-value", roles:[{'name': "SomeOtherRole"}]})
+    profile.set({name:"Amelia Sedley", jwt:"some-token-value", roles:["SomeOtherRole"]})
     const wrapper = await mount(TrainingReportIndex)
     expect(wrapper.text()).toContain('You are not authorized')
   })
