@@ -1,0 +1,45 @@
+@startuml loginless_sequence
+title Loginless Flow for SmartPay Training \n (see context diagram for boundary / data flow) \n
+actor User as user
+entity "Frontend SPA on browser \n cloud.gov pages [https]" as frontend
+entity "Backend FastAPI  \n cloud.gov [https]" as backend
+database "Brokered Redis Service \n cloud.gov [port 6379]" as redis
+database "Brokered PostgreSQL Service \n cloud.gov [port 5432]" as database
+entity "Gmail SMTP Relay \n google [port 587]" as smtp
+
+
+== Initialize Loginless Flow ==
+user -> frontend: complete form email/name
+frontend -> backend: post contact information
+backend -> redis: create uuid token, cache with user info
+note right
+  Cached tokens expire in 24 hourse
+end note
+
+backend -> smtp: send email unique link
+user <-- smtp: send email with unique link
+== Use System ==
+alt valid / non-expired link
+  user -> frontend: request page linked in email
+  frontend -> backend: api request with link token
+  backend -> redis: query token and retrieve user info
+  backend <-- redis: return user email/name
+
+else invalid / expired token
+  backend <--[#red] redis: not found
+  frontend <--[#red] backend: HTTP Error: Unauthorized
+  user x--[#red] frontend: error message [end flow]
+end
+backend -> database: get (or create) user contact info
+frontend <-- backend: create JWT with user info
+user -> frontend: take quiz / request certificate
+frontend -> backend: make api calls with jwt 
+alt valid jwt
+  backend -> database: validate jwt, save/request data
+  frontend <-- backend: send data
+  user <-- frontend: present results
+else invalid jwt
+  frontend <--[#red] backend: HTTP Error: Unauthorized
+  user x--[#red] frontend: error message
+end
+@enduml

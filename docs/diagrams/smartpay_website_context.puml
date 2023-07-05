@@ -1,0 +1,39 @@
+@startuml smartpay_website_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title SmartPay Website
+
+note as ConnectionNote
+All connections depicted are encrypted with TLS 1.2 unless otherwise noted. 
+All connextions are on port 443 and use https unles otherwise noted.
+All connections use TCP. 
+end note
+
+Boundary(cloud_gov_pages, "Cloud.gov Pages", "") {
+
+  System(smartpay, "SmartPay Website", "https://smartpay.gsa.gov\n Static HTML/CSS/Javascript") 
+  System(cloud_pages, "Cloud.gov system")
+  System(previews, "Preview Branches", "https://federalist-<token>.sites.pages.cloud.gov") 
+
+}
+
+Boundary(cicd, "CI/CD") {
+  System_Ext(github, "Github", "GSA controlled code repository")
+}
+
+
+Person_Ext(Public, "Public User")
+Person(Developer, "Developer")
+
+
+Rel(cloud_pages, github, "Watches for changes and deploys front-end static assets")
+Rel(cloud_pages, smartpay, "Deploys")
+Rel(cloud_pages, previews, "Deploys")
+
+Rel(Developer, github, "Publish code \n MFA login enforced by GSA", "git ssh[22]/https[443]")
+Rel(Public, smartpay, "Requests Webpage")
+
+SHOW_LEGEND()
+
+@enduml
