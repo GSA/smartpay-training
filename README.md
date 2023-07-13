@@ -31,11 +31,9 @@ npm run build:frontend
 
 ### Service dependencies
 
-This app depends on Redis to support the temporary tokens used for verification emails. It also uses PostgreSQL as a main data store. For administrator logins, the app requires an OAuth server. To start up local services:
+This app depends on a few services. For local development, these services have been neatly packaged into a Docker Compose stack. First, optionally edit `dev/uaa/uaa.yml` to create your own test user accounts (see the `scim.users` section of that file). Then to run the services:
 
 ```sh
-docker-compose up
-# Or to run them in the background:
 docker-compose up -d
 ```
 

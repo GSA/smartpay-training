@@ -1,43 +1,35 @@
 version: '3.8'
+
 services:
+
   redis:
     image: redis:6.2-alpine
     ports:
       - "6379:6379"
+
   db:
-    image: postgres:12  # For best results, match version in use by cloud.gov RDS
+    build:
+      context: ./dev/db
+    command: >
+      -c ssl=on
+      -c ssl_cert_file=/var/lib/postgresql/server.crt
+      -c ssl_key_file=/var/lib/postgresql/server.key
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
+
   adminer:
     image: adminer
     ports:
       - "8432:8080"
     depends_on:
       - db
+
   uaa:
     build:
-      context: .
-      dockerfile: Dockerfile.uaadev
+      context: ./dev/uaa
     ports:
       - "8080:8080"
     volumes:
-      - ./uaadev.yml:/tmp/uaa/uaa/src/main/resources/uaa.yml:ro
-  # api:
-  #   build:
-  #     context: .
-  #   ports:
-  #     - "8000:8000"
-  #   volumes:
-  #     - ./:/usr/src/app
-  #   depends_on:
-  #     - redis
-  #     - db
-  # web:
-  #   build:
-  #     context: ./training-front-end
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./training-front-end:/usr/src/app
+      - ./dev/uaa/uaa.yml:/tmp/uaa/uaa/src/main/resources/uaa.yml:ro
