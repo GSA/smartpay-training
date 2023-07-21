@@ -20,12 +20,6 @@ jobs:
         image: postgres:12  # For best results, match version in use by cloud.gov RDS
         ports:
           - 5432:5432
-        build:
-          context: ./dev/db
-        command: >
-          -c ssl=on
-          -c ssl_cert_file=/var/lib/postgresql/server.crt
-          -c ssl_key_file=/var/lib/postgresql/server.key
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
