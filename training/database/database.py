@@ -7,6 +7,6 @@ from training.config import settings
 # PostgreSQL URIs to use postgresql://
 db_uri = settings.DB_URI.replace("postgres://", "postgresql://")
 
-engine = create_engine(db_uri)
+engine = create_engine(db_uri, connect_args={'sslmode': 'prefer'})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
