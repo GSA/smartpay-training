@@ -68,11 +68,11 @@ describe('CertificateTable', async () => {
     const rows = wrapper.findAll('tr') 
     expect(rows.length).toBe(3)
 
-    const anchorOne = rows[1].find('a')
-    expect(anchorOne.attributes('href')).toBe("http://localhost:8000/api/v1/certificate/2")
+    const anchorOne = rows[1].find('form')
+    expect(anchorOne.attributes('action')).toBe("http://localhost:8000/api/v1/certificate/2")
 
-    const anchorTwo = rows[2].find('a')
-    expect(anchorTwo.attributes('href')).toBe("http://localhost:8000/api/v1/certificate/68")
+    const anchorTwo = rows[2].find('form')
+    expect(anchorTwo.attributes('action')).toBe("http://localhost:8000/api/v1/certificate/68")
   })
 
   it('show correct message when the user has not taken a quiz', async () => {

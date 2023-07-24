@@ -4,6 +4,13 @@
     import ErrorIcon from './icons/ErrorIcon.vue';
     import QuizResult from './QuizResult.vue';
     import USWDS from "@uswds/uswds/js";
+    import FileDownLoad from "./icons/FileDownload.vue"
+
+    import { useStore } from '@nanostores/vue'
+    import { profile} from '../stores/user'
+
+    const user = useStore(profile)
+
     const { accordion } = USWDS;
     const api_base = import.meta.env.PUBLIC_API_BASE_URL
 
@@ -47,13 +54,22 @@
       <p>
         You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which meets the 75% or higher requirement to pass.
       </p>
-      <a 
-        :href="quiz_certificate_url"
-        download="sample.pdf"
-        class="usa-button usa-button--outline margin-bottom-3"
-      >
-        Download your certificate of completion
-      </a>
+      <form
+            :action=quiz_certificate_url 
+            method="post"
+          >
+            <input 
+              type="hidden"
+              name="jwtToken"
+              :value="user.jwt"
+            >
+            <button
+              class="usa-button usa-button--outline margin-bottom-3"
+              type="submit"
+            >
+              <FileDownLoad /> Download your certificate of completion
+            </button>
+          </form>
     </div>
     <div v-else>
       <div class="usa-prose">

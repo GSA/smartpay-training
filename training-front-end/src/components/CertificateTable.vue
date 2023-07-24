@@ -18,9 +18,13 @@
   }
 
   const certificates = ref([]) 
-
+ 
   onMounted(async() => {
-      certificates.value = await fetch(`${api_url}/api/v1/certificates/${user.value.id}`).then((r) => r.json())
+      certificates.value = await fetch(`${api_url}/api/v1/certificates/`, {
+        method: 'GET',
+        headers: {'Authorization': `Bearer ${user.value.jwt}`}
+      }
+       ).then((r) => r.json())
     })
 
   const data_format = { year:"numeric", month:"long", day:"numeric"}
@@ -69,13 +73,22 @@
           {{ formatted_date(cert.completion_date) }}
         </td>
         <td>
-          <a 
-            :href="`${api_url}/api/v1/certificate/${cert.id}`" 
-            class="usa-button usa-button--unstyled" 
-            download="sample.pdf"
+          <form
+            :action="`${api_url}/api/v1/certificate/${cert.id}`" 
+            method="post"
           >
-            <FileDownLoad /> Download
-          </a>
+            <input 
+              type="hidden"
+              name="jwtToken"
+              :value="user.jwt"
+            >
+            <button
+              class="usa-button usa-button--unstyled"
+              type="submit"
+            >
+              <FileDownLoad /> Download
+            </button>
+          </form>
         </td>
       </tr>
     </tbody>
