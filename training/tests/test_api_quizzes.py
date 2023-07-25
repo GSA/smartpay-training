@@ -11,6 +11,7 @@ from .factories import QuizCreateSchemaFactory, QuizGradeSchemaFactory, QuizSche
 
 client = TestClient(app)
 
+
 @pytest.mark.skip(reason="quiz creation disabled for now")
 def test_create_quiz_valid(
     valid_quiz_create: QuizCreate,
