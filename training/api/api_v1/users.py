@@ -43,14 +43,6 @@ def get_users(
         return repo.find_all()
 
 
-@router.get("/users/{id}", response_model=User)
-def get_user(id: int, repo: UserRepository = Depends(user_repository)):
-    db_user = repo.find_by_id(id)
-    if db_user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return db_user
-
-
 @router.put("/users/edit-user-for-reporting", response_model=User)
 def edit_user_by_id(
     user_id: int,
