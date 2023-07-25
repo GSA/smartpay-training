@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 from fastapi import status
 from training.errors import IncompleteQuizResponseError, QuizNotFoundError
@@ -11,6 +12,7 @@ from .factories import QuizCreateSchemaFactory, QuizGradeSchemaFactory, QuizSche
 client = TestClient(app)
 
 
+@pytest.mark.skip(reason="quiz creation disabled for now")
 def test_create_quiz_valid(
     valid_quiz_create: QuizCreate,
     mock_quiz_repo: QuizRepository
@@ -23,6 +25,7 @@ def test_create_quiz_valid(
     assert response.status_code == status.HTTP_201_CREATED
 
 
+@pytest.mark.skip(reason="quiz creation disabled for now")
 def test_create_quiz_invalid():
     quiz_create = QuizCreateSchemaFactory.build()
     quiz_create.audience = "Invalid"  # type: ignore

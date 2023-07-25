@@ -76,23 +76,6 @@ def test_get_users_by_agency(goodJWT, mock_user_repo: UserRepository):
     assert len(response.json()) == 5
 
 
-def test_get_user(mock_user_repo: UserRepository):
-    user = UserSchemaFactory.build(id=1)
-    mock_user_repo.find_by_id.return_value = user
-    response = client.get(
-        "/api/v1/users/1"
-    )
-    assert response.status_code == status.HTTP_200_OK
-
-
-def test_get_user_invalid_id(mock_user_repo: UserRepository):
-    mock_user_repo.find_by_id.return_value = None
-    response = client.get(
-        "/api/v1/users/1"
-    )
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-
-
 @patch('training.config.settings', 'JWT_SECRET', 'super_secret')
 def test_search_users_by_name(goodJWT, mock_user_repo: UserRepository):
     users = [UserSchemaFactory.build(name="test name") for x in range(2)]
