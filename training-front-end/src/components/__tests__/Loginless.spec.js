@@ -79,7 +79,7 @@ describe('Loginless', () => {
     })
     let alert = wrapper.find('[data-test="alert-container"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.text()).toContain('authorized users only')
+    expect(alert.text()).toContain('FOR OFFICIAL USE ONLY')
     
     await submitEmail(wrapper, 'test@example.com') 
     await flushPromises()
