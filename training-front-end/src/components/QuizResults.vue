@@ -81,7 +81,7 @@
         </h2>
       </div>
       <p>
-        You got <b>{{ result_string }}</b> questions correct for a score of <b>{{ percentage }}%</b>. You need <b>75%</b>to pass. Please try again.
+        You got <b>{{ result_string }}</b> questions correct for a score of <b>{{ percentage }}%</b>. You need <b>75%</b> to pass. Please try again.
       </p>
       <button
         class="usa-button margin-bottom-2"
