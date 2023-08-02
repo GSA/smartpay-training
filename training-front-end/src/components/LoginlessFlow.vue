@@ -245,7 +245,7 @@
             v-model="user_input.name"
             client:load
             :validator="v_all_info$.name"
-            label="Name"
+            label="Full Name"
             name="name"
           />
           <ValidatedSelect
