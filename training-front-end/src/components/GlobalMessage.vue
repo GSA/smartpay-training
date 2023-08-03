@@ -6,10 +6,11 @@
 
   const message_text = useStore(message)
   const display_text = ref()
+  const display_level = ref()
   
   function consumeMessage() {
     if (message_text.value) {
-      display_text.value = message_text.value
+      [display_text.value, display_level.value] = message_text.value
       clearMessage(message)
     }
   }
@@ -21,7 +22,7 @@
 <template>
   <USWDSAlert 
     v-if="display_text"
-    status="warning"
+    :status="display_level"
     class="usa-alert--slim margin-y-4"
     :has-heading="false"
   >
