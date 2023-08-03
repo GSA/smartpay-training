@@ -6,6 +6,9 @@ import { persistentAtom, setPersistentEngine } from '@nanostores/persistent'
  * to allow other pages to display it if needed. This is currently only used
  * by the GlobalMessage component on the index page to allow a message about 
  * a previously expired session to be displayed to the user.
+ * 
+ * To use import and call `setMessage(message, level)`. The level should 
+ * correspond to the classMap in components/USWDSAlert.vue.
  */
 let listeners = []
 
