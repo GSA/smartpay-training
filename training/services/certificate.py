@@ -28,7 +28,9 @@ class Certificate:
 
         for field in page.widgets():
             field_name = field.field_name
+            field.text_font = 'Merriweather'
             field.field_value = data[field_name]
+            # field flag of 1 corresponds to "read-only"
             field.field_flags = 1
             field.update()
 
