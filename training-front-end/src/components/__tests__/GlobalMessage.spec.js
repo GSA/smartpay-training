@@ -44,7 +44,7 @@ describe('GlobalMessage', () => {
     expect(alert.classes()).toContain('usa-alert--success')
   })
 
-  it('displays the success alert level', async () => {
+  it('displays the warning alert level', async () => {
     setMessage("but it's all theatre", "warning")
     const wrapper = await mount(GlobalMessage)
     const alert = wrapper.findComponent(USWDSAlert)
