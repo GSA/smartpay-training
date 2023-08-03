@@ -1,7 +1,7 @@
 .usa-nav__primary button.exit {
-  color: color($theme-color-primary);
+  color: color('primary');
   &:hover {
-    color: color($theme-color-base-dark);
+    color: color('base-dark');
   }
 }
 
