@@ -27,5 +27,5 @@ export const message = persistentAtom('message', undefined,
   decode: JSON.parse
 })
 
-export const setMessage = action(message, 'setMessage', (store, text) => store.set(text))
+export const setMessage = action(message, 'setMessage', (store, text, level) => store.set([text, level]))
 export const clearMessage = action(message, 'clearMessage', store => store.set(undefined))
