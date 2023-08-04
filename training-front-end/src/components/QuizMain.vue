@@ -1,5 +1,6 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, computed, reactive} from "vue"
+  import { exit_warning } from '../stores/session_manager'
   import QuizQuestion from "./QuizQuestion.vue"
   import QuizCounter from "./QuizCounter.vue"
   import NavigateNext from "./icons/NavigateNext.vue"
@@ -41,11 +42,6 @@
     "ProgramCoordinators": "an agency/organization program coordinator (A/OPC)"
   }
  
-  function exit_warning(event) {
-    event.preventDefault()
-    return event.returnValue = "Are you sure you want to exit?";
-  }
-  
   function windowStateListener(event) {
     if (event.state) {
         question_index.value = event.state.page

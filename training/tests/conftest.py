@@ -10,7 +10,8 @@ from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository
+from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository, RoleRepository
+from training.schemas import AgencyCreate, RoleCreate
 from training.services import QuizService
 from training.config import settings
 from . import factories
@@ -57,8 +58,9 @@ def db_with_data(db: Session, testdata: dict):
     agency_ids = []
     user_ids = []
     quiz_ids = []
-    for name in testdata["agencies"]:
-        agency = models.Agency(name=name)
+
+    for data in testdata["agencies"]:
+        agency = models.Agency(name=data["name"], bureau=data["bureau"])
         db.add(agency)
         db.commit()
         db.refresh(agency)
@@ -91,6 +93,10 @@ def db_with_data(db: Session, testdata: dict):
     quiz_completion_fail = models.QuizCompletion(user_id=user_ids[-1], quiz_id=quiz_ids[-1], passed=False)
     db.add(quiz_completion_fail)
     db.commit()
+    for role in testdata["roles"]:
+        role = models.Role(name=role["name"])
+        db.add(role)
+        db.commit()
     yield db
 
 
@@ -126,11 +132,13 @@ def valid_quiz_ids(db_with_data: Session) -> Generator[list[int], None, None]:
 
 
 @pytest.fixture
-def valid_agency_name(testdata: dict) -> Generator[str, None, None]:
+def valid_agency(testdata: dict) -> Generator[AgencyCreate, None, None]:
     '''
-    Provides a valid agency name.
+    Provides a valid agency.
     '''
-    yield testdata["agencies"][0]
+    jsondata = testdata["agencies"][0]
+    agency = AgencyCreate(name=jsondata["name"], bureau=jsondata["bureau"])
+    yield agency
 
 
 @pytest.fixture
@@ -147,7 +155,7 @@ def valid_jwt(db_with_data: Session) -> str:
     Provides a JWT based on a test user in the database.
     '''
     db_user = db_with_data.query(models.User).first()
-    user = schemas.User.from_orm(db_user).dict()
+    user = schemas.UserJWT.from_orm(db_user).dict()
     return jwt.encode(user, settings.JWT_SECRET, algorithm="HS256")
 
 
@@ -301,3 +309,29 @@ def mock_agency_repo() -> Generator[AgencyRepository, None, None]:
     app.dependency_overrides[agency_repository] = lambda: mock
     yield mock
     app.dependency_overrides = {}
+
+
+@pytest.fixture
+def role_repo_empty(db: Session) -> Generator[RoleRepository, None, None]:
+    '''
+    Provides an RoleRepository injected with an empty database.
+    '''
+    yield RoleRepository(session=db)
+
+
+@pytest.fixture
+def role_repo_with_data(db_with_data: Session) -> Generator[RoleRepository, None, None]:
+    '''
+    Provides an RoleRepository injected with a populated database.
+    '''
+    yield RoleRepository(session=db_with_data)
+
+
+@pytest.fixture
+def valid_role(testdata: dict) -> Generator[RoleCreate, None, None]:
+    '''
+    Provides a valid agency.
+    '''
+    jsondata = testdata["roles"][0]
+    role = RoleCreate(name=jsondata["name"])
+    yield role

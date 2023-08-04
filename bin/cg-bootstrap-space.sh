@@ -2,6 +2,8 @@
 
 # Bootstraps a given space in cloud.gov
 
+set -e
+
 if [ -z "$1" ] ; then
   echo "Usage: $0 SPACE"
   exit 1
@@ -37,6 +39,7 @@ cf bind-security-group public_networks_egress $org --space $space
 # Services
 cf create-service aws-elasticache-redis $redis_plan smartpay-training-redis
 cf create-service aws-rds $rds_plan smartpay-training-db
+cf create-service cloud-gov-identity-provider oauth-client smartpay-training-oauth-client
 
 # Secrets
 cf create-user-provided-service smartpay-training-secrets

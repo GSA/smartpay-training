@@ -1,9 +1,6 @@
 <script setup>
-  import {computed} from 'vue'
-
-  const base_url = import.meta.env.PUBLIC_API_BASE_URL
+  import {computed} from 'vue'  
   
-  const options = await fetch(`${base_url}/api/v1/agencies`).then((r) => r.json())
   const props = defineProps({
     'modelValue': {
       type: String,
@@ -20,6 +17,10 @@
     },
     'label': {
       type: String,
+      required: true
+    },
+    'options': {
+      type: Array,
       required: true
     }
   })

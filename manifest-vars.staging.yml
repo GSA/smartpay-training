@@ -1,3 +1,6 @@
 env: staging
 memory: 256M
 instances: 2
+oauth_redirect_uri:
+  - https://training.smartpay.gsa.gov
+  - https://training.smartpay.gsa.gov/auth_callback

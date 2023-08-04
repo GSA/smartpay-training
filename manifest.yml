@@ -8,6 +8,10 @@ applications:
       - route: smartpay-training-((env)).app.cloud.gov
     instances: ((instances))
     services:
-      - smartpay-training-db
-      - smartpay-training-redis
-      - smartpay-training-secrets
+      - name: smartpay-training-db
+      - name: smartpay-training-redis
+      - name: smartpay-training-secrets
+      - name: smartpay-training-oauth-client
+        parameters:
+          redirect_uri: ((oauth_redirect_uri))
+          allowpublic: true

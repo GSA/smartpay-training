@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroTraining from '@components/HeroTraining.astro';
+import AdminSearchUser from '@components/AdminSearchUser.vue';
+import AuthRequired from '@components/AuthRequired.vue';
+
+const pageTitle = "Admin Panel";
+---
+<BaseLayout title={pageTitle}>
+  <HeroTraining background_class='bg_smartpay_cool_grey'>
+    Admin Panel
+    <span slot="subheader">
+        Administrators
+    </span>
+  </HeroTraining>
+  
+  <AuthRequired client:only>
+    <AdminSearchUser client:only />
+  </AuthRequired>
+</BaseLayout>

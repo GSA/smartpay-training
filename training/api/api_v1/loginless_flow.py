@@ -3,7 +3,7 @@ import jwt
 from typing import Union
 
 from fastapi import APIRouter, status, Response, HTTPException, Depends
-from training.schemas import TempUser, IncompleteTempUser, WebDestination, User
+from training.schemas import TempUser, IncompleteTempUser, WebDestination, UserJWT
 from training.data import UserCache
 from training.repositories import UserRepository
 from training.api.deps import user_repository
@@ -15,21 +15,54 @@ from training.api.auth import JWTUser
 router = APIRouter()
 
 
+# This lookup table allows the front-end to send a simple pageID
+# but be redirected to a more complex path. It also allows the
+# backend to provide errors if the user does not have the appropriate
+# role for a front-end page (although the data itself is secured by the API)
+def page_lookup():
+    return {
+        'certificates': {'path': '/certificates/', 'required_roles': []},
+        'training_reports': {'path': '/training_reports', 'required_roles': ['Report']},
+        'training_travel': {'path': '/quiz/training_travel/', 'required_roles': []},
+        'training_purchase': {'path': '/quiz/training_purchase/', 'required_roles': []},
+        'training_travel_pc': {'path': '/quiz/training_travel_pc/', 'required_roles': []},
+        'training_purchase_pc': {'path': '/quiz/training_purchase_pc/', 'required_roles': []},
+        'training_fleet_pc': {'path': '/quiz/training_fleet_pc/', 'required_roles': []},
+    }
+
+
 @router.post("/get-link", status_code=status.HTTP_201_CREATED)
 def send_link(
     response: Response,
     user: Union[TempUser, IncompleteTempUser],
     dest: WebDestination,
     repo: UserRepository = Depends(user_repository),
-    cache: UserCache = Depends(UserCache)
+    cache: UserCache = Depends(UserCache),
+    page_id_lookup: dict = Depends(page_lookup)
 ):
+    try:
+        required_roles = page_id_lookup[dest.page_id]['required_roles']
+    except KeyError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unkown Page Id {dest.page_id}"
+        )
     if isinstance(user, IncompleteTempUser):
         user_from_db = repo.find_by_email(user.email)
-
         if user_from_db is None:
             response.status_code = status.HTTP_200_OK
             return {'new': True}
         else:
+            role_names = set(role.name for role in user_from_db.roles)
+            if not all(role in role_names for role in required_roles):
+                logging.info(
+                    f"{user.email} does not have the required role to access {page_id_lookup[dest.page_id]['path']}"
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Unauthorized"
+                )
+
             user = TempUser.parse_obj({
                 "name": user_from_db.name,
                 "email": user_from_db.email,
@@ -43,19 +76,17 @@ def send_link(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Server Error"
         )
-    # TODO: make a lookup that translates page_id to a url
-    # we may have the users going to pages other than quizes
-    url = f"{settings.BASE_URL}/quiz/{dest.page_id}/?t={token}"
+    path = page_id_lookup[dest.page_id]['path']
+    url = f"{settings.BASE_URL}{path}?t={token}"
     try:
-        res = send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
+        send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
+        logging.info(f"Sent confirmation email to {user.email} for {path}")
     except Exception as e:
         logging.error("Error sending mail", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Server Error"
         )
-    # TODO: don't send the token once we can send email
-    return {"token": url, "response": res}
 
 
 @router.get("/user-info")
@@ -87,6 +118,7 @@ async def get_user(
     db_user = repo.find_by_email(user.email)
     if not db_user:
         db_user = repo.create(user)
-    user_return = User.from_orm(db_user)
+    user_return = UserJWT.from_orm(db_user)
+    logging.info(f"Confirmed email token for {user.email}")
     encoded_jwt = jwt.encode(user_return.dict(), settings.JWT_SECRET, algorithm="HS256")
     return {'user': user_return, 'jwt': encoded_jwt}

@@ -30,6 +30,9 @@ class QuizPublic(QuizBase):
     id: int
     content: QuizContentPublic
 
+    class Config:
+        orm_mode = True
+
 
 class Quiz(QuizBase):
     id: int

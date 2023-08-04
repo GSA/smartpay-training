@@ -28,7 +28,7 @@ describe("QuizResults", () => {
   it('displays failing result', async () => {
     const wrapper = mount(QuizResults, {props: {quiz: quiz, quizResults: failing_result, userSelections}})
     expect(wrapper.text()).toContain('You did not pass')
-    expect(wrapper.text()).toContain('You got 1 of 2 questions correct, for a total score of 50%, which does not meet the 75% or higher requirement to pass.')
+    expect(wrapper.text()).toContain('You got 1 of 2 questions correct for a score of 50%. You need 75% to pass. Please try again.')
   })
 
   it('displays error icon on passing result', async () => {

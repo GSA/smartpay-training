@@ -3,6 +3,7 @@ import GSAHeader from '@components/GSAHeader.astro';
 import GSAFooter from '@components/GSAFooter.astro';
 import USAIdentifier from '@components/USAIdentifier.astro';
 import Banner from '@components/Banner.astro';
+import SessionManger from '@components/SessionManager.vue';
 
 const { title } = Astro.props;
 ---
@@ -23,6 +24,7 @@ const { title } = Astro.props;
     <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA" id="_fed_an_ua_tag"></script>
   </head>
   <body>
+    <SessionManger client:only />
     <div id="app" class="grid-row flex flex-column height-full">
       <a class="usa-skipnav" href="#main-content">Skip to main content</a>
       <Banner />

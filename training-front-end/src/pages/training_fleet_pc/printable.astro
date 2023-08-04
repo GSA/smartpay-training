@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from "@layouts/BaseLayout.astro";
+import HeroTraining from "@components/HeroTraining.astro"
+import PrintIcon from "@components/icons/PrintIcon.vue"
+
+const pages = await getCollection('training_fleet_pc');
+const content_components = pages.map(async entry => (
+  {...entry, Content: (await entry.render()).Content}
+))
+
+const entries = await Promise.all(content_components)
+---
+<BaseLayout title="Training Travel">
+  <HeroTraining>
+    <span slot="subheader">Agency/Organization Program Coordinators (A/OPCs) Fleet Training</span>
+    Fleet Training
+  </HeroTraining>
+
+  <div class="usa-section">
+    <div class="grid-container">
+      <section class="usa-prose">
+        
+        <button id="print_button" class="usa-button usa-button--outline" onclick="window.print()">
+          <span class="display-block" aria-hidden="true">
+          <PrintIcon /> Print Training
+          </span>
+        </button>
+
+        {entries.map(item => (  
+          <div style="page-break-after: auto;">
+            <h1 class="text-primary">{item.data.title}</h1> 
+            <item.Content />
+          </div>
+        ))}
+       </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* turn off box that points to this page */
+  aside:first-of-type {display: none}
+ 
+  @media print {
+    #print_button {display: none;}
+    .usa-logo-img {height: .75in !important;}
+    .usa-prose h1 { break-before: page; }
+    nav.usa-nav {display: none;}
+    div.usa-navbar {border: none;}
+    .usa-banner {display: none;}
+    
+    button.usa-menu-btn {display: none;}
+    main {margin-top: 33%}
+    div h1.text-primary{
+      padding-top: 1em;
+      page-break-after: auto;
+    }
+    section.bg-primary {
+      background-color: white;
+      border-bottom: 1px solid black;
+    }
+    section.bg-primary h1 {
+      margin-top: .125in;
+    }
+    section.bg-primary span {
+      color: black;
+    }
+    table {break-inside: avoid; }
+    @page {
+     
+      margin-top: 0.5in;
+      margin-left: .75in;
+      margin-right: .75in;
+      margin-bottom: 0.6in;
+    }
+  
+}
+</style>
