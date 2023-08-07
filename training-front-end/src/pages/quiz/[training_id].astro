@@ -54,9 +54,24 @@ export function getStaticPaths() {
 }
 
 const { topic, audience, title, header, subhead, training_id} = Astro.props;
+
+// set banner background color class based on category type
+let background_class ="";
+if(training_id.includes("purchase"))
+{
+  background_class = "color-sp-purchase-medium";
+}
+else if (training_id.includes("fleet"))
+{
+  background_class = "color-sp-fleet-dark";
+}
+else {
+  background_class = "bg-primary";
+}
+
 ---
-<BaseLayout title={title}>
-  <HeroTraining>
+<BaseLayout title={title} >
+  <HeroTraining background_class={background_class}>
     <span slot="subheader">{subhead}</span>
     {header} Quiz
   </HeroTraining>

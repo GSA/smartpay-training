@@ -20,7 +20,7 @@ export default () => {
         return
       }
 
-      if (! domain.hostname.endsWith('training.smartpay.gsa.gov')) {
+      if (! domain.hostname.endsWith('gsa.gov')) {
         properties.className += ' usa-link--external'
       }
     });

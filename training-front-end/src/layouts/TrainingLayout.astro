@@ -5,9 +5,25 @@ import SideNav from "@components/SideNav.astro"
 import MobileNav from "@components/MobileNav.astro"
 
 const {hero_image, entry, pages, training_category, header, subheader, quiz_title} = Astro.props;
+console.log(training_category)
+
+// set banner background color class based on category type
+let background_class  ="";
+if(training_category.includes("purchase"))
+{
+  background_class = "color-sp-purchase-medium";
+}
+else if(training_category.includes("fleet"))
+{
+  background_class = "color-sp-fleet-dark";
+}
+else{
+  background_class = "bg-primary";
+}
+
 ---
 <BaseLayout title={entry.data.title}>
-  <HeroTraining hero_image={hero_image}>
+  <HeroTraining hero_image={hero_image} background_class ={background_class}>
     <span slot="subheader">{subheader} {header}</span>
     {entry.data.title}
   </HeroTraining>
