@@ -17,9 +17,9 @@ class Certificate:
     def __init__(self):
         pass
 
-    def generate_pdf(self, training_name, name, date):
+    def generate_pdf(self, training_name, name, agency, date):
         date_string = '{dt:%B} {dt.day}, {dt.year}'.format(dt=date)
-        data = {'name': name, 'date': date_string}
+        data = {'name': name, 'agency': agency, 'date': date_string}
         pdf = certificates[training_name]
         empty_pdf_path = os.path.join(SCRIPT_DIR, PDF_PATH, pdf)
 
@@ -28,8 +28,9 @@ class Certificate:
 
         for field in page.widgets():
             field_name = field.field_name
-            field.text_font = 'Arial,Bold'
+            field.text_font = 'Merriweather'
             field.field_value = data[field_name]
+            # field flag of 1 corresponds to "read-only"
             field.field_flags = 1
             field.update()
 
