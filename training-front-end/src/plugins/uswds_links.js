@@ -20,13 +20,7 @@ export default () => {
         return
       }
     
-      const internalHosts = [
-        'www.gsa.gov',
-        'smartpay.gsa.gov',
-        'training.smartpay.gsa.gov'
-      ];
-
-      if (!internalHosts.includes(domain.hostname)){
+      if (! domain.hostname.endsWith('gsa.gov')) {
         properties.className += ' usa-link--external'
       }
     
