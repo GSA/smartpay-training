@@ -28,7 +28,7 @@
 
   const isHighlighted = answer_index => {
     return props.result.correct_ids.includes(answer_index)
-    || (props.result.selected_ids.includes(answer_index) && props.result.correct)
+    || (props.result.selected_ids.includes(answer_index))
   }
 </script>
 
