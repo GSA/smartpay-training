@@ -28,7 +28,13 @@ i.e.
 html, body {
     height: 100%;
     line-height: line-height('body', 6);
+
+    // reset the process current step icon class's line height to avoid positioning towards bottom issue
+    .usa-step-indicator__current-step {
+        line-height: initial;
+    }
 }
+
 
 .flex-shrink-0 {
     flex-shrink: 0;
