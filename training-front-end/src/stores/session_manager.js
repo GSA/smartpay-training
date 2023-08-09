@@ -35,7 +35,7 @@ export async function exit() {
   // without an additional warning
   window.removeEventListener('beforeunload', exit_warning)
   setMessage(
-    'You have successfully exited your session. You can start a new session to take another training or access your certificates.',
+    'You have successfully exited your session. You can start a new session to take another training or to access your certificates.',
     'success'
   )
   window.location.replace(`${import.meta.env.BASE_URL}exit`)
