@@ -65,9 +65,10 @@ else if (training_id.includes("fleet"))
 {
   background_class = "color-sp-fleet-dark";
 }
-else {
-  background_class = "bg-primary";
+else if(training_id.includes("travel")){
+  background_class = "color-sp-travel-medium";
 }
+
 
 ---
 <BaseLayout title={title} >
