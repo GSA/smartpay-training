@@ -12,7 +12,7 @@
 
   const exit_redirect = () => {
     setMessage(
-      'You have successfully exited your session. You can start a new session to take another training or to access your certificates.',
+      'You have successfully exited.',
       'success'
     )
     window.location.replace(`${import.meta.env.BASE_URL}exit`)
