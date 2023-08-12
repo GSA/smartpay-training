@@ -135,7 +135,7 @@ class TestAuth:
                 "dest": {"page_id": "open_route", "title": "Public Page"}
             }
         )
-        fake_cache.set.assert_called_with(TempUser(**user_complete))
+        fake_cache.set.assert_called_with(TempUser.model_validate(user_complete))
 
     @patch('training.api.api_v1.loginless_flow.send_email')
     def test_complete_user_http_201(self, send_email, user_complete, fake_user_repo):

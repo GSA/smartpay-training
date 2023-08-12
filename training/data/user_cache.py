@@ -28,7 +28,7 @@ class UserCache:
         user = redis.get(token)
         if user:
             user = json.loads(user)
-            return UserCreate(**user)
+            return UserCreate.model_validate(user)
 
     def set(self, user: TempUser) -> str:
         token = str(uuid4())
