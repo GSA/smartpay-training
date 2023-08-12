@@ -54,11 +54,11 @@ class Settings(BaseSettings):
 
     # for local dev, email setting should be added to .env
     # see .env_example for example
-    SMTP_USER: str | None
+    SMTP_USER: str | None = None
     SMTP_SERVER: str
     SMTP_PORT: int
-    SMTP_STARTTLS: bool
-    SMTP_SSL_TLS: bool
+    SMTP_STARTTLS: bool | None = None
+    SMTP_SSL_TLS: bool | None = None
 
     EMAIL_FROM: EmailStr = "smartpay-noreply@gsa.gov"
     EMAIL_FROM_NAME: str = "GSA SmartPay"
@@ -66,7 +66,7 @@ class Settings(BaseSettings):
 
     # These are normally parsed from VCAP_SERVICES in Cloud Foundry, but can
     # be overridden locally by using the .env file.
-    SMTP_PASSWORD: str | None
+    SMTP_PASSWORD: str | None = None
     REDIS_HOST: str
     REDIS_PORT: int
     REDIS_PASSWORD: str
