@@ -32,7 +32,7 @@ def page_lookup():
 
 
 @router.post("/get-link", status_code=status.HTTP_201_CREATED)
-async def send_link(
+def send_link(
     response: Response,
     user: Union[TempUser, IncompleteTempUser],
     dest: WebDestination,
