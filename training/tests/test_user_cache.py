@@ -43,7 +43,7 @@ def test_set_user(uuid_mock, redis_mock, uuid, temp_user):
     new_user = TempUser(**temp_user)
     u = UserCache()
     new_id = u.set(new_user)
-    redis_mock.set.assert_called_with(uuid, json.dumps(temp_user))
+    redis_mock.set.assert_called_with(uuid, json.dumps(temp_user, separators=(',', ':')))
     redis_mock.expire.assert_called()
     assert new_id == uuid
 
