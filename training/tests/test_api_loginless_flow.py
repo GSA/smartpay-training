@@ -1,5 +1,4 @@
 import pytest
-from pydantic import EmailStr
 from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 from training.main import app
@@ -57,7 +56,7 @@ def authorized_complete():
     return User(
         id=100,
         name="Stephen Dedalus",
-        email=EmailStr("test@example.com"),
+        email="test@example.com",
         agency_id=3,
         agency=Agency(id=3, name='test name', bureau="test"),
         roles=[Role(id=1, name='Wizard')],

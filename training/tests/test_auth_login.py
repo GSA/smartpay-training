@@ -26,17 +26,17 @@ def regular_user() -> User:
 
 @pytest.fixture
 def admin_user_uaa_jwt(admin_user: User):
-    return jwt.encode(admin_user.dict(), "test_uaa_key", algorithm="HS256")
+    return jwt.encode(admin_user.model_dump(), "test_uaa_key", algorithm="HS256")
 
 
 @pytest.fixture
 def regular_user_uaa_jwt(regular_user: User):
-    return jwt.encode(regular_user.dict(), "test_uaa_key", algorithm="HS256")
+    return jwt.encode(regular_user.model_dump(), "test_uaa_key", algorithm="HS256")
 
 
 @pytest.fixture
 def invalid_jwt(admin_user: User):
-    payload = admin_user.dict()
+    payload = admin_user.model_dump()
     payload["aud"] = [settings.AUTH_CLIENT_ID, "openid"]
     return jwt.encode(
         payload,
@@ -58,7 +58,7 @@ def test_auth_metadata():
 @patch("training.repositories.UserRepository.find_by_email")
 @patch("training.api.auth.UAAJWTUser.decode_jwt")
 def test_auth_exchange_valid_jwt_admin_user(decode_jwt, find_by_email, admin_user, admin_user_uaa_jwt):
-    decode_jwt.return_value = admin_user.dict()
+    decode_jwt.return_value = admin_user.model_dump()
     find_by_email.return_value = admin_user
 
     response = client.post(
@@ -71,7 +71,7 @@ def test_auth_exchange_valid_jwt_admin_user(decode_jwt, find_by_email, admin_use
 @patch("training.repositories.UserRepository.find_by_email")
 @patch("training.api.auth.UAAJWTUser.decode_jwt")
 def test_auth_exchange_valid_jwt_regular_user(decode_jwt, find_by_email, regular_user, regular_user_uaa_jwt):
-    decode_jwt.return_value = regular_user.dict()
+    decode_jwt.return_value = regular_user.model_dump()
     find_by_email.return_value = regular_user
 
     response = client.post(
@@ -84,7 +84,7 @@ def test_auth_exchange_valid_jwt_regular_user(decode_jwt, find_by_email, regular
 @patch("training.repositories.UserRepository.find_by_email")
 @patch("training.api.auth.UAAJWTUser.decode_jwt")
 def test_auth_exchange_valid_jwt_nonexistent_user(decode_jwt, find_by_email, regular_user, regular_user_uaa_jwt):
-    decode_jwt.return_value = regular_user.dict()
+    decode_jwt.return_value = regular_user.model_dump()
     find_by_email.return_value = None
 
     response = client.post(

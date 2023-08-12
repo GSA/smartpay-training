@@ -9,7 +9,7 @@ class QuizRepository(BaseRepository[models.Quiz]):
         super().__init__(session, models.Quiz)
 
     def create(self, quiz: schemas.QuizCreate) -> models.Quiz:
-        content_dict = quiz.content.dict()
+        content_dict = quiz.content.model_dump()
 
         # Assign IDs to questions and choices
         for qindex, question in enumerate(content_dict.get("questions", [])):

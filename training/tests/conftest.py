@@ -1,7 +1,7 @@
 from collections.abc import Generator
 from unittest.mock import MagicMock
 import jwt
-from pydantic import parse_obj_as
+from pydantic import TypeAdapter
 import pytest
 import yaml
 import pathlib
@@ -16,6 +16,8 @@ from training.services import QuizService
 from training.config import settings
 from . import factories
 from training.main import app
+
+quiz_submission_adapter = TypeAdapter(schemas.QuizSubmission)
 
 
 @pytest.fixture
@@ -155,7 +157,7 @@ def valid_jwt(db_with_data: Session) -> str:
     Provides a JWT based on a test user in the database.
     '''
     db_user = db_with_data.query(models.User).first()
-    user = schemas.UserJWT.from_orm(db_user).dict()
+    user = schemas.UserJWT.model_validate(db_user).model_dump()
     return jwt.encode(user, settings.JWT_SECRET, algorithm="HS256")
 
 
@@ -221,7 +223,7 @@ def valid_passing_submission(testdata: dict) -> Generator[schemas.QuizSubmission
     Provides a QuizSubmission schema object containing valid passing responses.
     '''
     jsondata = testdata["quiz_submissions"]["valid_passing"]
-    yield parse_obj_as(schemas.QuizSubmission, jsondata)
+    yield quiz_submission_adapter.validate_python(jsondata)
 
 
 @pytest.fixture
@@ -230,7 +232,7 @@ def valid_failing_submission(testdata: dict) -> Generator[schemas.QuizSubmission
     Provides a QuizSubmission schema object containing valid failing responses.
     '''
     jsondata = testdata["quiz_submissions"]["valid_failing"]
-    yield parse_obj_as(schemas.QuizSubmission, jsondata)
+    yield quiz_submission_adapter.validate_python(jsondata)
 
 
 @pytest.fixture
@@ -240,7 +242,7 @@ def invalid_submission(testdata: dict) -> Generator[schemas.QuizSubmission, None
     responses.
     '''
     jsondata = testdata["quiz_submissions"]["invalid_incomplete"]
-    yield parse_obj_as(schemas.QuizSubmission, jsondata)
+    yield quiz_submission_adapter.validate_python(jsondata)
 
 
 @pytest.fixture

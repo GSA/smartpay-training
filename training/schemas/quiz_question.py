@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 from training.schemas import QuizChoice, QuizChoicePublic, QuizChoiceCreate
 
 
@@ -25,6 +25,4 @@ class QuizQuestionPublic(QuizQuestionBase):
 
 class QuizQuestion(QuizQuestionBase):
     id: int
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

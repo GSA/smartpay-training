@@ -1,6 +1,8 @@
-from pydantic import BaseSettings, EmailStr
+from typing import Tuple, Type
+from pydantic import EmailStr
 from typing import Dict, Any
 from cfenv import AppEnv
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 
 def vcap_services_settings(settings: BaseSettings) -> Dict[str, Any]:
@@ -55,7 +57,10 @@ class Settings(BaseSettings):
     SMTP_USER: str | None
     SMTP_SERVER: str
     SMTP_PORT: int
-    EMAIL_FROM: EmailStr = EmailStr("smartpay-noreply@gsa.gov")
+    SMTP_STARTTLS: bool
+    SMTP_SSL_TLS: bool
+
+    EMAIL_FROM: EmailStr = "smartpay-noreply@gsa.gov"
     EMAIL_FROM_NAME: str = "GSA SmartPay"
     EMAIL_SUBJECT: str = "GSA SmartPay Training"
 
@@ -74,18 +79,26 @@ class Settings(BaseSettings):
     AUTH_CLIENT_ID: str
     AUTH_AUTHORITY_URL: str
 
-    class Config:
-        env_file = '.env'
-        env_file_encoding = 'utf-8'
+    model_config = SettingsConfigDict(
+        env_file='.env',
+        env_file_encoding='utf-8'
+    )
 
-        @classmethod
-        def customise_sources(cls, init_settings, env_settings, file_secret_settings):
-            return (
-                init_settings,
-                env_settings,
-                file_secret_settings,
-                vcap_services_settings,
-            )
+    @classmethod
+    def customise_sources(
+        cls,
+        settings_cls: Type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource
+    ) -> Tuple[PydanticBaseSettingsSource, ...]:
+        return (
+            init_settings,
+            env_settings,
+            file_secret_settings,
+            vcap_services_settings,
+        )
 
 
 settings = Settings()  # type: ignore
