@@ -2,7 +2,7 @@ import logging
 import jwt
 from typing import Union
 
-from fastapi import APIRouter, status, Response, HTTPException, Depends, Request
+from fastapi import APIRouter, status, Response, HTTPException, Depends
 from training.schemas import TempUser, IncompleteTempUser, WebDestination, UserJWT
 from training.data import UserCache
 from training.repositories import UserRepository
@@ -34,16 +34,12 @@ def page_lookup():
 @router.post("/get-link", status_code=status.HTTP_201_CREATED)
 async def send_link(
     response: Response,
-    request: Request,
     user: Union[TempUser, IncompleteTempUser],
     dest: WebDestination,
     repo: UserRepository = Depends(user_repository),
     cache: UserCache = Depends(UserCache),
     page_id_lookup: dict = Depends(page_lookup)
 ):
-    tu = await request.json()
-    print("res: ", tu)
-    print("user: ", type(user))
     try:
         required_roles = page_id_lookup[dest.page_id]['required_roles']
     except KeyError:
