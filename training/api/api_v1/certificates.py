@@ -39,6 +39,7 @@ def get_certificate_by_id(
     pdf_bytes = certificate.generate_pdf(
         db_user_certificate.quiz_name,
         db_user_certificate.user_name,
+        db_user_certificate.agency,
         db_user_certificate.completion_date
     )
     headers = {'Content-Disposition': 'attachment; filename="SmartPayTraining.pdf"'}

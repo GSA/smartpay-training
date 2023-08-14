@@ -27,7 +27,14 @@ i.e.
 
 html, body {
     height: 100%;
+    line-height: line-height('body', 6);
+
+    // reset the process current step icon class's line height to avoid positioning towards bottom issue
+    .usa-step-indicator__current-step {
+        line-height: initial;
+    }
 }
+
 
 .flex-shrink-0 {
     flex-shrink: 0;
@@ -41,3 +48,32 @@ html, body {
 .flex-fill {
     flex: 1 0 auto;
 }
+
+/* global h4 headings are sans */
+ 
+h4 {
+    @include u-font('sans', $theme-type-scale-sm)
+ }
+
+.usa-prose {
+    h4 {
+       @include u-font('sans', $theme-type-scale-sm)
+    }
+ 
+    hr {
+       border-color: color('base-lighter')
+    }
+ }
+
+ // based on new design, h1-h3 are using Merriweather and use base darkest color
+h1, h2, h3{
+    font-family: family('serif');
+    color: color('base-darkest');
+  }
+  
+h2 {
+    font-size: 1.75em;
+  }
+ 
+
+  

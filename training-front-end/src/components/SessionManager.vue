@@ -2,6 +2,8 @@
   import { useStore } from '@nanostores/vue'
   import { hasActiveSession } from '../stores/user'
   import { willTimeOut, continueSession, exit } from '../stores/session_manager'
+  import { setMessage } from '../stores/message_manager'
+
   import ExitModal from './ExitModal.vue'
   import ExitMenu from './ExitMenu.vue'
 
@@ -9,6 +11,10 @@
   const isActive = useStore(hasActiveSession)
 
   const exit_redirect = () => {
+    setMessage(
+      'You have successfully exited.',
+      'success'
+    )
     window.location.replace(`${import.meta.env.BASE_URL}exit`)
   }
 </script>

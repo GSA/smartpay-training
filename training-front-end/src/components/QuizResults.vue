@@ -55,21 +55,21 @@
         You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which meets the 75% or higher requirement to pass.
       </p>
       <form
-            :action=quiz_certificate_url 
-            method="post"
-          >
-            <input 
-              type="hidden"
-              name="jwtToken"
-              :value="user.jwt"
-            >
-            <button
-              class="usa-button usa-button--outline margin-bottom-3"
-              type="submit"
-            >
-              <FileDownLoad /> Download your certificate of completion
-            </button>
-          </form>
+        :action="quiz_certificate_url"
+        method="post"
+      >
+        <input 
+          type="hidden"
+          name="jwtToken"
+          :value="user.jwt"
+        >
+        <button
+          class="usa-button usa-button--outline margin-bottom-3"
+          type="submit"
+        >
+          <FileDownLoad /> Download your certificate of completion
+        </button>
+      </form>
     </div>
     <div v-else>
       <div class="usa-prose">
@@ -81,7 +81,7 @@
         </h2>
       </div>
       <p>
-        You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which does <b>not</b> meet the 75% or higher requirement to pass.
+        You got <b>{{ result_string }}</b> questions correct for a score of <b>{{ percentage }}%</b>. You need <b>75%</b> to pass. Please try again.
       </p>
       <button
         class="usa-button margin-bottom-2"
