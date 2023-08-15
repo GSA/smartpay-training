@@ -34,7 +34,7 @@ def auth_exchange(
             detail="Invalid user."
         )
 
-    user = User.from_orm(db_user)
+    user = User.model_validate(db_user)
     if not user.is_admin():
         logging.info(f"UAA authenticated, but not an admin: {uaa_user['email']}")
         raise HTTPException(
@@ -42,7 +42,7 @@ def auth_exchange(
             detail="Not authorized to login."
         )
 
-    jwt_user = UserJWT.from_orm(db_user)
-    encoded_jwt = jwt.encode(jwt_user.dict(), settings.JWT_SECRET, algorithm="HS256")
+    jwt_user = UserJWT.model_validate(db_user)
+    encoded_jwt = jwt.encode(jwt_user.model_dump(), settings.JWT_SECRET, algorithm="HS256")
     logging.info(f"Token exchange success for {db_user.email}")
     return {'user': jwt_user, 'jwt': encoded_jwt}

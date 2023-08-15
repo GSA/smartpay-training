@@ -1,10 +1,10 @@
-from pydantic import BaseModel
-from pydantic.schema import Optional
+from typing import Optional
+from pydantic import ConfigDict, BaseModel
 
 
 class AgencyBase(BaseModel):
     name: str
-    bureau: Optional[str]
+    bureau: Optional[str] = None
 
 
 class AgencyCreate(AgencyBase):
@@ -13,9 +13,7 @@ class AgencyCreate(AgencyBase):
 
 class Agency(AgencyBase):
     id: int
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Bureau(BaseModel):

@@ -1,5 +1,4 @@
 import pytest
-from pydantic import EmailStr
 from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 from training.main import app
@@ -57,7 +56,7 @@ def authorized_complete():
     return User(
         id=100,
         name="Stephen Dedalus",
-        email=EmailStr("test@example.com"),
+        email="test@example.com",
         agency_id=3,
         agency=Agency(id=3, name='test name', bureau="test"),
         roles=[Role(id=1, name='Wizard')],
@@ -136,7 +135,7 @@ class TestAuth:
                 "dest": {"page_id": "open_route", "title": "Public Page"}
             }
         )
-        fake_cache.set.assert_called_with(TempUser(**user_complete))
+        fake_cache.set.assert_called_with(TempUser.model_validate(user_complete))
 
     @patch('training.api.api_v1.loginless_flow.send_email')
     def test_complete_user_http_201(self, send_email, user_complete, fake_user_repo):
