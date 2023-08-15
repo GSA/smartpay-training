@@ -1,39 +1,50 @@
 from typing import Tuple, Type
 from pydantic import EmailStr
+from pydantic.fields import FieldInfo
 from typing import Dict, Any
 from cfenv import AppEnv
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 
-def vcap_services_settings(settings: BaseSettings) -> Dict[str, Any]:
-    '''
-    Parse settings from the VCAP_SERVICES environment variable.
-    '''
-    appenv = AppEnv()
-    config = {}
+class VcapSettingsSource(PydanticBaseSettingsSource):
+    def get_field_value(
+        self, field: FieldInfo, field_name: str
+    ) -> Tuple[Any, str, bool]:
+        '''
+        This is a required method on the abstract base class, but does not seem to be
+        needed in all cases. This is a known issue: https://github.com/pydantic/pydantic-settings/issues/102
+        '''
+        pass
 
-    redis = appenv.get_service(label="aws-elasticache-redis")
-    if redis:
-        config["REDIS_HOST"] = redis.credentials["host"]
-        config["REDIS_PORT"] = redis.credentials["port"]
-        config["REDIS_PASSWORD"] = redis.credentials["password"]
-        config["REDIS_TLS"] = True  # cloud.gov Redis always requires TLS
+    def __call__(self) -> Dict[str, Any]:
+        '''
+        Parse settings from the VCAP_SERVICES environment variable.
+        '''
+        appenv = AppEnv()
+        config = {}
 
-    db = appenv.get_service(label="aws-rds")
-    if db:
-        config["DB_URI"] = db.credentials["uri"]
+        redis = appenv.get_service(label="aws-elasticache-redis")
+        if redis:
+            config["REDIS_HOST"] = redis.credentials["host"]
+            config["REDIS_PORT"] = redis.credentials["port"]
+            config["REDIS_PASSWORD"] = redis.credentials["password"]
+            config["REDIS_TLS"] = True  # cloud.gov Redis always requires TLS
 
-    secrets = appenv.get_service(label="user-provided")
-    if secrets and secrets.credentials["JWT_SECRET"]:
-        config["JWT_SECRET"] = secrets.credentials["JWT_SECRET"]
-    if secrets and secrets.credentials.get("SMTP_PASSWORD", None):
-        config["SMTP_PASSWORD"] = secrets.credentials["SMTP_PASSWORD"]
+        db = appenv.get_service(label="aws-rds")
+        if db:
+            config["DB_URI"] = db.credentials["uri"]
 
-    idp = appenv.get_service(label="cloud-gov-identity-provider")
-    if idp and idp.credentials["client_id"]:
-        config["AUTH_CLIENT_ID"] = idp.credentials["client_id"]
+        secrets = appenv.get_service(label="user-provided")
+        if secrets and secrets.credentials["JWT_SECRET"]:
+            config["JWT_SECRET"] = secrets.credentials["JWT_SECRET"]
+        if secrets and secrets.credentials.get("SMTP_PASSWORD", None):
+            config["SMTP_PASSWORD"] = secrets.credentials["SMTP_PASSWORD"]
 
-    return config
+        idp = appenv.get_service(label="cloud-gov-identity-provider")
+        if idp and idp.credentials["client_id"]:
+            config["AUTH_CLIENT_ID"] = idp.credentials["client_id"]
+
+        return config
 
 
 class Settings(BaseSettings):
@@ -85,7 +96,7 @@ class Settings(BaseSettings):
     )
 
     @classmethod
-    def customise_sources(
+    def settings_customise_sources(
         cls,
         settings_cls: Type[BaseSettings],
         init_settings: PydanticBaseSettingsSource,
@@ -97,7 +108,8 @@ class Settings(BaseSettings):
             init_settings,
             env_settings,
             file_secret_settings,
-            vcap_services_settings,
+            dotenv_settings,
+            VcapSettingsSource(settings_cls),
         )
 
 
