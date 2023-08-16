@@ -69,7 +69,7 @@ describe('AdminAgencySelect', async () => {
 
     expect(updateFetchSpy).nthCalledWith(1, expect.any(URL), {
       body: '[10]',
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Authorization': 'Bearer some-token-value',
         'Content-Type': 'application/json'
