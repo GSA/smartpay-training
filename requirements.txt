@@ -1,11 +1,12 @@
 redis==4.4.4
-fastapi==0.97.0
-uvicorn[standard]==0.20.0
+fastapi==0.101.0
+uvicorn[standard]==0.23.2
 pyjwt[crypto]==2.6.0
-fastapi_mail==1.2.5
 cfenv==0.5.3
 SQLAlchemy==2.0.5.post1
 psycopg2==2.9.5
 alembic==1.10.2
 PyMuPDF==1.21.1
+pydantic-settings==2.0.2
+email-validator==2.0.0.post2
 python-multipart==0.0.6

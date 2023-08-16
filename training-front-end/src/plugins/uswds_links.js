@@ -19,10 +19,11 @@ export default () => {
         // these will all be local, so ignore
         return
       }
-
-      if (! domain.hostname.endsWith('training.smartpay.gsa.gov')) {
+    
+      if (! domain.hostname.endsWith('gsa.gov')) {
         properties.className += ' usa-link--external'
       }
+    
     });
 };
 

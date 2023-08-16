@@ -34,7 +34,7 @@ def test_create_user(goodJWT, mock_user_repo: UserRepository):
     mock_user_repo.create.return_value = UserSchemaFactory.build()
     response = client.post(
         "/api/v1/users",
-        json=user_create.dict(),
+        json=user_create.model_dump(),
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
     assert response.status_code == status.HTTP_201_CREATED
@@ -46,7 +46,7 @@ def test_create_user_duplicate(goodJWT, mock_user_repo: UserRepository):
     mock_user_repo.find_by_email.return_value = user_create
     response = client.post(
         "/api/v1/users",
-        json=user_create.dict(),
+        json=user_create.model_dump(),
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -88,7 +88,7 @@ def test_search_users_by_name(goodJWT, mock_user_repo: UserRepository):
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == 2
     assert response.json()["total_count"] == 2
-    assert response.json()["users"] == users
+    assert response.json()["users"] == [user.model_dump() for user in users]
 
 
 def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
@@ -108,5 +108,5 @@ def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
     assert response.status_code == status.HTTP_200_OK
-    assert role in response.json()["roles"]
-    assert agency in response.json()["report_agencies"]
+    assert role.model_dump() in response.json()["roles"]
+    assert agency.model_dump() in response.json()["report_agencies"]

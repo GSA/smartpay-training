@@ -15,7 +15,7 @@ def test_create_agency(mock_agency_repo: AgencyRepository):
     mock_agency_repo.create.return_value = AgencySchemaFactory.build()
     response = client.post(
         "/api/v1/agencies",
-        json=agency_create.dict()
+        json=agency_create.model_dump()
     )
     assert response.status_code == status.HTTP_201_CREATED
 
@@ -26,7 +26,7 @@ def test_create_agency_duplicate(mock_agency_repo: AgencyRepository):
     mock_agency_repo.find_by_name.return_value = agency
     response = client.post(
         "/api/v1/agencies",
-        json=agency_create.dict()
+        json=agency_create.model_dump()
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 

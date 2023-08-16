@@ -28,11 +28,11 @@ class UserCache:
         user = redis.get(token)
         if user:
             user = json.loads(user)
-            return UserCreate(**user)
+            return UserCreate.model_validate(user)
 
     def set(self, user: TempUser) -> str:
         token = str(uuid4())
-        user_str = json.dumps(user.dict())
+        user_str = user.model_dump_json()
         # try/except here
         redis.set(token, user_str)
         redis.expire(token, self.CACHE_TTL)

@@ -4,7 +4,9 @@ export default class AuthService {
   private userManager: UserManager
 
   private constructor(metadata: any) {
-    const baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
+    let baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
+    // prevent problems when preview environments include trailing slash
+    baseUrl = baseUrl.replace(/\/$/, "")
     const settings: UserManagerSettings = {
       authority: metadata["authority"] || "",
       client_id: metadata["client_id"] || "",
@@ -16,7 +18,7 @@ export default class AuthService {
   }
 
   static async instance(): Promise<AuthService> {
-    let authMetadata = window.localStorage.getItem("authMetadata")
+    let authMetadata = window.sessionStorage.getItem("authMetadata")
 
     if (authMetadata) {
       authMetadata = JSON.parse(authMetadata)
@@ -26,7 +28,7 @@ export default class AuthService {
       const metadataResponse = await fetch(metadataUrl)
       authMetadata = await metadataResponse.json()
       if (authMetadata) {
-        window.localStorage.setItem("authMetadata", JSON.stringify(authMetadata))
+        window.sessionStorage.setItem("authMetadata", JSON.stringify(authMetadata))
       }
     }
 

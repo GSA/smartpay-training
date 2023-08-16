@@ -34,6 +34,10 @@ export async function exit() {
   // this allows users to click the modal's 'exit' button
   // without an additional warning
   window.removeEventListener('beforeunload', exit_warning)
+  setMessage(
+    'You have successfully exited.',
+    'success'
+  )
   window.location.replace(`${import.meta.env.BASE_URL}exit`)
 }
 
@@ -55,7 +59,7 @@ function prevent_session_end() {
 function set_timeout() {
   warn_interval = setTimeout(set_warn_before_exit, SESSION_TIME_OUT - SESSION_WARNING_TIME)
   session_timeout = setTimeout(async () => {
-    setMessage('Your session has timed out due to inactivity.')
+    setMessage('Your session has timed out due to inactivity.', 'warning')
     exit()
   }, SESSION_TIME_OUT)
 }

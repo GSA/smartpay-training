@@ -14,7 +14,7 @@ class QuizService():
         if db_quiz is None:
             raise QuizNotFoundError
 
-        quiz = Quiz.from_orm(db_quiz)
+        quiz = Quiz.model_validate(db_quiz)
         correct_count = 0
         question_count = len(quiz.content.questions)
         questions = []

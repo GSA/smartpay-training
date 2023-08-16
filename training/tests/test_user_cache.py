@@ -2,7 +2,7 @@ import pytest
 import json
 from unittest import mock
 from training.data.user_cache import UserCache, redis
-from training.schemas import TempUser
+from training.schemas import TempUser, UserCreate
 
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def test_get_user(temp_user, uuid):
         u = UserCache()
         found_user = u.get(uuid)
         redis.get.assert_called_with(uuid)
-        assert found_user == TempUser(**temp_user)
+        assert found_user == UserCreate.model_validate(temp_user)
 
 
 def test_get_non_user(uuid):
@@ -40,10 +40,10 @@ def test_get_non_user(uuid):
 def test_set_user(uuid_mock, redis_mock, uuid, temp_user):
     '''It sets redis key and generates a UUID for the user'''
     uuid_mock.return_value = uuid
-    new_user = TempUser(**temp_user)
+    new_user = TempUser.model_validate(temp_user)
     u = UserCache()
     new_id = u.set(new_user)
-    redis_mock.set.assert_called_with(uuid, json.dumps(temp_user))
+    redis_mock.set.assert_called_with(uuid, json.dumps(temp_user, separators=(',', ':')))
     redis_mock.expire.assert_called()
     assert new_id == uuid
 

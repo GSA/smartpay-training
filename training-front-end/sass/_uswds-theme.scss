@@ -11,7 +11,37 @@ in the form $setting: value,
 @use "uswds-core" with (
     $theme-image-path: "../images",
     $theme-font-path: "../fonts",
+    // Primary colors
+    $theme-color-primary-light: #8DA9E0,
+    $theme-color-primary: #405E97,
+    $theme-color-primary-vivid: #2753A7,
+    $theme-color-primary-dark: #1B3973,
+
+    // Base Colors
+    $theme-color-base-lightest: 'blue-warm-5',
+    $theme-color-base-lighter: 'blue-warm-10',
+    $theme-color-base-light: 'blue-warm-20',
+    $theme-color-base: 'blue-warm-60',
+    //$theme-color-base-dark: 'blue-warm-70',
+    $theme-color-base-darker: 'blue-warm-70',
+    $theme-color-base-darkest: 'blue-warm-80',
+    $theme-color-base-ink: 'blue-warm-90',
+
     $theme-summary-box-background-color: "base-lightest",
-    $theme-summary-box-border-color: "base-light"
+    $theme-summary-box-border-color: "base-light",
+
+    $theme-sidenav-current-border-width: 0,
+    // font family
+    $theme-font-type-sans: "public-sans",
+    $theme-font-role-body: 'sans',
+    $theme-font-role-heading: 'serif',
+
+    $theme-process-list-heading-font-family: 'serif',
+    $theme-process-list-counter-font-family: 'serif',
+
+    // Type scale
+    $theme-type-scale-lg: 9,
+    $theme-type-scale-xl: 12
+    
   );
  

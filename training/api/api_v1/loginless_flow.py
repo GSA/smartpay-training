@@ -63,7 +63,7 @@ def send_link(
                     detail="Unauthorized"
                 )
 
-            user = TempUser.parse_obj({
+            user = TempUser.model_validate({
                 "name": user_from_db.name,
                 "email": user_from_db.email,
                 "agency_id": user_from_db.agency_id,
@@ -118,7 +118,7 @@ async def get_user(
     db_user = repo.find_by_email(user.email)
     if not db_user:
         db_user = repo.create(user)
-    user_return = UserJWT.from_orm(db_user)
+    user_return = UserJWT.model_validate(db_user)
     logging.info(f"Confirmed email token for {user.email}")
-    encoded_jwt = jwt.encode(user_return.dict(), settings.JWT_SECRET, algorithm="HS256")
+    encoded_jwt = jwt.encode(user_return.model_dump(), settings.JWT_SECRET, algorithm="HS256")
     return {'user': user_return, 'jwt': encoded_jwt}

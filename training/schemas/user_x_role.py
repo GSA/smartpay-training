@@ -1,9 +1,7 @@
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 
 class UserXRole(BaseModel):
     user_id: int
     role_id: int
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

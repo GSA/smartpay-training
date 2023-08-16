@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 
 class QuizCompletionBase(BaseModel):
@@ -15,6 +15,4 @@ class QuizCompletionCreate(QuizCompletionBase):
 class QuizCompletion(QuizCompletionBase):
     id: int
     submit_ts: datetime
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
