@@ -19,7 +19,6 @@ class UserRepository(BaseRepository[models.User]):
     def find_by_agency(self, agency_id: int) -> list[models.User]:
         return self._session.query(models.User).filter(models.User.agency_id == agency_id).all()
 
-    # edit_user_for_reporting is function allow admin to modify specific user and assign report role and associate report agencies to the user
     def edit_user_for_reporting(self, user_id: int, report_agencies_list: list[int]) -> models.User:
         db_user = self._session.query(models.User).filter(models.User.id == user_id).first()
         if db_user is None:
@@ -31,13 +30,11 @@ class UserRepository(BaseRepository[models.User]):
                 if report_role:
                     db_user.roles.append(report_role)
                 else:
-                    # if Report role is not in DB, add it to DB (should not happen if data is prepopulated properly via seed.py and no direct DB removal)
                     role = models.Role(name="Report")
                     self._session.add(role)
                     self._session.commit()
                     db_user.roles.append(role)
         else:
-            # if report_agencies_list =[], it means remove all user associated agencies and thus remove user report role.
             if len(report_role_exist) > 0:
                 db_user.roles = [obj for obj in db_user.roles if obj.name != "Report"]
         db_user.report_agencies.clear()
@@ -49,6 +46,9 @@ class UserRepository(BaseRepository[models.User]):
                 raise ValueError("invalid agency associated with this user")
         self._session.commit()
         return db_user
+
+    def get_admins_users(self) -> list[models.User]:
+        return self._session.query(models.User).filter(models.User.roles.any(name='Admin')).all()
 
     def get_user_quiz_completion_report(self, report_user_id: int) -> list[UserQuizCompletionReportData]:
         report_user = self.find_by_id(report_user_id)
@@ -66,8 +66,7 @@ class UserRepository(BaseRepository[models.User]):
         else:
             raise ValueError("Invalid Report User")
 
-    def get_users(self, name: str, page_number: int) -> UserSearchResult:
-        # currently UI only support search by name, future may provide more search criteria
+    def search_users_by_name(self, name: str, page_number: int) -> UserSearchResult:
         if (name and name.strip() != '' and page_number > 0):
             count = self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).count()
             page_size = 25
