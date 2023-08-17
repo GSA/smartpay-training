@@ -13,7 +13,7 @@
   const PAGE_SIZE = 25
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  const report_url = `${base_url}/api/v1/users/search-users-by-name/`
+  const report_url = `${base_url}/api/v1/users/`
   const update_url = `${base_url}/api/v1/users/edit-user-for-reporting/`
 
   const currentPage = ref(0)
