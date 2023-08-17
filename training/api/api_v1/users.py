@@ -1,7 +1,6 @@
 import csv
 from io import StringIO
 import logging
-from typing import List
 from training.api.auth import RequireRole
 from fastapi import APIRouter, status, HTTPException, Response, Depends
 from training.schemas import User, UserCreate, UserSearchResult
@@ -30,21 +29,8 @@ def create_user(
     return db_user
 
 
-@router.get("/users", response_model=List[User])
-def get_users(
-    agency_id: int | None = None,
-    repo: UserRepository = Depends(user_repository),
-    user=Depends(RequireRole(["Admin"]))
-):
-    if agency_id:
-        return repo.find_by_agency(agency_id)
-    else:
-        # If agency_id is <= 0 or None, return all users:
-        return repo.find_all()
-
-
-@router.put("/users/edit-user-for-reporting", response_model=User)
-def edit_user_by_id(
+@router.patch("/users/edit-user-for-reporting", response_model=User)
+def edit_user_for_reporting(
     user_id: int,
     agency_id_list: list[int],
     repo: UserRepository = Depends(user_repository),
@@ -84,15 +70,22 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
     return Response(output.getvalue(), headers=headers, media_type='application/csv')
 
 
-@router.get("/users/search-users-by-name/{name}", response_model=UserSearchResult)
-def search_users_by_name(
-    name: str,
-    page_number: int,
+'''
+Get/users is used to search users for admin portal, currently only support search by user name, it may have additional search criteira in future.
+page_number param is used to support UI pagination functionality.
+It returns UserSearchResult object with a list of users and total_count returned.
+'''
+
+
+@router.get("/users", response_model=UserSearchResult)
+def get_users(
+    name: str | None = None,
+    page_number: int = 1,
     repo: UserRepository = Depends(user_repository),
     user=Depends(RequireRole(["Admin"]))
 ):
     try:
-        return repo.search_users_by_name(name, page_number)
+        return repo.get_users(name, page_number)
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
