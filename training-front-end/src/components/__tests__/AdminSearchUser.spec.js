@@ -118,7 +118,7 @@ describe('AdminAgencySelect', async () => {
     linkElements[1].trigger('click')
 
     expect(fetchSpy).toBeCalledTimes(2)
-    expect(fetchSpy.mock.lastCall[0].search).toBe('?page_number=2')
+    expect(fetchSpy.mock.lastCall[0].search).toBe('?name=Steeply&page_number=2')
   })
 
   it('displays no results message', async () => {
