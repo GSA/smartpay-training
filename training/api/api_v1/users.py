@@ -74,8 +74,8 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
 def get_users(
     name: Annotated[str, Query(min_length=1)],
     page_number: int = 1,
-    repo: UserRepository = Depends(user_repository)#,
-    #user=Depends(RequireRole(["Admin"]))
+    repo: UserRepository = Depends(user_repository),
+    user=Depends(RequireRole(["Admin"]))
 ):
     '''
     Get/users is used to search users for admin portal
