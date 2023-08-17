@@ -18,7 +18,7 @@ class UserRepository(BaseRepository[models.User]):
 
     def find_by_agency(self, agency_id: int) -> list[models.User]:
         return self._session.query(models.User).filter(models.User.agency_id == agency_id).all()
-   
+
     def edit_user_for_reporting(self, user_id: int, report_agencies_list: list[int]) -> models.User:
         # edit_user_for_reporting allow admin to assign report role and associate report agencies to specific user
         db_user = self._session.query(models.User).filter(models.User.id == user_id).first()
