@@ -18,9 +18,9 @@ class UserRepository(BaseRepository[models.User]):
 
     def find_by_agency(self, agency_id: int) -> list[models.User]:
         return self._session.query(models.User).filter(models.User.agency_id == agency_id).all()
-
-    # edit_user_for_reporting is function allow admin to modify specific user and assign report role and associate report agencies to the user
+   
     def edit_user_for_reporting(self, user_id: int, report_agencies_list: list[int]) -> models.User:
+        # edit_user_for_reporting allow admin to assign report role and associate report agencies to specific user
         db_user = self._session.query(models.User).filter(models.User.id == user_id).first()
         if db_user is None:
             raise ValueError("invalid user id")
@@ -37,7 +37,7 @@ class UserRepository(BaseRepository[models.User]):
                     self._session.commit()
                     db_user.roles.append(role)
         else:
-            # if report_agencies_list =[], it means remove all user associated agencies and thus remove user report role.
+            # if report_agencies_list =[], it will remove all user associated agencies and thus remove user report role.
             if len(report_role_exist) > 0:
                 db_user.roles = [obj for obj in db_user.roles if obj.name != "Report"]
         db_user.report_agencies.clear()
@@ -67,7 +67,7 @@ class UserRepository(BaseRepository[models.User]):
             raise ValueError("Invalid Report User")
 
     def get_users(self, name: str, page_number: int) -> UserSearchResult:
-        # currently UI only support search by name, future may provide more search criteria
+        # current UI only support search by user name, and it is required field.
         if (name and name.strip() != '' and page_number > 0):
             count = self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).count()
             page_size = 25
@@ -75,5 +75,3 @@ class UserRepository(BaseRepository[models.User]):
             search_results = self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).limit(page_size).offset(offset).all()
             user_search_result = UserSearchResult(users=search_results, total_count=count)
             return user_search_result
-        else:
-            raise ValueError("Invalid search criteria")

@@ -2,12 +2,12 @@ import csv
 from io import StringIO
 import logging
 from training.api.auth import RequireRole
-from fastapi import APIRouter, status, HTTPException, Response, Depends
+from fastapi import APIRouter, status, HTTPException, Response, Depends, Query
 from training.schemas import User, UserCreate, UserSearchResult
 from training.repositories import UserRepository
 from training.api.deps import user_repository
 from training.api.auth import user_from_form
-
+from typing import Annotated
 
 router = APIRouter()
 
@@ -70,24 +70,18 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
     return Response(output.getvalue(), headers=headers, media_type='application/csv')
 
 
-'''
-Get/users is used to search users for admin portal, currently only support search by user name, it may have additional search criteira in future.
-page_number param is used to support UI pagination functionality.
-It returns UserSearchResult object with a list of users and total_count returned.
-'''
-
-
 @router.get("/users", response_model=UserSearchResult)
 def get_users(
-    name: str | None = None,
+    name: Annotated[str, Query(min_length=1)],
     page_number: int = 1,
-    repo: UserRepository = Depends(user_repository),
-    user=Depends(RequireRole(["Admin"]))
+    repo: UserRepository = Depends(user_repository)#,
+    #user=Depends(RequireRole(["Admin"]))
 ):
-    try:
-        return repo.get_users(name, page_number)
-    except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="invalid search criteria"
-        )
+    '''
+    Get/users is used to search users for admin portal
+    currently search only support search by user name, name is required field.
+    It may have additional search criteira in future, which will require logic update.
+    page_number param is used to support UI pagination functionality.
+    It returns UserSearchResult object with a list of users and total_count used for UI pagination
+    '''
+    return repo.get_users(name, page_number)
