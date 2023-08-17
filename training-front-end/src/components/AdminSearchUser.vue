@@ -33,9 +33,6 @@
 
   async function search() {
     noResults.value = false
-    //const url = new URL(`${report_url}${searchTerm.value}`)
-    //url.search = new URLSearchParams({page_number: currentPage.value + 1})
-    console.log(searchTerm.value);
     const url = new URL(`${report_url}`)
     url.search = new URLSearchParams({name: searchTerm.value, page_number: currentPage.value + 1})
 
