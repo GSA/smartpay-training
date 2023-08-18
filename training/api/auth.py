@@ -1,12 +1,13 @@
-from fastapi import Request, HTTPException, Depends, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from typing import Annotated
-import jwt
 import json
+from typing import Annotated
+from urllib.request import urlopen
+
+from fastapi import Request, HTTPException, Depends, status
+from fastapi import Form
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import jwt
 from jwt.exceptions import InvalidTokenError
 from training.config import settings
-from urllib.request import urlopen
-from fastapi import Form
 
 
 class JWTUser(HTTPBearer):

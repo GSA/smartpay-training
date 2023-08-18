@@ -15,6 +15,9 @@ def get_certificates_by_userid(
     repo: CertificateRepository = Depends(certificate_repository),
     user: dict[str, Any] = Depends(JWTUser())
 ):
+    '''
+    Returns a list of certificates for `user`
+    '''
     db_user_certificates = repo.get_certificates_by_userid(user["id"])
     if db_user_certificates is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

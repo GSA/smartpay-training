@@ -32,7 +32,12 @@ def page_lookup():
     }
 
 
-@router.post("/get-link", status_code=status.HTTP_201_CREATED)
+@router.post("/get-link",
+             status_code=status.HTTP_201_CREATED,
+             responses={
+                 200: {"description": 'OK, but user details needed'},
+                 201: {"description": "Token created"}
+                 })
 def send_link(
     response: Response,
     user: Union[TempUser, IncompleteTempUser],
@@ -42,11 +47,13 @@ def send_link(
     page_id_lookup: dict = Depends(page_lookup)
 ):
     '''
-    Sends the user an email with a token embedded in a link back to the
-    frontend section the user made the request from (the 'dest' parameter).
-    The token is a key to the Redis cache. When they use the link to return,
-    we have confidence they could access the email and look up their idendity
-    from the cache. In cases where we add the user to the cache this repondes with an HTTP 201.
+    Create a link with an embedded token.\f
+
+    This link is sent via email pointing back to the frontend section the user
+    made the request from (the 'dest' parameter). The token is a key to the Redis
+    cache. When they use the link to return, we have confidence they could access
+    the email and look up their idendity from the cache. In cases where we add the
+    user to the cache this repondes with an HTTP 201.
 
     If the `user` body paremeter is an IncompleteTempUser (only has an email)
     this will query the database to see if the user exist. If the user does not exist
