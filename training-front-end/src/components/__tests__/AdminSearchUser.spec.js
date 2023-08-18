@@ -69,7 +69,7 @@ describe('AdminAgencySelect', async () => {
 
     expect(updateFetchSpy).nthCalledWith(1, expect.any(URL), {
       body: '[10]',
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Authorization': 'Bearer some-token-value',
         'Content-Type': 'application/json'
@@ -118,7 +118,7 @@ describe('AdminAgencySelect', async () => {
     linkElements[1].trigger('click')
 
     expect(fetchSpy).toBeCalledTimes(2)
-    expect(fetchSpy.mock.lastCall[0].search).toBe('?page_number=2')
+    expect(fetchSpy.mock.lastCall[0].search).toBe('?name=Steeply&page_number=2')
   })
 
   it('displays no results message', async () => {
