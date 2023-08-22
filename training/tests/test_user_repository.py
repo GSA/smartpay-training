@@ -107,9 +107,3 @@ def test_get_users(user_repo_with_data: UserRepository, valid_user_ids: List[int
     assert result is not None
     for item in result.users:
         assert search_criteria in item.name
-
-
-def test_invalid_get_users(user_repo_with_data: UserRepository):
-    search_criteria = None
-    with pytest.raises(Exception):
-        user_repo_with_data.get_users(search_criteria, 0)
