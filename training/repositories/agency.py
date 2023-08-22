@@ -1,7 +1,7 @@
 
 from sqlalchemy.orm import Session
 from training import models, schemas
-from training.schemas.agency import AgencyWithBureaus, Bureau
+from training.schemas.agency import AgencyWithBureaus
 from .base import BaseRepository
 from sqlalchemy.sql.expression import collate, case
 from itertools import groupby
