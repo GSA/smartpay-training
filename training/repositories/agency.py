@@ -1,8 +1,10 @@
+
 from sqlalchemy.orm import Session
 from training import models, schemas
-from training.schemas.agency import AgencyWithBureaus, Bureau
+from training.schemas.agency import AgencyWithBureaus
 from .base import BaseRepository
-from sqlalchemy.sql.expression import collate
+from sqlalchemy.sql.expression import collate, case
+from itertools import groupby
 
 
 class AgencyRepository(BaseRepository[models.Agency]):
@@ -24,21 +26,32 @@ class AgencyRepository(BaseRepository[models.Agency]):
         return self._session.query(models.Agency).filter(models.Agency.name == agency.name, models.Agency.bureau == agency.bureau).first()
 
     def get_agencies_with_bureaus(self) -> list[AgencyWithBureaus]:
-        db_results = self._session.query(models.Agency).order_by(collate(models.Agency.name, 'C')).all()
-        parent_agencies = [record for record in db_results if record.bureau is None]
+        '''
+        get agencies_with_bureaus return a list of parent agencies with bureaus list, if parent agency doesn't have bureaus, its bureaus list =[].
+        parent agencies are those db records with bureau value is null
+        UI want to sort agency alphabetically but needs 'Other' option to be displayed at the end. Both parent agency and bureau has 'Other' option.
+        several sort order are combined and is put in a specific order to achieve this.
+        group by is used to group same agency together
+        '''
+
+        # set 'Other' order rule for both agency and bureau
+        agency_other_order = case((models.Agency.name == "Other", 1), else_=0)
+        bureau_other_order = case((models.Agency.bureau == "Other", 2), (models.Agency.bureau==None, 0), else_=1)  # noqa E711
+
+        db_results = self._session.query(models.Agency).order_by(
+            agency_other_order,  # agency named Other should be at the bottom of parent agencies list
+            collate(models.Agency.name, 'C'),  # alphabetical order on agency's name
+            bureau_other_order,  # bureau named 'Other' should be at the bollom of the bureau list
+            collate(models.Agency.bureau, 'C')  # alphabetical order on bureau
+            ).all()
+
         transform_angecies = []
-        for record in parent_agencies:
-            agency_with_bureaus = [obj for obj in db_results if obj.bureau and obj.name == record.name]
-            bureaus = []
-            if len(agency_with_bureaus) > 0:
-                sorted_bureaus = sorted(agency_with_bureaus, key=lambda x: x.bureau)
-                for obj in sorted_bureaus:
-                    bureau = Bureau(id=obj.id, name=obj.bureau)
-                    bureaus.append(bureau)
+        for _, group in groupby(db_results, lambda row: row.name):
+            parent = next(group)  # Parent is first in the group
 
             transform_angecies.append({
-                'id': record.id,
-                'name': record.name,
-                'bureaus': bureaus
+                'id': parent.id,
+                'name': parent.name,
+                'bureaus': [{"id": b.id, "name": b.bureau} for b in group]
             })
         return transform_angecies
