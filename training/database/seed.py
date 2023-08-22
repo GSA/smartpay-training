@@ -35,7 +35,7 @@ for item in data["roles"]:
 user_repo = UserRepository(SessionLocal())
 
 for item in data["admins"]:
-    fas = AgencyCreate(name="General Services Administration", bureau="Federal Acquisition Service")
+    fas = AgencyCreate(name="U.S. General Services Administration", bureau="Federal Acquisition Service")
     smartpay_agency = agency_repo.find_by_name(fas)
     user = UserCreate(name=item['name'], email=item['email'], agency_id=smartpay_agency.id)
     print("User:", user.name, "Email:", user.email, "Agency_id:", smartpay_agency.id, end=" - ")
