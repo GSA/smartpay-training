@@ -26,12 +26,12 @@ class AgencyRepository(BaseRepository[models.Agency]):
     def get_agencies_with_bureaus(self) -> list[AgencyWithBureaus]:
         db_results = self._session.query(models.Agency).order_by(collate(models.Agency.name, 'C')).all()
         parent_agencies = [record for record in db_results if record.bureau is None]
-        
+
         # For UI display, sort all parent agency by alphabetical order except for 'Other', 'Other" needs to be placed at the bottom of the list.
         other_agency = [record for record in parent_agencies if record.name.lower() == 'other']
         rest_agencies = [record for record in parent_agencies if record.name.lower() != 'other']
         sorted_parent_agencies = rest_agencies + other_agency
-        
+
         transform_angecies = []
         for record in sorted_parent_agencies:
             agency_with_bureaus = [obj for obj in db_results if obj.bureau and obj.name == record.name]
