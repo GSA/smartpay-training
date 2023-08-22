@@ -115,8 +115,6 @@ class TestCertificateAPI:
             cert.completion_date
         )
         assert response.status_code == status.HTTP_200_OK
-        print(dir(response))
-        print(response.headers)
         assert response.headers['content-type'] == 'application/pdf'
         assert response.headers['content-disposition'] == 'attachment; filename="SmartPayTraining.pdf"'
         assert response.text == "some bytes"
