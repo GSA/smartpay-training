@@ -59,3 +59,24 @@ def test_delete_by_id(agency_repo_empty: AgencyRepository, valid_agency):
     agency_id = agency_repo_empty.save(models.Agency(name=valid_agency.name, bureau=valid_agency.bureau)).id
     agency_repo_empty.delete_by_id(agency_id)
     assert agency_repo_empty.find_by_id(agency_id) is None
+
+
+def test_get_agencies_with_bureaus_sort_order(agency_repo_with_data: AgencyRepository):
+    agencies = agency_repo_with_data.get_agencies_with_bureaus()
+    last_agency = agencies[-1]
+    assert last_agency['name'] == 'Other'
+    all_but_last = agencies[:-1]
+
+    assert all(a1['name'] < a2['name'] for a1, a2 in zip(all_but_last, all_but_last[1:]))
+
+
+def test_get_agencies_with_bureaus_bureau_sort_order(agency_repo_with_data: AgencyRepository):
+    agencies = agency_repo_with_data.get_agencies_with_bureaus()
+    for agency in agencies:
+        if any(b['name'] == 'Other' for b in agency['bureaus']):
+            last_bureau = agency['bureaus'][-1]
+            assert last_bureau['name'] == 'Other'
+            all_but_last_bureau = agency['bureaus'][:-1]
+            assert all(b1['name'] < b2['name'] for b1, b2 in zip(all_but_last_bureau, all_but_last_bureau[1:]))
+        else:
+            assert all(b1['name'] < b2['name'] for b1, b2 in zip(agency['bureaus'], agency['bureaus'][1:]))
