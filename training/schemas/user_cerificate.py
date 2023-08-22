@@ -8,5 +8,6 @@ class UserCertificate(BaseModel):
     user_name: str
     quiz_id: int
     quiz_name: str
+    agency: str
     completion_date: datetime
     model_config = ConfigDict(from_attributes=True)
