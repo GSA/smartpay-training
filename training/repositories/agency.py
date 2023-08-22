@@ -30,8 +30,8 @@ class AgencyRepository(BaseRepository[models.Agency]):
         get agencies_with_bureaus return a list of parent agencies with bureaus list, if parent agency doesn't have bureaus, its bureaus list =[].
         parent agencies are those db records with bureau value is null
         UI want to sort agency alphabetically but needs 'Other' option to be displayed at the end. Both parent agency and bureau has 'Other' option.
-        serveral sort order are combined and is put in a spefic order to achieve this.
-        groupby is used to group same agency together
+        several sort order are combined and is put in a specific order to achieve this.
+        group by is used to group same agency together
         '''
 
         # set 'Other' order rule for both agency and bureau
@@ -40,9 +40,9 @@ class AgencyRepository(BaseRepository[models.Agency]):
 
         db_results = self._session.query(models.Agency).order_by(
             agency_other_order,  # agency named Other should be at the bottom of parent agencies list
-            collate(models.Agency.name, 'C'),  # alphebetic order on agency's name
+            collate(models.Agency.name, 'C'),  # alphabetical order on agency's name
             bureau_other_order,  # bureau named 'Other' should be at the bollom of the bureau list
-            collate(models.Agency.bureau, 'C')  # alphbetic order on bureau
+            collate(models.Agency.bureau, 'C')  # alphabetical order on bureau
             ).all()
 
         transform_angecies = []
