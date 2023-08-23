@@ -238,7 +238,7 @@ class TestAuth:
         assert response.status_code == 404
 
     def test_get_user_creates_new_user(self, fake_cache, fake_user_repo, user_complete, authorized_complete):
-        '''Should create a user in the database if the they don't exist'''
+        '''Should create a user in the database if they don't exist'''
         token = "some_token"
         fake_cache.get.return_value = UserCreate.model_validate(user_complete)
         fake_user_repo.create.return_value = authorized_complete
