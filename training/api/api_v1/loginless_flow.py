@@ -10,16 +10,17 @@ from training.api.deps import user_repository
 
 from training.config import settings
 from training.api.email import send_email
-from training.api.auth import JWTUser
 
 router = APIRouter()
 
 
-# This lookup table allows the front-end to send a simple pageID
-# but be redirected to a more complex path. It also allows the
-# backend to provide errors if the user does not have the appropriate
-# role for a front-end page (although the data itself is secured by the API)
 def page_lookup():
+    '''
+    Returns a lookup table to allow the front-end to send a simple pageID
+    but be redirected to a more complex path. It also allows the
+    backend to provide errors if the user does not have the appropriate
+    role for a front-end page (although the data itself is secured by the API)
+    '''
     return {
         'certificates': {'path': '/certificates/', 'required_roles': []},
         'training_reports': {'path': '/training_reports', 'required_roles': ['Report']},
@@ -31,7 +32,12 @@ def page_lookup():
     }
 
 
-@router.post("/get-link", status_code=status.HTTP_201_CREATED)
+@router.post("/get-link",
+             status_code=status.HTTP_201_CREATED,
+             responses={
+                 200: {"description": 'OK, but user details needed'},
+                 201: {"description": "Token created"}
+                 })
 def send_link(
     response: Response,
     user: Union[TempUser, IncompleteTempUser],
@@ -40,6 +46,24 @@ def send_link(
     cache: UserCache = Depends(UserCache),
     page_id_lookup: dict = Depends(page_lookup)
 ):
+    '''
+    Create a link with an embedded token.\f
+
+    This link is sent via email pointing back to the frontend section the user
+    made the request from (the 'dest' parameter). The token is a key to the Redis
+    cache. When they use the link to return, we have confidence they could access
+    the email and look up their idendity from the cache. In cases where we add the
+    user to the cache this repondes with an HTTP 201.
+
+    If the `user` body paremeter is an IncompleteTempUser (only has an email)
+    this will query the database to see if the user exist. If the user does not exist
+    this should return an HTTP 200 to indicate to the frontend that no user was created
+    and it should ask them for more information (name, agency). If the email does exist,
+    we send that email a link.
+
+    A TempUser (has name, agency, and email) indicates a new user. We add this information
+    to the cache and send a link, but not the database until they have validated the email.
+    '''
     try:
         required_roles = page_id_lookup[dest.page_id]['required_roles']
     except KeyError:
@@ -48,12 +72,17 @@ def send_link(
             detail=f"Unkown Page Id {dest.page_id}"
         )
     if isinstance(user, IncompleteTempUser):
+        # we only got the email from the front end
         user_from_db = repo.find_by_email(user.email)
         if user_from_db is None:
             response.status_code = status.HTTP_200_OK
             return {'new': True}
         else:
             role_names = set(role.name for role in user_from_db.roles)
+            # Check to make sure the user has permission to access the destination.
+            # This allows the front end to tell the user they are not authorized
+            # to access this destination instead of finding out after they get the email
+            # and try the link.
             if not all(role in role_names for role in required_roles):
                 logging.info(
                     f"{user.email} does not have the required role to access {page_id_lookup[dest.page_id]['path']}"
@@ -89,20 +118,18 @@ def send_link(
         )
 
 
-@router.get("/user-info")
-def user_info(user=Depends(JWTUser())):
-    # This will eventually query the DB for the
-    # info we want to display on a user's home page
-    # But for now just send the jwt data
-    return user
-
-
 @router.get("/get-user/{token}")
 async def get_user(
     token: str,
     repo: UserRepository = Depends(user_repository),
     cache: UserCache = Depends(UserCache)
 ):
+    '''
+    Looks up the token in the redis cache to get a user who clicked a link with
+    a token. If the user is not yet in the database (a new registration), create
+    the user in the DB. Send back a user object with a JWT that the front end
+    can use to authenticate.
+    '''
     try:
         user = cache.get(token)
     except Exception as e:

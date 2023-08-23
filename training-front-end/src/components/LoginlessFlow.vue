@@ -213,7 +213,7 @@
         <h2 class="usa-prose">
           Check your email
         </h2>
-        <p>We sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
+        <p>We sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours. If you have not received the email within 15 minutes, please check your spam folder.</p>
 
         <p>Not the right email? <a href=".">Send another email</a></p>
       </div>

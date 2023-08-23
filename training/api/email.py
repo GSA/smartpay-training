@@ -1,4 +1,3 @@
-import logging
 from string import Template
 from pydantic import EmailStr
 from smtplib import SMTP
@@ -53,7 +52,6 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
         try:
             smtp.send_message(message)
         except Exception as e:
-            logging.error("Error sending email", e)
-            raise SendEmailError
+            raise SendEmailError from e
         finally:
             smtp.quit()
