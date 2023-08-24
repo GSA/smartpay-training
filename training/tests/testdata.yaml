@@ -1,10 +1,22 @@
 agencies:
   - name: Department of Mysteries
     bureau: null
+  - name: Other
+    bureau: null
+  - name: Department of Mysteries
+    bureau: Other
+  - name: Department of Mysteries
+    bureau: Time-Travel experiments
   - name: Department of Magical Law Enforcement
     bureau: null
   - name: Department of Magical Accidents and Catastrophes
     bureau: null
+  - name: Department of Mysteries
+    bureau: Terrible Poisons
+  - name: Department of Magical Law Enforcement
+    bureau: Zipper Spells
+  - name: Department of Magical Law Enforcement
+    bureau: Arrest Methods
 
 users:
   - email: test1@example.com
