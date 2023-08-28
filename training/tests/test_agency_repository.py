@@ -77,6 +77,6 @@ def test_get_agencies_with_bureaus_bureau_sort_order(agency_repo_with_data: Agen
             last_bureau = agency['bureaus'][-1]
             assert last_bureau['name'] == 'Other'
             all_but_last_bureau = agency['bureaus'][:-1]
-            assert all(b1['name'] < b2['name'] for b1, b2 in zip(all_but_last_bureau, all_but_last_bureau[1:]))
+            assert all((b1['name'].lower()) < (b2['name'].lower()) for b1, b2 in zip(all_but_last_bureau, all_but_last_bureau[1:]))
         else:
-            assert all(b1['name'] < b2['name'] for b1, b2 in zip(agency['bureaus'], agency['bureaus'][1:]))
+            assert all(b1['name'].lower() < b2['name'].lower() for b1, b2 in zip(agency['bureaus'], agency['bureaus'][1:]))
