@@ -1,4 +1,5 @@
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from training import models, schemas
 from training.schemas.agency import AgencyWithBureaus
@@ -40,9 +41,9 @@ class AgencyRepository(BaseRepository[models.Agency]):
 
         db_results = self._session.query(models.Agency).order_by(
             agency_other_order,  # agency named Other should be at the bottom of parent agencies list
-            collate(models.Agency.name, 'C'),  # alphabetical order on agency's name
+            collate(func.lower(models.Agency.name), 'C'),  # alphabetical order but ignore case on agency's name
             bureau_other_order,  # bureau named 'Other' should be at the bollom of the bureau list
-            collate(models.Agency.bureau, 'C')  # alphabetical order on bureau
+            collate(func.lower(models.Agency.bureau), 'C')  # alphabetical order but ignore case on bureau
             ).all()
 
         transform_angecies = []
