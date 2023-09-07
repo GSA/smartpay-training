@@ -18,11 +18,8 @@
   }
 </script>
 <template>
-  <h3 class="">
-    {{ question.text }}
-  </h3>
-
   <fieldset class="usa-fieldset margin-bottom-2">
+    <legend class="quiz-question">{{ question.text }}</legend>
     <div
       v-for="({id, text}) in question.choices"
       :key="id"

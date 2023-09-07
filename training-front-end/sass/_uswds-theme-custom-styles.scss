@@ -75,5 +75,13 @@ h2 {
     font-size: 1.75em;
   }
  
+// using legend instead of headers to address accessibily issue, making lengend (quiz question) same css style with .usa-prose h3 header
+.quiz-question{
+    font-family: family('serif');
+    color: color('base-darkest');
+    font-weight: 700;
+    font-size: 1.34em;
+    line-height: 1.2;
+}
 
   
