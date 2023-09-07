@@ -24,10 +24,8 @@ const { item } = Astro.props;
     <div class="usa-card__footer">
     <ul class="card_link">
       <li class="margin-y-1">
-        <a href={item.training_link_name}>
-        <button type="button" class="usa-button">
+        <a href={item.training_link_name} class="usa-button" aria-label={item.aria_label}>
         {item.training_link_text}
-        </button>
         </a>
       </li>
       <li>

@@ -55,7 +55,7 @@
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
       :value="modelValue"
-      :aria-describedby="error_id"
+      :aria-describedby="validator.$errors? error_id: null"
       :readonly="readonly"
       @input="$emit('update:modelValue', $event.target.value)"
     >
