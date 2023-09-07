@@ -65,7 +65,7 @@ describe('Quiz', () => {
     button.trigger('click')
     await flushPromises()
 
-    const heading = wrapper.find('h3')
+    const heading = wrapper.find('legend')
     expect(heading.text()).toBe(quiz.content.questions[1].text)
 
     const labels = wrapper.findAll('label')
