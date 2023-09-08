@@ -1,5 +1,8 @@
 ---
-const { item } = Astro.props;
+const { item, category } = Astro.props;
+const aria_label_training = `${item.training_link_text} for ${category}`;
+const aria_label_quiz = `Take the ${item.header.toLowerCase()} quiz for ${category}`;
+
 ---
 
 <li class="usa-card tablet:grid-col-4">
@@ -24,12 +27,12 @@ const { item } = Astro.props;
     <div class="usa-card__footer">
     <ul class="card_link">
       <li class="margin-y-1">
-        <a href={item.training_link_name} class="usa-button" aria-label={item.aria_label}>
+        <a href={item.training_link_name} class="usa-button" aria-label={aria_label_training}>
         {item.training_link_text}
         </a>
       </li>
       <li>
-        <a href={item.quiz_link_name} class="margin-top-2">
+        <a href={item.quiz_link_name} class="margin-top-2" aria-label={aria_label_quiz}>
         Take the quiz
         </a>
       </li>

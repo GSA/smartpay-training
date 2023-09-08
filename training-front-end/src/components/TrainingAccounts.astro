@@ -1,9 +1,9 @@
 ---
 import TrainingCard from "./TrainingCard.astro";
-const { items } = Astro.props;
+const { items, category} = Astro.props;
 ---
 
 <ul class="usa-card-group">
-    {items.map(item => <TrainingCard item={item} />)}
+    {items.map(item => <TrainingCard item={item} category={category}/>)}
 </ul>
     
