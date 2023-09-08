@@ -1,4 +1,8 @@
 ---
+/*
+this defines individual training card content for home page (index.astro). 
+aria-label is used to address accessiblity issues with same link text linking to different href URL
+*/
 const { item, category } = Astro.props;
 const aria_label_training = `${item.training_link_text} for ${category}`;
 const aria_label_quiz = `Take the ${item.header.toLowerCase()} quiz for ${category}`;
