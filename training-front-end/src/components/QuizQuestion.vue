@@ -19,7 +19,9 @@
 </script>
 <template>
   <fieldset class="usa-fieldset margin-bottom-2">
-    <legend class="quiz-question">{{ question.text }}</legend>
+    <legend class="quiz-question">
+      {{ question.text }}
+    </legend>
     <div
       v-for="({id, text}) in question.choices"
       :key="id"
