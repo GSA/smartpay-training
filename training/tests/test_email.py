@@ -58,7 +58,7 @@ class TestEmail:
         args, _ = smtp_instance.send_message.call_args
         email_message = args[0]
         message = email_message.get_content()
-        assert 'Click the link below to access your GSA SmartPayⓇ training certificate(s)' in message
+        assert 'Click the link below to access your GSA SmartPay® training certificate(s)' in message
         assert email_message['Subject'] == 'Access your GSA SmartPay training certificate(s)'
 
     def test_email_report(self, smtp_instance):
@@ -66,7 +66,7 @@ class TestEmail:
         args, _ = smtp_instance.send_message.call_args
         email_message = args[0]
         message = email_message.get_content()
-        assert 'Click the link below to access your GSA SmartPayⓇ reporting information for A/OPCs' in message
+        assert 'Click the link below to access your GSA SmartPay® reporting information for A/OPCs' in message
         assert email_message['Subject'] == 'Access to GSA SmartPay training report'
 
     def test_email_quiz(self, smtp_instance):
@@ -74,5 +74,5 @@ class TestEmail:
         args, _ = smtp_instance.send_message.call_args
         email_message = args[0]
         message = email_message.get_content()
-        assert 'Click the link below to access your GSA SmartPayⓇ Ad Sales quiz.' in message
+        assert 'Click the link below to access your GSA SmartPay® Ad Sales quiz.' in message
         assert email_message['Subject'] == 'Access GSA SmartPay Ad Sales quiz'
