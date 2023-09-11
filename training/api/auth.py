@@ -23,16 +23,14 @@ class JWTUser(HTTPBearer):
     '''
 
     async def __call__(self, request: Request):
+        # The parent HTTPBearer default's to raising an error if there is
+        # no authentication or the authentication schema is not bearer
         credentials: HTTPAuthorizationCredentials | None = await super().__call__(request)
-        if credentials:
-            if not credentials.scheme == "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            user = self.decode_jwt(credentials.credentials)
-            if user is None:
-                raise HTTPException(status_code=403, detail="Invalid or expired token.")
-            return user
-        else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+
+        user = self.decode_jwt(credentials.credentials)
+        if user is None:
+            raise HTTPException(status_code=403, detail="Invalid or expired token.")
+        return user
 
     def decode_jwt(self, token: str):
         try:
@@ -48,16 +46,12 @@ class UAAJWTUser(HTTPBearer):
     '''
 
     async def __call__(self, request: Request):
+
         credentials: HTTPAuthorizationCredentials | None = await super().__call__(request)
-        if credentials:
-            if not credentials.scheme == "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            user = self.decode_jwt(credentials.credentials)
-            if user is None:
-                raise HTTPException(status_code=403, detail="Invalid or expired token.")
-            return user
-        else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+        user = self.decode_jwt(credentials.credentials)
+        if user is None:
+            raise HTTPException(status_code=403, detail="Invalid or expired token.")
+        return user
 
     def decode_jwt(self, token: str):
         token_header = jwt.get_unverified_header(token)
