@@ -18,7 +18,7 @@
     if (err.message == 'Unauthorized'){
       err = {
         name: 'You are not authorized to receive reports.',
-        message: 'Your email account is not authorized to access training reports. If you should be authorized, you can <a class="usa-link" href="mailto:gsa_smartpay@gsa.gov">contact the GSA SmartPay team</a> to gain access.'
+        message: 'Your email account is not authorized to access training reports. If you should be authorized, you can <a class="usa-link" href="mailto:gsa_smartpay@gsa.gov">contact the GSA SmartPay® team</a> to gain access.'
       }
       setError(err)
     }
