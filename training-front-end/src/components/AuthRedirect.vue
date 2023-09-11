@@ -14,6 +14,7 @@
   const auth = await AuthService.instance()
   const error = ref(null)
   const authRedirectTarget = useStore(redirectTarget)
+  const base_url = import.meta.env.BASE_URL
 
   auth.loginCallback().then(async () => {
     const uaaToken = await auth.getAccessToken()
@@ -34,7 +35,7 @@
       >
         {{ error }}
       </USWDSAlert>
-      <p><a href="/">Return to Home</a></p>
+      <p><a :href="base_url">Return to Home</a></p>
     </div>
   </div>
 </template>
