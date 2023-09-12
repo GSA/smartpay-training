@@ -288,7 +288,7 @@
 
           We only obtain your information necessary to access this system. We collect information such as agency name and email address, to issue training certificates and for agency reporting management. We carefully protect your information and will not make it available to web tracking software for retention. We do not disclose, give, sell, or transfer any personal information about our visitors, unless required for law enforcement or statute.<br><br>
 
-          To access the GSA SmartPay training system, please use your business or work email only, and not a personal email address.
+          To access the GSA SmartPay® training system, please use your business or work email only, and not a personal email address.
         </USWDSAlert>
         <slot name="initial-greeting" />
 
