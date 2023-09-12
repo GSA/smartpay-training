@@ -18,7 +18,7 @@ describe('Quiz', () => {
 
   it('renders initial view of first question', async () => {
     const wrapper = await mount(Quiz, {props})
-    const heading = wrapper.find('h3')
+    const heading = wrapper.find('legend')
     expect(heading.text()).toBe(quiz.content.questions[0].text)
   })
 
@@ -65,7 +65,7 @@ describe('Quiz', () => {
     button.trigger('click')
     await flushPromises()
 
-    const heading = wrapper.find('h3')
+    const heading = wrapper.find('legend')
     expect(heading.text()).toBe(quiz.content.questions[1].text)
 
     const labels = wrapper.findAll('label')
