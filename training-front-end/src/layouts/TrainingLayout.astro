@@ -4,7 +4,7 @@ import HeroTraining from "@components/HeroTraining.astro"
 import SideNav from "@components/SideNav.astro"
 import MobileNav from "@components/MobileNav.astro"
 
-const {hero_image, entry, pages, training_category, header, subheader, quiz_title} = Astro.props;
+const {hero_image, entry, pages, training_category, header, subheader, quiz_title, description} = Astro.props;
 
 // set banner background color class based on category type
 let background_class  ="";
@@ -21,7 +21,7 @@ else if(training_category.includes("travel")){
 }
 
 ---
-<BaseLayout title={entry.data.title}>
+<BaseLayout title={entry.data.title} description={description}>
   <HeroTraining hero_image={hero_image} background_class ={background_class}>
     <span slot="subheader">{subheader} {header}</span>
     {entry.data.title}
