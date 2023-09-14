@@ -15,7 +15,7 @@ agencies:
     bureau: null
   - name: District of Columbia
     bureau: null
-  - name: Equal Employment Opportunity Commission
+  - name: U.S. Equal Employment Opportunity Commission
     bureau: null
   - name: Executive Office of the President
     bureau: null
@@ -49,7 +49,7 @@ agencies:
     bureau: null
   - name: Inter-American Foundation
     bureau: null
-  - name: International Trade Commission
+  - name: U.S. International Trade Commission
     bureau: null
   - name: Library of Congress
     bureau: null
@@ -93,7 +93,7 @@ agencies:
     bureau: null
   - name: Privacy & Civil Liberties Oversight Board
     bureau: null
-  - name: Securities and Exchange Commission
+  - name: U.S. Securities and Exchange Commission
     bureau: null
   - name: Selective Service System
     bureau: null
@@ -467,6 +467,29 @@ agencies:
     bureau: US Patent and Trademark Office
   - name: U.S. Department of Commerce
     bureau: Other
+  - name: U.S. Agency for International Development
+    bureau: null
+  - name: National Credit Union Administration
+    bureau: null  
+  - name: Board of Governors of the Federal Reserve System
+    bureau: null  
+  - name: Administrative Office of the United States Courts
+    bureau: null  
+  - name: U.S. AbilityOne Commission
+    bureau: null  
+  - name: Other Boards and Commissions
+    bureau: null  
+  - name: National Endowment for the Humanities
+    bureau: null
+  - name: Bonneville Power Administration
+    bureau: null
+  - name: United States Capitol Police
+    bureau: null
+  - name: Office of Special Counsel
+    bureau: null
+
+
+
   
 admins:
   - email: andrew.lee@gsa.gov
