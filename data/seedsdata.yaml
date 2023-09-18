@@ -426,6 +426,12 @@ agencies:
   - name: U.S. Department of Health and Human Services
     bureau: Substance Abuse and Mental Health Services Administration (SAMHSA)
   - name: U.S. Department of Health and Human Services
+    bureau: Advanced Research Projects Agency (ARPA-H)
+  - name: U.S. Department of Health and Human Services
+    bureau: Program Support Center (PSC)  
+  - name: U.S. Department of Health and Human Services
+    bureau: Office of Acquisition Management Services (OAMS)  
+  - name: U.S. Department of Health and Human Services
     bureau: Other
   - name: U.S. Department of Veterans Affairs
     bureau: Departmental Administration Offices
