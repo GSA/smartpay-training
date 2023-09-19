@@ -85,8 +85,10 @@ def send_link(
             # and try the link.
             if not all(role in role_names for role in required_roles):
                 logging.info(
-                    f"{user.email} does not have the required role to access {page_id_lookup[dest.page_id]['path']}"
+                    "unauthorized access attempt",
+                    extra={'user': user.email, 'path': page_id_lookup[dest.page_id]['path']}
                 )
+
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Unauthorized"
@@ -109,7 +111,7 @@ def send_link(
     url = f"{settings.BASE_URL}{path}?t={token}"
     try:
         send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
-        logging.info(f"Sent confirmation email to {user.email} for {path}")
+        logging.info("Sent confirmation email", extra={'user': user.email, 'path': path})
     except Exception as e:
         logging.error("Error sending mail", e)
         raise HTTPException(
@@ -146,6 +148,6 @@ async def get_user(
     if not db_user:
         db_user = repo.create(user)
     user_return = UserJWT.model_validate(db_user)
-    logging.info(f"Confirmed email token for {user.email}")
+    logging.info("Confirmed email token", extra={'user': user.email})
     encoded_jwt = jwt.encode(user_return.model_dump(), settings.JWT_SECRET, algorithm="HS256")
     return {'user': user_return, 'jwt': encoded_jwt}
