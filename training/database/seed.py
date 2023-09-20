@@ -53,3 +53,34 @@ for item in data["admins"]:
         user_for_edit.roles.append(role)
         user_repo._session.commit()
         print("Admin role added")
+
+# load AOPCs data
+for item in data["AOPSs"]:
+    # find user's agency
+    user_agency = user_repo._session.query(models.Agency).filter(models.Agency.name == item['agency'] and models.Agency.bureau == item['bureau']).first()
+    user = UserCreate(name=item['name'], email=item['email'], agency_id=user_agency.id)
+    print("AOPC User:", user.name, "email:", user.email, "user_agency:", user_agency.name, "user_bureau:", user_agency.bureau, end=" - ")
+    if user_repo.find_by_email(user.email):
+        print("already exists, skipping")
+    else:
+        user_repo.create(user)
+        print("added")
+    user_for_edit = user_repo.find_by_email(user.email)
+    report_role_exists = any(role.name == "Report" for role in user_for_edit.roles)
+    if report_role_exists:
+        print("Report role already exisits, skipping")
+    else:
+        role = user_repo._session.query(models.Role).filter(models.Role.name == "Report").first()
+        user_for_edit.roles.append(role)
+        user_repo._session.commit()
+        print("Report role added")
+    for objAgency in item['reporting_agencies']:
+        # use repo's own session to find its object to avoid object attached to multiple sessions issue when you need to update DB data
+        user_report_agency = user_repo._session.query(models.Agency).filter(models.Agency.name == objAgency['report_agency']
+                                                                            and models.Agency.bureau == objAgency['report_bureau']).first()
+        if (user_report_agency in user_for_edit.report_agencies):
+            print("Report Agency: ", user_report_agency.name, "Report bureau: ", user_report_agency.bureau,  " already exists, skipping")
+        else:
+            user_for_edit.report_agencies.append(user_report_agency)
+            user_repo._session.commit()
+            print("Report Agency: ", user_report_agency.name, "Report bureau: ", user_report_agency.bureau,  " added")
