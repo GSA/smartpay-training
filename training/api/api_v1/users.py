@@ -25,7 +25,7 @@ def create_user(
             detail="User email address already exists"
         )
     db_user = repo.create(user)
-    logging.info(f"{user['email']} created user {new_user.email}")
+    logging.info("Created user", extra={"admin": user['email'], "user": new_user.email})
     return db_user
 
 
@@ -38,7 +38,10 @@ def edit_user_for_reporting(
 ):
     try:
         updated_user = repo.edit_user_for_reporting(user_id, agency_id_list)
-        logging.info(f"{user['email']} granted user {updated_user.email} reporting for agencies: {agency_id_list}")
+        logging.info(
+            "Granted reporting access",
+            extra={"admin": user['email'], "user": updated_user.email, "agencies": agency_id_list}
+        )
         return updated_user
     except ValueError:
         raise HTTPException(
