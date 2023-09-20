@@ -1,3 +1,8 @@
+'''
+This module replaces uvicorn logging with structlog and adds a structured loggin handler to
+python's logging.It is intended to be used with a middleware component in FastAPI. (See main.py)
+'''
+
 import logging
 import sys
 
@@ -6,22 +11,30 @@ from structlog.types import Processor, EventDict
 
 
 def drop_color_message_key(_, __, event_dict: EventDict) -> EventDict:
-    """
-    Uvicorn logs an extra `color_message`, but it's not useful.
-    """
+    '''
+    Uvicorn logs an extra `color_message`, but it's not useful here, so remove it.
+    '''
     event_dict.pop("color_message", None)
     return event_dict
 
 
 def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
+    '''
+    Setup stuctured logging using the structlog library: https://www.structlog.org.
+    This will replace the uvicorn loggers and add a hanler to the root python logger
+
+    json_logs: allows certain features to be turned off primarily for local development
+    log_level: will be passed to logging module
+
+    '''
     timestamper = structlog.processors.TimeStamper(fmt="iso")
 
     shared_processors: list[Processor] = [
-        structlog.contextvars.merge_contextvars,
+        structlog.contextvars.merge_contextvars,          # ensure logs include context-local bindings
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
-        structlog.stdlib.ExtraAdder(),
+        structlog.stdlib.ExtraAdder(),                    # Allow use of extra={} in logging calls
         drop_color_message_key,
         timestamper,
         structlog.processors.StackInfoRenderer(),
@@ -33,8 +46,7 @@ def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
         shared_processors.append(structlog.processors.format_exc_info)
 
     structlog.configure(
-        processors=shared_processors
-        + [structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
+        processors=shared_processors + [structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
         logger_factory=structlog.stdlib.LoggerFactory(),
         cache_logger_on_first_use=True,
     )
@@ -46,8 +58,7 @@ def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
         log_renderer = structlog.dev.ConsoleRenderer()
 
     formatter = structlog.stdlib.ProcessorFormatter(
-        # These run ONLY on `logging` entries that do NOT originate within
-        # structlog.
+        # These run ONLY on `logging` entries that do NOT originate within structlog.
         foreign_pre_chain=shared_processors,
         # These run on ALL entries after the pre_chain is done.
         processors=[
@@ -65,16 +76,11 @@ def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
     root_logger.setLevel(log_level.upper())
 
     for _log in ["uvicorn", "uvicorn.error"]:
-        # Clear the log handlers for uvicorn loggers, and enable propagation
-        # so the messages are caught by our root logger and formatted correctly
-        # by structlog
         logging.getLogger(_log).handlers.clear()
-        logging.getLogger(_log).propagate = True
+        logging.getLogger(_log).propagate = True  # allow messages to be caught by python root logger
 
-    # Since we re-create the access logs ourselves, to add all information
-    # in the structured log (see the `logging_middleware` in main.py), we clear
-    # the handlers and prevent the logs to propagate to a logger higher up in the
-    # hierarchy (effectively rendering them silent).
+    # We will recreate access logs ourselves `logging_middleware` in main.py.
+    # Clear the handlers and prevent the logs to propagate to a logger higher up the chain
     logging.getLogger("uvicorn.access").handlers.clear()
     logging.getLogger("uvicorn.access").propagate = False
 

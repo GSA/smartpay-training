@@ -14,6 +14,7 @@ from training.api.api import api_router
 
 LOG_JSON_FORMAT = True
 LOG_LEVEL = 'INFO'
+
 setup_logging(json_logs=LOG_JSON_FORMAT, log_level=LOG_LEVEL)
 access_logger = structlog.stdlib.get_logger("api.access")
 
@@ -33,7 +34,7 @@ origins = [
 @app.middleware("http")
 async def logging_middleware(request: Request, call_next) -> Response:
     structlog.contextvars.clear_contextvars()
-    # These context vars will be added to all log entries emitted during the request
+    # Add a unique id / per request to logs to allow tracing
     request_id = correlation_id.get()
     structlog.contextvars.bind_contextvars(request_id=request_id)
 
