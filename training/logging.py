@@ -68,7 +68,7 @@ def setup_logging(json_logs: bool = False, log_level: str = "INFO"):
         ],
     )
 
-    handler = logging.StreamHandler()
+    handler = logging.StreamHandler(sys.stdout)
     # Use OUR `ProcessorFormatter` to format all `logging` entries.
     handler.setFormatter(formatter)
     root_logger = logging.getLogger()
