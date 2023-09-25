@@ -2,7 +2,7 @@ from typing import Any
 from fastapi import APIRouter, status, HTTPException, Depends
 from training.api.auth import JWTUser
 from training.errors import IncompleteQuizResponseError, QuizNotFoundError
-from training.schemas import QuizPublic, QuizGrade, QuizSubmission, Quiz,  QuizCreate
+from training.schemas import QuizPublic, QuizGrade, QuizSubmission  # , Quiz,  QuizCreate
 from training.repositories import QuizRepository
 from training.services import QuizService
 from training.api.deps import quiz_repository, quiz_service
@@ -10,12 +10,12 @@ from training.api.deps import quiz_repository, quiz_service
 
 router = APIRouter()
 
-
+''' disable quiz creation for security
 @router.post("/quizzes", response_model=Quiz, status_code=status.HTTP_201_CREATED)
 def create_quiz(quiz: QuizCreate, repo: QuizRepository = Depends(quiz_repository)):
     db_quiz = repo.create(quiz)
     return db_quiz
-
+'''
 
 @router.get("/quizzes", response_model=list[QuizPublic])
 def get_quizzes(
