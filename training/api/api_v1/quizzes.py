@@ -17,6 +17,7 @@ def create_quiz(quiz: QuizCreate, repo: QuizRepository = Depends(quiz_repository
     return db_quiz
 '''
 
+
 @router.get("/quizzes", response_model=list[QuizPublic])
 def get_quizzes(
     topic: str | None = None,
