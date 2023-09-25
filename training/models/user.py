@@ -15,4 +15,4 @@ class User(Base):
     agency_id: Mapped[int] = mapped_column(ForeignKey("agencies.id"))
     agency: Mapped[Agency] = relationship()
     roles: Mapped[list[Role]] = relationship(secondary="users_x_roles")
-    report_agencies: Mapped[Agency] = relationship(secondary="report_users_x_agencies")
+    report_agencies: Mapped[list[Agency]] = relationship(secondary="report_users_x_agencies")

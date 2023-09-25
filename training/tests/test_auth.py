@@ -92,6 +92,11 @@ class TestAuth:
         assert response.status_code == 403
         assert response.json() == {'detail': 'Invalid or expired token.'}
 
+    def test_invalid_auth_scheme(self, goodJWT):
+        response = client.get("/home", headers={"Authorization": f"Non_Bearer {goodJWT}"})
+        assert response.status_code == 403
+        assert response.json() == {'detail': 'Invalid authentication credentials'}
+
     def test_missing_jwt(self):
         response = client.get("/home")
         assert response.status_code == 403

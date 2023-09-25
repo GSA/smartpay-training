@@ -13,7 +13,7 @@
   const PAGE_SIZE = 25
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  const report_url = `${base_url}/api/v1/users/search-users-by-name/`
+  const report_url = `${base_url}/api/v1/users/`
   const update_url = `${base_url}/api/v1/users/edit-user-for-reporting/`
 
   const currentPage = ref(0)
@@ -33,8 +33,9 @@
 
   async function search() {
     noResults.value = false
-    const url = new URL(`${report_url}${searchTerm.value}`)
-    url.search = new URLSearchParams({page_number: currentPage.value + 1})
+    const url = new URL(`${report_url}`)
+    url.search = new URLSearchParams({name: searchTerm.value, page_number: currentPage.value + 1})
+
     try {
       const response = await fetch(
         url, {
@@ -64,7 +65,7 @@
     try {
       const response = await fetch(
         url, { 
-          method: "PUT", 
+          method: "PATCH", 
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${user.value.jwt}` 

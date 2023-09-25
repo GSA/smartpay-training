@@ -1,4 +1,3 @@
-import logging
 from string import Template
 from pydantic import EmailStr
 from smtplib import SMTP
@@ -30,13 +29,13 @@ email us at gsa_smartpay@gsa.gov.
 def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
 
     if training_title and "certificate" in training_title.lower():
-        subject = "GSA SmartPayⓇ training certificate(s)"
+        subject = "GSA SmartPay® training certificate(s)"
         email_subject = "Access your GSA SmartPay training certificate(s)"
     elif training_title and "report" in training_title.lower():
-        subject = "GSA SmartPayⓇ reporting information for A/OPCs"
+        subject = "GSA SmartPay® reporting information for A/OPCs"
         email_subject = "Access to GSA SmartPay training report"
     else:
-        subject = f"GSA SmartPayⓇ {training_title} quiz"
+        subject = f"GSA SmartPay® {training_title} quiz"
         email_subject = f"Access GSA SmartPay {training_title} quiz"
 
     body = EMAIL_TEMPLATE.substitute({"name": name, "link": link, "subject": subject})
@@ -53,7 +52,6 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
         try:
             smtp.send_message(message)
         except Exception as e:
-            logging.error("Error sending email", e)
-            raise SendEmailError
+            raise SendEmailError from e
         finally:
             smtp.quit()

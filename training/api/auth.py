@@ -1,28 +1,36 @@
-from fastapi import Request, HTTPException, Depends, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from typing import Annotated
-import jwt
 import json
+from typing import Annotated
+from urllib.request import urlopen
+
+from fastapi import Request, HTTPException, Depends, status
+from fastapi import Form
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import jwt
 from jwt.exceptions import InvalidTokenError
 from training.config import settings
-from urllib.request import urlopen
-from fastapi import Form
 
 
 class JWTUser(HTTPBearer):
-    # Represents a JWT issued by our API.
+    '''
+    Represents a JWT issued by our API.
+    This class can be used as a dependency in FastAPI routes like:
+
+    @router.get("/somepath", response_model=SomeModel)
+    def my_function( user: dict[str, Any] = Depends(JWTUser())):
+
+    to generate a user with a valid token.
+
+    '''
 
     async def __call__(self, request: Request):
+        # The parent HTTPBearer default's to raising an error if there is
+        # no authentication or the authentication schema is not bearer
         credentials: HTTPAuthorizationCredentials | None = await super().__call__(request)
-        if credentials:
-            if not credentials.scheme == "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            user = self.decode_jwt(credentials.credentials)
-            if user is None:
-                raise HTTPException(status_code=403, detail="Invalid or expired token.")
-            return user
-        else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+
+        user = self.decode_jwt(credentials.credentials)
+        if user is None:
+            raise HTTPException(status_code=403, detail="Invalid or expired token.")
+        return user
 
     def decode_jwt(self, token: str):
         try:
@@ -32,19 +40,18 @@ class JWTUser(HTTPBearer):
 
 
 class UAAJWTUser(HTTPBearer):
-    # Represents a JWT issued by an OAuth server.
+    '''
+    Represents a JWT issued by an OAuth server.
+    Used as part of the Admin SecureAuth flow
+    '''
 
     async def __call__(self, request: Request):
+
         credentials: HTTPAuthorizationCredentials | None = await super().__call__(request)
-        if credentials:
-            if not credentials.scheme == "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            user = self.decode_jwt(credentials.credentials)
-            if user is None:
-                raise HTTPException(status_code=403, detail="Invalid or expired token.")
-            return user
-        else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+        user = self.decode_jwt(credentials.credentials)
+        if user is None:
+            raise HTTPException(status_code=403, detail="Invalid or expired token.")
+        return user
 
     def decode_jwt(self, token: str):
         token_header = jwt.get_unverified_header(token)
@@ -120,6 +127,16 @@ class UAAJWTUser(HTTPBearer):
 
 
 class RequireRole:
+    '''
+    Used for api routes that should be limited to specific roles. These
+    roles will be encoded in the JWT when the user authenticates. This
+    checkes the roles in the JWT and compares them to the roles this
+    class was initialized with. It can be used like this to ensure we
+    either have a user with the `Admin` role or response with a 401:
+
+    @router.post("/some_route", response_model=SomeModel
+    def create_user(user=Depends(RequireRole(["Admin"]))):
+    '''
     def __init__(self, required_roles: list[str]) -> None:
         self.required_roles = set(required_roles)
 
@@ -136,6 +153,14 @@ class RequireRole:
 
 
 def user_from_form(jwtToken: Annotated[str, Form()]):
+    '''
+    This allows POST requests to send a token as part of form-encoded request.
+    There are places in the front-end where we want to download a file, but we also
+    need to authenticate the user. We cannot pass a JWT with a simple html <a>, so instead
+    use a form to POST the request. The form can then include the JWT as in input. This
+    function is used to decode and validate the JWT in that case. See: "/certificate/{id}"
+    for an example.
+    '''
     try:
         return jwt.decode(jwtToken, settings.JWT_SECRET, algorithms=["HS256"])
     except jwt.exceptions.InvalidTokenError:

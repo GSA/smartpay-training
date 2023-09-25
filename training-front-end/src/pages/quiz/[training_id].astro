@@ -27,7 +27,7 @@ export function getStaticPaths() {
       header: 'Travel Training',
       subhead: 'Program Coordinators',
       training_id: "training_travel_pc",
-      title: "Travel Training for Agency/Organization Program Coordinators (A/OPCs)"
+      title: "Travel Training for Program Coordinators"
     },
     {
       topic: 'Purchase',
@@ -69,9 +69,11 @@ else if(training_id.includes("travel")){
   background_class = "color-sp-travel-medium";
 }
 
+// set meta description for quiz page
+const meta_descritpion = `Access and take ${header} quiz for ${subhead}`
 
 ---
-<BaseLayout title={title} >
+<BaseLayout title={title} description={meta_descritpion}>
   <HeroTraining background_class={background_class}>
     <span slot="subheader">{subhead}</span>
     {header} Quiz

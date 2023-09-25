@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 
 class UserCertificate(BaseModel):
@@ -8,7 +8,6 @@ class UserCertificate(BaseModel):
     user_name: str
     quiz_id: int
     quiz_name: str
+    agency: str
     completion_date: datetime
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

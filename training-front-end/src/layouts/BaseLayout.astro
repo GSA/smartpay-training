@@ -5,20 +5,23 @@ import USAIdentifier from '@components/USAIdentifier.astro';
 import Banner from '@components/Banner.astro';
 import SessionManger from '@components/SessionManager.vue';
 
-const { title } = Astro.props;
+const { title, description} = Astro.props;
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <script is:inline src={`${import.meta.env.BASE_URL}js/uswds-init.min.js`}></script>
     <link rel="stylesheet" href={`${import.meta.env.BASE_URL}styles/styles.css`} />
-
-    <link rel="apple-touch-icon" sizes="180x180" href='/images/apple-touch-icon.png'>
-    <link rel="icon" type="image/png" sizes="32x32" href='/images/favicon-32x32.png'>
-    <link rel="icon" type="image/png" sizes="16x16" href='/images/favicon-16x16.png'>
-
+    <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL}images/favicon-32x32.png`}>
+    <link rel="icon" type="image/png" sizes="16x16" href={`${import.meta.env.BASE_URL}images/favicon-16x16.png`}>
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={`${Astro.site}images/smartpay_meta_og_images.jpg`} /> 
+
     <title>{title}</title>
     
     <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA" id="_fed_an_ua_tag"></script>
