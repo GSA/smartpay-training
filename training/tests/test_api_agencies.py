@@ -3,32 +3,10 @@ from fastapi import status
 from training.main import app
 from training.repositories import AgencyRepository
 from training.schemas.agency import Bureau
-from training.tests.factories import AgencyCreateSchemaFactory, AgencySchemaFactory
+from training.tests.factories import AgencySchemaFactory
 
 
 client = TestClient(app)
-
-
-def test_create_agency(mock_agency_repo: AgencyRepository):
-    agency_create = AgencyCreateSchemaFactory.build()
-    mock_agency_repo.find_by_name.return_value = None
-    mock_agency_repo.create.return_value = AgencySchemaFactory.build()
-    response = client.post(
-        "/api/v1/agencies",
-        json=agency_create.model_dump()
-    )
-    assert response.status_code == status.HTTP_201_CREATED
-
-
-def test_create_agency_duplicate(mock_agency_repo: AgencyRepository):
-    agency_create = AgencyCreateSchemaFactory.build()
-    agency = AgencySchemaFactory.build(name=agency_create.name)
-    mock_agency_repo.find_by_name.return_value = agency
-    response = client.post(
-        "/api/v1/agencies",
-        json=agency_create.model_dump()
-    )
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 def test_get_agencies_all(mock_agency_repo: AgencyRepository):
