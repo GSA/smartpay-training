@@ -1,1 +1,1 @@
-web: uvicorn training.main:app --host 0.0.0.0 --port $PORT
+web: gunicorn -b :$PORT training.main:app --workers 9 --worker-class uvicorn.workers.UvicornWorker
