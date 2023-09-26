@@ -1,1 +1,1 @@
-web: gunicorn -b :$PORT training.main:app --workers 9 --worker-class uvicorn.workers.UvicornWorker
+web: gunicorn -b :$PORT training.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker
