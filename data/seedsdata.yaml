@@ -1,4 +1,5 @@
 agencies:
+# parenent agencies set up ( with bureau as null value)
   - name: Architect of the Capitol
     bureau: null
   - name: Armed Forces Retirement Home
@@ -179,8 +180,31 @@ agencies:
     bureau: null
   - name: United States Tax Court
     bureau: null
+  - name: U.S. Agency for International Development
+    bureau: null
+  - name: National Credit Union Administration
+    bureau: null  
+  - name: Board of Governors of the Federal Reserve System
+    bureau: null  
+  - name: Administrative Office of the United States Courts
+    bureau: null  
+  - name: U.S. AbilityOne Commission
+    bureau: null  
+  - name: Other Boards and Commissions
+    bureau: null  
+  - name: National Endowment for the Humanities
+    bureau: null
+  - name: Bonneville Power Administration
+    bureau: null
+  - name: United States Capitol Police
+    bureau: null
+  - name: Office of Special Counsel
+    bureau: null
+  - name: Other Agencies/Organizations
+    bureau: null  
   - name: Other
     bureau: null
+  # below are for child bureaus set up (bureau value can't be null)
   - name: U.S. Department of Justice
     bureau: Bureau of Alcohol, Tobacco, Firearms and Explosives (ATF)
   - name: U.S. Department of Justice
@@ -477,30 +501,80 @@ agencies:
     bureau: US Patent and Trademark Office
   - name: U.S. Department of Commerce
     bureau: Other
-  - name: U.S. Agency for International Development
-    bureau: null
-  - name: National Credit Union Administration
-    bureau: null  
-  - name: Board of Governors of the Federal Reserve System
-    bureau: null  
-  - name: Administrative Office of the United States Courts
-    bureau: null  
-  - name: U.S. AbilityOne Commission
-    bureau: null  
+
+  - name: Native American Tribal Governments
+    bureau: Cherokee Nation Housing Authority  
+  - name: Native American Tribal Governments
+    bureau: Cowlitz Indian Tribe  
+  - name: Native American Tribal Governments
+    bureau: Little River Band of Ottawa Indians
+  - name: Native American Tribal Governments
+    bureau:  Pinoleville Pomo Nation 
+  - name: Native American Tribal Governments
+    bureau: Sierra Tribal Consortium, INC.
+  - name: Native American Tribal Governments
+    bureau: Other
+  - name: Other Agencies/Organizations
+    bureau: Administrative Conference of the United States
+  - name: Other Agencies/Organizations
+    bureau: Appraisal Subcommittee - FFIEC
+  - name: Other Agencies/Organizations
+    bureau: Barry Goldwater Scholarship & Excellence in Education Foundation
+  - name: Other Agencies/Organizations
+    bureau: Congressional Office for International Leadership 
+  - name: Other Agencies/Organizations
+    bureau: Delta Regional Authority
+  - name: Other Agencies/Organizations
+    bureau: District of Columbia Courts 
+  - name: Other Agencies/Organizations
+    bureau: Federal Mediation and Conciliation Service
+  - name: Other Agencies/Organizations
+    bureau: Federal Permitting Improvement Steering Council  
+  - name: Other Agencies/Organizations
+    bureau: Institute of Museum and Library Services
+  - name: Other Agencies/Organizations
+    bureau: Legal Services Corporation
+  - name: Other Agencies/Organizations
+    bureau: MedPac                 
+  - name: Other Agencies/Organizations
+    bureau: NeighborWorks America
+  - name: Other Agencies/Organizations
+    bureau: Office of Navajo & Hopi Indian Relocation
+  - name: Other Agencies/Organizations
+    bureau: Pretrial Services Agency for the District of Columbia                 
+  - name: Other Agencies/Organizations
+    bureau: U.S. Interagency Council on Homelessness
+  - name: Other Agencies/Organizations
+    bureau: United States Holocaust Memorial Museum
+  - name: Other Agencies/Organizations
+    bureau: Other                 
   - name: Other Boards and Commissions
-    bureau: null  
-  - name: National Endowment for the Humanities
-    bureau: null
-  - name: Bonneville Power Administration
-    bureau: null
-  - name: United States Capitol Police
-    bureau: null
-  - name: Office of Special Counsel
-    bureau: null
+    bureau: Appalachian Regional Commission
+  - name: Other Boards and Commissions
+    bureau: Delaware River Basin Commission   
+  - name: Other Boards and Commissions
+    bureau: International Pacific Halibut Commission
+  - name: Other Boards and Commissions
+    bureau: James Madison Memorial Fellowship Foundation
+  - name: Other Boards and Commissions
+    bureau: National Capital Planning Commission    
+  - name: Other Boards and Commissions
+    bureau: Northern Border Regional Commission
+  - name: Other Boards and Commissions
+    bureau: Nuclear Waste Technical Review Board
+  - name: Other Boards and Commissions
+    bureau: Public Buildings Reform Board   
+  - name: Other Boards and Commissions
+    bureau: Southeast Crescent Regional Commission
+  - name: Other Boards and Commissions
+    bureau: The Inter-American Foundation
+  - name: Other Boards and Commissions
+    bureau: U.S. Commission for the Preservation of America's Heritage Abroad
+  - name: Other Boards and Commissions
+    bureau: U.S. Commission on Civil Rights
+  - name: Other Boards and Commissions
+    bureau: Other
 
-
-
-  
 admins:
   - email: andrew.lee@gsa.gov
     name: Andrew Lee
@@ -617,39 +691,39 @@ AOPSs:
         report_bureau: null
   - name: Bernadette Brady
     email: bradyb@lsc.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Legal Services Corporation 
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Legal Services Corporation 
   - name: Patricia Colindres
     email: colindresp@lsc.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Legal Services Corporation 
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Legal Services Corporation 
   - name: Nikola Otlans
     email: otlans@heritageabroad.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: U.S. Commission for the Preservation of America's Heritage Abroad
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: U.S. Commission for the Preservation of America's Heritage Abroad
   - name: Barbi Broadus
     email: broadus@heritageabroad.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: U.S. Commission for the Preservation of America's Heritage Abroad
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: U.S. Commission for the Preservation of America's Heritage Abroad
   - name: Michelle Lucas
     email: michellelucas@lrboi-nsn.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: U.S. Commission for the Preservation of America's Heritage Abroad
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null    
+        report_bureau: U.S. Commission for the Preservation of America's Heritage Abroad    
   - name: Dale Magoon
     email: dalemagoon@lrboi-nsn.gov
     agency: Native American Tribal Governments
@@ -660,17 +734,17 @@ AOPSs:
   - name: Angela Rabb
     email: angelarabb@lrboi-nsn.gov
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Little River Band of Ottawa Indians
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null 
+        report_bureau: Little River Band of Ottawa Indians 
   - name: Lori Davis
     email: loridavis@lrboi-nsn.gov
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Little River Band of Ottawa Indians
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Little River Band of Ottawa Indians
   - name: Monica Cisco
     email: monica.cisco@wichitatribe.com
     agency: Native American Tribal Governments
@@ -681,10 +755,10 @@ AOPSs:
   - name: Paul Walden
     email: paul.walden@pbrb.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Public Buildings Reform Board
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Public Buildings Reform Board
   - name: Rob Fream
     email: Rob.Fream@fcc.gov
     agency: Federal Communications Commission
@@ -757,25 +831,25 @@ AOPSs:
         report_bureau: null
   - name: Shadi McPherson
     email: mshadi@ushmm.org
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: United States Holocaust Memorial Museum
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: United States Holocaust Memorial Museum
   - name: Chris Guy
     email: cguy@ushmm.org
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: United States Holocaust Memorial Museum
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: United States Holocaust Memorial Museum
   - name: Tracy Roberts
     email: troberts@ushmm.org
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: United States Holocaust Memorial Museum
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: United States Holocaust Memorial Museum
   - name: Albina Collingham
     email: albina.collingham@sss.gov
     agency: Selective Service System
@@ -821,24 +895,24 @@ AOPSs:
   - name: Oliver Alwes
     email: oalwes@jamesmadison.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: James Madison Memorial Fellowship Foundation
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: James Madison Memorial Fellowship Foundation
   - name: Lewis Larsen
     email: llarsen@jamesmadison.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: James Madison Memorial Fellowship Foundation
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: James Madison Memorial Fellowship Foundation
   - name: Clare Iglesias
     email: ciglesias@jamesmadison.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: James Madison Memorial Fellowship Foundation
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: James Madison Memorial Fellowship Foundation
   - name: Sharla Domogauer
     email: sharla.domogauer@nara.gov
     agency: U.S. National Archives and Records Administration
@@ -870,38 +944,39 @@ AOPSs:
   - name: Lesley Duncan
     email: LDuncan@iaf.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: The Inter-American Foundation
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: The Inter-American Foundation
   - name: Anna-Marie Hinojosa
     email: adminassist@sierratribal.org
-    agency: Other Boards and Commissions
-    bureau: null
+    agency: Native American Tribal Governments
+    bureau: Sierra Tribal Consortium, INC.
     reporting_agencies:
-      - report_agency: Other Boards and Commissions
-        report_bureau: null
+      - report_agency: Native American Tribal Governments
+        report_bureau: Sierra Tribal Consortium, INC.
   - name: Yolanda Herrera
     email: stcdirector@sierratribal.org
-    agency: Other Boards and Commissions
+    agency: Native American Tribal Governments
+    bureau: Sierra Tribal Consortium, INC.
     bureau: null
     reporting_agencies:
-      - report_agency: Other Boards and Commissions
-        report_bureau: null
+      - report_agency: Native American Tribal Governments
+        report_bureau: Sierra Tribal Consortium, INC.
   - name: John Ratcliffe
     email: jratcliffe@usccr.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: U.S. Commission on Civil Rights
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: U.S. Commission on Civil Rights
   - name: Pamela Dunston
     email: pdunston@usccr.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: U.S. Commission on Civil Rights
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: U.S. Commission on Civil Rights
   - name: Gregory Kassab
     email: greg.kassab@aoc.gov 
     agency: Architect of the Capitol
@@ -947,17 +1022,17 @@ AOPSs:
   - name: Casey Waithe
     email: waithe@nwtrb.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Nuclear Waste Technical Review Board
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Nuclear Waste Technical Review Board
   - name: Neysa Slater-Chandler
     email: slater-chandler@nwtrb.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Nuclear Waste Technical Review Board
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Nuclear Waste Technical Review Board
   - name: Sara Abramson
     email: abramsons@fca.gov
     agency: Farm Credit Administration
@@ -982,59 +1057,59 @@ AOPSs:
   - name: Andrea  Keikkala
     email: andrea.keikkala@iphc.int
     agency: Other Boards and Commissions 
-    bureau: null
+    bureau: International Pacific Halibut Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: International Pacific Halibut Commission
   - name: Monica Thom
     email: monica.thom@iphc.int
     agency: Other Boards and Commissions 
-    bureau: null
+    bureau: International Pacific Halibut Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: International Pacific Halibut Commission
   - name: Rebecca Kuklok
     email: rebecca.kuklok@iphc.int
     agency: Other Boards and Commissions 
-    bureau: null
+    bureau: International Pacific Halibut Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: International Pacific Halibut Commission
   - name: Ola Wietecha
     email: ola.wietecha@iphc.int
     agency: Other Boards and Commissions 
-    bureau: null
+    bureau: International Pacific Halibut Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: International Pacific Halibut Commission
   - name: Nidhi Agrawal
     email: nagrawal@arc.gov
     agency: Other Boards and Commissions 
-    bureau: null
+    bureau: Appalachian Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Appalachian Regional Commission
   - name: Erik Gabriel
     email: egabriel@arc.gov
     agency: Other Boards and Commissions 
-    bureau: null
+    bureau: Appalachian Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Appalachian Regional Commission
   - name: Loretta Schuster
     email: Lori@asc.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Appraisal Subcommittee - FFIEC
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Appraisal Subcommittee - FFIEC
   - name: Keandre Haywood
     email: khaywood@dra.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Delta Regional Authority
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Delta Regional Authority
   - name: Jill Daly
     email: jill.daly@nrc.gov
     agency: Nuclear Regulatory Commission
@@ -1065,25 +1140,25 @@ AOPSs:
         report_bureau: null
   - name: Jane Sargus
     email: jsar@coil.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Congressional Office for International Leadership
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Congressional Office for International Leadership
   - name: Maura Shelden
     email: mshelden@coil.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Congressional Office for International Leadership
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Congressional Office for International Leadership
   - name: Shelia Parson
     email: sparson@coil.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Congressional Office for International Leadership
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Congressional Office for International Leadership
   - name: Nikki Moore
     email: nikki.moore@frb.gov
     agency: Board of Governors of the Federal Reserve System
@@ -1128,18 +1203,18 @@ AOPSs:
         report_bureau: null
   - name: Adriel Pond
     email: adriel.pond@fpisc.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Federal Permitting Improvement Steering Council
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Federal Permitting Improvement Steering Council
   - name: Buffy Ramsey
     email: buffy.ramsey@fpisc.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Federal Permitting Improvement Steering Council
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Federal Permitting Improvement Steering Council
   - name: Lenise Cyrus
     email: lenise.cyrus@hq.dhs.gov
     agency: U.S. Department of Homeland Security
@@ -1199,38 +1274,38 @@ AOPSs:
   - name: Dr. Jennifer Clyburn Reed
     email: jclyburn.reed@scrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Southeast Crescent Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Southeast Crescent Regional Commission
   - name: Melissa Lindler
     email: mlindler@scrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Southeast Crescent Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Southeast Crescent Regional Commission
   - name: Mohammed Salehin
     email: msalehin@scrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Southeast Crescent Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Southeast Crescent Regional Commission
   - name: Cana Williams
     email: cana.williams@ncpc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: National Capital Planning Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: National Capital Planning Commission
   - name: Tamara Lewis
     email: tamara.lewis@ncpc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: National Capital Planning Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: National Capital Planning Commission
   - name: Jacqueline Johnson
     email: johnsonjw@gao.gov
     agency: U.S. Government Accountability Office
@@ -1254,32 +1329,32 @@ AOPSs:
         report_bureau: null
   - name: Jane Sargus
     email: jsar@coil.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Congressional Office for International Leadership
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Congressional Office for International Leadership
   - name: Maura Shelden
     email: mshelden@coil.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Congressional Office for International Leadership
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Congressional Office for International Leadership
   - name: Shelia Parson
     email: sparson@coil.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Congressional Office for International Leadership
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Congressional Office for International Leadership
   - name: Jeanette Howard
     email: howardjm@dcsc.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: District of Columbia Courts
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: District of Columbia Courts
   - name: Denise T. Clarke
     email: deniset.clarke@hq.doe.gov
     agency: U.S. Department of Energy
@@ -1472,66 +1547,66 @@ AOPSs:
   - name: Angie Bettineski
     email: abettineski@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Zenaida Johnson
     email: zjohnson@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Kayla Watkins
     email: kwatkins@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Katie Russell
     email: krussell@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Richard Van Zwol
     email: rvanzwol@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Steven Stark
     email: sstark@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Beverly Davis
     email: bdavis@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Marc McNelly
     email: mmcnelly@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Cowlitz Indian Tribe
   - name: Serge Davis
     email: sdavis@cowlitz.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cowlitz Indian Tribe
     reporting_agencies:
     - report_agency: Native American Tribal Governments
-      report_bureau: null
+      report_bureau: Cowlitz Indian Tribe
   - name: Pranita Raghavan
     email: praghavan@neh.gov
     agency: National Endowment for the Humanities
@@ -1555,32 +1630,32 @@ AOPSs:
         report_bureau: null
   - name: Harry M Seidman
     email: hseidman@acus.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Administrative Conference of the United States
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Administrative Conference of the United States
   - name: Nathan Tomasso
     email: ntomasso@acus.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Administrative Conference of the United States
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Administrative Conference of the United States
   - name: Sanya Cade
     email: sanya.cade@usich.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: U.S. Interagency Council on Homelessness
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: U.S. Interagency Council on Homelessness
   - name: Chrischanne Smith
     email: chrischanne.smith@usich.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: U.S. Interagency Council on Homelessness
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: U.S. Interagency Council on Homelessness
   - name: Ralphael Small
     email: rsma@loc.gov
     agency: Library of Congress
@@ -1675,73 +1750,73 @@ AOPSs:
   - name: Elba Deck
     email: elba.deck@drbc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Delaware River Basin Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Delaware River Basin Commission
   - name: Lulin Zhong
     email: lulin.zhong@drbc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Delaware River Basin Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Delaware River Basin Commission
   - name: Patricia Hausler
     email: patricia.hausler@drbc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Delaware River Basin Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Delaware River Basin Commission
   - name: Donna Woolf
     email: donna.woolf@drbc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Delaware River Basin Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Delaware River Basin Commission
   - name: William Gallagher
     email: Wgallagher@nbrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Northern Border Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Northern Border Regional Commission
   - name: Jon Orourke
     email: Jorourke@nbrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Northern Border Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Northern Border Regional Commission
   - name: Rich Grogan
     email: Rgrogan@nbrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Northern Border Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Northern Border Regional Commission
   - name: Molly Taflas
     email: Mtaflas@nbrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Northern Border Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Northern Border Regional Commission
   - name: Chris Saunders
     email: Csaunders@nbrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Northern Border Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Northern Border Regional Commission
   - name: Tom Sidor
     email: Tsidor@nbrc.gov
     agency: Other Boards and Commissions
-    bureau: null
+    bureau: Northern Border Regional Commission
     reporting_agencies:
       - report_agency: Other Boards and Commissions
-        report_bureau: null
+        report_bureau: Northern Border Regional Commission
   - name: June M Carter
     email: Carter.June.M@dol.gov
     agency: U.S. Department of Labor
@@ -1905,39 +1980,39 @@ AOPSs:
         report_bureau: null
   - name: Cynthia D. Washington
     email: cwashington@fmcs.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Federal Mediation and Conciliation Service
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Federal Mediation and Conciliation Service
   - name: Erika Faith LeTourneau
     email: eletourneau@fmcs.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Federal Mediation and Conciliation Service
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Federal Mediation and Conciliation Service
   - name: Chris Catignani
     email: ccatignani@imls.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Institute of Museum and Library Services
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Institute of Museum and Library Services
   - name: Chris Mettee
     email: cmettee@imls.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Institute of Museum and Library Services
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Institute of Museum and Library Services
   - name: Don Delauter
     email: ddelauter@imls.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Institute of Museum and Library Services
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: Institute of Museum and Library Services
   - name: Alec Cloyd
     email: alec.j.cloyd.civ@mail.mil
     agency: U.S. Department of Defense - Independent Agencies
@@ -2160,18 +2235,18 @@ AOPSs:
       report_bureau: null
   - name: Cynthia Wilson
     email: cwilson@medpac.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: MedPac
     reporting_agencies:
-      - report_agency: Other
-        report_bureau: null
+      - report_agency: Other Agencies/Organizations
+        report_bureau: MedPac
   - name: Mary Beth Parsons
     email: mparsons@medpac.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: MedPac
     reporting_agencies:
-        - report_agency: Other
-          report_bureau: null
+        - report_agency: Other Agencies/Organizations
+          report_bureau: MedPac
   - name: Tahani Mishriki
     email: mishrikita@state.gov
     agency: U.S. Department of State
@@ -2609,10 +2684,10 @@ AOPSs:
   - name: Rebecca J. Rumbley
     email: jo.rumbley@hacn.org
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Cherokee Nation Housing Authority
     reporting_agencies:
     - report_agency: Native American Tribal Governments
-      report_bureau: null
+      report_bureau: Cherokee Nation Housing Authority
   - name: Anthony Eleftherion
     email: aeleftherion@osc.gov
     agency: Office of Special Counsel
@@ -2636,25 +2711,25 @@ AOPSs:
       report_bureau: null
   - name: Erlin Lanz Filot
     email: ELanz@nw.org
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: NeighborWorks America
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: NeighborWorks America
   - name: Troy Greene
     email: TGreene@nw.org
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: NeighborWorks America
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: NeighborWorks America
   - name: Theresa Casumbal
     email: TCasumbal@nw.org
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: NeighborWorks America
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: NeighborWorks America
   - name: Derek A. Henderson
     email: derek.henderson@usitc.gov
     agency: U.S. International Trade Commission
@@ -2692,67 +2767,67 @@ AOPSs:
       report_bureau: null
   - name: Anne Marie Kanakkanatt
     email: goldwaterao@goldwaterscholarship.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Barry Goldwater Scholarship & Excellence in Education Foundation
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Barry Goldwater Scholarship & Excellence in Education Foundation
   - name: John Mateja
     email: goldwaterpres@goldwaterscholarship.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Barry Goldwater Scholarship & Excellence in Education Foundation
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Barry Goldwater Scholarship & Excellence in Education Foundation
   - name: Delores Murray
     email: dmurray@onhir.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Office of Navajo & Hopi Indian Relocation
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Office of Navajo & Hopi Indian Relocation
   - name: Diane Pratte
     email: dpratte@onhir.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Office of Navajo & Hopi Indian Relocation
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Office of Navajo & Hopi Indian Relocation
   - name: Nancy L Thomas
     email: nthomas@onhir.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Office of Navajo & Hopi Indian Relocation
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Office of Navajo & Hopi Indian Relocation
   - name: Keandre Haywood
     email: khaywood@dra.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Delta Regional Authority
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Delta Regional Authority
   - name: Tamara Brown
     email: tamara.brown@psa.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Pretrial Services Agency for the District of Columbia
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Pretrial Services Agency for the District of Columbia
   - name: Rachel Dobbs
     email: rachel.dobbs@psa.gov
-    agency: Other
-    bureau: null
+    agency: Other Agencies/Organizations
+    bureau: Pretrial Services Agency for the District of Columbia
     reporting_agencies:
-    - report_agency: Other
-      report_bureau: null
+    - report_agency: Other Agencies/Organizations
+      report_bureau: Pretrial Services Agency for the District of Columbia
   - name: Tina Young
     email: tyoung@pinoleville-nsn.gov
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Pinoleville Pomo Nation
     reporting_agencies:
     - report_agency: Native American Tribal Governments
-      report_bureau: null
+      report_bureau: Pinoleville Pomo Nation
   - name: Arlita Derkowski
     email: Arlinta.Derkowski@nlrb.gov
     agency: National Labor Relations Board
