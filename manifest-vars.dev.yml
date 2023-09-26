@@ -4,3 +4,4 @@ instances: 1
 oauth_redirect_uri:
   - https://federalist-2e11f2c8-970f-44f5-acc8-b47ef6c741ad.sites.pages.cloud.gov/preview/gsa/smartpay-training/dev/
   - https://federalist-2e11f2c8-970f-44f5-acc8-b47ef6c741ad.sites.pages.cloud.gov/preview/gsa/smartpay-training/dev/auth_callback
+num_workers: 2
