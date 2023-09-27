@@ -513,6 +513,8 @@ agencies:
   - name: Native American Tribal Governments
     bureau: Sierra Tribal Consortium, INC.
   - name: Native American Tribal Governments
+    bureau: Wichita and Affiliated Tribes
+  - name: Native American Tribal Governments
     bureau: Other
   - name: Other Agencies/Organizations
     bureau: Administrative Conference of the United States
@@ -727,10 +729,10 @@ AOPSs:
   - name: Dale Magoon
     email: dalemagoon@lrboi-nsn.gov
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Little River Band of Ottawa Indians
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null   
+        report_bureau: Little River Band of Ottawa Indians   
   - name: Angela Rabb
     email: angelarabb@lrboi-nsn.gov
     agency: Native American Tribal Governments
@@ -748,10 +750,10 @@ AOPSs:
   - name: Monica Cisco
     email: monica.cisco@wichitatribe.com
     agency: Native American Tribal Governments
-    bureau: null
+    bureau: Wichita and Affiliated Tribes
     reporting_agencies:
       - report_agency: Native American Tribal Governments
-        report_bureau: null
+        report_bureau: Wichita and Affiliated Tribes
   - name: Paul Walden
     email: paul.walden@pbrb.gov
     agency: Other Boards and Commissions
