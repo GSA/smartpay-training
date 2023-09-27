@@ -28,7 +28,7 @@ const entries = await Promise.all(content_components)
         </button>
 
         {entries.map(item => (  
-          <div style="page-break-after: auto;">
+          <div class="usa-prose" style="page-break-after: auto;">
             <h1 class="text-primary">{item.data.title}</h1> 
             <item.Content />
           </div>
