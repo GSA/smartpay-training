@@ -2186,8 +2186,6 @@ AOPSs:
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
       report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
-      report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
   - name: Mukur Hazari
@@ -2200,8 +2198,6 @@ AOPSs:
     - report_agency: U.S. Department of Defense - Department of the Air Force
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
-      report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
       report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
@@ -2216,8 +2212,6 @@ AOPSs:
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
       report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
-      report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
   - name: Chris Chiappetta
@@ -2230,8 +2224,6 @@ AOPSs:
     - report_agency: U.S. Department of Defense - Department of the Air Force
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
-      report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
       report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
