@@ -72,7 +72,7 @@
         for="input-email"
         class="usa-label" 
       >
-        Full Name
+        Email
       </label>
       <input
         id="input-email"
