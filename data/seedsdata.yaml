@@ -1,3 +1,4 @@
+# This yaml file used as data source for pre-loading data inserts. For data update, please use database migration scripts
 agencies:
 # parenent agencies set up ( with bureau as null value)
   - name: Architect of the Capitol
@@ -529,8 +530,6 @@ agencies:
   - name: Other Agencies/Organizations
     bureau: Delta Regional Authority
   - name: Other Agencies/Organizations
-    bureau: District of Columbia Courts 
-  - name: Other Agencies/Organizations
     bureau: Federal Mediation and Conciliation Service
   - name: Other Agencies/Organizations
     bureau: Federal Permitting Improvement Steering Council  
@@ -578,6 +577,10 @@ agencies:
     bureau: U.S. Commission on Civil Rights
   - name: Other Boards and Commissions
     bureau: Other
+  - name: District of Columbia
+    bureau: District of Columbia Courts
+  - name: District of Columbia
+    bureau: Other  
 
 admins:
   - email: andrew.lee@gsa.gov
@@ -1354,10 +1357,10 @@ AOPSs:
         report_bureau: Congressional Office for International Leadership
   - name: Jeanette Howard
     email: howardjm@dcsc.gov
-    agency: Other Agencies/Organizations
+    agency: District of Columbia
     bureau: District of Columbia Courts
     reporting_agencies:
-      - report_agency: Other Agencies/Organizations
+      - report_agency: District of Columbia
         report_bureau: District of Columbia Courts
   - name: Denise T. Clarke
     email: deniset.clarke@hq.doe.gov
