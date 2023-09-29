@@ -500,7 +500,7 @@ agencies:
   - name: U.S. Department of Commerce
     bureau: United States Census Bureau
   - name: U.S. Department of Commerce
-    bureau: US Patent and Trademark Office
+    bureau: United States Patent and Trademark Office
   - name: U.S. Department of Commerce
     bureau: Other
 
@@ -2188,8 +2188,6 @@ AOPSs:
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
       report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
-      report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
   - name: Mukur Hazari
@@ -2202,8 +2200,6 @@ AOPSs:
     - report_agency: U.S. Department of Defense - Department of the Air Force
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
-      report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
       report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
@@ -2218,8 +2214,6 @@ AOPSs:
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
       report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
-      report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
   - name: Chris Chiappetta
@@ -2232,8 +2226,6 @@ AOPSs:
     - report_agency: U.S. Department of Defense - Department of the Air Force
       report_bureau: null
     - report_agency: U.S. Department of Defense - Department of the Army
-      report_bureau: null
-    - report_agency: U.S. Department of Defense - Department of the Navy
       report_bureau: null
     - report_agency: U.S. Department of Defense - Defense Logistics Agency
       report_bureau: null
@@ -3604,7 +3596,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
@@ -3635,7 +3627,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
@@ -3666,7 +3658,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
@@ -3697,7 +3689,9 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
+    - report_agency: U.S. Department of Commerce
+      report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
       report_bureau: Other
   - name: Glenera (Peggy) Sisson
@@ -3834,7 +3828,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
@@ -3865,7 +3859,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
@@ -3896,7 +3890,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
@@ -3927,7 +3921,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
@@ -3958,7 +3952,7 @@ AOPSs:
     - report_agency: U.S. Department of Commerce
       report_bureau: United States Census Bureau
     - report_agency: U.S. Department of Commerce
-      report_bureau: US Patent and Trademark Office
+      report_bureau: United States Patent and Trademark Office
     - report_agency: U.S. Department of Commerce
       report_bureau: Bureau of Economic Analysis
     - report_agency: U.S. Department of Commerce
