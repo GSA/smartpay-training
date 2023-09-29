@@ -6,7 +6,7 @@ from training.database import SessionLocal
 from training.schemas import AgencyCreate, UserCreate, RoleCreate
 from training.repositories import AgencyRepository, UserRepository, RoleRepository
 
-# pre-data loading for DB, it only can handle records inserts and not able to handle record update properly. For data update, use DB migration scripts instead
+# used initial loading only, it can not handle record update properly. For data update, please use DB migration scripts instead
 seed_source = os.path.join(os.path.dirname(__file__), "..", "..", "data", "seedsdata.yaml")
 with open(seed_source) as f:
     data = yaml.safe_load(f)
@@ -54,14 +54,14 @@ for item in data["admins"]:
         user_repo._session.commit()
         print("Admin role added")
 
-# load AOPCs data
+# AOPCs data (initial load usage only)
 for item in data["AOPSs"]:
     # find user's agency
     user_agency = user_repo._session.query(models.Agency).filter(models.Agency.name == item['agency'], models.Agency.bureau == item['bureau']).first()
     user = UserCreate(name=item['name'], email=item['email'], agency_id=user_agency.id)
     print("AOPC User:", user.name, "email:", user.email, "user_agency:", user_agency.name, "user_bureau:", user_agency.bureau, end=" - ")
     continue_aopc_data_loading = True
-    # if AOPC already exisiting, skip the rest of process
+    # if AOPC already exisiting, nitial load is done previously, skip the rest of process to advoid potential data conflicts since admin can modify AOPCs via UI
     if user_repo.find_by_email(user.email):
         print("already exists, skipping the process")
         continue_aopc_data_loading = False

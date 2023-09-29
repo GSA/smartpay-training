@@ -1,4 +1,4 @@
-# This yaml file used as data source for pre-loading data inserts. For data update, please use database migration scripts
+# This yaml file used as initial data loading only. For data update, please use database migration scripts instead
 agencies:
 # parenent agencies set up ( with bureau as null value)
   - name: Architect of the Capitol
