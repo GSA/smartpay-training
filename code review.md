@@ -88,16 +88,13 @@ We use this list when performing a code review to ensure that all tasks have bee
 
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
-	- [ ] read through every task on the Scrum board that's encompassed by this pull request
+	- [ ] read through every task on the project board that's encompassed by this pull request
 	- [ ] read the description of the commits that comprise the pull request
 - [ ] If changes were made in the UI (if not, skip):
   - [ ] If desired, run `docker system prune` to remove any unused docker images from previous code review.
   - [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/{PR #}/head:sprint-{Sprint #}`), and then switch to that branch (e.g. `git checkout sprint-{Sprint #}`)
   - [ ] stand up the site locally, with `./docker-run.sh`
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
-	- [ ] for internal Court functionality, perform the most thorough testing in Edge, though also test in Chrome and Firefox
-	- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/)
-	- [ ] test in Mobile Safari and Mobile Chrome (or an emulator like Chrome DevTools), with the caveat that not all internal Court functionality will be necessary on these platforms
 	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
 		- [ ] look at efficiency of page loads, asset sizes, HTTP connection management, etc.
 	- [ ] review for accessibility
@@ -105,7 +102,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] navigate site only with the keyboard
 		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
 		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
-- [ ] review static code analysis results in [the vendor’s DeepScan account](https://deepscan.io/dashboard/#view=project&tid=8976&pid=17137&bid=383813&prid=874192&subview=overview)
+- [ ] review static code analysis results in [where can these be accessed?]
 - [ ] examine OWASP ZAP output in `docs/`, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
 - [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
 - [ ] review all tests
@@ -113,8 +110,6 @@ We use this list when performing a code review to ensure that all tasks have bee
 	- [ ] methodically review all new tests for correctness, quality of naming
 - [ ] determine what code isn’t tested, review that rigorously
 - [ ] review documentation to ensure that it matches changes
-	- [ ] user-visible changes (including API users like the IRS) are documented in CHANGELOG.md (which is linked from US Tax Court website).
 - [ ] provide comments on the pull request on GitHub, as necessary
 	- [ ] for comments that are specific to a particular line of code, comment on those specific lines
-
 - [ ] for each feature-level bug (i.e., it’s working as designed, but designed wrong), open a new issue and put it in the backlog
