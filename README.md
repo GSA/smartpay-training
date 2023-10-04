@@ -90,11 +90,11 @@ python -m training.database.seed
 ```
 
 #### Importing training questions into the db
-In order to fully use the application in development, we will need to import the training questions and answers into the database. However, _we do not commit that data to this repository_. You will need to contact the project maintainers to get access to the training question sql dump files.
+In order to fully use the application in development, we will need to import the training quizzes into the database. However, _we do not commit that data to this repository_. You will need to contact the project maintainers to get access to the training quiz data sql dump file.
   
-Once you have those files, however, you can run the following to import them into the db:
+Once you have that file, you can run the following to import quiz data into the db:
 ```
-# Assuming the dump file is named quiz-data-dump-sql
+# Assuming the dump file is named quiz-data-dump.sql
 psql -h localhost -p 5432 -U postgres -W postgres < /path/to/quiz-data-dump.sql
 ```
 
