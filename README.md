@@ -55,8 +55,10 @@ pip install -r requirements.dev.txt -r requirements.txt
 
 ### Frontend environment settings
 The frontend is built using [Astro](https://astro.build/) and [Vue](https://vuejs.org/). These require an installation of Node. We recommend using one of the following development environments for Node:
-* [NVM](https://github.com/nvm-sh/nvm) -- The correct Node version is set automatically from this repo's `.nvmrc` file
-* [nodeenv](https://pypi.org/project/nodeenv/), which is compatible with python's virtualenv.
+* [NVM](https://github.com/nvm-sh/nvm) -- The correct Node version is set automatically from this repo's `.nvmrc` file (Node LTS v18)
+* [nodeenv](https://pypi.org/project/nodeenv/), which is compatible with python's virtualenv. If you use this option, be sure to use the latest Node LTS version, which is `v18`.
+  
+  
   
 Once you have a proper Node environment set up, you can install the frontend dependencies as follows:
 
