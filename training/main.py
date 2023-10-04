@@ -15,12 +15,12 @@ origins = [
     "https://localhost:3000",
     "http://127.0.0.1:3000",
     "https://training.smartpay.gov",
+    "https://federalist-2e11f2c8-970f-44f5-acc8-b47ef6c741ad.sites.pages.cloud.gov"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r'https://federalist.*\.sites\.pages\.cloud\.gov',
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
