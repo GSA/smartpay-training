@@ -30,12 +30,15 @@
   const question_index = ref(0)
   const user_answers = reactive([])
   const acknowledge = ref(false)
+  const has_submitted = ref(false)
 
   const number_of_questions = computed(() => props.quiz['content']['questions'].length)
   const is_quiz_complete = computed(() => user_answers.length === number_of_questions.value)
   const current_question = computed(() => props.quiz['content']['questions'][question_index.value])
   const is_current_unanswered = computed(() => user_answers[question_index.value] === undefined )
   const show_acknowledge = computed(() => is_quiz_complete.value && (question_index.value >= number_of_questions.value))
+
+  const can_submit = computed(() => acknowledge.value && !has_submitted.value)
 
   const user_string_lookup = {
     "AccountHoldersApprovingOfficials": "a card/account holder or approving official",
@@ -82,6 +85,7 @@
   }
 
   async function submit_quiz() {
+    has_submitted.value = true
     emit('submitQuiz', user_answers)
   }
 
@@ -110,7 +114,7 @@
     <div class="grid-row">
       <button
         class="usa-button margin-y-3"
-        :disabled="!acknowledge"
+        :disabled="!can_submit"
         @click="submit_quiz"
       >
         Submit quiz
