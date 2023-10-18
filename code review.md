@@ -19,8 +19,8 @@ We perform a code review in order to ensure that the produced code meets the [Qu
 It is important to approach a code review with the right frame of mind:
 
 * Expect to ask lots of questions, not as an interrogation, but as an ongoing conversation, taking place between the government and the vendor.
-* This is an Agile process and, as such, we treat the output of every sprint as a completed product. Security, accessibility, UX, tests, browser compatibility, etc. are not features, to be implemented in future sprints, but are things that we expect to be incorporated constantly, and completed at the end of each sprint.
-* Remember that we are all learning together here. If you see something in the code that you don’t understand, it’s incumbent on you to say so. Maybe you know something that the developer doesn’t, maybe the developer knows something that you don’t, but they only way to find out is to ask.
+* This is an Agile process and, as such, we treat the output of every sprint as a completed product. Security, accessibility, UX, tests, browser compatibility, etc. are not features to be implemented in future sprints, but are things that we expect to be incorporated constantly, and completed at the end of each sprint.
+* Remember that we are all learning together here. If you see something in the code that you don’t understand, it’s incumbent on you to say so. Maybe you know something that the developer doesn’t, maybe the developer knows something that you don’t, but the only way to find out is to ask.
 
 ## What we look for
 
@@ -44,26 +44,23 @@ Test names shouldn’t be overly technical. Ideally folks outside the developmen
 ### Tests actually do what they’re supposed to
 It’s easy to get to 100% code coverage without actually testing anything. We’ll look at the tests themselves to make sure they’re actually making the right assertions about the methods under test.
 
-### Cyclomatic complexity, code depth, and method lengths are reasonable
-We’ll use automated tools to perform [static source analysis](https://18f.gsa.gov/2016/10/04/what-is-static-source-analysis/). Anywhere the metrics are higher than what we’d generally like, we’ll look at the code itself to see if they make sense. We’re going to take a more in-depth look when we see a cyclomatic complexity above 10, a code depth above 5, or a method length above 25 lines.
-
 ### Opportunities to abstract and refactor
-We’ll look for duplication in the code where it might make sense to break functionality into methods that can be reused.
+We’ll look for duplication in the code or excessively complex code where it might make sense to break functionality into methods that can be simplified or reused.
 
 ### Unwieldy methods
-Methods that are hard to reason through are also difficult to test, difficult to maintain, and prone to bugs. We’ll look out for methods that are complex, and suggest either refactoring that method or possibly breaking it into smaller pieces.
+Methods that are hard to reason through are also difficult to test, difficult to maintain, and prone to bugs. We’ll look out for methods that are complex, or unusually long, and suggest either refactoring that method or possibly breaking it into smaller pieces.
 
 ### Meaningful method and variable names
-Method names should accurately reflect what the method does, and variable names should pretty clearly indicate what data they’re holding. Don’t be afraid of long names.  This also applies to method argument names. Ideally, someone looking at a method signature should be able to infer what it does without any additional documentation. We’ll look at these names to be sure they make sense. Good naming practices contribute to self-documenting code and reduce the manual documentation burden.
+Method names should accurately reflect what the method does, and variable names should pretty clearly indicate what data they’re holding. Don’t be afraid of long names. This also applies to method argument names. Ideally, someone looking at a method signature should be able to infer what it does without any additional documentation. We’ll look at these names to be sure they make sense. Good naming practices contribute to self-documenting code and reduce the manual documentation burden.
 
 ### Commented-out code
-With good version control, it should be unnecessary to comment-out blocks of code — just delete them and get them from source history if you really need them again in the future.  Obviously it’s fine to comment out code while you’re developing, but once a feature is ready to merge, that former code should just be removed. We’ll be looking for these commented code blocks.
+With good version control, it should be unnecessary to comment-out blocks of code — just delete them and get them from source history if you really need them again in the future. Obviously it’s fine to comment out code while you’re developing, but once a feature is ready to merge, that former code should just be removed. We’ll be looking for these commented code blocks.
 
 ### Necessary comments
 Comments in the code should describe complex bits of logic that aren’t easily glanceable — if someone new to the code can’t skim it and understand it, a comment might be in order. As we’re reviewing the code, if we find a bit we can’t understand quickly from the code and context, we’ll be looking for a comment that explains it. Comments should appear with the code they’re describing.
 
 ### Documented APIs
-If code exposes a public API — whether that’s public methods on a class or HTTP endpoints in a REST service — those public methods should be documented.  We like documentation that can be extracted into some pretty markup (e.g., .NET’s XML comments, OAS, Swagger). We’ll check that any public-facing methods have useful documentation.
+If code exposes a public API — whether that’s public methods on a class or HTTP endpoints in a REST service — those public methods should be documented. We like documentation that can be extracted into some pretty markup (e.g., .NET’s XML comments, OAS, Swagger). We’ll check that any public-facing methods have useful documentation.
 
 ### Adherence to the project’s style guide
 The project should adopt a code style guide and code should conform. Which guide the team chooses is less important than the consistency that comes from actually using it. We’ll check to make sure there’s a linter configured to check code style, that it passes, and that any exceptions are documented and explained in the code.
@@ -86,30 +83,28 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
-- [ ] review the pull request itself, to get oriented
-	- [ ] read the description of the pull request, which should summarize the changes made
-	- [ ] read through every task on the project board that's encompassed by this pull request
-	- [ ] read the description of the commits that comprise the pull request
+- [ ] Review the pull request itself, to get oriented
+	- [ ] Read the description of the pull request, which should summarize the changes made
+	- [ ] Read through every task on the project board that's encompassed by this pull request
+	- [ ] Read the description of the commits that comprise the pull request
 - [ ] If changes were made in the UI (if not, skip):
-  - [ ] If desired, run `docker system prune` to remove any unused docker images from previous code review.
-  - [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/{PR #}/head:sprint-{Sprint #}`), and then switch to that branch (e.g. `git checkout sprint-{Sprint #}`)
-  - [ ] stand up the site locally, with `./docker-run.sh`
-	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
-	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
-		- [ ] look at efficiency of page loads, asset sizes, HTTP connection management, etc.
-	- [ ] review for accessibility
-		- [ ] use an automated audit tool, such as Chrome Audit or aXe
-		- [ ] navigate site only with the keyboard
-		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
-		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
-- [ ] review static code analysis results in [where can these be accessed?]
-- [ ] examine OWASP ZAP output in `docs/`, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
-- [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
-- [ ] review all tests
-	- [ ] look at code coverage of tests in GitHub Actions
-	- [ ] methodically review all new tests for correctness, quality of naming
-- [ ] determine what code isn’t tested, review that rigorously
-- [ ] review documentation to ensure that it matches changes
-- [ ] provide comments on the pull request on GitHub, as necessary
-	- [ ] for comments that are specific to a particular line of code, comment on those specific lines
-- [ ] for each feature-level bug (i.e., it’s working as designed, but designed wrong), open a new issue and put it in the backlog
+    - [ ] Inspect the changes on the preview branch on cloud.gov Pages
+	- [ ] Test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
+	- [ ] Use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
+		- [ ] Look at efficiency of page loads, asset sizes, HTTP connection management, etc.
+	- [ ] Review for accessibility
+		- [ ] Use an automated audit tool, such as Chrome Audit or aXe
+		- [ ] Navigate site only with the keyboard
+		- [ ] Use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
+		- [ ] Manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
+- [ ] Review static code analysis results in GitHub CodeQL logs and DependaBot
+- [ ] Examine output from dynamic testing tools, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
+- [ ] Skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
+- [ ] Review all tests
+	- [ ] Look at code coverage of tests in GitHub Actions
+	- [ ] Methodically review all new tests for correctness, quality of naming
+- [ ] Determine what code isn’t tested, review that rigorously
+- [ ] Review documentation to ensure that it matches changes
+- [ ] Provide comments on the pull request on GitHub, as necessary
+	- [ ] For comments that are specific to a particular line of code, comment on those specific lines
+- [ ] For each feature-level bug (i.e., it’s working as designed, but designed wrong), open a new issue and put it in the backlog
