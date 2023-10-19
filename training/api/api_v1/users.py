@@ -61,7 +61,7 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
     writer = csv.writer(output)
 
     # header row
-    writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Datetime'])
+    writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Date and Time'])
     for item in results:
         # data row
         writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y %H:%M:%S")])  # noqa 501
