@@ -61,10 +61,10 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
     writer = csv.writer(output)
 
     # header row
-    writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Date'])
+    writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Datetime'])
     for item in results:
         # data row
-        writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y")])  # noqa 501
+        writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y %H:%M:%S")])  # noqa 501
 
     headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingQuizCompletionReport.csv"'}
     return Response(output.getvalue(), headers=headers, media_type='application/csv')
