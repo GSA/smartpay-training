@@ -32,7 +32,7 @@
   const user_answers = reactive([])
   const acknowledge = ref(false)
   const has_submitted = ref(false)
-  const show_spinner= ref(false)
+  
 
   const number_of_questions = computed(() => props.quiz['content']['questions'].length)
   const is_quiz_complete = computed(() => user_answers.length === number_of_questions.value)
@@ -88,7 +88,6 @@
 
   async function submit_quiz() {
     has_submitted.value = true
-    show_spinner.value = true
     emit('submitQuiz', user_answers)
   }
 
@@ -126,7 +125,7 @@
       </div>
       <!--display spinner along with submit button in one row for desktop-->
       <div
-        v-if="show_spinner"
+        v-if="has_submitted"
         class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
         >
           <SpinnerGraphic />
@@ -134,7 +133,7 @@
     </div>
       <!--display spinner under submit button for mobile view-->
       <div
-        v-if="show_spinner"
+        v-if="has_submitted"
         class="tablet:display-none margin-top-1 text-center"
         >
           <SpinnerGraphic />
