@@ -127,17 +127,17 @@
       <div
         v-if="has_submitted"
         class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
-        >
-          <SpinnerGraphic />
-        </div>
-    </div>
-      <!--display spinner under submit button for mobile view-->
-      <div
-        v-if="has_submitted"
-        class="tablet:display-none margin-top-1 text-center"
-        >
-          <SpinnerGraphic />
+      >
+        <SpinnerGraphic />
       </div>
+    </div>
+    <!--display spinner under submit button for mobile view-->
+    <div
+      v-if="has_submitted"
+      class="tablet:display-none margin-top-1 text-center"
+    >
+      <SpinnerGraphic />
+    </div>
   </section>
 
   <div v-else>
