@@ -5,6 +5,7 @@
   import QuizCounter from "./QuizCounter.vue"
   import NavigateNext from "./icons/NavigateNext.vue"
   import NavigateBack from "./icons/NavigateBack.vue"
+  import SpinnerGraphic from './SpinnerGraphic.vue'
   
 
   const emit = defineEmits(['submitQuiz'])
@@ -31,6 +32,7 @@
   const user_answers = reactive([])
   const acknowledge = ref(false)
   const has_submitted = ref(false)
+  
 
   const number_of_questions = computed(() => props.quiz['content']['questions'].length)
   const is_quiz_complete = computed(() => user_answers.length === number_of_questions.value)
@@ -112,13 +114,29 @@
       </label>
     </div>
     <div class="grid-row">
-      <button
-        class="usa-button margin-y-3"
-        :disabled="!can_submit"
-        @click="submit_quiz"
+      <div class="grid-col tablet:grid-col-3 ">
+        <button
+          class="usa-button margin-y-3"
+          :disabled="!can_submit"
+          @click="submit_quiz"
+        >
+          Submit quiz
+        </button>
+      </div>
+      <!--display spinner along with submit button in one row for desktop-->
+      <div
+        v-if="has_submitted"
+        class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
       >
-        Submit quiz
-      </button>
+        <SpinnerGraphic />
+      </div>
+    </div>
+    <!--display spinner under submit button for mobile view-->
+    <div
+      v-if="has_submitted"
+      class="tablet:display-none margin-top-1 text-center"
+    >
+      <SpinnerGraphic />
     </div>
   </section>
 
