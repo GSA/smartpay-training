@@ -72,16 +72,16 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
 
 @router.get("/users", response_model=UserSearchResult)
 def get_users(
-    name: Annotated[str, Query(min_length=1)],
+    searchText: Annotated[str, Query(min_length=1)],
     page_number: int = 1,
     repo: UserRepository = Depends(user_repository),
     user=Depends(RequireRole(["Admin"]))
 ):
     '''
     Get/users is used to search users for admin portal
-    currently search only support search by user name, name is required field.
+    currently search only support search by user name and email address, searchText is required field.
     It may have additional search criteira in future, which will require logic update.
     page_number param is used to support UI pagination functionality.
     It returns UserSearchResult object with a list of users and total_count used for UI pagination
     '''
-    return repo.get_users(name, page_number)
+    return repo.get_users(searchText, page_number)

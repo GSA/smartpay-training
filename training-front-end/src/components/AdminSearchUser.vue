@@ -34,7 +34,7 @@
   async function search() {
     noResults.value = false
     const url = new URL(`${report_url}`)
-    url.search = new URLSearchParams({name: searchTerm.value, page_number: currentPage.value + 1})
+    url.search = new URLSearchParams({searchText: searchTerm.value, page_number: currentPage.value + 1})
 
     try {
       const response = await fetch(

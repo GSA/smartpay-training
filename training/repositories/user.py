@@ -1,4 +1,4 @@
-from sqlalchemy import nullsfirst
+from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
 from training.schemas import UserQuizCompletionReportData, UserSearchResult
@@ -66,12 +66,12 @@ class UserRepository(BaseRepository[models.User]):
         else:
             raise ValueError("Invalid Report User")
 
-    def get_users(self, name: str, page_number: int) -> UserSearchResult:
-        # current UI only support search by user name, and it is required field.
-        if (name and name.strip() != '' and page_number > 0):
-            count = self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).count()
+    def get_users(self, searchText: str, page_number: int) -> UserSearchResult:
+        # current UI only support search by user name and email. The search field it is required field.
+        if (searchText and searchText.strip() != '' and page_number > 0):
+            count = self._session.query(models.User).filter(or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).count()
             page_size = 25
             offset = (page_number - 1) * page_size
-            search_results = self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).limit(page_size).offset(offset).all()
+            search_results = self._session.query(models.User).filter(or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).limit(page_size).offset(offset).all()
             user_search_result = UserSearchResult(users=search_results, total_count=count)
             return user_search_result
