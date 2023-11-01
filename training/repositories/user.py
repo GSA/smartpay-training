@@ -72,6 +72,7 @@ class UserRepository(BaseRepository[models.User]):
             count = self._session.query(models.User).filter(or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).count()
             page_size = 25
             offset = (page_number - 1) * page_size
-            search_results = self._session.query(models.User).filter(or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).limit(page_size).offset(offset).all()
+            search_results = self._session.query(models.User).filter(
+                or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).limit(page_size).offset(offset).all()
             user_search_result = UserSearchResult(users=search_results, total_count=count)
             return user_search_result
