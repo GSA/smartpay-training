@@ -116,7 +116,7 @@
           class="tablet:grid-col-8"
         >
           <label for="search-field">
-            Name
+            Name or Email
           </label>
           <div 
             id="gnHint"
