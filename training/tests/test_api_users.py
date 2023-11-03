@@ -58,7 +58,7 @@ def test_get_users(goodJWT, mock_user_repo: UserRepository):
     user_search_result = UserSearchResult(users=users, total_count=2)
     mock_user_repo.get_users.return_value = user_search_result
     response = client.get(
-        "/api/v1/users?name=test&page_number=1",
+        "/api/v1/users?searchText=test&page_number=1",
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
     assert response.status_code == status.HTTP_200_OK
