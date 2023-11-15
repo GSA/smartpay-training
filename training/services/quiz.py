@@ -118,7 +118,7 @@ class QuizService():
                     db_user_certificate.agency,
                     db_user_certificate.completion_date
                 )
-                self.emailCertificate(user.name, quiz.name, user.email, pdf_bytes)
+                self.email_certificate(user.name, quiz.name, user.email, pdf_bytes)
                 logging.info(f"Sent confirmation email to {user.email} for passing training quiz")
             except Exception as e:
                 logging.error("Error sending quiz confirmation mail", e)
@@ -129,7 +129,7 @@ class QuizService():
 
         return grade
 
-    def emailCertificate(self, user_name: str, course_name: str, to_email: str, certificate: bytes) -> None:
+    def email_certificate(self, user_name: str, course_name: str, to_email: str, certificate: bytes) -> None:
         """
         Sends congratulatory email to user with certificate attached.
         :param user_name: User's Name

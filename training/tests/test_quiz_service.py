@@ -1,10 +1,8 @@
-from datetime import datetime
-
 import pytest
 from unittest.mock import MagicMock, patch
 from training import models, schemas
 from training.errors import IncompleteQuizResponseError
-from training.services import QuizService
+from training.services import QuizService, Certificate
 from training.repositories import QuizRepository, QuizCompletionRepository, CertificateRepository
 from sqlalchemy.orm import Session
 from .factories import QuizCompletionFactory
@@ -13,10 +11,14 @@ from .factories import QuizCompletionFactory
 @patch.object(QuizRepository, "find_by_id")
 @patch.object(QuizCompletionRepository, "create")
 @patch.object(CertificateRepository, "get_certificate_by_id")
+@patch.object(Certificate, "generate_pdf")
+@patch.object(QuizService, "email_certificate")
 def test_grade_passing(
+        mock_quiz_service_email_certificate: MagicMock,
+        mock_certificate_service_generate_pdf: MagicMock,
+        mock_certificate_repo_get_certificate_by_id: MagicMock,
         mock_quiz_completion_repo_create: MagicMock,
         mock_quiz_repo_find_by_id: MagicMock,
-        mock_certificate_repo_get_certificate_by_id: MagicMock,
         db_with_data: Session,
         valid_passing_submission: schemas.QuizSubmission,
         valid_quiz: models.Quiz,
@@ -26,6 +28,8 @@ def test_grade_passing(
     mock_quiz_repo_find_by_id.return_value = valid_quiz
     mock_quiz_completion_repo_create.return_value = QuizCompletionFactory.build()
     mock_certificate_repo_get_certificate_by_id.return_value = valid_user_certificate
+    mock_certificate_service_generate_pdf.return_value = bytearray()
+    mock_quiz_service_email_certificate.return_value = None
 
     result = quiz_service.grade(quiz_id=123, user_id=123, submission=valid_passing_submission)
 

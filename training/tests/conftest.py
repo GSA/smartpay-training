@@ -346,8 +346,8 @@ def valid_user_certificate() -> Generator[schemas.UserCertificate, None, None]:
         'user_id': 2,
         'user_name': "Molly",
         'agency': 'Freeman Journal',
-        'quiz_id': 100,
-        'quiz_name': "Dublin History",
+        'quiz_id': 123,
+        'quiz_name': "Travel Training for Agency/Organization Program Coordinators",
         'completion_date': '2023-08-21T22:59:36'
     }
     yield UserCertificate.model_validate(testdata)
