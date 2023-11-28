@@ -19,11 +19,11 @@ CERTIFICATE_EMAIL_TEMPLATE = Template('''
 <p>
 Congratulations!
 </p>
-<p>You've successfully passed the quiz for the $course_name.</p>
+<p>You've successfully passed the GSA SmartPay® $course_name quiz.</p>
 <p>Your certificate is attached below.</p>
 <p>
-If you have any questions or need further assistance,
-email us at gsa_smartpay@gsa.gov.
+If you did not submit this request, you may be receiving this message in error. Please disregard this email. If you have any questions or need further
+ assistance, email us at gsa_smartpay@gsa.gov.
 </p>
 <p>Thank you.</p>
 ''')
@@ -141,7 +141,7 @@ class QuizService():
         body = CERTIFICATE_EMAIL_TEMPLATE.substitute({"name": user_name, "course_name": course_name})
         message = EmailMessage()
         message.set_content(body, subtype="html")
-        message["Subject"] = "Certificate - " + course_name
+        message["Subject"] = "Certificate - GSA SmartPay " + course_name
         message["From"] = f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM}>"
         message["To"] = to_email
         message.add_attachment(certificate, maintype="application", subtype="pdf", filename="SmartPayTraining.pdf")
