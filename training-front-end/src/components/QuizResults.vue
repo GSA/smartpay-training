@@ -52,7 +52,8 @@
         </h2>
       </div>
       <p>
-        You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which meets the 75% or higher requirement to pass.
+        You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which meets the 75% or higher requirement to pass. 
+        Your certificate has been emailed to you. Or, you may download your certificate below.
       </p>
       <form
         :action="quiz_certificate_url"
