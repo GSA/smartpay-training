@@ -14,9 +14,9 @@ router = APIRouter()
 
 @router.post("/users", response_model=User, status_code=status.HTTP_201_CREATED)
 def create_user(
-    new_user: UserCreate,
-    repo: UserRepository = Depends(user_repository),
-    user=Depends(RequireRole(["Admin"]))
+        new_user: UserCreate,
+        repo: UserRepository = Depends(user_repository),
+        user=Depends(RequireRole(["Admin"]))
 ):
     db_user = repo.find_by_email(new_user.email)
     if db_user:
@@ -31,10 +31,10 @@ def create_user(
 
 @router.patch("/users/edit-user-for-reporting", response_model=User)
 def edit_user_for_reporting(
-    user_id: int,
-    agency_id_list: list[int],
-    repo: UserRepository = Depends(user_repository),
-    user=Depends(RequireRole(["Admin"]))
+        user_id: int,
+        agency_id_list: list[int],
+        repo: UserRepository = Depends(user_repository),
+        user=Depends(RequireRole(["Admin"]))
 ):
     try:
         updated_user = repo.edit_user_for_reporting(user_id, agency_id_list)
@@ -72,10 +72,10 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
 
 @router.get("/users", response_model=UserSearchResult)
 def get_users(
-    searchText: Annotated[str, Query(min_length=1)],
-    page_number: int = 1,
-    repo: UserRepository = Depends(user_repository),
-    user=Depends(RequireRole(["Admin"]))
+        searchText: Annotated[str, Query(min_length=1)],
+        page_number: int = 1,
+        repo: UserRepository = Depends(user_repository),
+        user=Depends(RequireRole(["Admin"]))
 ):
     '''
     Get/users is used to search users for admin portal
@@ -85,3 +85,27 @@ def get_users(
     It returns UserSearchResult object with a list of users and total_count used for UI pagination
     '''
     return repo.get_users(searchText, page_number)
+
+
+@router.put("/users/{user_id}", response_model=User)
+def update_user_by_id(
+        user_id: int,
+        updated_user: User,
+        repo: UserRepository = Depends(user_repository),
+        user=Depends(RequireRole(["Admin"]))
+):
+    """
+    Updates user details by User ID
+    :param updated_user: Updated user model
+    :param user_id: User ID
+    :param repo: UserRepository repository
+    :param user: Required role to complete operation
+    :return: Returns the updated user object
+    """
+    try:
+        return repo.update_user(user_id, updated_user)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid user id"
+        )
