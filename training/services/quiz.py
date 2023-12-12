@@ -3,8 +3,6 @@ from email.message import EmailMessage
 from smtplib import SMTP
 from string import Template
 
-from fastapi import HTTPException, status
-
 from training.config import settings
 from training.errors import IncompleteQuizResponseError, QuizNotFoundError, SendEmailError
 from training.repositories import QuizRepository, QuizCompletionRepository, UserRepository, CertificateRepository
