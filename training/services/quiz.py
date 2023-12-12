@@ -122,10 +122,7 @@ class QuizService():
                 logging.info(f"Sent confirmation email to {user.email} for passing training quiz")
             except Exception as e:
                 logging.error("Error sending quiz confirmation mail", e)
-                raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    detail="Server Error"
-                )
+                raise
 
         return grade
 
