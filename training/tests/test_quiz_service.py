@@ -160,3 +160,4 @@ def test_email_certificate_raises_exception(
     smtp_instance.send_message.side_effect = ValueError('something went wrong')
     with pytest.raises(SendEmailError):
         quiz_service.email_certificate('Test_User', 'Travel Training for Ministry of Magic', 'test_user@freemanjournal.com', b'')
+
