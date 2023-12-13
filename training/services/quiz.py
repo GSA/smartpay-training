@@ -3,8 +3,6 @@ from email.message import EmailMessage
 from smtplib import SMTP
 from string import Template
 
-from fastapi import HTTPException, status
-
 from training.config import settings
 from training.errors import IncompleteQuizResponseError, QuizNotFoundError, SendEmailError
 from training.repositories import QuizRepository, QuizCompletionRepository, UserRepository, CertificateRepository
@@ -122,10 +120,7 @@ class QuizService():
                 logging.info(f"Sent confirmation email to {user.email} for passing training quiz")
             except Exception as e:
                 logging.error("Error sending quiz confirmation mail", e)
-                raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    detail="Server Error"
-                )
+                raise
 
         return grade
 

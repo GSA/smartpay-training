@@ -1,5 +1,5 @@
 from collections.abc import Generator
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 import jwt
 from pydantic import TypeAdapter
 import pytest
@@ -351,3 +351,10 @@ def valid_user_certificate() -> Generator[schemas.UserCertificate, None, None]:
         'completion_date': '2023-08-21T22:59:36'
     }
     yield UserCertificate.model_validate(testdata)
+
+
+@pytest.fixture
+def smtp_instance():
+    with patch('training.services.quiz.SMTP') as smtp_mock:
+        with smtp_mock() as smtp:
+            yield smtp
