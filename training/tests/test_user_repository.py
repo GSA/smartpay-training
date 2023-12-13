@@ -107,3 +107,13 @@ def test_get_users(user_repo_with_data: UserRepository, valid_user_ids: List[int
     assert result is not None
     for item in result.users:
         assert search_criteria in item.name
+
+
+def test_get_users_by_email(user_repo_with_data: UserRepository, valid_user_ids: List[int]):
+    valid_user_id = valid_user_ids[0]
+    db_user = user_repo_with_data.find_by_id(valid_user_id)
+    search_criteria = db_user.email[:-1]
+    result = user_repo_with_data.get_users(search_criteria, 1)
+    assert result is not None
+    for item in result.users:
+        assert search_criteria in item.email
