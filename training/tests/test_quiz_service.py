@@ -137,7 +137,7 @@ def test_email_certificate_config(
     quiz_service = QuizService(db_with_data)
     quiz_service.email_certificate('Test_User', 'Travel Training for Ministry of Magic', 'test_user@freemanjournal.com', b'')
     smtp_instance.starttls.assert_called()
-    smtp_instance.login.called_with(user='Aeolus', password='cycl0ps')
+    smtp_instance.login.assert_called_once_with(user='Aeolus', password='cycl0ps')
 
 
 def test_email_certificate_passing(
