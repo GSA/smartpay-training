@@ -1,5 +1,5 @@
 from collections.abc import Generator
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 import jwt
 from pydantic import TypeAdapter
 import pytest
@@ -11,7 +11,7 @@ from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository, RoleRepository
-from training.schemas import AgencyCreate, RoleCreate
+from training.schemas import AgencyCreate, RoleCreate, UserCertificate
 from training.services import QuizService
 from training.config import settings
 from . import factories
@@ -337,3 +337,24 @@ def valid_role(testdata: dict) -> Generator[RoleCreate, None, None]:
     jsondata = testdata["roles"][0]
     role = RoleCreate(name=jsondata["name"])
     yield role
+
+
+@pytest.fixture
+def valid_user_certificate() -> Generator[schemas.UserCertificate, None, None]:
+    testdata = {
+        'id': 1,
+        'user_id': 2,
+        'user_name': "Molly",
+        'agency': 'Freeman Journal',
+        'quiz_id': 123,
+        'quiz_name': "Travel Training for Agency/Organization Program Coordinators",
+        'completion_date': '2023-08-21T22:59:36'
+    }
+    yield UserCertificate.model_validate(testdata)
+
+
+@pytest.fixture
+def smtp_instance():
+    with patch('training.services.quiz.SMTP') as smtp_mock:
+        with smtp_mock() as smtp:
+            yield smtp
