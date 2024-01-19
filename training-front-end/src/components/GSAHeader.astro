@@ -6,7 +6,7 @@ import closeIcon from '../assets/images/usa-icons/close.svg'
     <div class="usa-navbar">
       <div class="usa-logo" id="header-logo">
           <a href={`${import.meta.env.BASE_URL}`}>
-              <img class="usa-logo-img" src={GSALogo} alt="GSA SmartPay Logo" title="U.S. General Services Administration">
+              <img class="usa-logo-img" src={GSALogo.src} alt="GSA SmartPay Logo" title="U.S. General Services Administration">
           </a>
       </div>
       <button type="button" class="usa-menu-btn cursor-pointer">Menu</button>
@@ -14,7 +14,7 @@ import closeIcon from '../assets/images/usa-icons/close.svg'
     <nav aria-label="Primary navigation" class="usa-nav">
       <div class="usa-nav__inner">
         <button type="button" class="usa-nav__close">
-          <img src={ closeIcon } alt="Close" />
+          <img src={ closeIcon.src } alt="Close" />
         </button>
         <ul id='header_main_menu' class="usa-nav__primary usa-accordion">
           <li class="usa-nav__primary-item">
