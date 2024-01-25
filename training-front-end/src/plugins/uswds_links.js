@@ -4,10 +4,8 @@
  */
 import selector from 'hast-util-select';
 
-const { selectAll } = selector;
-
 export default () => {
-    return node => selectAll('a', node).forEach(node => {
+    return node => selector.selectAll('a', node).forEach(node => {
       const properties = node.properties
       properties.className = 'usa-link'
 
