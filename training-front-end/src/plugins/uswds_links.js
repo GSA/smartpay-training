@@ -2,10 +2,10 @@
  * The purpose of this is to apply the appropriate class to links
  * it will add uswds usa-link--external for non gsa.gov links
  */
-import selector from 'hast-util-select';
+import selectAll from 'hast-util-select';
 
 export default () => {
-    return node => selector.selectAll('a', node).forEach(node => {
+    return node => selectAll('a', node).forEach(node => {
       const properties = node.properties
       properties.className = 'usa-link'
 
