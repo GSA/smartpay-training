@@ -1,5 +1,21 @@
 <script setup>
   import USWDSAlert from './USWDSAlert.vue'
+  import ValidatedTextArea from './ValidatedTextArea.vue';
+
+  const props = defineProps({
+    'emailAddresses': {
+      type: String,
+      required: true
+    },
+    'emailInvitationExpirationDate': {
+      type: String,
+      required: true
+    },
+    'certificationExpirationDate': {
+      type: String,
+      required: true
+    },
+  })
 </script>
 
 <template>
@@ -25,28 +41,12 @@
       role="search"
       @submit.prevent="search"
     >
-      <label 
-        class="usa-label" 
-        for="email-addresses-textarea"
-      >
-        Email Addresses of GSA SmartPay Forum Attendees 
-        <span class="text-secondary-dark">(*Required)</span>
-      </label>
-      <span v-if="validator.$error">
-        <span
-          v-for="error in validator.$errors"
-          :id="error_id"
-          :key="error.$property"
-          class="usa-error-message"
-          role="alert"
-        >
-          {{ error.$message }}
-        </span>
-      </span>
-      <textarea
-        id="email-addresses-textarea"
-        class="usa-textarea usa-input tablet:grid-col-8"
-        name="email-addresses-textarea"
+      <ValidatedTextArea
+        v-model="user_input.name"
+        client:load
+        :validator="v_all_info$.name"
+        label="Full Name"
+        name="name"
       />
       <button 
         class="usa-button"
