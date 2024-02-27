@@ -1,22 +1,26 @@
 from typing import List
-from fastapi import APIRouter, status, HTTPException, Depends
-from training.schemas import Agency
-from training.repositories import AgencyRepository
-from training.api.deps import agency_repository
-from training.schemas.agency import AgencyWithBureaus
-
+from fastapi import APIRouter, status, HTTPException
+from training.schemas.gspc_invite import GspcInvite
 
 router = APIRouter()
 
+#todo limit to admins 
+@router.post("/gspc-invite")
+async def gspc_admin_invite(
+    GspcInvite: GspcInvite
+):
+    try:
+        #Parse emails string into valid and invalid email list
+        GspcInvite.parse()
 
-@router.get("/agencies", response_model=List[AgencyWithBureaus])
-def get_agencies(repo: AgencyRepository = Depends(agency_repository)):
-    return repo.get_agencies_with_bureaus()
+        #todo Save valid emails to db
 
+        #todo Send Email to each valid user 
 
-@router.get("/agencies/{id}", response_model=Agency)
-def get_agency(id: int, repo: AgencyRepository = Depends(agency_repository)):
-    db_agency = repo.find_by_id(id)
-    if db_agency is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return db_agency
+        #Return object with both list for succcess and failure messages
+        return GspcInvite
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid user id or agencies ids"
+        )

@@ -3,7 +3,7 @@
   const props = defineProps({
     'modelValue': {
       type: String,
-      required: false,
+      required: true,
       default: undefined
     },
     'validator': {
@@ -51,7 +51,7 @@
     </span>
     <textarea
       :id="name"
-      class="usa-input usa-input tablet:grid-col-8"
+      class="usa-textarea tablet:grid-col-8"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
       :value="modelValue"

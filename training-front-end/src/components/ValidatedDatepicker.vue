@@ -1,5 +1,5 @@
 <script setup>
-  import {computed} from 'vue'  
+  import {computed , reactive} from 'vue'  
   
   const props = defineProps({
     'modelValue': {
@@ -24,13 +24,37 @@
       required: false,
       default: ''
     },
-  })
-  
-  defineEmits(['update:modelValue'])
+  });
 
-  var error_id = computed(() => props.name + '-input-error-message')
+  const emit = defineEmits(['update:modelValue']);
 
-  console.log(props.name);
+  const error_id = computed(() => props.name + '-input-error-message');
+
+  const user_input = reactive({
+    day: '',
+    month: '',
+    year: ''
+  });
+
+  const updateDate = () =>  {
+    const year = user_input.year;
+    const month = user_input.month;
+    const day = user_input.day;
+    if (year && month && day) {
+      const newDate = new Date(`${year}-${month}-${day}`);
+      if (!isNaN(newDate)) {
+        emit('update:modelValue', newDate);
+        // Reset validation errors if the date is valid
+        props.validator.reset();
+      } else {
+        // Set validation errors if the date is invalid
+        props.validator.setErrors({ invalidDate: 'Please enter a valid date.' });
+      }
+    } else {
+      // Clear validation errors if any input field is empty
+      props.validator.reset();
+    }
+  }
 </script>
 <template>
   <div
@@ -70,11 +94,14 @@
           </label>
           <select 
             :id="props.name + '-month'"
+            v-model="user_input.month"
             class="usa-select" 
             :name="props.name + '-month'"
             aria-describedby="mdHint"
+            :required="validator.$dirty"
+            @input="updateDate"
           >
-            <option value>
+            <option value="">
               - Select -
             </option>
             <option value="1">
@@ -124,13 +151,15 @@
           </label>
           <input 
             :id="props.name + '-day'"
+            v-model="user_input.day"
             class="usa-input" 
             aria-describedby="mdHint" 
             :name="props.name + '-day'"
             maxlength="2" 
             pattern="[0-9]*" 
             inputmode="numeric" 
-            value="" 
+            :required="validator.$dirty" 
+            @input="updateDate"
           >
         </div>
         <div class="usa-form-group usa-form-group--year">
@@ -142,6 +171,7 @@
           </label>
           <input 
             :id="props.name + '-year'"
+            v-model="user_input.year"
             class="usa-input" 
             aria-describedby="mdHint" 
             :name="props.name + '-year'" 
@@ -149,7 +179,8 @@
             maxlength="4" 
             pattern="[0-9]*" 
             inputmode="numeric" 
-            value="" 
+            :required="validator.$dirty"
+            @input="updateDate"
           >
         </div>
       </div>

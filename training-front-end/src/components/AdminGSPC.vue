@@ -1,12 +1,14 @@
 <script setup>
-  import { reactive } from 'vue';
+  import { reactive, onMounted } from 'vue';
   import USWDSAlert from './USWDSAlert.vue'
   import ValidatedTextArea from './ValidatedTextArea.vue';
-  import ValidatedDatePicker from './ValidatedDatePicker.vue';
+  import ValidatedDatePicker from './ValidatedDatepicker.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, email, helpers } from '@vuelidate/validators';
+  import { getUserFromToken } from '../stores/user'
 
   const { withMessage } = helpers
+  const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
   // const props = defineProps({
   //   'emailAddresses': {
@@ -29,15 +31,47 @@
   /* Form validation for additional information if we allow registation here */
   const validations_all_info = {
     emailAddresses: {
-      required: withMessage('Please enter your full name', required)
+      required: withMessage('Please enter the email addresses to invite', required)
     },
     certificationExpirationDate: {
-      required: withMessage('Please enter your agency', required),
+      required: withMessage('Please enter the cerification experation date', required),
     },
   }
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
+  async function submitGspcInvites(){
+    const apiURL = new URL(`${base_url}/api/v1/gspc-invite`)
 
+    try {
+      console.log('certificationExpirationDate value:')
+      console.log(user_input.certificationExpirationDate)
+
+      let res = await fetch(apiURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email_addresses: user_input.emailAddresses,
+          certification_expiration_date: user_input.certificationExpirationDate
+        })
+      });
+
+    if (!res.ok) {
+      if (res.status == 401) {
+        throw new Error("Unauthorized")
+      }
+      throw new Error("Error contacting server")
+    }
+
+      const data = await res.json();
+      console.log('Server response:', data); // Logging the server response
+
+
+    // Handle response as needed
+  } catch (err) {
+    // Handle errors
+  }
+  }
+  
 </script>
 
 <template>
@@ -52,7 +86,7 @@
     <form
       class="usa-form usa-form--large margin-bottom-3 "
       data-test="gspc-form"
-      @submit.prevent="start_email_flow"
+      @submit.prevent="submitGspcInvites"
     >
       <ValidatedTextArea
         v-model="user_input.emailAddresses"
@@ -74,7 +108,7 @@
         type="submit"
       >
         <span class="usa-search__submit-text">
-          Search
+          Submit
         </span>
       </button>
     </form>
