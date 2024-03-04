@@ -1,25 +1,21 @@
 <script setup>
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive } from 'vue';
   import USWDSAlert from './USWDSAlert.vue'
   import ValidatedTextArea from './ValidatedTextArea.vue';
   import ValidatedDatePicker from './ValidatedDatepicker.vue';
   import { useVuelidate } from '@vuelidate/core';
-  import { required, email, helpers } from '@vuelidate/validators';
-  import { getUserFromToken } from '../stores/user'
+  import { required, helpers } from '@vuelidate/validators';
+  import SpinnerGraphic from './SpinnerGraphic.vue'
 
   const { withMessage } = helpers
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
-  // const props = defineProps({
-  //   'emailAddresses': {
-  //     type: String,
-  //     required: true
-  //   },
-  //   'certificationExpirationDate': {
-  //     type: Date,
-  //     required: true
-  //   },
-  // })
+  const showSuccessMessage = ref(false)
+  const showFailedMessage = ref(false)
+  const failedEmailList = ref('')
+  const successCount = ref(0)
+  const isLoading = ref(false)
+  const showSpinner = ref(false)
 
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
@@ -28,6 +24,15 @@
     certificationExpirationDate: undefined
   })
 
+  const isNotPast = helpers.withParams(
+    { type: 'notPast' },
+    (value) => {
+      const currentDate = new Date();
+      const inputDate = new Date(value);
+      return inputDate >= currentDate;
+    }
+  );
+
   /* Form validation for additional information if we allow registation here */
   const validations_all_info = {
     emailAddresses: {
@@ -35,17 +40,28 @@
     },
     certificationExpirationDate: {
       required: withMessage('Please enter the cerification experation date', required),
+      isNotPast: withMessage('The date must not be in the past', isNotPast)
     },
   }
+
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
   async function submitGspcInvites(){
+    const validation = v_all_info$
+    const isFormValid = await validation.value.$validate()
+
+    if (!isFormValid) {
+      showSpinner.value = false;
+      return
+    }
+
+    emit('startLoading')
+    isLoading.value = true
+    showSpinner.value = true
+
     const apiURL = new URL(`${base_url}/api/v1/gspc-invite`)
 
     try {
-      console.log('certificationExpirationDate value:')
-      console.log(user_input.certificationExpirationDate)
-
       let res = await fetch(apiURL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -55,21 +71,43 @@
         })
       });
 
-    if (!res.ok) {
-      if (res.status == 401) {
-        throw new Error("Unauthorized")
+      if (!res.ok) {
+        if (res.status == 401) {
+          throw new Error("Unauthorized")
+        }
+        throw new Error("Error contacting server")
       }
-      throw new Error("Error contacting server")
+
+      if (res.status == 200) {
+        const data = await res.json();
+
+        if (data.valid_emails.length > 0) {
+          showSuccessMessage.value = true;
+          successCount.value = data.valid_emails.length;
+        } else{
+          showSuccessMessage.value = false;
+        }
+        
+        if (data.invalid_emails.length > 0) {
+          showFailedMessage.value = true
+          failedEmailList.value = data.invalid_emails.join(', ');
+        } else{
+          showFailedMessage.value = false
+        }
+      }
+
+      isLoading.value = false
+      showSpinner.value = false
+      emit('endLoading')
+    
+    } catch (err) {
+      isLoading.value = false
+      showSpinner.value = false
+      const e = new Error("Sorry, we had an error connecting to the server.")
+      e.name = "Server Error"
+      emit('endLoading')
+      throw e
     }
-
-      const data = await res.json();
-      console.log('Server response:', data); // Logging the server response
-
-
-    // Handle response as needed
-  } catch (err) {
-    // Handle errors
-  }
   }
   
 </script>
@@ -103,14 +141,49 @@
         name="certification-expiration-date"
         hint-text="For example: January 19 2000"
       />
-      <button 
-        class="usa-button"
-        type="submit"
+      <div>
+        <USWDSAlert
+          v-if="showFailedMessage"
+          status="error"
+          class="usa-alert--slim"
+          :has-heading="false"
+        >
+          Emails failed to send to: {{ failedEmailList }}.
+        </USWDSAlert>
+        <USWDSAlert
+          v-if="showSuccessMessage"
+          status="success"
+          class="usa-alert--slim"
+          :has-heading="false"
+        >
+          Emails successfully sent to {{ successCount }} people.
+        </USWDSAlert>
+      </div>
+      <div class="grid-row">
+        <div class="grid-col tablet:grid-col-3 ">
+          <input
+            class="usa-button"
+            type="submit"
+            value="Submit"
+            :disabled="isLoading"
+            data-test="submit"
+          >
+        </div>
+        <!--display spinner along with submit button in one row for desktop-->
+        <div
+          v-if="showSpinner"
+          class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
+        >
+          <SpinnerGraphic />
+        </div>
+      </div>
+      <!--display spinner under submit button for mobile view-->
+      <div
+        v-if="showSpinner"
+        class="tablet:display-none margin-top-1 text-center"
       >
-        <span class="usa-search__submit-text">
-          Submit
-        </span>
-      </button>
+        <SpinnerGraphic />
+      </div>
     </form>
   </div>
 </template>

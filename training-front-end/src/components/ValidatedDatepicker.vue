@@ -44,17 +44,10 @@
       const newDate = new Date(`${year}-${month}-${day}`);
       if (!isNaN(newDate)) {
         emit('update:modelValue', newDate);
-        // Reset validation errors if the date is valid
-        props.validator.reset();
-      } else {
-        // Set validation errors if the date is invalid
-        props.validator.setErrors({ invalidDate: 'Please enter a valid date.' });
-      }
-    } else {
-      // Clear validation errors if any input field is empty
-      props.validator.reset();
+      } 
     }
   }
+  
 </script>
 <template>
   <div

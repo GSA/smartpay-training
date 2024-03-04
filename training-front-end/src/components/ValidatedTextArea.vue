@@ -54,7 +54,6 @@
       class="usa-textarea tablet:grid-col-8"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
-      :value="modelValue"
       :aria-describedby="validator.$error? error_id: null"
       :readonly="readonly"
       @input="$emit('update:modelValue', $event.target.value)"
