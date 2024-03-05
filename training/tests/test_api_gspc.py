@@ -12,12 +12,14 @@ client = TestClient(app)
 
 ENDPOINT = "/api/v1/gspc-invite"
 
+
 def post_gspc_invite(payload, goodJWT,):
     return client.post(
         ENDPOINT, 
         json=payload, 
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
+
 
 @pytest.fixture
 def admin_user():
@@ -27,9 +29,11 @@ def admin_user():
         'roles': ['Admin']
     }
 
+
 @pytest.fixture
 def goodJWT(admin_user):
     return jwt.encode(admin_user, settings.JWT_SECRET, algorithm="HS256")
+
 
 @pytest.fixture
 def fake_gspc_invite_repo():
@@ -37,6 +41,7 @@ def fake_gspc_invite_repo():
     app.dependency_overrides[gspc_invite_repository] = lambda: mock
     yield mock
     app.dependency_overrides = {}
+
 
 @pytest.fixture
 def standard_payload():
@@ -46,6 +51,7 @@ def standard_payload():
         "certification_expiration_date": tomorrows_date.strftime('%Y-%m-%dT00:00:00.000Z'),
         "email_addresses": "ValidEmail@test.com, ValidEmail2@test.com, invalidEmail, @invalidEmail.2"
     }
+
 
 class TestGspc:
     @patch('training.config.settings', 'JWT_SECRET', 'super_secret')

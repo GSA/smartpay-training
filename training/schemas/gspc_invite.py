@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, field_validator
+from pydantic import BaseModel, field_validator
 from datetime import datetime, timezone
 from typing import List, Optional
 import re
@@ -28,20 +28,20 @@ class GspcInvite(BaseModel):
 
         emails = self.email_addresses.split(',')
         
-        #Instantiate list
+        # Instantiate list
         self.valid_emails = []
         self.invalid_emails = []
 
-        #Regex for validating an Email
+        # Regex for validating an Email
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
-        #Sort
+        # Sort
         for email in emails:
-            #Remove whitespace
+            # Remove whitespace
             email = email.strip()
             if email == "":
                 continue
-            if(re.fullmatch(regex, email)):
+            if (re.fullmatch(regex, email)):
                 self.valid_emails.append(email)
             else:
                 self.invalid_emails.append(email)
