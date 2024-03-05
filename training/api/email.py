@@ -47,10 +47,10 @@ If you have any questions or need further assistance, email us at gsa_smartpay@g
 <p>Thank you.</p>
 ''')
 
-#Todo move email function from quiz.py and turn this into a service so that it can be mocked 
 
+# Todo move email function from quiz.py and turn this into a service so that it can be mocked 
 def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
-    #Todo clean this up 
+    # Todo clean this up 
     if training_title and "certificate" in training_title.lower():
         subject = "GSA SmartPay® training certificate(s)"
         email_subject = "Access your GSA SmartPay training certificate(s)"
@@ -79,8 +79,9 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
         finally:
             smtp.quit()
 
+
 def send_gspc_invite_email(to_email: EmailStr, link: str) -> None:
-    body = GSPC_INVITE_EMAIL_TEMPLATE.substitute({ "link": link})
+    body = GSPC_INVITE_EMAIL_TEMPLATE.substitute({"link": link})
     message = EmailMessage()
     message.set_content(body, subtype="html")
     message["Subject"] = "Paceholder"
