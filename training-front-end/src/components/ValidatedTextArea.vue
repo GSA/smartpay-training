@@ -51,11 +51,12 @@
     </span>
     <textarea
       :id="name"
-      class="usa-textarea tablet:grid-col-8"
+      class="usa-textarea tablet:grid-col-12"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
       :aria-describedby="validator.$error? error_id: null"
       :readonly="readonly"
+      rows="10"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </div>    

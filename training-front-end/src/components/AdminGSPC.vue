@@ -111,7 +111,6 @@
   }
   
 </script>
-
 <template>
   <div class="padding-top-4 padding-bottom-4 grid-container">
     <h2>GSPC Send Email Notifications</h2>
@@ -187,3 +186,8 @@
     </form>
   </div>
 </template>
+<style>
+  .usa-textarea {
+    height: 15rem;
+  }
+</style>

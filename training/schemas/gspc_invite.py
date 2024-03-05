@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, validator
+from pydantic import BaseModel, ValidationError, field_validator
 from datetime import datetime, timezone
 from typing import List, Optional
 import re
@@ -10,13 +10,17 @@ class GspcInvite(BaseModel):
     valid_emails: Optional[List[str]] = []
     invalid_emails: Optional[List[str]] = []
 
-    @validator('certification_expiration_date')
+    @field_validator('certification_expiration_date')
     @classmethod
     def check_certification_expiration_date(cls, value):
         value is datetime
         if value < datetime.now(timezone.utc):
             raise ValueError("Certification expiration date cannot be in the past")
         return value
+    
+    # def __init__(self, email_addresses, certification_expiration_date):
+    #     self.email_addresses = email_addresses
+    #     self.certification_expiration_date = certification_expiration_date
 
     def parse(self):
         if not self.email_addresses:

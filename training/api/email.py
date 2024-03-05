@@ -26,7 +26,7 @@ email us at gsa_smartpay@gsa.gov.
 ''')
 
 GSPC_INVITE_EMAIL_TEMPLATE = Template('''
-<p>Hello $name,</p>
+<p>Hello</p>
 
 <p>
 During the GSA SmartPay Training Forum, you completed the required coursework for the GSA SmartPay Program Certification (GSPC) defined by Smart Bulletin 22.
@@ -37,9 +37,9 @@ GSPC recipients are also required to have a minimum of six (6) months of continu
 <p>
 Please do not share this link with others as it is unique to you.
 </p>
-<p>
-    (link placeholder)
-</p>
+                                      
+<p><a href="$link">$link</a></p>
+                                      
 <p>
 After completing this action, your GSPC will be immediately emailed to you and available for download within the training system.
 If you have any questions or need further assistance, email us at gsa_smartpay@gsa.gov.
@@ -47,7 +47,7 @@ If you have any questions or need further assistance, email us at gsa_smartpay@g
 <p>Thank you.</p>
 ''')
 
-#todo move email function from quiz.py into this service 
+#Todo move email function from quiz.py and turn this into a service so that it can be mocked 
 
 def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
     #Todo clean this up 
@@ -79,9 +79,8 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
         finally:
             smtp.quit()
 
-
-def send_gspc_invite_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
-    body = GSPC_INVITE_EMAIL_TEMPLATE #.substitute({ "link": link})
+def send_gspc_invite_email(to_email: EmailStr, link: str) -> None:
+    body = GSPC_INVITE_EMAIL_TEMPLATE.substitute({ "link": link})
     message = EmailMessage()
     message.set_content(body, subtype="html")
     message["Subject"] = "Paceholder"
