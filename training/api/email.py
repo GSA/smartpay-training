@@ -48,9 +48,9 @@ If you have any questions or need further assistance, email us at gsa_smartpay@g
 ''')
 
 
-# Todo move email function from quiz.py and turn this into a service so that it can be mocked 
+# Todo move email function from quiz.py and turn this into a service so that it can be mocked
 def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
-    # Todo clean this up 
+    # Todo clean this up
     if training_title and "certificate" in training_title.lower():
         subject = "GSA SmartPay® training certificate(s)"
         email_subject = "Access your GSA SmartPay training certificate(s)"

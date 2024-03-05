@@ -8,14 +8,16 @@ from training.api.auth import RequireRole
 
 router = APIRouter()
 
-
-# todo documentation
 @router.post("/gspc-invite")
 async def gspc_admin_invite(
     gspcInvite: GspcInvite,
     repo: GspcInviteRepository = Depends(gspc_invite_repository),
     user=Depends(RequireRole(["Admin"]))
 ):
+    '''
+    Given a list of emails we parse them into two list (valid and invalid).
+    Then we log each of the valid emails to the db and shoot of an email to each.
+    '''
     try:
         # Parse emails string into valid and invalid email list
         gspcInvite.parse()
