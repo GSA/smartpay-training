@@ -15,8 +15,8 @@ ENDPOINT = "/api/v1/gspc-invite"
 
 def post_gspc_invite(payload, goodJWT,):
     return client.post(
-        ENDPOINT, 
-        json=payload, 
+        ENDPOINT,
+        json=payload,
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
 
@@ -95,4 +95,3 @@ class TestGspc:
         with patch('training.api.api_v1.gspc.logging') as logger:
             post_gspc_invite(standard_payload, goodJWT)
             assert logger.info.call_count == 2
-    

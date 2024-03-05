@@ -33,13 +33,13 @@ During the GSA SmartPay Training Forum, you completed the required coursework fo
 </p>
 <p>
 GSPC recipients are also required to have a minimum of six (6) months of continuous, hands-on experience working with the GSA SmartPay program.
-</p>                                  
+</p>
 <p>
 Please do not share this link with others as it is unique to you.
 </p>
-                                      
+
 <p><a href="$link">$link</a></p>
-                                      
+
 <p>
 After completing this action, your GSPC will be immediately emailed to you and available for download within the training system.
 If you have any questions or need further assistance, email us at gsa_smartpay@gsa.gov.

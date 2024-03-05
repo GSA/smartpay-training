@@ -6,7 +6,7 @@ import re
 
 class GspcInvite(BaseModel):
     email_addresses: str
-    certification_expiration_date: datetime 
+    certification_expiration_date: datetime
     valid_emails: Optional[List[str]] = []
     invalid_emails: Optional[List[str]] = []
 
@@ -17,7 +17,7 @@ class GspcInvite(BaseModel):
         if value < datetime.now(timezone.utc):
             raise ValueError("Certification expiration date cannot be in the past")
         return value
-    
+
     # def __init__(self, email_addresses, certification_expiration_date):
     #     self.email_addresses = email_addresses
     #     self.certification_expiration_date = certification_expiration_date
@@ -27,7 +27,7 @@ class GspcInvite(BaseModel):
             return
 
         emails = self.email_addresses.split(',')
-        
+
         # Instantiate list
         self.valid_emails = []
         self.invalid_emails = []

@@ -22,7 +22,7 @@ async def gspc_admin_invite(
 
         for email in gspcInvite.valid_emails:
             repo.create(email=email, certification_expiration_date=gspcInvite.certification_expiration_date)
-            # If performance becomes an issue use multithreading to send the emails 
+            # If performance becomes an issue use multithreading to send the emails
             try:
                 send_gspc_invite_email(to_email=email, link="TBD")
                 logging.info(f"Sent gspc invite email to {email}")

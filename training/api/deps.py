@@ -40,5 +40,6 @@ def quiz_service(db: Session = Depends(db)) -> QuizService:
 def certificate_repository(db: Session = Depends(db)) -> CertificateRepository:
     return CertificateRepository(db)
 
+
 def gspc_invite_repository(db: Session = Depends(db)) -> GspcInviteRepository:
     return GspcInviteRepository(db)
