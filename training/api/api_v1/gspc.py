@@ -8,6 +8,7 @@ from training.api.auth import RequireRole
 
 router = APIRouter()
 
+
 @router.post("/gspc-invite")
 async def gspc_admin_invite(
     gspcInvite: GspcInvite,
