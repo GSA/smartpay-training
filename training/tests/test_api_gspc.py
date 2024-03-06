@@ -87,11 +87,11 @@ class TestGspc:
 
     @patch('training.config.settings', 'JWT_SECRET', 'super_secret')
     @patch('training.api.api_v1.gspc.send_gspc_invite_email')
-    def test_gspc_invite_sends_emails_to_valid_emails(self, goodJWT, standard_payload, fake_gspc_invite_repo):
+    def test_gspc_invite_sends_emails_to_valid_emails(self, send_gspc_invite_email, goodJWT, standard_payload, fake_gspc_invite_repo):
         '''Given 2 valid emails send 2 invite emails'''
-        with patch('training.api.api_v1.gspc.send_gspc_invite_email') as mock_send_email:
-            post_gspc_invite(standard_payload, goodJWT)
-            assert mock_send_email.call_count == 2
+
+        post_gspc_invite(standard_payload, goodJWT)
+        assert send_gspc_invite_email.call_count == 2
 
     @patch('training.config.settings', 'JWT_SECRET', 'super_secret')
     @patch('training.api.api_v1.gspc.send_gspc_invite_email')
