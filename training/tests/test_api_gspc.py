@@ -58,9 +58,8 @@ class TestGspc:
     @patch('training.api.api_v1.gspc.send_gspc_invite_email')
     def test_gspc_invite_success(self, send_gspc_invite_email, goodJWT, standard_payload, fake_gspc_invite_repo):
         '''Given 2 valid emails it should call the db create method for each'''
-        send_gspc_invite_email.return_value = "email response"
         response = post_gspc_invite(standard_payload, goodJWT)
-        
+
         assert response.status_code == 200
         assert fake_gspc_invite_repo.create.call_count == 2
 
