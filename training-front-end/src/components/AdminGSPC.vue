@@ -113,12 +113,12 @@
 </script>
 <template>
   <div class="padding-top-4 padding-bottom-4 grid-container">
-    <h2>GSPC Send Email Notifications</h2>
+    <h2>Send Invitations for GSA SmartPay Program Certification</h2>
     <p>
-      Content here duis vulputate pellentesque commodo. Nullam congue nibh a diam porta, at tincidunt mi pellentesque. Curabitur at mollis erat. Pellentesque ultricies libero sem, sed ornare nisl faucibus sit amet. In vel dictum tortor. Nullam iaculis efficitur ipsum. Quisque pharetra euismod augue et placerat.
+      After the attendees finish the necessary coursework for the GSA SmartPay Program Certification (GSPC), as stated in Smart Bulletin 22 during the GSA SmartPay Training Forum, you can use the form below to send each attendee an email containing a link. This link will enable them to certify their hands-on experience and obtain a PDF copy of their GSPC.
     </p>
     <p>
-      Duis congue, eros eu volutpat suscipit, odio dui varius nisi, id bibendum ipsum nisi at libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer felis velit, sollicitudin a leo sagittis, iaculis efficitur turpis. Vivamus id mi sed sapien facilisis consequat pulvinar sed orci. Morbi tellus quam, consectetur in aliquet eu, auctor id urna.
+      Please fill out the form below by entering the attendees' email addresses as a comma-separated list and selecting an expiration date for their certificate. The expiration date should be three years from the date of the GSA SmartPay Training Forum. This form will verify the entered email addresses and notify you if any are invalid.
     </p>
     <form
       class="usa-form usa-form--large margin-bottom-3 "
