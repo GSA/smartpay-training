@@ -18,10 +18,6 @@ class GspcInvite(BaseModel):
             raise ValueError("Certification expiration date cannot be in the past")
         return value
 
-    # def __init__(self, email_addresses, certification_expiration_date):
-    #     self.email_addresses = email_addresses
-    #     self.certification_expiration_date = certification_expiration_date
-
     def parse(self):
         if not self.email_addresses:
             return

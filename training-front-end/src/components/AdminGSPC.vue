@@ -6,7 +6,10 @@
   import { useVuelidate } from '@vuelidate/core';
   import { required, helpers } from '@vuelidate/validators';
   import SpinnerGraphic from './SpinnerGraphic.vue'
+  import { useStore } from '@nanostores/vue'
+  import { profile} from '../stores/user'
 
+  const user = useStore(profile)
   const { withMessage } = helpers
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
 
@@ -64,7 +67,7 @@
     try {
       let res = await fetch(apiURL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${user.value.jwt}` },
         body: JSON.stringify({
           email_addresses: user_input.emailAddresses,
           certification_expiration_date: user_input.certificationExpirationDate
@@ -147,7 +150,7 @@
           class="usa-alert--slim"
           :has-heading="false"
         >
-          Emails failed to send to: {{ failedEmailList }}.
+          Emails failed to send to: {{ failedEmailList }}
         </USWDSAlert>
         <USWDSAlert
           v-if="showSuccessMessage"
