@@ -77,7 +77,7 @@ class UserRepository(BaseRepository[models.User]):
             user_search_result = UserSearchResult(users=search_results, total_count=count)
             return user_search_result
 
-    def update_user(self, user_id: int, user: schemas.User) -> models.User:
+    def update_user(self, user_id: int, user: schemas.UserUpdate) -> models.User:
         """
         Updates user name and agency values
         :param user_id: User's ID to update

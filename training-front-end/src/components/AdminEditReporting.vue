@@ -142,7 +142,10 @@
     </div>
   </div>
   <div v-if="editing">
-    <admin-edit-user-details></admin-edit-user-details>
+    <admin-edit-user-details
+    :userToEdit="user"
+    @cancel="$emit('cancel')">
+    </admin-edit-user-details>
   </div>
   
   

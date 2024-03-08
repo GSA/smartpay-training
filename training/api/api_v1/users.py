@@ -3,7 +3,7 @@ from io import StringIO
 import logging
 from training.api.auth import RequireRole
 from fastapi import APIRouter, status, HTTPException, Response, Depends, Query
-from training.schemas import User, UserCreate, UserSearchResult
+from training.schemas import User, UserCreate, UserSearchResult, UserUpdate
 from training.repositories import UserRepository
 from training.api.deps import user_repository
 from training.api.auth import user_from_form
@@ -87,10 +87,10 @@ def get_users(
     return repo.get_users(searchText, page_number)
 
 
-@router.put("/users/{user_id}", response_model=User)
+@router.patch("/users/{user_id}", response_model=User)
 def update_user_by_id(
         user_id: int,
-        updated_user: User,
+        updated_user: UserUpdate,
         repo: UserRepository = Depends(user_repository),
         user=Depends(RequireRole(["Admin"]))
 ):
