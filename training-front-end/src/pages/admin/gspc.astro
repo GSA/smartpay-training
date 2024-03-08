@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroTraining from '@components/HeroTraining.astro';
+import AuthRequired from '@components/AuthRequired.vue';
+import AdminGSPC from '@components/AdminGSPC.vue';
+
+const pageTitle = "GSA SmartPay® Program Certification (GSPC)";
+---
+
+<BaseLayout title={pageTitle} description="Card/Account Holders and Approving Officials">
+  <HeroTraining background_class='bg_smartpay_cool_grey'>
+    {pageTitle}
+    <span slot="subheader">
+      Administrators
+    </span>
+  </HeroTraining>
+  <AuthRequired client:only>
+    <AdminGSPC client:only />
+  </AuthRequired>
+</BaseLayout>

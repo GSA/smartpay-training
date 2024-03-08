@@ -1,6 +1,6 @@
 from collections.abc import Generator
 from fastapi import Depends
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, CertificateRepository
+from training.repositories import AgencyRepository, UserRepository, QuizRepository, CertificateRepository, GspcInviteRepository
 from training.services import QuizService
 from training.database import SessionLocal
 from sqlalchemy.orm import Session
@@ -39,3 +39,7 @@ def quiz_service(db: Session = Depends(db)) -> QuizService:
 
 def certificate_repository(db: Session = Depends(db)) -> CertificateRepository:
     return CertificateRepository(db)
+
+
+def gspc_invite_repository(db: Session = Depends(db)) -> GspcInviteRepository:
+    return GspcInviteRepository(db)
