@@ -95,7 +95,7 @@ class TestGspc:
 
     @patch('training.config.settings', 'JWT_SECRET', 'super_secret')
     @patch('training.api.api_v1.gspc.send_gspc_invite_email')
-    def test_gspc_invite_logs_emails(self, send_gspc_invite_email, goodJWT, standard_payload, fake_gspc_invite_repo):
+    def test_gspc_invite_loggs_emails(self, send_gspc_invite_email, goodJWT, standard_payload, fake_gspc_invite_repo):
         '''Given 2 valid emails logger logs emails sent'''
         with patch('training.api.api_v1.gspc.logging') as logger:
             post_gspc_invite(standard_payload, goodJWT)

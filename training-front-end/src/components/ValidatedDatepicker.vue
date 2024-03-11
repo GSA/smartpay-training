@@ -1,5 +1,5 @@
 <script setup>
-  import {computed , reactive, watch} from 'vue'  
+  import {computed , reactive} from 'vue'  
   
   const props = defineProps({
     'modelValue': {
@@ -26,22 +26,6 @@
     },
   });
 
-  const options = [
-      { txt: '- Select -', value: ""},
-      { txt: '01 - January', value: 0 },
-      { txt: '02 - February', value: 1 },
-      { txt: '03 - March', value: 2 },
-      { txt: '04 - April', value: 3 },
-      { txt: '05 - May', value: 4 },
-      { txt: '06 - June', value: 5 },
-      { txt: '07 - July', value: 6 },
-      { txt: '08 - August', value: 7 },
-      { txt: '09 - September', value: 8 },
-      { txt: '10 - October', value: 9 },
-      { txt: '11 - November', value: 10 },
-      { txt: '12 - December', value: 11 }
-    ]
-
   const emit = defineEmits(['update:modelValue']);
 
   const error_id = computed(() => props.name + '-input-error-message');
@@ -52,35 +36,17 @@
     year: ''
   });
 
-  const updateMonth = (selectedValue) => {
-    user_input.month = selectedValue;
-    updateDate()
-  }
-
   const updateDate = () =>  {
     const year = user_input.year;
     const month = user_input.month;
     const day = user_input.day;
-    if (year.length == 4 && month && day) {
-      const newDate = new Date(year, month, day, '00', '00', '00');
+    if (year && month && day) {
+      const newDate = new Date(`${year}-${month}-${day}`);
       if (!isNaN(newDate)) {
         emit('update:modelValue', newDate);
       } 
     }
   }
-
-  watch(() => props.modelValue, (newValue) => {
-    const newDate = new Date(newValue);
-    if (!isNaN(newDate)) {
-      user_input.day = String(newDate?.getDate())
-      user_input.month = newDate?.getMonth()
-      user_input.year = String(newDate?.getFullYear())
-    } else{
-      user_input.day = '';
-      user_input.month = '';
-      user_input.year = '';
-    }
-  });
   
 </script>
 <template>
@@ -126,14 +92,46 @@
             :name="props.name + '-month'"
             aria-describedby="mdHint"
             :required="validator.$dirty"
-            @change="updateMonth($event.target.value)"
+            @input="updateDate"
           >
-            <option
-              v-for="option in options" 
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.txt }}
+            <option value="">
+              - Select -
+            </option>
+            <option value="1">
+              01 - January
+            </option>
+            <option value="2">
+              02 - February
+            </option>
+            <option value="3">
+              03 - March
+            </option>
+            <option value="4">
+              04 - April
+            </option>
+            <option value="5">
+              05 - May
+            </option>
+            <option value="6">
+              06 - June
+            </option>
+            <option value="7">
+              07 - July
+            </option>
+            <option value="8">
+              08 - August
+            </option>
+            <option value="9">
+              09 - September
+            </option>
+            <option value="10">
+              10 - October
+            </option>
+            <option value="11">
+              11 - November
+            </option>
+            <option value="12">
+              12 - December
             </option>
           </select>
         </div>

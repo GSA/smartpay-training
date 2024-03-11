@@ -51,7 +51,6 @@
     </span>
     <textarea
       :id="name"
-      :value="modelValue"
       class="usa-textarea tablet:grid-col-12"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"

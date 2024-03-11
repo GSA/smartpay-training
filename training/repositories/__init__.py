@@ -5,4 +5,3 @@ from .quiz_completion import QuizCompletionRepository
 from .certificate import CertificateRepository
 from .role import RoleRepository
 from .gspc_invite import GspcInviteRepository
-from .gspc_completion import GspcCompletionRepository
