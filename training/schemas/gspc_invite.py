@@ -13,7 +13,6 @@ class GspcInvite(BaseModel):
     @field_validator('certification_expiration_date')
     @classmethod
     def check_certification_expiration_date(cls, value):
-        value is datetime
         if value < datetime.now(timezone.utc):
             raise ValueError("Certification expiration date cannot be in the past")
         return value
