@@ -4,17 +4,17 @@ import HeroTraining from '@components/HeroTraining.astro';
 import AdminSearchUser from '@components/AdminSearchUser.vue';
 import AuthRequired from '@components/AuthRequired.vue';
 
-const pageTitle = "Admin Panel";
+const pageTitle = "Admin User Search";
 ---
-<BaseLayout title={pageTitle} description="GSA SmartPay admin panel for administrators">
+
+<BaseLayout title={pageTitle} description="GSA SmartPay admin panel for user search">
   <HeroTraining background_class='bg_smartpay_cool_grey'>
     Admin Panel
     <span slot="subheader">
-        Administrators
+        User Search
     </span>
   </HeroTraining>
-  
   <AuthRequired client:only>
     <AdminSearchUser client:only />
-  </AuthRequired>
+   </AuthRequired>
 </BaseLayout>
