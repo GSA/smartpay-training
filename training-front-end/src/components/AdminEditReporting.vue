@@ -19,7 +19,7 @@
   // Copy to avoid modifying parent prop and allow cancelling edits 
   const agencies = ref([...props.user.report_agencies])
 
-  defineEmits(['cancel', 'save'])
+  const emit = defineEmits(['cancel', 'save', 'userUpdateSuccess'])
 
   const agency_options = useStore(agencyList)
   const bureaus = useStore(bureauList)
@@ -50,6 +50,15 @@
   watch(() => user_input.agency_id, async() => {
     setSelectedAgencyId(user_input.agency_id)
   })
+  
+  async function updateUser(successMessage) {
+    emit('userUpdateSuccess', successMessage)
+    editing.value = false
+  }
+  
+  function cancelUpdate() {
+    editing.value = false;
+  }
 </script>
 
 <template>
@@ -67,68 +76,24 @@
         User Profile
       </h3>
     </div>
-    <div class="grid-row grid-gap">
+    <div class="grid-row grid-gap padding-top-4">
       <div class="tablet:grid-col">
-        <label
-            for="input-full-name"
-            class="usa-label"
-        >
-          Full Name
-        </label>
-        <input
-            id="input-full-name"
-            class="usa-input bg-base-lightest"
-            name="input-full-name"
-            :value="user.name"
-            :readonly="true"
-        >
+        <dt class="font-sans-xs">Full Name</dt>
+        <dd :aria-label="'User Name: ' + user.name" class="margin-left-0 text-bold font-sans-sm">{{ user.name }}</dd>
       </div>
       <div class="tablet:grid-col">
-        <label
-            for="input-email"
-            class="usa-label"
-        >
-          Email
-        </label>
-        <input
-            id="input-email"
-            class="usa-input bg-base-lightest"
-            name="input-email"
-            :value="user.email"
-            :readonly="true"
-        >
+        <dt class="font-sans-xs">Email</dt>
+        <dd :aria-label="'Email: ' + user.email" class="margin-left-0 text-bold font-sans-sm">{{ user.email }}</dd>
       </div>
     </div>
-    <div class="grid-row grid-gap">
+    <div class="grid-row grid-gap padding-top-2">
       <div class="tablet:grid-col">
-        <label
-            for="input-agency"
-            class="usa-label"
-        >
-          Agency / Organization
-        </label>
-        <input
-            id="input-agency"
-            class="usa-input bg-base-lightest"
-            name="input-agency"
-            :value="user.agency.name"
-            :readonly="true"
-        >
+        <dt class="font-sans-xs">Agency / Organization</dt>
+        <dd :aria-label="'Agency / Organization: ' + user.agency.name" class="margin-left-0 text-bold font-sans-sm">{{ user.agency.name }}</dd>
       </div>
       <div class="tablet:grid-col">
-        <label
-            class="usa-label"
-            for="input-bureau"
-        >
-          Sub-Agency, Organization, or Bureau
-        </label>
-        <input
-            id="input-bureau"
-            class="usa-input bg-base-lightest"
-            name="input-bureau"
-            :value="user.agency.bureau"
-            :readonly="true"
-        >
+        <dt class="font-sans-xs">Sub-Agency, Organization, or Bureau</dt>
+        <dd :aria-label="'Sub-Agency, Organization, or Bureau: ' + user.agency.bureau" class="margin-left-0 text-bold font-sans-sm">{{ user.agency.bureau }}</dd>
       </div>
     </div>
     <div class="margin-top-3">
@@ -144,7 +109,8 @@
   <div v-if="editing">
     <admin-edit-user-details
     :userToEdit="user"
-    @cancel="$emit('cancel')">
+    @cancel="cancelUpdate"
+    @complete-user-update="updateUser">
     </admin-edit-user-details>
   </div>
   

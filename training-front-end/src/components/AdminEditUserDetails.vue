@@ -2,7 +2,7 @@
 
 import ValidatedInput from "@components/ValidatedInput.vue";
 import {onBeforeMount, reactive, ref, watch} from "vue";
-import {email, helpers, required, requiredIf} from "@vuelidate/validators";
+import {helpers, required, requiredIf} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
 import ValidatedSelect from "@components/ValidatedSelect.vue";
 import {useStore} from "@nanostores/vue";
@@ -24,12 +24,13 @@ const bureaus = useStore(bureauList)
 const isSaving = ref(false)
 const error = ref()
 
-defineEmits(['cancel'])
+const emit = defineEmits(['cancel', 'completeUserUpdate'])
 
 const currentUserAgencyId = agency_options.value.find(agency => agency.name === props.userToEdit.agency.name).id
 
 const user_input = reactive({
   name: props.userToEdit.name,
+  email: props.userToEdit.email,
   agency_id: currentUserAgencyId,
   bureau_id: props.userToEdit.agency_id
 })
@@ -69,11 +70,7 @@ async function update_user_info() {
   if (bureau_id) {
     user_data.agency_id = bureau_id
   }
-
-  console.log(user_data)
-  console.log(JSON.stringify({
-    updated_user: user_data
-  }))
+  
   const apiURL = new URL(`${base_url}/api/v1/users/${props.userToEdit.id}`)
   try {
     const response = await fetch(apiURL,  {
@@ -82,15 +79,17 @@ async function update_user_info() {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${user.value.jwt}`
       },
-      body: JSON.stringify({
-        updated_user: user_data
-      })
+      body: JSON.stringify(user_data)
     })
     if (!response.ok) {
-      const message = await response.text()
-      throw new Error(message)
+      if (res.status === 401) {
+        throw new Error("Unauthorized")
+      }
+      throw new Error("Error contacting server")
     }
     let updatedUser = await response.json()
+    let successMessage = `Successfully updated ${updatedUser.email}`
+    emit('completeUserUpdate', successMessage)
   } catch (err) {
     error.value = err
   }

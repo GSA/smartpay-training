@@ -14,8 +14,7 @@ class UserCreate(UserBase):
     pass
 
 
-class UserUpdate(BaseModel):
-    name: str
+class UserUpdate(UserBase):
     agency_id: int
 
 

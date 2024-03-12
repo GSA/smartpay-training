@@ -103,6 +103,7 @@ def update_user_by_id(
     :return: Returns the updated user object
     """
     try:
+        logging.info(f"{user['email']} updated user {updated_user.email} user profile")
         return repo.update_user(user_id, updated_user)
     except ValueError:
         raise HTTPException(
