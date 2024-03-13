@@ -37,7 +37,6 @@ scim:
   users:
     - paul|wombat|paul@uaa.test|Paul|Smith|openid
     - stefan|wallaby|stefan@uaa.test|Stefan|Schmidt|openid
-    - dan|felder|dan.felder@gsa.gov|Dan|Felder|openid
 
 oauth:
   user:
