@@ -102,6 +102,11 @@ def update_user_by_id(
     :param user: Required role to complete operation
     :return: Returns the updated user object
     """
+    if user["id"] == user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can not update your own profile"
+        )
     try:
         logging.info(f"{user['email']} updated user {updated_user.email} user profile")
         return repo.update_user(user_id, updated_user)

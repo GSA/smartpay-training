@@ -23,6 +23,7 @@ const agency_options = useStore(agencyList)
 const bureaus = useStore(bureauList)
 const isSaving = ref(false)
 const error = ref()
+const show_error = ref(false)
 
 const emit = defineEmits(['cancel', 'completeUserUpdate'])
 
@@ -59,6 +60,8 @@ onBeforeMount(async () => {
 })
 
 async function update_user_info() {
+  error.value = ref()
+  show_error.value = false
   const isFormValid = await v_all_info$.value.$validate()
   
   if (!isFormValid) {
@@ -72,8 +75,9 @@ async function update_user_info() {
   }
   
   const apiURL = new URL(`${base_url}/api/v1/users/${props.userToEdit.id}`)
+  let response = ref();
   try {
-    const response = await fetch(apiURL,  {
+     response = await fetch(apiURL, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -81,20 +85,43 @@ async function update_user_info() {
       },
       body: JSON.stringify(user_data)
     })
+  } catch (error) {
+    setError({
+      name: 'Server Error',
+      message: 'Sorry, we had an error connecting to the server.'
+    })
+    return
+  }
     if (!response.ok) {
-      if (res.status === 401) {
-        throw new Error("Unauthorized")
+      if (response.status === 400) {
+        setError({
+          name: 'Unauthorized',
+          message: 'You are not authorized to receive reports..'
+        })
+        return
       }
-      throw new Error("Error contacting server")
+      if (response.status === 403) {
+        setError({
+          name: 'Unauthorized',
+          message: "You can not update your own profile"
+        })
+        return
+      }
+      setError({
+        name: 'Error',
+        message: "Error contacting server"
+      })
+      return
     }
     let updatedUser = await response.json()
     let successMessage = `Successfully updated ${updatedUser.email}`
     emit('completeUserUpdate', successMessage)
-  } catch (err) {
-    error.value = err
-  }
 }
 
+function setError(event){
+  error.value = event
+  show_error.value = true
+}
 </script>
 
 <template>
@@ -104,7 +131,7 @@ async function update_user_info() {
     </h3>
   </div>
   <USWDSAlert
-      v-if="error"
+      v-if="show_error"
       status="error"
       :heading="error.name"
   >

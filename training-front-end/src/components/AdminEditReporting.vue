@@ -79,21 +79,21 @@
     <div class="grid-row grid-gap padding-top-4">
       <div class="tablet:grid-col">
         <dt class="font-sans-xs">Full Name</dt>
-        <dd :aria-label="'User Name: ' + user.name" class="margin-left-0 text-bold font-sans-sm">{{ user.name }}</dd>
+        <dd id="user-name-value" :aria-label="'User Name: ' + user.name" class="margin-left-0 text-bold font-sans-sm">{{ user.name }}</dd>
       </div>
       <div class="tablet:grid-col">
         <dt class="font-sans-xs">Email</dt>
-        <dd :aria-label="'Email: ' + user.email" class="margin-left-0 text-bold font-sans-sm">{{ user.email }}</dd>
+        <dd id="user-email-value" :aria-label="'Email: ' + user.email" class="margin-left-0 text-bold font-sans-sm">{{ user.email }}</dd>
       </div>
     </div>
     <div class="grid-row grid-gap padding-top-2">
       <div class="tablet:grid-col">
         <dt class="font-sans-xs">Agency / Organization</dt>
-        <dd :aria-label="'Agency / Organization: ' + user.agency.name" class="margin-left-0 text-bold font-sans-sm">{{ user.agency.name }}</dd>
+        <dd id="user-agency-organization-value" :aria-label="'Agency / Organization: ' + user.agency.name" class="margin-left-0 text-bold font-sans-sm">{{ user.agency.name }}</dd>
       </div>
       <div class="tablet:grid-col">
         <dt class="font-sans-xs">Sub-Agency, Organization, or Bureau</dt>
-        <dd :aria-label="'Sub-Agency, Organization, or Bureau: ' + user.agency.bureau" class="margin-left-0 text-bold font-sans-sm">{{ user.agency.bureau }}</dd>
+        <dd id="user-bureau-value" :aria-label="'Sub-Agency, Organization, or Bureau: ' + user.agency.bureau" class="margin-left-0 text-bold font-sans-sm">{{ user.agency.bureau }}</dd>
       </div>
     </div>
     <div class="margin-top-3">
