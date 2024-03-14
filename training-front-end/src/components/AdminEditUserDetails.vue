@@ -9,6 +9,7 @@ import {useStore} from "@nanostores/vue";
 import {agencyList, bureauList, setSelectedAgencyId} from "../stores/agencies.js";
 import {profile} from "../stores/user.js";
 import USWDSAlert from "@components/USWDSAlert.vue";
+import SpinnerGraphic from "@components/SpinnerGraphic.vue";
 
 const props = defineProps({
   userToEdit: {
@@ -21,9 +22,10 @@ const base_url = import.meta.env.PUBLIC_API_BASE_URL
 const { withMessage } = helpers
 const agency_options = useStore(agencyList)
 const bureaus = useStore(bureauList)
-const isSaving = ref(false)
+const is_saving = ref(false)
 const error = ref()
 const show_error = ref(false)
+const show_spinner = ref(false)
 
 const emit = defineEmits(['cancel', 'completeUserUpdate'])
 
@@ -67,6 +69,8 @@ async function update_user_info() {
   if (!isFormValid) {
     return
   }
+  is_saving.value = true
+  show_spinner.value = true
 
   // When user has choosen a bureau use that id instead of the agency
   let {bureau_id, ...user_data} = user_input
@@ -90,9 +94,13 @@ async function update_user_info() {
       name: 'Server Error',
       message: 'Sorry, we had an error connecting to the server.'
     })
+    is_saving.value = false
+    show_spinner.value = false
     return
   }
     if (!response.ok) {
+      is_saving.value = false
+      show_spinner.value = false
       if (response.status === 400) {
         setError({
           name: 'Unauthorized',
@@ -113,6 +121,8 @@ async function update_user_info() {
       })
       return
     }
+    is_saving.value = false
+    show_spinner.value = false
     let updatedUser = await response.json()
     let successMessage = `Successfully updated ${updatedUser.email}`
     emit('completeUserUpdate', successMessage)
@@ -193,16 +203,23 @@ function setError(event){
             class="usa-button"
             type="submit"
             value="Save Profile"
-            :disabled="isSaving"
+            :disabled="is_saving"
         >
         <button
             id="cancel"
             type="button"
             class="usa-button usa-button--outline"
             @click="$emit('cancel')"
+            :disabled="is_saving"
         >
           Cancel
         </button>
+        <div
+            v-if="show_spinner"
+            class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
+        >
+          <SpinnerGraphic />
+        </div>
       </div>
     </div>
   </form>
