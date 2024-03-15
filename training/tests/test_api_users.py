@@ -117,3 +117,4 @@ def test_edit_user_details_same_user(mock_user_repo: UserRepository, goodJWT: st
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
     assert response.status_code == status.HTTP_403_FORBIDDEN
+    
