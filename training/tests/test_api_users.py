@@ -13,6 +13,7 @@ from training.schemas import UserSearchResult, Agency, Role
 @pytest.fixture
 def admin_user():
     return {
+        'id': 1,
         'name': 'Albus Dumbledore',
         'email': 'dumbledore@hogwarts.edu',
         'roles': ['Admin']
@@ -95,7 +96,7 @@ def test_edit_user_details(mock_user_repo: UserRepository, goodJWT: str):
     mock_user_repo.update_user.return_value = updated_user
     user_id = updated_user.id
     URL = f"/api/v1/users/{user_id}"
-    response = client.put(
+    response = client.patch(
         URL,
         json=updated_user.model_dump(),
         headers={"Authorization": f"Bearer {goodJWT}"}
@@ -103,3 +104,16 @@ def test_edit_user_details(mock_user_repo: UserRepository, goodJWT: str):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["name"] == updated_user.name
     assert response.json()["agency_id"] == updated_user.agency_id
+
+
+def test_edit_user_details_same_user(mock_user_repo: UserRepository, goodJWT: str):
+    updated_user = UserSchemaFactory.build()
+    mock_user_repo.update_user.return_value = updated_user
+    user_id = 1
+    URL = f"/api/v1/users/{user_id}"
+    response = client.patch(
+        URL,
+        json=updated_user.model_dump(),
+        headers={"Authorization": f"Bearer {goodJWT}"}
+    )
+    assert response.status_code == status.HTTP_403_FORBIDDEN
