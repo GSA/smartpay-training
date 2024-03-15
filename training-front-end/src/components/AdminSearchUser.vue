@@ -125,12 +125,12 @@
       {{ error.message }}
     </USWDSAlert>
     <USWDSAlert
-        v-if="showSuccessMessage"
-        status="success"
-        class="usa-alert--slim"
-        :has-heading="false"
+      v-if="showSuccessMessage"
+      status="success"
+      class="usa-alert--slim"
+      :has-heading="false"
     >
-      {{successMessage}}
+      {{ successMessage }}
     </USWDSAlert>
     <div 
       v-if="!selectedUser"
