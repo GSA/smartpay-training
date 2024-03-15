@@ -104,20 +104,20 @@ async function update_user_info() {
       if (response.status === 400) {
         setError({
           name: 'Unauthorized',
-          message: 'You are not authorized to receive reports..'
+          message: 'You are not authorized to edit profile.'
         })
         return
       }
       if (response.status === 403) {
         setError({
           name: 'Unauthorized',
-          message: "You can not update your own profile"
+          message: "You can not update your own profile."
         })
         return
       }
       setError({
         name: 'Error',
-        message: "Error contacting server"
+        message: "Error contacting server."
       })
       return
     }
