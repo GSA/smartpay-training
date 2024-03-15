@@ -1,15 +1,15 @@
 ﻿<script setup>
 
-import ValidatedInput from "@components/ValidatedInput.vue";
+import ValidatedInput from "./ValidatedInput.vue";
 import {onBeforeMount, reactive, ref, watch} from "vue";
 import {helpers, required, requiredIf} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
-import ValidatedSelect from "@components/ValidatedSelect.vue";
+import ValidatedSelect from "./ValidatedSelect.vue";
 import {useStore} from "@nanostores/vue";
 import {agencyList, bureauList, setSelectedAgencyId} from "../stores/agencies.js";
 import {profile} from "../stores/user.js";
-import USWDSAlert from "@components/USWDSAlert.vue";
-import SpinnerGraphic from "@components/SpinnerGraphic.vue";
+import USWDSAlert from "./USWDSAlert.vue";
+import SpinnerGraphic from "./SpinnerGraphic.vue";
 
 const props = defineProps({
   userToEdit: {

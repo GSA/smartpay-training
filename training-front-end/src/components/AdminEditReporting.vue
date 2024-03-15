@@ -5,7 +5,7 @@
   import USWDSComboBox from "./USWDSComboBox.vue";
   import { bureauList, agencyList, setSelectedAgencyId, selectedAgencyId} from '../stores/agencies'
   import { useStore } from '@nanostores/vue'
-  import AdminEditUserDetails from "@components/AdminEditUserDetails.vue";
+  import AdminEditUserDetails from "./AdminEditUserDetails.vue";
   
   const props = defineProps({
     user: {
