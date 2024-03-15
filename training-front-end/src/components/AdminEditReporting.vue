@@ -29,7 +29,7 @@ const user_input = reactive({
   agency_id: undefined,
 })
 
-const selectedAgency = computed(() => agency_options.value.find(agency => agency.id === agencyId.value))
+const selectedAgency = computed(() => agency_options.value.find(agency => agency.id == agencyId.value))
 
 function editUserAgencies(e, checked) {
   if (checked) {
@@ -39,7 +39,7 @@ function editUserAgencies(e, checked) {
       bureau: agencyId.value === e.id ? undefined : e.name
     })
   } else {
-    agencies.value = agencies.value.filter(agency => agency.id !== e.id)
+    agencies.value = agencies.value.filter(agency => agency.id != e.id)
   }
 }
 
