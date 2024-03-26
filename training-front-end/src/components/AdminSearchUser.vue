@@ -16,15 +16,17 @@
   const report_url = `${base_url}/api/v1/users/`
   const update_url = `${base_url}/api/v1/users/edit-user-for-reporting/`
 
-  const currentPage = ref(0)
-  const numberOfResults = ref(0)
+  let currentPage = ref(0)
+  let numberOfResults = ref(0)
   const numberOfPages = computed(() => Math.ceil(numberOfResults.value/PAGE_SIZE))
 
-  const searchTerm = ref('')
+  let searchTerm = ref('')
   const selectedUser = ref()
-  const searchResults = ref([])
+  let searchResults = ref([])
   const noResults = ref(false)
   const error = ref()
+  const showSuccessMessage = ref(false)
+  const successMessage = ref()
 
   async function setPage(page) {
     currentPage.value = page
@@ -32,6 +34,7 @@
   }
 
   async function search() {
+    clearAlerts()
     noResults.value = false
     const url = new URL(`${report_url}`)
     url.search = new URLSearchParams({searchText: searchTerm.value, page_number: currentPage.value + 1})
@@ -94,6 +97,22 @@
     setCurrentUser(undefined)
     setSelectedAgencyId(undefined)
   }
+  
+  async function updateUserSuccess(message) {
+    successMessage.value = message
+    showSuccessMessage.value = true
+    cancelEdit()
+    currentPage.value = 0
+    numberOfResults.value = 0
+    searchTerm.value = ''
+    searchResults.value = []
+  }
+  
+  function clearAlerts() {
+    error.value = undefined
+    successMessage.value = undefined
+    showSuccessMessage.value = false
+  }
 </script>
 
 <template>
@@ -104,6 +123,14 @@
       :heading="error.name"
     >
       {{ error.message }}
+    </USWDSAlert>
+    <USWDSAlert
+      v-if="showSuccessMessage"
+      status="success"
+      class="usa-alert--slim"
+      :has-heading="false"
+    >
+      {{ successMessage }}
     </USWDSAlert>
     <div 
       v-if="!selectedUser"
@@ -139,6 +166,7 @@
             <button 
               class="usa-button"
               type="submit"
+              :disabled="!searchTerm"
             >
               <span class="usa-search__submit-text">
                 Search
@@ -174,6 +202,7 @@
         :user="selectedUser"
         @save="updateUserReports"
         @cancel="cancelEdit"
+        @user-update-success="updateUserSuccess"
       />
     </div>
   </div>
