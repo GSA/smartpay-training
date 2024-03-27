@@ -1,11 +1,6 @@
 from .agency import Agency, AgencyCreate, AgencyWithBureaus
 from .temp_user import TempUser, IncompleteTempUser, WebDestination
 from .user import User, UserCreate, UserQuizCompletionReportData, UserSearchResult, UserJWT, UserUpdate
-from .gspc_certificate import GspcCertificate
-from .gspc_completion import GspcCompletion
-from .gspc_invite import GspcInvite
-from .gspc_result import GspcResult
-from .gspc_submission import GspcSubmission
 from .quiz_choice import QuizChoice, QuizChoiceCreate, QuizChoicePublic
 from .quiz_question import QuizQuestion, QuizQuestionCreate, QuizQuestionPublic, QuizQuestionType
 from .quiz_content import QuizContent, QuizContentCreate, QuizContentPublic
