@@ -76,3 +76,18 @@ class UserRepository(BaseRepository[models.User]):
                 or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).limit(page_size).offset(offset).all()
             user_search_result = UserSearchResult(users=search_results, total_count=count)
             return user_search_result
+
+    def update_user(self, user_id: int, user: schemas.UserUpdate) -> models.User:
+        """
+        Updates user name and agency values
+        :param user_id: User's ID to update
+        :param user: User object with updated values
+        :return: Updated User object
+        """
+        db_user = self.find_by_id(user_id)
+        if db_user is None:
+            raise ValueError("invalid user id")
+        db_user.name = user.name
+        db_user.agency_id = user.agency_id
+        self._session.commit()
+        return db_user

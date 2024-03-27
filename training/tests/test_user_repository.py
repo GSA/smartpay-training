@@ -117,3 +117,31 @@ def test_get_users_by_email(user_repo_with_data: UserRepository, valid_user_ids:
     assert result is not None
     for item in result.users:
         assert search_criteria in item.email
+
+
+def test_update_user_passing(user_repo_with_data: UserRepository, agency_repo_with_data: AgencyRepository):
+    agency_id = agency_repo_with_data.find_all()[0].id
+    user_id = user_repo_with_data.find_all()[0]
+    updated_user = models.User(
+        email="updateduser@example.com",
+        name="Updated User",
+        agency_id=agency_id,
+    )
+
+    result = user_repo_with_data.update_user(user_id.id, updated_user)
+    assert result is not None
+    assert result.name == "Updated User"
+    assert result.agency_id == agency_id
+    assert result.email != "updateduser@example.com"
+
+
+def test_update_user_invalid_user(user_repo_with_data: UserRepository):
+    invalid_user_id = 0
+    updated_user = models.User(
+        email="updateduser@example.com",
+        name="Updated User",
+        agency_id=1,
+    )
+
+    with pytest.raises(Exception):
+        user_repo_with_data.update_user(invalid_user_id, updated_user)

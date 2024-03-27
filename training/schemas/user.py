@@ -14,6 +14,10 @@ class UserCreate(UserBase):
     pass
 
 
+class UserUpdate(UserBase):
+    agency_id: int
+
+
 class User(UserBase):
     id: int
     agency_id: int
@@ -24,6 +28,7 @@ class User(UserBase):
     def is_admin(self) -> bool:
         role_names = [role.name.upper() for role in self.roles]
         return "Admin".upper() in role_names
+
     model_config = ConfigDict(from_attributes=True)
 
 
