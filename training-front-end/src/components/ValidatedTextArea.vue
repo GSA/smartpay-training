@@ -51,6 +51,7 @@
     </span>
     <textarea
       :id="name"
+      :v-model="props.modelValue"
       class="usa-textarea tablet:grid-col-12"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
