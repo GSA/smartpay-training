@@ -23,7 +23,7 @@
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
   const user_input = reactive({
-    emailAddresses: undefined,
+    emailAddresses: "",
     certificationExpirationDate: undefined
   })
 
@@ -54,7 +54,7 @@
     showSpinner.value = true;
 
     // Clear out the fields
-    user_input.emailAddresses = undefined;
+    user_input.emailAddresses = "";
     user_input.certificationExpirationDate = undefined;
 
     isLoading.value = false;
@@ -135,7 +135,7 @@
     <p>
       Please fill out the form below by entering the attendees' email addresses as a comma-separated list and selecting an expiration date for their certificate. The expiration date should be three years from the date of the GSA SmartPay Training Forum. This form will verify the entered email addresses and notify you if any are invalid.
     </p>
-    <v-form
+    <form
       ref="form"
       class="usa-form usa-form--large margin-bottom-3"
       data-test="gspc-form"
@@ -187,7 +187,7 @@
             id="cancel"
             type="button"
             class="usa-button usa-button--outline"
-            :disabled="is_saving"
+            :disabled="isLoading"
             @click="cancel"
           >
             Cancel
@@ -208,7 +208,7 @@
       >
         <SpinnerGraphic />
       </div>
-    </v-form>
+    </form>
   </div>
 </template>
 <style>
