@@ -26,10 +26,10 @@ email us at gsa_smartpay@gsa.gov.
 ''')
 
 GSPC_INVITE_EMAIL_TEMPLATE = Template('''
-<p>Greetings</p>
+<p>Greetings!</p>
 
 <p>
-During the GSA SmartPay Training Forum, you completed the required coursework for the GSA SmartPay Program Certification (GSPC)
+During the GSA SmartPay® Training Forum, you completed the required coursework for the GSA SmartPay Program Certification (GSPC)
  defined by <a href="https://smartpay.gsa.gov/policies-and-audits/smart-bulletins/022/">Smart Bulletin 22</a>.
 </p>
 <p>
