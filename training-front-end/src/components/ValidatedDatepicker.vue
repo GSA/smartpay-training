@@ -41,7 +41,7 @@
     const month = user_input.month;
     const day = user_input.day;
     if (year.length == 4 && month && day) {
-      const newDate = new Date(`${year}-${month}-${day}`);
+      const newDate = new Date(Date.UTC(year, month, day, '00', '00', '00'));
       if (!isNaN(newDate)) {
         emit('update:modelValue', newDate);
       } 
@@ -52,7 +52,7 @@
     const newDate = new Date(newValue);
     if (!isNaN(newDate)) {
       user_input.day = newDate?.getDate()
-      user_input.month = newDate?.getMonth() + 1 //+1 to convert from 0 index array 
+      user_input.month = newDate?.getMonth()
       user_input.year = newDate?.getFullYear()
     } else{
       user_input.day = '';
@@ -110,40 +110,40 @@
             <option value="">
               - Select -
             </option>
-            <option value="1">
+            <option value="0">
               01 - January
             </option>
-            <option value="2">
+            <option value="1">
               02 - February
             </option>
-            <option value="3">
+            <option value="2">
               03 - March
             </option>
-            <option value="4">
+            <option value="3">
               04 - April
             </option>
-            <option value="5">
+            <option value="4">
               05 - May
             </option>
-            <option value="6">
+            <option value="5">
               06 - June
             </option>
-            <option value="7">
+            <option value="6">
               07 - July
             </option>
-            <option value="8">
+            <option value="7">
               08 - August
             </option>
-            <option value="9">
+            <option value="8">
               09 - September
             </option>
-            <option value="10">
+            <option value="9">
               10 - October
             </option>
-            <option value="11">
+            <option value="10">
               11 - November
             </option>
-            <option value="12">
+            <option value="11">
               12 - December
             </option>
           </select>
