@@ -1,6 +1,5 @@
 <script setup>
   import {computed , reactive, watch} from 'vue'  
-  import {computed , reactive, watch} from 'vue'  
   
   const props = defineProps({
     'modelValue': {
