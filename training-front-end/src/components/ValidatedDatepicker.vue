@@ -1,5 +1,5 @@
 <script setup>
-  import {computed , reactive} from 'vue'  
+  import {computed , reactive, watch} from 'vue'  
   
   const props = defineProps({
     'modelValue': {
@@ -40,13 +40,26 @@
     const year = user_input.year;
     const month = user_input.month;
     const day = user_input.day;
-    if (year && month && day) {
+    if (year.length == 4 && month && day) {
       const newDate = new Date(`${year}-${month}-${day}`);
       if (!isNaN(newDate)) {
         emit('update:modelValue', newDate);
       } 
     }
   }
+
+  watch(() => props.modelValue, (newValue) => {
+    const newDate = new Date(newValue);
+    if (!isNaN(newDate)) {
+      user_input.day = newDate?.getDate()
+      user_input.month = newDate?.getMonth() + 1 //+1 to convert from 0 index array 
+      user_input.year = newDate?.getFullYear()
+    } else{
+      user_input.day = '';
+      user_input.month = '';
+      user_input.year = '';
+    }
+  });
   
 </script>
 <template>

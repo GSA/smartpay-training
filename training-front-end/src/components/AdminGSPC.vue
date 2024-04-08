@@ -23,7 +23,7 @@
   const emit = defineEmits(['startLoading', 'endLoading', 'error'])
 
   const user_input = reactive({
-    emailAddresses: undefined,
+    emailAddresses: "",
     certificationExpirationDate: undefined
   })
 
@@ -49,6 +49,18 @@
 
   const v_all_info$ = useVuelidate(validations_all_info, user_input)
 
+  async function cancel(){
+    isLoading.value = true;
+    showSpinner.value = true;
+
+    // Clear out the fields
+    user_input.emailAddresses = "";
+    user_input.certificationExpirationDate = undefined;
+
+    isLoading.value = false;
+    showSpinner.value = false;
+  }
+
   async function submitGspcInvites(){
     const validation = v_all_info$
     const isFormValid = await validation.value.$validate()
@@ -59,8 +71,8 @@
     }
 
     emit('startLoading')
-    isLoading.value = true
-    showSpinner.value = true
+    isLoading.value = true;
+    showSpinner.value = true;
 
     const apiURL = new URL(`${base_url}/api/v1/gspc-invite`)
 
@@ -124,7 +136,8 @@
       Please fill out the form below by entering the attendees' email addresses as a comma-separated list and selecting an expiration date for their certificate. The expiration date should be three years from the date of the GSA SmartPay Training Forum. This form will verify the entered email addresses and notify you if any are invalid.
     </p>
     <form
-      class="usa-form usa-form--large margin-bottom-3 "
+      ref="form"
+      class="usa-form usa-form--large margin-bottom-3"
       data-test="gspc-form"
       @submit.prevent="submitGspcInvites"
     >
@@ -161,15 +174,24 @@
           Emails successfully sent to {{ successCount }} people.
         </USWDSAlert>
       </div>
-      <div class="grid-row">
-        <div class="grid-col tablet:grid-col-3 ">
+      <div class="grid-row grid-gap margin-top-3">
+        <div class="grid-col">
           <input
             class="usa-button"
             type="submit"
-            value="Submit"
+            value="Send Invitations"
             :disabled="isLoading"
             data-test="submit"
           >
+          <button
+            id="cancel"
+            type="button"
+            class="usa-button usa-button--outline"
+            :disabled="isLoading"
+            @click="cancel"
+          >
+            Cancel
+          </button>
         </div>
         <!--display spinner along with submit button in one row for desktop-->
         <div
