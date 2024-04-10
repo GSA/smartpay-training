@@ -106,7 +106,8 @@ def send_link(
             detail="Server Error"
         )
     path = page_id_lookup[dest.page_id]['path']
-    url = f"{settings.BASE_URL}{path}?t={token}"
+    parameters = f"t={token}" if not dest.parameters else f"{dest.parameters}&t={token}"
+    url = f"{settings.BASE_URL}{path}?{parameters}"
     try:
         send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
         logging.info(f"Sent confirmation email to {user.email} for {path}")

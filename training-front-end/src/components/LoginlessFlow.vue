@@ -46,6 +46,11 @@
     'linkDestinationText': {
       type: String,
       required: true
+    },
+    'parameters': {
+      type: String,
+      required: false,
+      default: ""
     }
   })
 
@@ -161,7 +166,7 @@
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
           user: user_data,
-          dest: {page_id: props.pageId, title: props.title}
+          dest: {page_id: props.pageId, parameters: props.parameters, title: props.title}
         })
       })
     } catch (err) {
