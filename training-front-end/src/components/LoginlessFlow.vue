@@ -90,7 +90,7 @@
     unregisteredEmail.value = false
   })
 
-  /* Form validation for additional information if we allow registation here */
+  /* Form validation for additional information if we allow registration here */
   const showAdditionalFormFields = computed(() => props.allowRegistration && unregisteredEmail.value)
   const validations_all_info = {
     name: {
@@ -155,7 +155,7 @@
 
     const apiURL = new URL(`${base_url}/api/v1/get-link`)
     let res
-    // When user has choosen a bureau use that id instead of the agency
+    // When user has chosen a bureau use that id instead of the agency
     let {bureau_id, ...user_data} = user_input
     if (bureau_id) {
       user_data.agency_id = bureau_id

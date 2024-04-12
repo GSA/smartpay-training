@@ -1,42 +1,21 @@
 <script setup>
   import { ref, onErrorCaptured, onBeforeMount } from 'vue';
-  import { useStore } from '@nanostores/vue'
-  import { profile} from '../stores/user'
   import USWDSAlert from './USWDSAlert.vue'
   import Loginless from './LoginlessFlow.vue';
-
-  const user = useStore(profile)
-  const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  const quiz = ref()
-  const userSelections = ref([])
-
-  const props = defineProps({
-    'pageId': {
-      type: String,
-      required: true,
-    }, 
-    'title': {
-      type: String,
-      required: true,
-    },
-    'header': {
-      type: String,
-      required: true,
-    },
-    'subhead': {
-      type: String,
-      required: true,
-    }
-  })
-
-  onBeforeMount(async () => {
-
-  })
 
   onErrorCaptured((err) => {
     setError(err)
     return false
   })
+
+  let expirationDate = ""
+
+  onBeforeMount(async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    expirationDate = urlParams.get('expirationDate')
+    console.log(expirationDate)
+  })
+
 
 	const error = ref()
 
@@ -75,10 +54,10 @@
             </template>
             <Loginless
               page-id="gspc_registration"
-              :title="title"
+              title="gspc_registration"
               :header="header"
-              parameters="date=01-31-2012"
               link-destination-text="GSPC Registration"
+              :parameters="expirationDate"
               @start-loading="startLoading"
               @error="setError"
             >

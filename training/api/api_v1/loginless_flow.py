@@ -29,6 +29,7 @@ def page_lookup():
         'training_travel_pc': {'path': '/quiz/training_travel_pc/', 'required_roles': []},
         'training_purchase_pc': {'path': '/quiz/training_purchase_pc/', 'required_roles': []},
         'training_fleet_pc': {'path': '/quiz/training_fleet_pc/', 'required_roles': []},
+        'gspc_registration': {'path': '/gspc_registration', 'required_roles': []},
     }
 
 
@@ -52,10 +53,10 @@ def send_link(
     This link is sent via email pointing back to the frontend section the user
     made the request from (the 'dest' parameter). The token is a key to the Redis
     cache. When they use the link to return, we have confidence they could access
-    the email and look up their idendity from the cache. In cases where we add the
-    user to the cache this repondes with an HTTP 201.
+    the email and look up their identity from the cache. In cases where we add the
+    user to the cache this responds with an HTTP 201.
 
-    If the `user` body paremeter is an IncompleteTempUser (only has an email)
+    If the `user` body parameter is an IncompleteTempUser (only has an email)
     this will query the database to see if the user exist. If the user does not exist
     this should return an HTTP 200 to indicate to the frontend that no user was created
     and it should ask them for more information (name, agency). If the email does exist,
@@ -69,7 +70,7 @@ def send_link(
     except KeyError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unkown Page Id {dest.page_id}"
+            detail=f"Unknown Page Id {dest.page_id}"
         )
     if isinstance(user, IncompleteTempUser):
         # we only got the email from the front end
