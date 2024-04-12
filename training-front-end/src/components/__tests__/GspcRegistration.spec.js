@@ -14,6 +14,9 @@ describe('GspcRegistration', () => {
   })
 
   it('loads initial view with unknown user', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: false, status:404, json: () => Promise.resolve([]) })
+    })
     const wrapper = await mount(GspcRegistration)
     await flushPromises()
     expect(wrapper.text()).toContain("GSPC Registration")
@@ -21,6 +24,9 @@ describe('GspcRegistration', () => {
   })
 
   it('shows start registration form once user is known', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
+      return Promise.resolve({ok: false, status:404, json: () => Promise.resolve([]) })
+    })
     profile.set({name:"John Smith", jwt:"some-token-value"})
     const wrapper = await mount(GspcRegistration)
     await flushPromises()
