@@ -64,6 +64,9 @@ def send_link(
 
     A TempUser (has name, agency, and email) indicates a new user. We add this information
     to the cache and send a link, but not the database until they have validated the email.
+
+    Parameters needed for the generated link can be passed in through the WebDestination
+    object and will concatenated with the user token and added to the link.
     '''
     try:
         required_roles = page_id_lookup[dest.page_id]['required_roles']

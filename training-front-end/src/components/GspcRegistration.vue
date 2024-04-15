@@ -13,7 +13,6 @@
   onBeforeMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
     expirationDate = urlParams.get('expirationDate')
-    console.log(expirationDate)
   })
 
 
