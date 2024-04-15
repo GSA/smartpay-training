@@ -58,6 +58,9 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
     elif training_title and "report" in training_title.lower():
         subject = "GSA SmartPay® reporting information for A/OPCs"
         email_subject = "Access to GSA SmartPay training report"
+    elif training_title and "gspc_registration" in training_title.lower():
+        subject = "GSA SmartPay® GSPC Registration form"
+        email_subject = "Access to GSA SmartPay GSPC Registration"
     else:
         subject = f"GSA SmartPay® {training_title} quiz"
         email_subject = f"Access GSA SmartPay {training_title} quiz"

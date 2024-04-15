@@ -371,7 +371,7 @@ describe('Loginless', () => {
     await second_form.trigger('submit.prevent')
     await flushPromises()
     expect(fetchspy).nthCalledWith(2, expect.any(URL), {
-      body: '{"user":{"name":"Molly","email":"test@example.com","agency_id":"3"},"dest":{"page_id":"page-id","title":"Training Title"}}',
+      body: '{"user":{"name":"Molly","email":"test@example.com","agency_id":"3"},"dest":{"page_id":"page-id","parameters":"","title":"Training Title"}}',
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
     })
@@ -401,7 +401,7 @@ describe('Loginless', () => {
 
     expect(fetchspy).toBeCalledTimes(2)
     expect(fetchspy).nthCalledWith(2, expect.any(URL), {
-      body: '{"user":{"name":"Molly","email":"test@example.com","agency_id":"1"},"dest":{"page_id":"page-id","title":"Training Title"}}',
+      body: '{"user":{"name":"Molly","email":"test@example.com","agency_id":"1"},"dest":{"page_id":"page-id","parameters":"","title":"Training Title"}}',
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
     })

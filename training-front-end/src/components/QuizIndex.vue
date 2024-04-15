@@ -84,7 +84,7 @@
   }
   
   function resetQuiz() {
-    /* Fired when user wants to retake quiz after unsuccesful attempt */
+    /* Fired when user wants to retake quiz after unsuccessful attempt */
     isSubmitted.value = false
     quizSubmission.value = undefined
     quizResults.value = undefined
