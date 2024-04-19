@@ -59,7 +59,7 @@ During the GSA SmartPay® Training Forum, you completed the required coursework 
 GSPC recipients are also required to have a minimum of six (6) months of continuous, hands-on experience working with the GSA SmartPay program.
 </p>
 <p>
-Please do not share this link with others as it is unique to you.
+Please do not share this link with others.
 </p>
 
 <p><a href="$link">$link</a></p>
@@ -84,7 +84,6 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
     elif training_title and "gspc_registration" in training_title.lower():
         subject = "GSA SmartPay® GSPC Registration form"
         email_subject = "Access to GSA SmartPay GSPC Registration"
-        mailto = "smartpaygspc@gsa.gov"
     else:
         subject = f"GSA SmartPay® {training_title} quiz"
         email_subject = f"Access GSA SmartPay {training_title} quiz"
