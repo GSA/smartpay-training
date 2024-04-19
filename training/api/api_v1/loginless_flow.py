@@ -29,6 +29,7 @@ def page_lookup():
         'training_travel_pc': {'path': '/quiz/training_travel_pc/', 'required_roles': []},
         'training_purchase_pc': {'path': '/quiz/training_purchase_pc/', 'required_roles': []},
         'training_fleet_pc': {'path': '/quiz/training_fleet_pc/', 'required_roles': []},
+        'gspc_registration': {'path': '/gspc_registration', 'required_roles': []},
     }
 
 
@@ -52,10 +53,10 @@ def send_link(
     This link is sent via email pointing back to the frontend section the user
     made the request from (the 'dest' parameter). The token is a key to the Redis
     cache. When they use the link to return, we have confidence they could access
-    the email and look up their idendity from the cache. In cases where we add the
-    user to the cache this repondes with an HTTP 201.
+    the email and look up their identity from the cache. In cases where we add the
+    user to the cache this responds with an HTTP 201.
 
-    If the `user` body paremeter is an IncompleteTempUser (only has an email)
+    If the `user` body parameter is an IncompleteTempUser (only has an email)
     this will query the database to see if the user exist. If the user does not exist
     this should return an HTTP 200 to indicate to the frontend that no user was created
     and it should ask them for more information (name, agency). If the email does exist,
@@ -63,13 +64,16 @@ def send_link(
 
     A TempUser (has name, agency, and email) indicates a new user. We add this information
     to the cache and send a link, but not the database until they have validated the email.
+
+    Parameters needed for the generated link can be passed in through the WebDestination
+    object and will concatenated with the user token and added to the link.
     '''
     try:
         required_roles = page_id_lookup[dest.page_id]['required_roles']
     except KeyError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unkown Page Id {dest.page_id}"
+            detail=f"Unknown Page Id {dest.page_id}"
         )
     if isinstance(user, IncompleteTempUser):
         # we only got the email from the front end
@@ -106,7 +110,8 @@ def send_link(
             detail="Server Error"
         )
     path = page_id_lookup[dest.page_id]['path']
-    url = f"{settings.BASE_URL}{path}?t={token}"
+    parameters = f"t={token}" if not dest.parameters else f"{dest.parameters}&t={token}"
+    url = f"{settings.BASE_URL}{path}?{parameters}"
     try:
         send_email(to_email=user.email, name=user.name, link=url, training_title=dest.title)
         logging.info(f"Sent confirmation email to {user.email} for {path}")

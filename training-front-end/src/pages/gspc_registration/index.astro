@@ -1,0 +1,17 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroTraining from '@components/HeroTraining.astro';
+import GspcRegistration from '@components/GspcRegistration.vue';
+
+const pageTitle = "GSPC Registration";
+---
+
+<BaseLayout title={pageTitle} description="GSPC registration page">
+  <HeroTraining background_class='bg_smartpay_cool_grey'>
+    GSPC Registration
+  </HeroTraining>
+  <GspcRegistration
+    client:load
+    client:only >
+  </GspcRegistration>
+</BaseLayout>
