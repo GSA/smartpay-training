@@ -1,11 +1,15 @@
+from typing import Any
 import logging
 from fastapi import APIRouter, status, HTTPException, Depends
-from training.schemas.gspc_invite import GspcInvite
+from training.schemas import GspcInvite, GspcResult, GspcSubmission
+from training.services import GspcService
 from training.repositories import GspcInviteRepository
-from training.api.deps import gspc_invite_repository
+from training.api.deps import gspc_invite_repository, gspc_service
 from training.api.email import send_gspc_invite_email
 from training.api.auth import RequireRole
 from training.config import settings
+from training.api.auth import JWTUser
+
 
 router = APIRouter()
 
@@ -42,3 +46,19 @@ async def gspc_admin_invite(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="emails or expiration date"
         )
+
+
+@router.post(
+    "/submission",
+    response_model=GspcResult,
+    status_code=status.HTTP_201_CREATED
+)
+def submit_gspc_registration(
+    id: int,
+    submission: GspcSubmission,
+    gspc_service: GspcService = Depends(gspc_service),
+    user: dict[str, Any] = Depends(JWTUser())
+):
+    result = gspc_service.grade(quiz_id=id, user_id=user["id"], submission=submission)
+
+    return result
