@@ -15,7 +15,7 @@ describe('GspcQuestion', () => {
   }
 
   // Sample user answer for testing
-  const userAnswer = 0
+  //const userAnswer = 0
 
   it('renders question text correctly', () => {
     const wrapper = shallowMount(GspcQuestion, {
