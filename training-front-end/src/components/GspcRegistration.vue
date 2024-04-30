@@ -34,7 +34,7 @@
 	}
 
   function downloadCert(){
-    console.log('todo')
+    //console.log('todo')
 	}
 
   async function submitGspcRegistration(user_answers) {
@@ -66,10 +66,8 @@
       setError(e)
     }
     var result = await res.json()
-    console.log(result.passed)
     if(result.passed){
       certPassed.value = true
-      console.log('certPassed ='+certPassed.value)
     } else{
       certFailed.value = true
     }
@@ -126,7 +124,7 @@
                 >
                   Download your certificate
                 </button>
-                <br>
+                <br><br>
                 <a href="/">Return to the GSA SmartPay Training Home Page</a>
               </div>
               <div v-else-if="certFailed">
