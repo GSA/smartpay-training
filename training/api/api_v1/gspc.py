@@ -49,16 +49,14 @@ async def gspc_admin_invite(
 
 
 @router.post(
-    "/submission",
+    "/gspc/submission",
     response_model=GspcResult,
     status_code=status.HTTP_201_CREATED
 )
 def submit_gspc_registration(
-    id: int,
     submission: GspcSubmission,
     gspc_service: GspcService = Depends(gspc_service),
     user: dict[str, Any] = Depends(JWTUser())
 ):
-    result = gspc_service.grade(quiz_id=id, user_id=user["id"], submission=submission)
-
+    result = gspc_service.grade(user_id=user["id"], submission=submission)
     return result

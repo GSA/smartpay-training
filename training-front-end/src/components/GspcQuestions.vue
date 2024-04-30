@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, computed, reactive} from "vue"
   import { exit_warning } from '../stores/session_manager'
-  import QuizQuestion from "./QuizQuestion.vue"
+  import GspcQuestion from "./GspcQuestion.vue"
   import QuizCounter from "./QuizCounter.vue"
   import NavigateNext from "./icons/NavigateNext.vue"
   import NavigateBack from "./icons/NavigateBack.vue"
@@ -89,14 +89,16 @@
     v-if="show_intro"
     class="usa-prose margin-y-1 usa-prose"
   >
+    <h2>GSA SmartPay® Program Certification (GSPC) Requirements</h2>
     <p>
-      Now that you’ve completed the training portion of the GSA SmartPay® {{ title }}, you are ready to take the quiz.
-    </p>
-    <p>
-      Once you’ve successfully passed the quiz, your certificate will be displayed. You can print the certificate or save it as a PDF.
-    </p>
-    <p>
-      <b>Note:</b> Your quiz progress will not be saved if you navigate away.
+      To earn your GSA SmartPay ® Program Certification you will need to:
+
+      <ul>
+        <li>Complete a minimum of seven classes, including two GSA-qualifying classes and five Bank/brand-qualifying classes, during the annual GSA SmartPay Training forum.</li>
+        <li>Have a minimum of six months of continuous, hands-on experience working with the GSA SmartPay program.</li>
+      </ul> 
+
+      You can complete the verification steps to receive your GSA SmartPay® Program Certification if you meet these requirements.
     </p>
     <button
       class="usa-button"
@@ -112,7 +114,7 @@
     />
 
     <section class="usa-prose margin-y-4 bg-white padding-4 border-1px border-base-lighter radius-md">
-      <QuizQuestion 
+      <GspcQuestion 
         :key="question_index" 
         :question="current_question" 
         :selection="user_answers[question_index]"

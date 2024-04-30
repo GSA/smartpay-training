@@ -1,13 +1,14 @@
 from pydantic import BaseModel
 
 
-class QuizSubmissionQuestion(BaseModel):
+class GspcSubmissionQuestion(BaseModel):
     question_id: int
     question: str
-    response_ids: list[int]
-    response: list[str]
+    response_id: int
+    response: str
     correct: bool
 
 
 class GspcSubmission(BaseModel):
-    responses: list[QuizSubmissionQuestion]
+    expiration_date: str
+    responses: list[GspcSubmissionQuestion]
