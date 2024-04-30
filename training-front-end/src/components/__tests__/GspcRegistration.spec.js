@@ -19,8 +19,8 @@ describe('GspcRegistration', () => {
     })
     const wrapper = await mount(GspcRegistration)
     await flushPromises()
-    expect(wrapper.text()).toContain("GSPC Registration")
-    expect(wrapper.text()).toContain("Enter your email address to login. You'll receive an email with an access link.")
+    expect(wrapper.text()).toContain("Verify GSPC coursework and experience")
+    expect(wrapper.text()).toContain("Enter your email address")
   })
 
   it('shows start registration form once user is known', async () => {
@@ -30,6 +30,6 @@ describe('GspcRegistration', () => {
     profile.set({name:"John Smith", jwt:"some-token-value"})
     const wrapper = await mount(GspcRegistration)
     await flushPromises()
-    expect(wrapper.text()).toContain("GSPC Placeholder")
+    expect(wrapper.text()).toContain("GSA SmartPay® Program Certification (GSPC) Requirements")
   })
 })
