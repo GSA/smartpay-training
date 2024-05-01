@@ -11,13 +11,43 @@
     return false
   })
 
+  const props = defineProps({
+    'certPassed': {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    'certFailed': {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    'error': {
+      type: Object,
+      required: false,
+      default: null
+    },
+  })
+
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  const certPassed = ref(false)
-  const certFailed = ref(false)
-  const error = ref()
+  const certPassed = ref(props.certPassed)
+  const certFailed = ref(props.certFailed)
+  const error = ref(props.error)
   let redirectExpirationDateString = ""
   let expirationDate = ""
+
+  const questions = 
+    [{"id": 0, 
+        "text": "I have met the coursework requirement during the GSA SmartPay Training Forum by attending at least two GSA Qualifying classes and at least five Bank/Brand Qualifying classes, as outlined in Smart Bulletin No. 022.", 
+        "type": "MultipleChoiceSingleSelect",  
+        "choices": [{"id": 0, "text": "Yes", "correct": true}, {"id": 1, "text": "No", "correct": false}]}, 
+      {"id": 1, 
+        "text": "I have met the experience requirement by having a minimum of six months of continuous, hands-on experience working in an agency/organization's GSA SmartPay Program prior to receiving the GSPC.", 
+        "type": "MultipleChoiceSingleSelect", 
+        "choices": [{"id": 0, "text": "Yes", "correct": true}, {"id": 1, "text": "No", "correct": false}]},
+      ]
+
 
   onBeforeMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -135,7 +165,7 @@
               </div>
               <div v-else>
                 <GspcQuestions
-                  :expiration-date="expirationDate"
+                  :questions="questions"
                   @submit-gspc-registration="submitGspcRegistration"
                 />
               </div>

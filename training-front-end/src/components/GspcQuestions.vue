@@ -8,51 +8,36 @@
   import SpinnerGraphic from './SpinnerGraphic.vue'
 
   const emit = defineEmits(['submitGspcRegistration'])
-
-  const questions = 
-    [{"id": 0, 
-        "text": "I have met the coursework requirement during the GSA SmartPay Training Forum by attending at least two GSA Qualifying classes and at least five Bank/Brand Qualifying classes, as outlined in Smart Bulletin No. 022.", 
-        "type": "MultipleChoiceSingleSelect",  
-        "choices": [{"id": 0, "text": "Yes", "correct": true}, {"id": 1, "text": "No", "correct": false}]}, 
-      {"id": 1, 
-        "text": "I have met the experience requirement by having a minimum of six months of continuous, hands-on experience working in an agency/organization's GSA SmartPay Program prior to receiving the GSPC.", 
-        "type": "MultipleChoiceSingleSelect", 
-        "choices": [{"id": 0, "text": "Yes", "correct": true}, {"id": 1, "text": "No", "correct": false}]},
-      ]
-
-      //GSPC
-      //Id UserId JSON(List QuestionId QuestionSting AnswerId AnswerString Correct(bool)) CreatedOn 
+  
+  const props = defineProps({
+    'questions': {
+      type: Object,
+      required: true
+    },
+  })
 
   const question_index = ref(0)
   const user_answers = reactive([])
   const has_submitted = ref(false)
   let show_intro = ref(true)
 
-  const number_of_questions = computed(() => questions.length)
-  const current_question = computed(() => questions[question_index.value])
+  const number_of_questions = computed(() => props.questions.length)
+  const current_question = computed(() => props.questions[question_index.value])
   const is_current_unanswered = computed(() => user_answers[question_index.value] === undefined )
-  const last_question = computed(() => question_index.value == (questions.length -1))
+  const last_question = computed(() => question_index.value == (props.questions.length -1))
   const can_submit = computed(() => !is_current_unanswered.value && !has_submitted.value)
 
   function start() {
     show_intro.value = false
   }
 
-  function windowStateListener(event) {
-    if (event.state) {
-        question_index.value = event.state.page
-      }
-  }
-
   onMounted(async () => {
     window.addEventListener("beforeunload", exit_warning)
     const state = { page: 0 };
     history.replaceState(state, "", "");
-    window.addEventListener("popstate", windowStateListener)
   })
 
   onBeforeUnmount(() => {
-    window.removeEventListener('popstate', windowStateListener)
     window.removeEventListener('beforeunload', exit_warning)
   })
 
@@ -64,9 +49,6 @@
   }
 
   function previous_question(){
-    if (question_index.value <= 0) {
-      return
-    }
     question_index.value -= 1
     const state = { page: question_index.value }
     const url = ""
@@ -101,6 +83,7 @@
       You can complete the verification steps to receive your GSA SmartPay® Program Certification if you meet these requirements.
     </p>
     <button
+      id="start-button"
       class="usa-button"
       @click="start"
     >
@@ -123,6 +106,7 @@
     </section>
     <div v-if="last_question">
       <button
+        id="submit-button"
         class="usa-button margin-bottom-2"
         :disabled="!can_submit"
         @click="submit_quiz"
@@ -146,7 +130,7 @@
     </div>
     <div v-else>
       <button
-        
+        id="next-button"
         class="usa-button margin-bottom-2"
         :disabled="is_current_unanswered"
         @click="next_question"
@@ -158,6 +142,7 @@
     <br>
     <button
       v-if="question_index"
+      id="previous-button"
       type=""
       class="usa-button usa-button--unstyled"
       @click="previous_question"
