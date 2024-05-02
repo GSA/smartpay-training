@@ -33,6 +33,8 @@
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const certPassed = ref(props.certPassed)
   const certFailed = ref(props.certFailed)
+  const quizStarted = ref(false)
+  const quizSubmitted = ref(false)
   const error = ref(props.error)
   let redirectExpirationDateString = ""
   let expirationDate = ""
@@ -67,9 +69,13 @@
     //console.log('todo')
 	}
 
+  function startQuiz() {
+    quizStarted.value = true
+  }
+
   async function submitGspcRegistration(user_answers) {
     const url = `${base_url}/api/v1/gspc/submission`
-   
+    quizSubmitted.value = true
     let res
     
     try {
@@ -105,9 +111,9 @@
 </script>
 
 <template>
-  <div 
-    class="padding-top-4 padding-bottom-4" 
-    :class="{'bg-base-lightest': isStarted && !isSubmitted}"
+  <div
+    class="padding-top-4 padding-bottom-4"
+    :class="{'bg-base-lightest': quizStarted && !quizSubmitted}"
   >
     <div
       class="grid-container"
@@ -146,8 +152,8 @@
                 <p>Before verifying your GSPC coursework and experience, you'll need to create and complete your profile.</p>
               </template>
               <div v-if="certPassed">
-                <h2>Congratulations You Earned Your GSA SmartPay® Program Certificate (GSPC)</h2>
-                <p>You have met the requirements to earn a GSA SmartPay® Program Certificate (GSPC). Your certificate has been emailed to you. Or, you may download your certificate below.</p>
+                <h2>Congratulations You Earned Your GSA SmartPay Program Certificate (GSPC)</h2>
+                <p>You have met the requirements to earn a GSA SmartPay Program Certificate (GSPC). Your certificate has been emailed to you. Or, you may download your certificate below.</p>
                 <button
                   class="usa-button"
                   @click="downloadCert"
@@ -158,7 +164,7 @@
                 <a href="/">Return to the GSA SmartPay Training Home Page</a>
               </div>
               <div v-else-if="certFailed">
-                <h2>You Don't Meet the Requirements for GSA SmartPay® Program Certification (GSPC)</h2>
+                <h2>You Don't Meet the Requirements for GSA SmartPay Program Certification (GSPC)</h2>
                 <p>Once you have met the coursework and experience requirement of six months of continuous, hands-on experience working with the GSA SmartPay program please return to the link  in your email to reapply.</p>
                 <p>If you have any questions ,please reference <a href="">Smart Bulletin No. 022</a> or contact the GSPC Program Manager at <a href="mailto:smartpaygspc@gsa.gov">smartpaygspc@gsa.com</a>.</p>
                 <a href="/">Return to the GSA SmartPay Training Home Page</a>
@@ -167,6 +173,7 @@
                 <GspcQuestions
                   :questions="questions"
                   @submit-gspc-registration="submitGspcRegistration"
+                  @start-quiz="startQuiz"
                 />
               </div>
             </Loginless>

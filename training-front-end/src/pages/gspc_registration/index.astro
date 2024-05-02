@@ -3,11 +3,14 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import HeroTraining from '@components/HeroTraining.astro';
 import GspcRegistration from '@components/GspcRegistration.vue';
 
-const pageTitle = "GSPC Registration";
+const pageTitle = "GSA SmartPay® Program Certification";
 ---
 
 <BaseLayout title={pageTitle} description="GSPC registration page">
   <HeroTraining background_class='bg_smartpay_cool_grey'>
+    <span slot="subheader">
+      Card/Account Holders and Approving Officials
+    </span>
     GSA SmartPay® Program Certification (GSPC)
   </HeroTraining>
   <GspcRegistration

@@ -7,7 +7,8 @@
   import NavigateBack from "./icons/NavigateBack.vue"
   import SpinnerGraphic from './SpinnerGraphic.vue'
 
-  const emit = defineEmits(['submitGspcRegistration'])
+  const emit = defineEmits(['submitGspcRegistration', 'startQuiz'])
+  
   
   const props = defineProps({
     'questions': {
@@ -29,6 +30,7 @@
 
   function start() {
     show_intro.value = false
+    emit('startQuiz')
   }
 
   onMounted(async () => {
@@ -90,7 +92,9 @@
       Continue to verify coursework and experience
     </button>
   </section>
-  <div v-else>
+  <div 
+    v-else
+  >
     <QuizCounter
       :current="question_index + 1"
       :total="number_of_questions"
