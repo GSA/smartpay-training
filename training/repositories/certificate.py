@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from training import models
-from training.schemas.user_cerificate import UserCertificate
+from training.schemas.user_certificate import UserCertificate
 from .base import BaseRepository
 
 
