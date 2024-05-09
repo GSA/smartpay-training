@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class GspcSubmissionQuestion(BaseModel):
@@ -7,8 +7,14 @@ class GspcSubmissionQuestion(BaseModel):
     response_id: int
     response: str
     correct: bool
+    model_config = ConfigDict(from_attributes=True)
+
+
+class GspcSubmissionQuestions(BaseModel):
+    responses: list[GspcSubmissionQuestion]
 
 
 class GspcSubmission(BaseModel):
     expiration_date: str
-    responses: list[GspcSubmissionQuestion]
+    responses: GspcSubmissionQuestions
+    model_config = ConfigDict(from_attributes=True)

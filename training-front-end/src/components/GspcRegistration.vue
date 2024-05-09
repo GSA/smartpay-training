@@ -17,6 +17,11 @@
       required: false,
       default: false
     },
+    'certId': {
+      type: Number,
+      required: false,
+      default: null
+    },
     'certFailed': {
       type: Boolean,
       required: false,
@@ -32,6 +37,7 @@
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const certPassed = ref(props.certPassed)
+  const certId = ref(props.certId)
   const certFailed = ref(props.certFailed)
   const quizStarted = ref(false)
   const quizSubmitted = ref(false)
@@ -104,6 +110,7 @@
     var result = await res.json()
     if(result.passed){
       certPassed.value = true
+      certId.value = result.cert_id
     } else{
       certFailed.value = true
     }

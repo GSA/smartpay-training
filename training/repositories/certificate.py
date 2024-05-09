@@ -33,3 +33,4 @@ class CertificateRepository(BaseRepository[models.QuizCompletion]):
                                 .join(models.Quiz, models.QuizCompletion.quiz_id == models.Quiz.id)
                                 .filter(models.QuizCompletion.passed, models.User.id == user_id).all())
         return results
+    
