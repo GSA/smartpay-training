@@ -60,7 +60,7 @@ def get_certificate_by_type_and_id(
             certificate.certification_expiration_date
         )
 
-        filename = "GSPC Certification.pdf"
+        filename = "GSA SmartPay Program Certification.pdf"
     else:
         # type not implemented
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
