@@ -34,7 +34,7 @@ describe('GspcRegistration', () => {
     setUserCredentials()
     const wrapper = await mount(GspcRegistration)
     await flushPromises()
-    expect(wrapper.text()).toContain("GSA SmartPay® Program Certification (GSPC) Requirements")
+    expect(wrapper.text()).toContain("GSA SmartPay Program Certification (GSPC) Requirements")
   })
 
   it('renders USWDSAlert when error is present', async () => {

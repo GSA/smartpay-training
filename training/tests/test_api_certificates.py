@@ -177,4 +177,3 @@ class TestCertificateAPI:
             data={"jwtToken": goodJWT}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-        
