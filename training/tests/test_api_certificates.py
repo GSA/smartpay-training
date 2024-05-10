@@ -157,7 +157,7 @@ class TestCertificateAPI:
         )
         assert response.status_code == status.HTTP_200_OK
         assert response.headers['content-type'] == 'application/pdf'
-        assert response.headers['content-disposition'] == 'attachment; filename="GSPC Certification.pdf"'
+        assert response.headers['content-disposition'] == 'attachment; filename="GSA SmartPay Program Certification.pdf"'
         assert response.text == "some bytes"
 
     def test_get_specific_gspc_certificate_not_found(self, fake_cert_repo, goodJWT):
