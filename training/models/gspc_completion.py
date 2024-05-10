@@ -1,3 +1,4 @@
+from typing import Any
 from datetime import datetime
 from training.models import Base
 from sqlalchemy.orm import Mapped, mapped_column
@@ -12,4 +13,4 @@ class GspcCompletion(Base):
     passed: Mapped[bool] = mapped_column()
     certification_expiration_date = Column(Date(), nullable=False)
     submit_ts: Mapped[datetime] = mapped_column(server_default=func.now())
-    responses: Mapped[str] = mapped_column()
+    responses: Mapped[dict[str, Any]] = mapped_column()

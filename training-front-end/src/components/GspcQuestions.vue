@@ -73,16 +73,16 @@
     v-if="show_intro"
     class="usa-prose margin-y-1 usa-prose"
   >
-    <h2>GSA SmartPay® Program Certification (GSPC) Requirements</h2>
+    <h2>GSA SmartPay Program Certification (GSPC) Requirements</h2>
     <p>
-      To earn your GSA SmartPay ® Program Certification you will need to:
+      To earn your GSA SmartPay Program Certification you will need to:
 
       <ul>
         <li>Complete a minimum of seven classes, including two GSA-qualifying classes and five Bank/brand-qualifying classes, during the annual GSA SmartPay Training forum.</li>
         <li>Have a minimum of six months of continuous, hands-on experience working with the GSA SmartPay program.</li>
       </ul> 
 
-      You can complete the verification steps to receive your GSA SmartPay® Program Certification if you meet these requirements.
+      You can complete the verification steps to receive your GSA SmartPay Program Certification if you meet these requirements.
     </p>
     <button
       id="start-button"

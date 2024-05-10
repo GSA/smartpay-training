@@ -1,7 +1,6 @@
 import logging
 from training.repositories import GspcCompletionRepository, UserRepository, CertificateRepository
-from training.schemas import GspcSubmission, GspcResult
-from models import GspcCompletion
+from training.schemas import GspcSubmission, GspcResult, GspcCompletion
 from sqlalchemy.orm import Session
 from training.services import Certificate
 from string import Template
@@ -16,11 +15,11 @@ CERTIFICATE_EMAIL_TEMPLATE = Template('''
     <p>
     Congratulations!
     </p>
-    <p>You've successfully passed the GSA SmartPay® $course_name quiz.</p>
+    <p>You've successfully met the GSPC experience requirement.</p>
     <p>Your certificate is attached below.</p>
     <p>
     If you did not submit this request, you may be receiving this message in error. Please disregard this email. If you have any questions or need further
-    assistance, email us at gsa_smartpay@gsa.gov.
+    assistance, email us at <a href="mailto:smartpaygspc@gsa.gov">smartpaygspc@gsa.com</a>.
     </p>
     <p>Thank you.</p>
     ''')
@@ -41,7 +40,7 @@ class GspcService():
         :return: GspcResult model which includes the final result
         """
 
-        passed = all(question.correct for question in submission.responses)
+        passed = all(question.correct for question in submission.responses.responses)
 
         responses_dict = submission.responses.model_dump()
         result = self.gspc_completion_repo.create(GspcCompletion(
@@ -56,12 +55,12 @@ class GspcService():
                 user = self.user_repo.find_by_id(user_id)
                 pdf_bytes = self.certificate_service.generate_gspc_pdf(
                     user.name,
-                    user.agency,
+                    user.agency.name,
                     result.submit_ts,
                     result.certification_expiration_date
                 )
 
-                self.email_certificate(user.name, user.email, pdf_bytes, submission.expiration_date)
+                self.email_certificate(user.name, user.email, pdf_bytes)
                 logging.info(f"Sent confirmation email to {user.email} for passing training quiz")
             except Exception as e:
                 logging.error("Error sending quiz confirmation mail", e)
@@ -69,26 +68,26 @@ class GspcService():
 
         result = GspcResult(
             passed=passed,
+            cert_id=result.id
         )
 
         return result
 
-    def email_certificate(self, user_name: str, course_name: str, to_email: str, certificate: bytes) -> None:
+    def email_certificate(self, user_name: str, to_email: str, certificate: bytes) -> None:
         """
         Sends congratulatory email to user with certificate attached.
         :param user_name: User's Name
-        :param course_name: Name of course user completed
         :param to_email: User's email
         :param certificate: Certificate PDF file
         :return: N/A
         """
-        body = CERTIFICATE_EMAIL_TEMPLATE.substitute({"name": user_name, "course_name": course_name})
+        body = CERTIFICATE_EMAIL_TEMPLATE.substitute({"name": user_name})
         message = EmailMessage()
         message.set_content(body, subtype="html")
-        message["Subject"] = "Certificate - GSA SmartPay " + course_name
+        message["Subject"] = "Certificate – GSA SmartPay® Program Certificate"
         message["From"] = f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM}>"
         message["To"] = to_email
-        message.add_attachment(certificate, maintype="application", subtype="pdf", filename="SmartPayTraining.pdf")
+        message.add_attachment(certificate, maintype="application", subtype="pdf", filename="GSPC Certificate.pdf")
 
         with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT) as smtp:
             smtp.starttls()

@@ -24,26 +24,54 @@ def get_certificates_by_userid(
     return db_user_certificates
 
 
-@router.post("/certificate/{id}", response_model=UserCertificate)
-def get_certificate_by_id(
-    id: int,
-    repo: CertificateRepository = Depends(certificate_repository),
-    certificate: Certificate = Depends(Certificate),
-    user=Depends(user_from_form)
+@router.post("/certificate/{certType}/{id}", response_model=UserCertificate)
+def get_certificate_by_type_and_id(
+        id: int,
+        certType: str,
+        certificateRepo: CertificateRepository = Depends(certificate_repository),
+        certificateService: Certificate = Depends(Certificate),
+        user=Depends(user_from_form)
 ):
-    db_user_certificate = repo.get_certificate_by_id(id)
+    pdf_bytes = None
+    filename = ''
 
-    if db_user_certificate is None:
+    if (certType == 'quiz'):
+        db_user_certificate = certificateRepo.get_certificate_by_id(id)
+
+        verify_certificate_is_valid(db_user_certificate, user["id"])
+
+        pdf_bytes = certificateService.generate_pdf(
+            db_user_certificate.quiz_name,
+            db_user_certificate.user_name,
+            db_user_certificate.agency,
+            db_user_certificate.completion_date
+        )
+
+        filename = "SmartPayTraining.pdf"
+    elif (certType == 'gspc'):
+        certificate = certificateRepo.get_gspc_certificate_by_id(id)
+
+        verify_certificate_is_valid(certificate, user["id"])
+
+        pdf_bytes = certificateService.generate_gspc_pdf(
+            certificate.user_name,
+            certificate.agency,
+            certificate.completion_date,
+            certificate.certification_expiration_date
+        )
+
+        filename = "GSPC Certification.pdf"
+    else:
+        # type not implemented
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if db_user_certificate.user_id != user["id"]:
-        raise HTTPException(status_code=401, detail="Not Authorized")
-
-    pdf_bytes = certificate.generate_pdf(
-        db_user_certificate.quiz_name,
-        db_user_certificate.user_name,
-        db_user_certificate.agency,
-        db_user_certificate.completion_date
-    )
-    headers = {'Content-Disposition': 'attachment; filename="SmartPayTraining.pdf"'}
+    headers = {'Content-Disposition': f'attachment; filename="{filename}"'}
     return Response(pdf_bytes, headers=headers, media_type='application/pdf')
+
+
+def verify_certificate_is_valid(cert: object, user_id: int):
+    if cert is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    if cert.user_id != user_id:
+        raise HTTPException(status_code=401, detail="Not Authorized")
