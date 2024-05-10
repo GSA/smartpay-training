@@ -5,6 +5,7 @@
   import USWDSAlert from './USWDSAlert.vue'
   import Loginless from './LoginlessFlow.vue';
   import GspcQuestions from './GspcQuestions.vue';
+  import FileDownLoad from "./icons/FileDownload.vue"
 
   onErrorCaptured((err) => {
     setError(err)
@@ -16,6 +17,11 @@
       type: Boolean,
       required: false,
       default: false
+    },
+    'certId': {
+      type: Number,
+      required: false,
+      default: null
     },
     'certFailed': {
       type: Boolean,
@@ -32,6 +38,7 @@
   const user = useStore(profile)
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
   const certPassed = ref(props.certPassed)
+  const certId = ref(props.certId)
   const certFailed = ref(props.certFailed)
   const quizStarted = ref(false)
   const quizSubmitted = ref(false)
@@ -65,10 +72,6 @@
     error.value = event
 	}
 
-  function downloadCert(){
-    //console.log('todo')
-	}
-
   function startQuiz() {
     quizStarted.value = true
   }
@@ -85,7 +88,7 @@
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.value.jwt}`
         },
-        body:  JSON.stringify( {'responses': user_answers, 'expiration_date': expirationDate}) 
+        body: JSON.stringify({'responses':{'responses': user_answers}, 'expiration_date': expirationDate}) 
       })
     } catch(e) {
       const err = new Error("There was a problem connecting with the server")
@@ -104,6 +107,7 @@
     var result = await res.json()
     if(result.passed){
       certPassed.value = true
+      certId.value = result.cert_id
     } else{
       certFailed.value = true
     }
@@ -137,7 +141,7 @@
               page-id="gspc_registration"
               title="gspc_registration"
               :header="header"
-              link-destination-text="the GSA SmartPay Program Certification (GSPCS)"
+              link-destination-text="the GSA SmartPay Program Certification (GSPC)"
               :parameters="redirectExpirationDateString"
               @start-loading="startLoading"
               @error="setError"
@@ -154,24 +158,35 @@
               <div v-if="certPassed">
                 <h2>Congratulations You Earned Your GSA SmartPay Program Certificate (GSPC)</h2>
                 <p>You have met the requirements to earn a GSA SmartPay Program Certificate (GSPC). Your certificate has been emailed to you. Or, you may download your certificate below.</p>
-                <button
-                  class="usa-button"
-                  @click="downloadCert"
+                <form
+                  :action="`${base_url}/api/v1/certificate/gspc/${certId}`" 
+                  method="post"
                 >
-                  Download your certificate
-                </button>
-                <br><br>
-                <a href="/">Return to the GSA SmartPay Training Home Page</a>
+                  <input 
+                    type="hidden"
+                    name="jwtToken"
+                    :value="user.jwt"
+                  >
+                  <button
+                    class="usa-button"
+                    type="submit"
+                  >
+                    <FileDownLoad /> Download your certificate
+                  </button>
+                  <br><br>
+                  <a :href="base_url">Return to the GSA SmartPay Training Home Page</a>
+                </form>
               </div>
               <div v-else-if="certFailed">
                 <h2>You Don't Meet the Requirements for GSA SmartPay Program Certification (GSPC)</h2>
                 <p>Once you have met the coursework and experience requirement of six months of continuous, hands-on experience working with the GSA SmartPay program please return to the link  in your email to reapply.</p>
-                <p>If you have any questions ,please reference <a href="">Smart Bulletin No. 022</a> or contact the GSPC Program Manager at <a href="mailto:smartpaygspc@gsa.gov">smartpaygspc@gsa.com</a>.</p>
-                <a href="/">Return to the GSA SmartPay Training Home Page</a>
+                <p>If you have any questions, please reference <a href="https://smartpay.gsa.gov/policies-and-audits/smart-bulletins/022">Smart Bulletin No. 022</a> or contact the GSPC Program Manager at <a href="mailto:smartpaygspc@gsa.gov">smartpaygspc@gsa.com</a>.</p>
+                <a :href="base_url">Return to the GSA SmartPay Training Home Page</a>
               </div>
               <div v-else>
                 <GspcQuestions
                   :questions="questions"
+                  class="desktop:grid-col-8"
                   @submit-gspc-registration="submitGspcRegistration"
                   @start-quiz="startQuiz"
                 />
