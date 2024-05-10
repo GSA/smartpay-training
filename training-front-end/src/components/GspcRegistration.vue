@@ -7,7 +7,6 @@
   import GspcQuestions from './GspcQuestions.vue';
   import FileDownLoad from "./icons/FileDownload.vue"
 
-
   onErrorCaptured((err) => {
     setError(err)
     return false
@@ -89,7 +88,7 @@
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.value.jwt}`
         },
-        body:  JSON.stringify( { 'responses':{'responses': user_answers}, 'expiration_date': expirationDate}) 
+        body: JSON.stringify({'responses':{'responses': user_answers}, 'expiration_date': expirationDate}) 
       })
     } catch(e) {
       const err = new Error("There was a problem connecting with the server")

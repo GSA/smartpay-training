@@ -23,7 +23,7 @@ class CertificateRepository(BaseRepository[models.QuizCompletion]):
                                .first())
         return result
 
-    def get_certificates_by_userid(self, user_id: int) -> list[UserCertificate]:
+    def get_certificates_by_userId(self, user_id: int) -> list[UserCertificate]:
         results = (self._session.query(models.QuizCompletion.id.label("id"), models.User.id.label("user_id"),
                                        models.User.name.label("user_name"), models.Quiz.id.label("quiz_id"),
                                        models.Agency.name.label("agency"), models.Quiz.name.label("quiz_name"),
