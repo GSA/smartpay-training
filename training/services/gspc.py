@@ -1,5 +1,5 @@
 import logging
-from training.repositories import GspcCompletionRepository, UserRepository, CertificateRepository
+from training.repositories import GspcCompletionRepository, UserRepository
 from training.schemas import GspcSubmission, GspcResult, GspcCompletion
 from sqlalchemy.orm import Session
 from training.services import Certificate
@@ -29,7 +29,6 @@ class GspcService():
     def __init__(self, db: Session):
         self.gspc_completion_repo = GspcCompletionRepository(db)
         self.user_repo = UserRepository(db)
-        self.certificate_repo = CertificateRepository(db)
         self.certificate_service = Certificate()
 
     def grade(self, user_id: int, submission: GspcSubmission) -> GspcResult:

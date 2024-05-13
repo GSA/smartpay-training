@@ -7,6 +7,7 @@
   import GspcQuestions from './GspcQuestions.vue';
   import FileDownLoad from "./icons/FileDownload.vue"
 
+
   onErrorCaptured((err) => {
     setError(err)
     return false
@@ -36,7 +37,8 @@
   })
 
   const user = useStore(profile)
-  const base_url = import.meta.env.PUBLIC_API_BASE_URL
+  const base_api_url = import.meta.env.PUBLIC_API_BASE_URL
+  const base_url = import.meta.env.BASE_URL
   const certPassed = ref(props.certPassed)
   const certId = ref(props.certId)
   const certFailed = ref(props.certFailed)
@@ -77,7 +79,7 @@
   }
 
   async function submitGspcRegistration(user_answers) {
-    const url = `${base_url}/api/v1/gspc/submission`
+    const url = `${base_api_url}/api/v1/gspc/submission`
     quizSubmitted.value = true
     let res
     
@@ -159,7 +161,7 @@
                 <h2>Congratulations You Earned Your GSA SmartPay Program Certificate (GSPC)</h2>
                 <p>You have met the requirements to earn a GSA SmartPay Program Certificate (GSPC). Your certificate has been emailed to you. Or, you may download your certificate below.</p>
                 <form
-                  :action="`${base_url}/api/v1/certificate/gspc/${certId}`" 
+                  :action="`${base_api_url}/api/v1/certificate/gspc/${certId}`" 
                   method="post"
                 >
                   <input 
