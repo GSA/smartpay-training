@@ -15,7 +15,7 @@ CERTIFICATE_EMAIL_TEMPLATE = Template('''
     <p>
     Congratulations!
     </p>
-    <p>You've successfully met the GSPC experience requirement.</p>
+    <p>You've successfully met the GSPC requirements.</p>
     <p>Your certificate is attached below.</p>
     <p>
     If you did not submit this request, you may be receiving this message in error. Please disregard this email. If you have any questions or need further
