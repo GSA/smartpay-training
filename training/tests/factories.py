@@ -40,3 +40,7 @@ class AgencyCreateSchemaFactory(ModelFactory[schemas.AgencyCreate]):
 
 class RoleSchemaFactory(ModelFactory[schemas.Role]):
     __model__ = schemas.Role
+
+
+class GspcCompletionFactory(ModelFactory[schemas.GspcCompletion]):
+    __model__ = schemas.GspcCompletion

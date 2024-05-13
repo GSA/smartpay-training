@@ -78,7 +78,7 @@
       To earn your GSA SmartPay Program Certification you will need to:
 
       <ul>
-        <li>Complete a minimum of seven classes, including two GSA-qualifying classes and five Bank/brand-qualifying classes, during the annual GSA SmartPay Training forum.</li>
+        <li>Complete a minimum of seven classes, including two GSA-qualifying classes and five Bank/brand-qualifying classes, during the annual GSA SmartPay Training Forum.</li>
         <li>Have a minimum of six months of continuous, hands-on experience working with the GSA SmartPay program.</li>
       </ul> 
 
