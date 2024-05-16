@@ -10,7 +10,8 @@ from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository, RoleRepository
+from training.repositories import (AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository,
+                                   CertificateRepository, RoleRepository, GspcCompletionRepository)
 from training.schemas import AgencyCreate, RoleCreate, UserCertificate, GspcCertificate
 from training.services import QuizService
 from training.config import settings
@@ -352,6 +353,14 @@ def valid_user_certificate() -> Generator[schemas.UserCertificate, None, None]:
         'completion_date': '2023-08-21T22:59:36'
     }
     yield UserCertificate.model_validate(testdata)
+
+
+@pytest.fixture
+def gspc_completion_repo_with_data(db_with_data: Session) -> Generator[GspcCompletionRepository, None, None]:
+    '''
+    Provides a GspcCompletionRepository injected with a populated database.
+    '''
+    yield GspcCompletionRepository(session=db_with_data)
 
 
 @pytest.fixture
