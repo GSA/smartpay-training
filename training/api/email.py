@@ -51,30 +51,11 @@ If you have any questions or need further assistance, email us at <a href="mailt
 GSPC_INVITE_EMAIL_TEMPLATE = Template('''
 <p>Greetings!</p>
 
-<p>
-During the GSA SmartPay® Training Forum, you completed the required coursework for the GSA SmartPay Program Certification (GSPC)
- defined by <a href="https://smartpay.gsa.gov/policies-and-audits/smart-bulletins/022/">Smart Bulletin 22</a>.
-</p>
-<p>
-GSPC recipients are also required to have a minimum of six (6) months of continuous, hands-on experience working with the GSA SmartPay program.
-</p>
-<p>
-Please do not share this link with others.
-</p>
-
-<p><a href="$link">$link</a></p>
-
-<p>
-After completing this action, your GSPC will be immediately emailed to you and available for download within the training system.
-If you have any questions or need further assistance, email us at <a href="mailto:gsa_smartpay@gsa.gov">gsa_smartpay@gsa.gov</a>.
-</p>
-<p>Thank you.</p>
-''')
-
-
 # Todo move email function from quiz.py and turn this into a service so that it can be mocked
 def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
     # Todo clean this up
+    mailto = "gsa_smartpay@gsa.gov"
+
     if training_title and "certificate" in training_title.lower():
         subject = "GSA SmartPay® training certificate(s)"
         email_subject = "Access your GSA SmartPay training certificate(s)"
@@ -84,6 +65,7 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
     elif training_title and "gspc_registration" in training_title.lower():
         subject = "GSA SmartPay® GSPC Registration form"
         email_subject = "Access to GSA SmartPay GSPC Registration"
+        mailto = "smartpaygspc@gsa.gov"
     else:
         subject = f"GSA SmartPay® {training_title} quiz"
         email_subject = f"Access GSA SmartPay {training_title} quiz"
