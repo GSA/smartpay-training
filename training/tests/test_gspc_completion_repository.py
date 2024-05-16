@@ -12,7 +12,10 @@ def valid_gspc_completion(
         user_id=valid_user_ids[-1],
         passed=True,
         certification_expiration_date='2099-01-01',
-        responses={"responses": [{"correct": True, "question": "Q1", "response": "Yes", "question_id": 0, "response_id": 0}, {"correct": True, "question": "Q2", "response": "Yes", "question_id": 1, "response_id": 0}]}
+        responses={"responses": [
+            {"correct": True, "question": "Q1", "response": "Yes", "question_id": 0, "response_id": 0},
+            {"correct": True, "question": "Q2", "response": "Yes", "question_id": 1, "response_id": 0}
+        ]}
     )
 
 
