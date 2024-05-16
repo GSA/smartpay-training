@@ -353,12 +353,14 @@ def valid_user_certificate() -> Generator[schemas.UserCertificate, None, None]:
     }
     yield UserCertificate.model_validate(testdata)
 
+
 @pytest.fixture
 def gspc_completion_repo_with_data(db_with_data: Session) -> Generator[GspcCompletionRepository, None, None]:
     '''
     Provides a GspcCompletionRepository injected with a populated database.
     '''
     yield GspcCompletionRepository(session=db_with_data)
+
 
 @pytest.fixture
 def valid_gspc_certificate() -> Generator[schemas.GspcCertificate, None, None]:
