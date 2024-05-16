@@ -10,7 +10,8 @@ from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository, RoleRepository, GspcCompletionRepository
+from training.repositories import (AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository,
+                                   CertificateRepository, RoleRepository, GspcCompletionRepository)
 from training.schemas import AgencyCreate, RoleCreate, UserCertificate, GspcCertificate
 from training.services import QuizService
 from training.config import settings
