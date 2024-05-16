@@ -29,7 +29,7 @@
 
     const result_string = computed(() => `${props.quizResults.correct_count} of ${props.quizResults.question_count}`)
     const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
-    const quiz_certificate_url = computed(() => `${api_base}/api/v1/certificate/${props.quizResults.quiz_completion_id}`)
+    const quiz_certificate_url = computed(() => `${api_base}/api/v1/certificate/quiz/${props.quizResults.quiz_completion_id}`)
     function windowStateListener() {
       window.location = import.meta.env.BASE_URL
     }

@@ -94,3 +94,33 @@ quiz_submissions:
     responses:
       - question_id: 0
         response_ids: [0]
+
+gspc_submission:
+  valid_passing:
+    expiration_date: '2099-01-01'
+    responses:
+      responses:
+        - question_id: 0
+          question: 'question1'
+          response_id: 0
+          response: 'Yes'
+          correct: True
+        - question_id: 1
+          question: 'question2'
+          response_id: 0
+          response: 'Yes'
+          correct: True
+  valid_failing:
+    expiration_date: '2099-01-01'
+    responses:
+      responses:
+        - question_id: 0
+          question: 'question1'
+          response_id: 1
+          response: 'No'
+          correct: False
+        - question_id: 1
+          question: 'question2'
+          response_id: 0
+          response: 'Yes'
+          correct: True

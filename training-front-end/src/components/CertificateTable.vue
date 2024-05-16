@@ -74,7 +74,7 @@
         </td>
         <td>
           <form
-            :action="`${api_url}/api/v1/certificate/${cert.id}`" 
+            :action="`${api_url}/api/v1/certificate/quiz/${cert.id}`" 
             method="post"
           >
             <input 

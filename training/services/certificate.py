@@ -36,3 +36,27 @@ class Certificate:
 
         doc.need_appearances(True)
         return doc.tobytes(linear=True, deflate_fonts=True, expand=2)
+
+    def generate_gspc_pdf(self, name, agency, date, expiration_date):
+        date_string = '{dt:%B} {dt.day}, {dt.year}'.format(dt=date)
+        expiration_date_string = 'Valid Through '+'{dt:%B} {dt.day}, {dt.year}'.format(dt=expiration_date)
+        data = {'name': name, 'agency': agency, 'date': date_string, 'expiration': expiration_date_string}
+        pdf = 'c_gspc.pdf'
+        empty_pdf_path = os.path.join(SCRIPT_DIR, PDF_PATH, pdf)
+
+        doc = fitz.open(empty_pdf_path)  # type: ignore
+        page = doc.load_page(0)
+
+        for field in page.widgets():
+            try:
+                field_name = field.field_name
+                field.field_value = data[field_name]
+                # field flag of 1 corresponds to "read-only"
+                field.field_flags = 1
+                field.update()
+            except KeyError:
+                # pdf has hidden calculated fields
+                continue
+
+        doc.need_appearances(True)
+        return doc.tobytes(linear=True, deflate_fonts=True, expand=2)

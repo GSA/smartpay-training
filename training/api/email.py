@@ -20,7 +20,7 @@ Click the link below to access your $subject.
 <p>
 If you did not submit this request, you may be receiving this message in error.
 Please disregard this email. If you have any questions or need further assistance,
-email us at gsa_smartpay@gsa.gov.
+email us at <a href="mailto:$mailto">$mailto</a>.
 </p>
 <p>Thank you.</p>
 ''')
@@ -48,10 +48,14 @@ If you have any questions or need further assistance, email us at <a href="mailt
 <p>Thank you.</p>
 ''')
 
+GSPC_INVITE_EMAIL_TEMPLATE = Template('''
+<p>Greetings!</p>
 
 # Todo move email function from quiz.py and turn this into a service so that it can be mocked
 def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
     # Todo clean this up
+    mailto = "gsa_smartpay@gsa.gov"
+
     if training_title and "certificate" in training_title.lower():
         subject = "GSA SmartPay® training certificate(s)"
         email_subject = "Access your GSA SmartPay training certificate(s)"
@@ -61,11 +65,12 @@ def send_email(to_email: EmailStr, name: str, link: str, training_title: str) ->
     elif training_title and "gspc_registration" in training_title.lower():
         subject = "GSA SmartPay® GSPC Registration form"
         email_subject = "Access to GSA SmartPay GSPC Registration"
+        mailto = "smartpaygspc@gsa.gov"
     else:
         subject = f"GSA SmartPay® {training_title} quiz"
         email_subject = f"Access GSA SmartPay {training_title} quiz"
 
-    body = EMAIL_TEMPLATE.substitute({"name": name, "link": link, "subject": subject})
+    body = EMAIL_TEMPLATE.substitute({"name": name, "link": link, "subject": subject, "mailto": mailto})
     message = EmailMessage()
     message.set_content(body, subtype="html")
     message["Subject"] = email_subject
