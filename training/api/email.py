@@ -48,8 +48,6 @@ If you have any questions or need further assistance, email us at <a href="mailt
 <p>Thank you.</p>
 ''')
 
-GSPC_INVITE_EMAIL_TEMPLATE = Template('''
-<p>Greetings!</p>
 
 # Todo move email function from quiz.py and turn this into a service so that it can be mocked
 def send_email(to_email: EmailStr, name: str, link: str, training_title: str) -> None:
