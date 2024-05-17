@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from training import models
-from training.schemas.user_cerificate import UserCertificate
+from training.schemas import UserCertificate, GspcCertificate
 from .base import BaseRepository
 
 
@@ -33,3 +33,15 @@ class CertificateRepository(BaseRepository[models.QuizCompletion]):
                                 .join(models.Quiz, models.QuizCompletion.quiz_id == models.Quiz.id)
                                 .filter(models.QuizCompletion.passed, models.User.id == user_id).all())
         return results
+
+    def get_gspc_certificate_by_id(self, id: int) -> GspcCertificate | None:
+
+        result = (self._session.query(models.GspcCompletion.id.label("id"), models.User.id.label("user_id"),
+                                      models.User.name.label("user_name"), models.Agency.name.label("agency"),
+                                      models.GspcCompletion.submit_ts.label("completion_date"),
+                                      models.GspcCompletion.certification_expiration_date.label("certification_expiration_date"))
+                  .join(models.User, models.GspcCompletion.user_id == models.User.id)
+                  .join(models.Agency, models.User.agency_id == models.Agency.id)
+                  .filter(models.GspcCompletion.passed, models.GspcCompletion.id == id)
+                  .first())
+        return result

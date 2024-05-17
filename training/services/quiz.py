@@ -106,7 +106,7 @@ class QuizService():
         grade.quiz_completion_id = result.id
 
         if passed:
-            # Send email with quizz completion attached
+            # Send email with quiz completion attached
             try:
                 user = self.user_repo.find_by_id(user_id)
                 db_user_certificate = self.certificate_repo.get_certificate_by_id(result.id)

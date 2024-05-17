@@ -10,14 +10,16 @@ from training.database import engine
 from training import models, schemas
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
-from training.repositories import AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository, CertificateRepository, RoleRepository
-from training.schemas import AgencyCreate, RoleCreate, UserCertificate
+from training.repositories import (AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository,
+                                   CertificateRepository, RoleRepository, GspcCompletionRepository)
+from training.schemas import AgencyCreate, RoleCreate, UserCertificate, GspcCertificate
 from training.services import QuizService
 from training.config import settings
 from . import factories
 from training.main import app
 
 quiz_submission_adapter = TypeAdapter(schemas.QuizSubmission)
+gspc_submission_adapter = TypeAdapter(schemas.GspcSubmission)
 
 
 @pytest.fixture
@@ -354,7 +356,55 @@ def valid_user_certificate() -> Generator[schemas.UserCertificate, None, None]:
 
 
 @pytest.fixture
+def gspc_completion_repo_with_data(db_with_data: Session) -> Generator[GspcCompletionRepository, None, None]:
+    '''
+    Provides a GspcCompletionRepository injected with a populated database.
+    '''
+    yield GspcCompletionRepository(session=db_with_data)
+
+
+@pytest.fixture
+def valid_gspc_certificate() -> Generator[schemas.GspcCertificate, None, None]:
+    '''
+    Provides a GspcCertificate schema object.
+    '''
+    testdata = {
+        'user_id': 2,
+        'user_name': "Molly",
+        'agency': 'Freeman Journal',
+        'certification_expiration_date': '2099-01-01',
+        'completion_date': '2023-08-21T22:59:36'
+    }
+    yield GspcCertificate.model_validate(testdata)
+
+
+@pytest.fixture
+def valid_gspc_passing_submission(testdata: dict) -> Generator[schemas.GspcSubmission, None, None]:
+    '''
+    Provides a GspcSubmission schema object containing valid passing responses.
+    '''
+    jsondata = testdata["gspc_submission"]["valid_passing"]
+    yield gspc_submission_adapter.validate_python(jsondata)
+
+
+@pytest.fixture
+def valid_gspc_failing_submission(testdata: dict) -> Generator[schemas.GspcSubmission, None, None]:
+    '''
+    Provides a GspcSubmission schema object containing invalid passing responses.
+    '''
+    jsondata = testdata["gspc_submission"]["valid_failing"]
+    yield gspc_submission_adapter.validate_python(jsondata)
+
+
+@pytest.fixture
 def smtp_instance():
     with patch('training.services.quiz.SMTP') as smtp_mock:
+        with smtp_mock() as smtp:
+            yield smtp
+
+
+@pytest.fixture
+def gspc_smtp_instance():
+    with patch('training.services.gspc.SMTP') as smtp_mock:
         with smtp_mock() as smtp:
             yield smtp

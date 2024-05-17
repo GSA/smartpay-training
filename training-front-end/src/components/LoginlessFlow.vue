@@ -118,7 +118,10 @@
 
   function clearToken() {
     const url = new URL(window.location);
-    url.search = ''
+    //remove token from url
+    const params = new URLSearchParams(url.search);
+    params.delete('t')
+    url.search = params
     history.replaceState({}, '', url)
   }
 
