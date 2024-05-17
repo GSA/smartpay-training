@@ -12,7 +12,7 @@
   
   const props = defineProps({
     'questions': {
-      type: Object,
+      type: Array,
       required: true
     },
   })
