@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from training.api.deps import certificate_repository
 from training.config import settings
 from training.main import app
-from training.schemas import UserCertificate, GspcCertificate
+from training.schemas import UserCertificate, GspcCertificate, CertificateListValue
 from training.services.certificate import Certificate
 
 client = TestClient(app)
@@ -36,6 +36,18 @@ def gspc_cert():
         'agency': 'Freeman Journal',
         'completion_date': '2023-08-21T22:59:36',
         'certification_expiration_date': '2024-08-21'
+    }
+
+
+@pytest.fixture
+def cert_list_value():
+    return {
+        'id': 1,
+        'user_id': 2,
+        'user_name': "Molly",
+        'cert_title': "Dublin History",
+        'completion_date': '2023-08-21T22:59:36',
+        'certificate_type': 1
     }
 
 
@@ -68,7 +80,7 @@ class TestCertificateAPI:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_get_no_certificates(self, fake_cert_repo, goodJWT):
-        fake_cert_repo.get_certificates_by_userid.return_value = None
+        fake_cert_repo.get_all_certificates_by_userid.return_value = None
         response = client.get(
             "/api/v1/certificates",
             headers={"Authorization": f"Bearer {goodJWT}"}
@@ -76,36 +88,36 @@ class TestCertificateAPI:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_gets_certificates_by_type_and_id(self, fake_cert_repo, goodJWT):
-        fake_cert_repo.get_certificates_by_userid.return_value = None
+        fake_cert_repo.get_all_certificates_by_userid.return_value = None
         client.get(
             "/api/v1/certificates",
             headers={"Authorization": f"Bearer {goodJWT}"}
         )
-        fake_cert_repo.get_certificates_by_userid.assert_called_once_with(1)
+        fake_cert_repo.get_all_certificates_by_userid.assert_called_once_with(1)
 
-    def test_gets_certificates(self, fake_cert_repo, goodJWT, user_cert):
-        cert = UserCertificate.model_validate(user_cert)
-        fake_cert_repo.get_certificates_by_userid.return_value = [cert]
+    def test_gets_certificates(self, fake_cert_repo, goodJWT, cert_list_value):
+        cert = CertificateListValue.model_validate(cert_list_value)
+        fake_cert_repo.get_all_certificates_by_userid.return_value = [cert]
         response = client.get(
             "/api/v1/certificates",
             headers={"Authorization": f"Bearer {goodJWT}"}
         )
-        assert response.json() == [user_cert]
+        assert response.json() == [cert_list_value]
 
     def test_get_specific_certificate_not_found(self, fake_cert_repo, goodJWT):
         fake_cert_repo.get_certificate_by_id.return_value = None
         response = client.post(
-            "/api/v1/certificate/quiz/2",
+            "/api/v1/certificate/1/2",
             data={"jwtToken": goodJWT}
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
         fake_cert_repo.get_certificate_by_id.assert_called_once_with(2)
 
-    def test_get_specific_certificate_wrong_user(self, fake_cert_repo, goodJWT, user_cert):
-        cert = UserCertificate.model_validate(user_cert)
+    def test_get_specific_certificate_wrong_user(self, fake_cert_repo, goodJWT, cert_list_value):
+        cert = CertificateListValue.model_validate(cert_list_value)
         fake_cert_repo.get_certificate_by_id.return_value = cert
         response = client.post(
-            "/api/v1/certificate/quiz/2",
+            "/api/v1/certificate/1/2",
             data={"jwtToken": goodJWT}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -117,7 +129,7 @@ class TestCertificateAPI:
         fake_cert_service_repo.generate_pdf.return_value = b'some bytes'
 
         response = client.post(
-            "/api/v1/certificate/quiz/2",
+            "/api/v1/certificate/1/2",
             data={"jwtToken": goodJWT}
         )
         fake_cert_service_repo.generate_pdf.assert_called_once_with(
@@ -146,7 +158,7 @@ class TestCertificateAPI:
         fake_cert_service_repo.generate_gspc_pdf.return_value = b'some bytes'
 
         response = client.post(
-            "/api/v1/certificate/gspc/2",
+            "/api/v1/certificate/2/2",
             data={"jwtToken": goodJWT}
         )
         fake_cert_service_repo.generate_gspc_pdf.assert_called_once_with(
@@ -163,7 +175,7 @@ class TestCertificateAPI:
     def test_get_specific_gspc_certificate_not_found(self, fake_cert_repo, goodJWT):
         fake_cert_repo.get_gspc_certificate_by_id.return_value = None
         response = client.post(
-            "/api/v1/certificate/gspc/2",
+            "/api/v1/certificate/2/2",
             data={"jwtToken": goodJWT}
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -173,7 +185,7 @@ class TestCertificateAPI:
         cert = GspcCertificate.model_validate(gspc_cert)
         fake_cert_repo.get_gspc_certificate_by_id.return_value = cert
         response = client.post(
-            "/api/v1/certificate/gspc/2",
+            "/api/v1/certificate/2/2",
             data={"jwtToken": goodJWT}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
