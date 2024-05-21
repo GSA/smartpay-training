@@ -123,6 +123,7 @@ class TestCertificateAPI:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_get_specific_quiz_certificate(self, fake_cert_repo, goodJWT, user_cert, fake_cert_service_repo):
+    def test_get_specific_quiz_certificate(self, fake_cert_repo, goodJWT, user_cert, fake_cert_service_repo):
         user_cert['user_id'] = 1
         cert = UserCertificate.model_validate(user_cert)
         fake_cert_repo.get_certificate_by_id.return_value = cert
