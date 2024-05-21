@@ -1,6 +1,6 @@
 from typing import List, Any
 from fastapi import APIRouter, status, HTTPException, Depends, Response
-from training.schemas import UserCertificate
+from training.schemas import UserCertificate, CertificateType, CertificateListValue
 from training.repositories import CertificateRepository
 from training.api.deps import certificate_repository
 from training.services.certificate import Certificate
@@ -10,7 +10,7 @@ from training.api.auth import JWTUser, user_from_form
 router = APIRouter()
 
 
-@router.get("/certificates/", response_model=List[UserCertificate])
+@router.get("/certificates/", response_model=List[CertificateListValue])
 def get_certificates_by_userid(
     repo: CertificateRepository = Depends(certificate_repository),
     user: dict[str, Any] = Depends(JWTUser())
@@ -18,7 +18,8 @@ def get_certificates_by_userid(
     '''
     Returns a list of certificates for `user`
     '''
-    db_user_certificates = repo.get_certificates_by_userid(user["id"])
+    db_user_certificates = repo.get_all_certificates_by_userid(user["id"])
+
     if db_user_certificates is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return db_user_certificates
@@ -27,7 +28,7 @@ def get_certificates_by_userid(
 @router.post("/certificate/{certType}/{id}", response_model=UserCertificate)
 def get_certificate_by_type_and_id(
         id: int,
-        certType: str,
+        certType: int,
         certificateRepo: CertificateRepository = Depends(certificate_repository),
         certificateService: Certificate = Depends(Certificate),
         user=Depends(user_from_form)
@@ -35,7 +36,7 @@ def get_certificate_by_type_and_id(
     pdf_bytes = None
     filename = ''
 
-    if (certType == 'quiz'):
+    if (certType == CertificateType.QUIZ.value):
         db_user_certificate = certificateRepo.get_certificate_by_id(id)
 
         verify_certificate_is_valid(db_user_certificate, user["id"])
@@ -48,7 +49,7 @@ def get_certificate_by_type_and_id(
         )
 
         filename = "SmartPayTraining.pdf"
-    elif (certType == 'gspc'):
+    elif (certType == CertificateType.GSPC.value):
         certificate = certificateRepo.get_gspc_certificate_by_id(id)
 
         verify_certificate_is_valid(certificate, user["id"])

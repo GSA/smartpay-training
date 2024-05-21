@@ -161,7 +161,7 @@
                 <h2>Congratulations You Earned Your GSA SmartPay Program Certificate (GSPC)</h2>
                 <p>You have met the requirements to earn a GSA SmartPay Program Certificate (GSPC). Your certificate has been emailed to you. Or, you may download your certificate below.</p>
                 <form
-                  :action="`${base_api_url}/api/v1/certificate/gspc/${certId}`" 
+                  :action="`${base_api_url}/api/v1/certificate/2/${certId}`" 
                   method="post"
                 >
                   <input 
