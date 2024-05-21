@@ -42,7 +42,6 @@ def get_certificate_by_type_and_id(
         db_user_certificate = certificateRepo.get_certificate_by_id(id)
 
         verify_certificate_is_valid(db_user_certificate, user["id"])
-        verify_certificate_is_valid(db_user_certificate, user["id"])
 
         pdf_bytes = certificateService.generate_pdf(
             db_user_certificate.quiz_name,
@@ -71,14 +70,6 @@ def get_certificate_by_type_and_id(
 
     headers = {'Content-Disposition': f'attachment; filename="{filename}"'}
     return Response(pdf_bytes, headers=headers, media_type='application/pdf')
-
-
-def verify_certificate_is_valid(cert: object, user_id: int):
-    if cert is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-
-    if cert.user_id != user_id:
-        raise HTTPException(status_code=401, detail="Not Authorized")
 
 
 def verify_certificate_is_valid(cert: object, user_id: int):
