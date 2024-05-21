@@ -8,7 +8,6 @@ const API_RESPONSE = [
     "user_id": 1,
     "user_name": "Becky Sharp",
     "cert_title": "Travel Training for Card/Account Holders and Approving Officials",
-    "quiz_name": "Travel Training for Card/Account Holders and Approving Officials",
     "completion_date": "2023-04-17T15:02:02.814004",
     "certificate_type": 1
   },
@@ -17,7 +16,6 @@ const API_RESPONSE = [
     "user_id": 1,
     "user_name": "Becky Sharp",
     "cert_title": "Travel Training for Agency/Organization Program Coordinators",
-    "quiz_name": "Travel Training for Agency/Organization Program Coordinators",
     "completion_date": "2023-04-25T18:03:45.134752",
     "certificate_type": 1
   },
@@ -26,7 +24,6 @@ const API_RESPONSE = [
     "user_id": 1,
     "user_name": "Becky Sharp",
     "cert_title": "GSPC",
-    "quiz_name": "GSPC",
     "completion_date": "2023-07-25T18:03:45.134752",
     "certificate_type": 2
   }

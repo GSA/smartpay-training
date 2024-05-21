@@ -35,8 +35,6 @@ def get_certificate_by_type_and_id(
 ):
     pdf_bytes = None
     filename = ''
-    pdf_bytes = None
-    filename = ''
 
     if (certType == CertificateType.QUIZ.value):
         db_user_certificate = certificateRepo.get_certificate_by_id(id)
