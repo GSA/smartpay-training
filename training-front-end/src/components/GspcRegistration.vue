@@ -47,6 +47,7 @@
   const error = ref(props.error)
   let redirectExpirationDateString = ""
   let expirationDate = ""
+  const certTypeGspc = 2
 
   const questions = 
     [{"id": 0, 
@@ -161,7 +162,7 @@
                 <h2>Congratulations You Earned Your GSA SmartPay Program Certificate (GSPC)</h2>
                 <p>You have met the requirements to earn a GSA SmartPay Program Certificate (GSPC). Your certificate has been emailed to you. Or, you may download your certificate below.</p>
                 <form
-                  :action="`${base_api_url}/api/v1/certificate/2/${certId}`" 
+                  :action="`${base_api_url}/api/v1/certificate/${certTypeGspc}/${certId}`" 
                   method="post"
                 >
                   <input 

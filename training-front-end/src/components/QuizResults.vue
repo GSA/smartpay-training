@@ -13,6 +13,7 @@
 
     const { accordion } = USWDS;
     const api_base = import.meta.env.PUBLIC_API_BASE_URL
+    const certTypeQuiz = 1
 
     const props = defineProps({
       'quiz':{
@@ -29,7 +30,7 @@
 
     const result_string = computed(() => `${props.quizResults.correct_count} of ${props.quizResults.question_count}`)
     const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
-    const quiz_certificate_url = computed(() => `${api_base}/api/v1/certificate/1/${props.quizResults.quiz_completion_id}`)
+    const quiz_certificate_url = computed(() => `${api_base}/api/v1/certificate/${certTypeQuiz}/${props.quizResults.quiz_completion_id}`)
     function windowStateListener() {
       window.location = import.meta.env.BASE_URL
     }
