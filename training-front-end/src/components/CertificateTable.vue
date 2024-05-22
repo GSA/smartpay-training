@@ -9,12 +9,13 @@
   const user = useStore(profile)
 
 
-  const card_icons = {
+  const cert_icons = {
     'Travel Training for Card/Account Holders and Approving Officials': 'smartpay-blue-travel-plain.svg',
     'Travel Training for Agency/Organization Program Coordinators': 'smartpay-blue-travel-plain.svg',
     'Purchase Training for Card/Account Holders and Approving Officials': 'smartpay-red-purchase-plain.svg',
     'Purchase Training For Program Coordinators': 'smartpay-red-purchase-plain.svg',
-    'Fleet Training For Program Coordinators': 'smartpay-green-fleet-plain.svg'
+    'Fleet Training For Program Coordinators': 'smartpay-green-fleet-plain.svg',
+    'GSA SmartPay Program Certification (GSPC)': 'smartpay-green-fleet-plain.svg'
   }
 
   const certificates = ref([]) 
@@ -29,7 +30,7 @@
 
   const data_format = { year:"numeric", month:"long", day:"numeric"}
   const formatted_date = date => new Date(date).toLocaleDateString('en-US', data_format)
-  const card_src = training => `${base_url}images/${card_icons[training]}`
+  const cert_img_src = cert => `${base_url}images/${cert_icons[cert]}`
 
 </script>
 
@@ -44,7 +45,7 @@
     <thead>
       <tr>
         <th scope="col">
-          Business Line
+          Certificate Name
         </th>
         <th scope="col">
           Date Earned
@@ -60,21 +61,21 @@
         :key="index"
       >
         <td>
-          <img 
-            :src="card_src(cert.quiz_name)" 
+          <img
+            :src="cert_img_src(cert.cert_title)" 
             class="text-middle margin-right-1" 
             :style="{height:'1.5rem'}" 
             aria-hidden="true" 
             alt=""
           >
-          {{ cert.quiz_name }}
+          {{ cert.cert_title }}
         </td>
         <td>
           {{ formatted_date(cert.completion_date) }}
         </td>
         <td>
           <form
-            :action="`${api_url}/api/v1/certificate/quiz/${cert.id}`" 
+            :action="`${api_url}/api/v1/certificate/${cert.certificate_type}/${cert.id}`" 
             method="post"
           >
             <input 
