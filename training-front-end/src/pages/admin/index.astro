@@ -50,6 +50,23 @@ const pageTitle = "Admin Panel";
             </div>
           </div>
         </li>
+        <li class="usa-card tablet:grid-col-6">
+          <div class="usa-card__container">
+            <div class="usa-card__header">
+              <h4 class="usa-card__heading">System Reports</h4>
+            </div>
+            <div class="usa-card__body">
+              <p>
+                Allows administrators to download reports.
+              </p>
+            </div>
+            <div class="usa-card__footer">
+                <a href=`${import.meta.env.BASE_URL}admin/reports` class="card_link usa-button">
+                  Reports
+                </a>
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
   </AuthRequired>
