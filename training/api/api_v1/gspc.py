@@ -11,7 +11,6 @@ from training.api.email import send_gspc_invite_email
 from training.api.auth import RequireRole
 from training.config import settings
 from training.api.auth import JWTUser
-from training.api.auth import user_from_form
 
 
 router = APIRouter()
@@ -67,7 +66,7 @@ def submit_gspc_registration(
 
 @router.post("/gspc/download-gspc-completion-report")
 def download_report_csv(
-        user=Depends(user_from_form),
+        user=Depends(RequireRole(["Admin"])),
         gspc_completion_repo: GspcCompletionRepository = Depends(gspc_completion_repository),
 ):
     results = gspc_completion_repo.get_gspc_completion_report()
