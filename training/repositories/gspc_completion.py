@@ -17,8 +17,13 @@ class GspcCompletionRepository(BaseRepository[models.GspcCompletion]):
             responses=gspc_completion.responses
         ))
 
-    def get_gspc_completion_report(self) -> list[schemas.GspcCompletionReportData]:
-        completedGspcResults = ( 
+    def get_gspc_completion_report(self):
+        completed_results = self._get_completed_gspc_results()
+        uncompleted_results = self._get_uncompleted_gspc_results()
+        return completed_results + uncompleted_results
+
+    def _get_completed_gspc_results(self):
+        result = (
             self._session.query(
                 models.GspcInvite.email.label("invitedEmail"),
                 models.User.email.label("registeredEmail"),
@@ -36,6 +41,9 @@ class GspcCompletionRepository(BaseRepository[models.GspcCompletion]):
             .order_by(desc(models.GspcCompletion.passed), models.GspcCompletion.submit_ts)
         ).all()
 
+        return result
+
+    def _get_uncompleted_gspc_results(self):
         # Subquery to get all emails from User that are referenced in GspcCompletion
         subquery = (
             self._session.query(models.User.email)
@@ -45,7 +53,7 @@ class GspcCompletionRepository(BaseRepository[models.GspcCompletion]):
         )
 
         # Query to get all unique emails from GspcInvite that are not in the subquery
-        uncompletedGspcResults = (
+        result = (
             self._session.query(
                 models.GspcInvite.email.label("invitedEmail"),
                 literal(None).label('registeredEmail'),
@@ -61,5 +69,4 @@ class GspcCompletionRepository(BaseRepository[models.GspcCompletion]):
             .distinct()
         ).all()
 
-        results = completedGspcResults + uncompletedGspcResults
-        return results
+        return result
