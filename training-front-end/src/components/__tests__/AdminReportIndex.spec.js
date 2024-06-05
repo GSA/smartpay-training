@@ -9,8 +9,7 @@ import AdminReportIndex from '../AdminReportIndex.vue'
 describe("AdminReportIndex", async () => {
   afterEach(() => {
     vi.restoreAllMocks()
-    cleanStores()
-    profile.set({})
+    cleanStores(profile)
   })
 
   it('Shows download screen', async () => {

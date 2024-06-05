@@ -22,9 +22,9 @@ SMTP_USER="<ethereal-account-email-address>"
 ```
   
 #### Update the base url
-For development, we need to update the `BASE_URL` environment value so that confirmation emails link back to the locally running application. By default, our web application will be running locally at port `3000` when in development:
+For development, we need to update the `BASE_URL` environment value so that confirmation emails link back to the locally running application. By default, our web application will be running locally at port `4321` when in development:
 ```config
-BASE_URL="http://localhost:3000"
+BASE_URL="http://localhost:4321"
 ```
 **Note the lack of a trailing slash!**
 

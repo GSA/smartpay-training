@@ -53,7 +53,7 @@ describe('SessionManager', () => {
     const exit_button = exit_menu.find('[data-test=exit-button]')
     await exit_button.trigger('click')
 
-    expect(setMock).toHaveBeenCalledWith(import.meta.env.BASE_URL+'exit')
+    expect(setMock).toHaveBeenCalledWith(import.meta.env.BASE_URL+'exit/')
   })
 })
 

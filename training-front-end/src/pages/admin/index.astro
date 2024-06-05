@@ -13,7 +13,7 @@ const pageTitle = "Admin Panel";
         Administrators
     </span>
   </HeroTraining>
-  <AuthRequired client:only>
+  <AuthRequired client:only="vue">
     <div class="padding-top-4 padding-bottom-4 grid-container">
       <ul class="usa-card-group">
         <li class="usa-card tablet:grid-col-6">
@@ -27,7 +27,7 @@ const pageTitle = "Admin Panel";
               </p>
             </div>         
             <div class="usa-card__footer">
-                <a href={`${import.meta.env.BASE_URL}admin/user_search`} class="card_link usa-button">
+                <a href={`${import.meta.env.BASE_URL}admin/user_search/`} class="card_link usa-button">
                   Search for users
                 </a>
             </div>
@@ -44,7 +44,7 @@ const pageTitle = "Admin Panel";
               </p>
             </div>
             <div class="usa-card__footer">
-                <a href={`${import.meta.env.BASE_URL}admin/gspc`} class="card_link usa-button">
+                <a href={`${import.meta.env.BASE_URL}admin/gspc/`} class="card_link usa-button">
                   Manage GSPC attendees
                 </a>
             </div>
@@ -61,7 +61,7 @@ const pageTitle = "Admin Panel";
               </p>
             </div>
             <div class="usa-card__footer">
-                <a href=`${import.meta.env.BASE_URL}admin/reports` class="card_link usa-button">
+                <a href=`${import.meta.env.BASE_URL}admin/reports/` class="card_link usa-button">
                   Reports
                 </a>
             </div>
