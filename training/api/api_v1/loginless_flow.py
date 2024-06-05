@@ -29,7 +29,7 @@ def page_lookup():
         'training_travel_pc': {'path': '/quiz/training_travel_pc/', 'required_roles': []},
         'training_purchase_pc': {'path': '/quiz/training_purchase_pc/', 'required_roles': []},
         'training_fleet_pc': {'path': '/quiz/training_fleet_pc/', 'required_roles': []},
-        'gspc_registration': {'path': '/gspc_registration', 'required_roles': []},
+        'gspc_registration': {'path': '/gspc_registration/', 'required_roles': []},
     }
 
 

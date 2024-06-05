@@ -33,7 +33,7 @@ async def gspc_admin_invite(
             # If performance becomes an issue use multithreading to send the emails
             try:
                 params = gspcInvite.certification_expiration_date.strftime('%Y-%m-%d')
-                link = f"{settings.BASE_URL}/gspc_registration?expirationDate={params}"
+                link = f"{settings.BASE_URL}/gspc_registration/?expirationDate={params}"
                 send_gspc_invite_email(to_email=email, link=link)
                 logging.info(f"Sent gspc invite email to {email}")
             except Exception as e:
