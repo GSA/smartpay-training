@@ -1,6 +1,6 @@
 from .agency import Agency, AgencyCreate, AgencyWithBureaus
 from .temp_user import TempUser, IncompleteTempUser, WebDestination
-from .user import User, UserCreate, UserQuizCompletionReportData, UserSearchResult, UserJWT, UserUpdate
+from .user import User, UserCreate, UserSearchResult, UserJWT, UserUpdate
 from .gspc_certificate import GspcCertificate
 from .gspc_completion import GspcCompletion
 from .gspc_invite import GspcInvite
@@ -17,3 +17,4 @@ from .user_certificate import UserCertificate, CertificateType, CertificateListV
 from .user_x_role import UserXRole
 from .report_user_x_agency import ReportUserXAgency
 from .role import Role, RoleCreate
+from .reports import UserQuizCompletionReportData, GspcCompletionReportData

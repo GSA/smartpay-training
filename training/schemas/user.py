@@ -1,4 +1,3 @@
-from datetime import datetime
 from pydantic import ConfigDict, BaseModel, EmailStr, field_validator
 from training.schemas.agency import Agency
 from training.schemas.role import Role
@@ -41,14 +40,6 @@ class UserJWT(User):
     def convert_roles(cls, input) -> list[str]:
         # Converts roles from a list of dicts to a simple list of role name strings.
         return [role.name for role in input]
-
-
-class UserQuizCompletionReportData(UserBase):
-    agency: str
-    bureau: str | None = None
-    quiz: str
-    completion_date: datetime
-    model_config = ConfigDict(from_attributes=True)
 
 
 class UserSearchResult(BaseModel):

@@ -22,6 +22,7 @@
     "Loginless",
     "nanostores",
     "pydantic",
+    "sqlalchemy",
     "USWDS",
     "Vuelidate"
   ]
