@@ -31,7 +31,7 @@
     "hast-util-select": "^5.0.5",
     "install": "^0.13.0",
     "nanostores": "^0.8.0",
-    "npm": "^9.6.3",
+    "npm": "^10.8.1",
     "oidc-client-ts": "^2.4.0",
     "remark-custom-heading-id": "^1.0.1",
     "vue": "^3.2.47"
