@@ -23,7 +23,7 @@ def page_lookup():
     '''
     return {
         'certificates': {'path': '/certificates/', 'required_roles': []},
-        'training_reports': {'path': '/training_reports', 'required_roles': ['Report']},
+        'training_reports': {'path': '/training_reports/', 'required_roles': ['Report']},
         'training_travel': {'path': '/quiz/training_travel/', 'required_roles': []},
         'training_purchase': {'path': '/quiz/training_purchase/', 'required_roles': []},
         'training_travel_pc': {'path': '/quiz/training_travel_pc/', 'required_roles': []},
