@@ -19,7 +19,7 @@ export function processLinksPlugin() {
           return
         }
 
-        if (! domain.hostname.endsWith('gsa.gov')) {
+        if (!(domain.hostname === 'gsa.gov' || domain.hostname === 'www.gsa.gov'|| domain.protocol === 'mailto:')) {
           properties.className += ' usa-link--external'
         }
 
