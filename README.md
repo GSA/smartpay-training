@@ -136,6 +136,14 @@ cd training-frontend
 npm run test:coverage
 ```
 
+## 🇺🇸 USWDS
+This site uses the [U.S. Web Design System (USWDS)](https://designsystem.digital.gov). To customize  USWDS styles you will need to edit the SASS components and styles in the `/sass` directory. Changes here will not be reflected in the site until you rebuild the css. To build the css, cd to the frontend project and run gulp:
+
+```
+npx gulp compile --gulpfile gulpfile.cjs
+```
+This will rebuild the static assests and place them in the `/public` directory. To learn more, visit USWDS [Getting started for developers  ](https://designsystem.digital.gov/documentation/getting-started-for-developers/).
+
 ## Deployment on cloud.gov
 
 Follow these steps to deploy the application on cloud.gov. Your cloud.gov account must have the `SpaceDeveloper` role in each space in order to run these scripts.
