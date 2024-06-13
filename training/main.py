@@ -11,9 +11,9 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "https://localhost",
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://localhost:4321",
+    "https://localhost:4321",
+    "http://127.0.0.1:4321",
     "https://training.smartpay.gsa.gov",
     "https://federalist-2e11f2c8-970f-44f5-acc8-b47ef6c741ad.sites.pages.cloud.gov"
 ]
