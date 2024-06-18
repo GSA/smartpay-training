@@ -183,7 +183,7 @@
               <div v-else-if="certFailed">
                 <h2>You Don't Meet the Requirements for GSA SmartPay Program Certification (GSPC)</h2>
                 <p>Once you have met the coursework and experience requirement of six months of continuous, hands-on experience working with the GSA SmartPay program please return to the link  in your email to reapply.</p>
-                <p>If you have any questions, please reference <a href="https://smartpay.gsa.gov/policies-and-audits/smart-bulletins/022">Smart Bulletin No. 022</a> or contact the GSPC Program Manager at <a href="mailto:smartpaygspc@gsa.gov">smartpaygspc@gsa.com</a>.</p>
+                <p>If you have any questions, please reference <a href="https://smartpay.gsa.gov/policies-and-audits/smart-bulletins/022/">Smart Bulletin No. 022</a> or contact the GSPC Program Manager at <a href="mailto:smartpaygspc@gsa.gov">smartpaygspc@gsa.com</a>.</p>
                 <a :href="base_url">Return to the GSA SmartPay Training Home Page</a>
               </div>
               <div v-else>
