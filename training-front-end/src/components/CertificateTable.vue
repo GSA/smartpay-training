@@ -62,6 +62,8 @@
       >
         <td>
           <img
+            width="38.5"
+            height="24"
             :src="cert_img_src(cert.cert_title)" 
             class="text-middle margin-right-1" 
             :style="{height:'1.5rem'}" 
