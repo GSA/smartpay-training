@@ -9,9 +9,6 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'training-front-end'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,30 +22,29 @@ jobs:
       
       - name: install dependencies
         run: npm ci
+        working-directory: training-front-end
 
   unit-tests-and-lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'training-front-end'
     needs: setup
     steps:
       - name: run linter
         run: npm run lint
+        working-directory: training-front-end
 
       - name: code run coverage > 90 %
         run: npm run test:coverage -- --watch=false
+        working-directory: training-front-end
 
       - name: Run pa11y 
         run: npm run pa11y-ci:gh 
+        working-directory: training-front-end
 
   link_checker:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'training-front-end'
     needs: setup
     steps:   
     - name: Run broken link checker
       run: npm run link-checker:pipeline
+      working-directory: training-front-end
 
