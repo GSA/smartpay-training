@@ -7,8 +7,11 @@ on:
       - .github/**
 
 jobs:
-  setup:
+  unit-tests-and-lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'training-front-end'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -19,32 +22,18 @@ jobs:
           node-version: '18'
           cache: 'npm'
           cache-dependency-path: training-front-end/package-lock.json
-      
+
       - name: install dependencies
         run: npm ci
-        working-directory: training-front-end
 
-  unit-tests-and-lint:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
       - name: run linter
         run: npm run lint
-        working-directory: training-front-end
 
       - name: code run coverage > 90 %
         run: npm run test:coverage -- --watch=false
-        working-directory: training-front-end
 
       - name: Run pa11y 
         run: npm run pa11y-ci:gh 
-        working-directory: training-front-end
 
-  link_checker:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:   
-    - name: Run broken link checker
-      run: npm run link-checker:pipeline
-      working-directory: training-front-end
-
+      - name: Run broken link checker 
+        run: npm run link-checker:pipeline 
