@@ -8,26 +8,26 @@ on:
 
 jobs:
   setup:
-     runs-on: ubuntu-latest
-  defaults:
-    run:
-      working-directory: 'training-front-end'
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: training-front-end/package-lock.json
-    
-    - name: install dependencies
-      run: npm ci
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: training-front-end/package-lock.json
+      
+      - name: install dependencies
+        run: npm ci
 
   unit-tests-and-lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'training-front-end'
     needs: setup
     steps:
       - name: run linter
@@ -41,6 +41,9 @@ jobs:
 
   link_checker:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'training-front-end'
     needs: setup
     steps:   
     - name: Run broken link checker
