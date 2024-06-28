@@ -9,6 +9,9 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'training-front-end'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,9 +28,6 @@ jobs:
 
   unit-tests-and-lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'training-front-end'
     needs: setup
     steps:
       - name: run linter
@@ -41,9 +41,6 @@ jobs:
 
   link_checker:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'training-front-end'
     needs: setup
     steps:   
     - name: Run broken link checker
