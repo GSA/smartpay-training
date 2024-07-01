@@ -148,7 +148,7 @@
       v-if="question_index"
       id="previous-button"
       type=""
-      class="usa-button usa-button--unstyled"
+      class="usa-button usa-button--outline"
       @click="previous_question"
     >
       <NavigateBack />
