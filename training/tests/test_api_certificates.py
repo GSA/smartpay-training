@@ -50,6 +50,17 @@ def cert_list_value():
         'certificate_type': 1
     }
 
+@pytest.fixture
+def admin_user():
+    return {
+        'name': 'Albus Dumbledore',
+        'email': 'dumbledore@hogwarts.edu',
+        'roles': ['Admin']
+    }
+
+@pytest.fixture
+def adminJWT(admin_user):
+    return jwt.encode(admin_user, settings.JWT_SECRET, algorithm="HS256")
 
 @pytest.fixture
 def fake_cert_repo():
@@ -80,7 +91,7 @@ class TestCertificateAPI:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_get_no_certificates(self, fake_cert_repo, goodJWT):
-        fake_cert_repo.get_all_certificates_by_userid.return_value = None
+        fake_cert_repo.get_all_certificates_by_userId.return_value = None
         response = client.get(
             "/api/v1/certificates",
             headers={"Authorization": f"Bearer {goodJWT}"}
@@ -88,21 +99,37 @@ class TestCertificateAPI:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_gets_certificates_by_type_and_id(self, fake_cert_repo, goodJWT):
-        fake_cert_repo.get_all_certificates_by_userid.return_value = None
+        fake_cert_repo.get_all_certificates_by_userId.return_value = None
         client.get(
             "/api/v1/certificates",
             headers={"Authorization": f"Bearer {goodJWT}"}
         )
-        fake_cert_repo.get_all_certificates_by_userid.assert_called_once_with(1)
+        fake_cert_repo.get_all_certificates_by_userId.assert_called_once_with(1)
 
     def test_gets_certificates(self, fake_cert_repo, goodJWT, cert_list_value):
         cert = CertificateListValue.model_validate(cert_list_value)
-        fake_cert_repo.get_all_certificates_by_userid.return_value = [cert]
+        fake_cert_repo.get_all_certificates_by_userId.return_value = [cert]
         response = client.get(
             "/api/v1/certificates",
             headers={"Authorization": f"Bearer {goodJWT}"}
         )
         assert response.json() == [cert_list_value]
+
+    def test_gets_certificates_by_userId(self, fake_cert_repo, adminJWT, cert_list_value):
+        cert = CertificateListValue.model_validate(cert_list_value)
+        fake_cert_repo.get_all_certificates_by_userId.return_value = [cert]
+        response = client.get(
+            "/api/v1/certificates/2",
+            headers={"Authorization": f"Bearer {adminJWT}"}
+        )
+        assert response.json() == [cert_list_value]
+
+    def test_gets_certificates_by_userId_no_admin_role(self, goodJWT):
+        response = client.get(
+            "/api/v1/certificates/2",
+            headers={"Authorization": f"Bearer {goodJWT}"}
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_get_specific_certificate_not_found(self, fake_cert_repo, goodJWT):
         fake_cert_repo.get_certificate_by_id.return_value = None
@@ -144,7 +171,7 @@ class TestCertificateAPI:
         assert response.text == "some bytes"
 
     def test_gets_certificates_unknown_type(self, fake_cert_repo, goodJWT):
-        fake_cert_repo.get_certificates_by_userid.return_value = None
+        fake_cert_repo.get_certificates_by_userId.return_value = None
         response = client.get(
             "/api/v1/certificates/new-type",
             headers={"Authorization": f"Bearer {goodJWT}"}
