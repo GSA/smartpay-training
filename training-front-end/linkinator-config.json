@@ -1,0 +1,16 @@
+{
+    "recurse": true,
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0",
+        "Referer": "http://localhost:4321/"
+    },
+    "skip": [
+        "https://www.fpds.gov/",
+        "https://www.congress.gov/bill/101st-congress/house-bill/94",
+        "/printable/printable/$",
+        "http://www.energystar.gov/",
+        "http://www.biopreferred.gov/BioPreferred/",
+        "https://www.gsaadvantage.gov/advantage/ws/main/start_page\\?store=ADVANTAGE"
+    ],
+    "verbosity": "debug"
+}
