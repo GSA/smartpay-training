@@ -24,7 +24,7 @@ class CertificateRepository(BaseRepository[models.QuizCompletion]):
                                .first())
         return result
 
-    def get_all_certificates_by_userid(self, user_id: int) -> list[CertificateListValue]:
+    def get_all_certificates_by_userId(self, user_id: int) -> list[CertificateListValue]:
         quiz_results = (self._session.query(models.QuizCompletion.id.label("id"), models.User.id.label("user_id"),
                                             models.User.name.label("user_name"), models.Quiz.name.label("cert_title"),
                                             models.QuizCompletion.submit_ts.label("completion_date"),

@@ -6,6 +6,7 @@ import USWDSComboBox from "./USWDSComboBox.vue";
 import {agencyList, bureauList, selectedAgencyId, setSelectedAgencyId} from '../stores/agencies'
 import {useStore} from '@nanostores/vue'
 import AdminEditUserDetails from "./AdminEditUserDetails.vue";
+import AdminViewUserCertificateTable from "./AdminViewUserCertificateTable.vue"
 
 const props = defineProps({
   user: {
@@ -72,9 +73,9 @@ function cancelUpdate() {
   </button>
   <div v-if="!editing">
     <div class="usa-prose">
-      <h3>
+      <h2>
         User Profile
-      </h3>
+      </h2>
     </div>
     <div class="grid-row grid-gap padding-top-4">
       <div class="tablet:grid-col">
@@ -151,9 +152,9 @@ function cancelUpdate() {
   >
     <hr class="margin-bottom-5">
     <div class="usa-prose">
-      <h4>
+      <h3>
         Add Reporting Access
-      </h4>
+      </h3>
     </div>
     <div class="grid-row grid-gap">
       <div>
@@ -193,11 +194,14 @@ function cancelUpdate() {
   >
     <div>
       <div class="usa-prose">
-        <h4>
+        <h3>
           Granted Reporting Access
-        </h4>
+        </h3>
       </div>
-      <table class="usa-table usa-table--borderless width-full">
+      <table
+        id="user-reporting-access-table"
+        class="usa-table usa-table--borderless width-full"
+      >
         <thead>
           <tr>
             <th
@@ -245,6 +249,19 @@ function cancelUpdate() {
           </tr>
         </tbody>
       </table>
+    </div>
+  </section>
+  <section
+    v-if="!editing"
+    class="margin-top-5"
+  >
+    <hr class="margin-bottom-5">
+    <div>
+      <div class="usa-prose">
+        <AdminViewUserCertificateTable 
+          :user="props.user"
+        />
+      </div>
     </div>
   </section>
 </template>
