@@ -179,7 +179,7 @@ class TestCertificateAPI:
             "/api/v1/certificates/new-type",
             headers={"Authorization": f"Bearer {goodJWT}"}
         )
-        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_get_specific_gspc_certificate(self, fake_cert_repo, goodJWT, gspc_cert, fake_cert_service_repo):
         gspc_cert['user_id'] = 1
