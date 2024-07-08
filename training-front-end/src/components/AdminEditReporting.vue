@@ -198,7 +198,10 @@ function cancelUpdate() {
           Granted Reporting Access
         </h3>
       </div>
-      <table class="usa-table usa-table--borderless width-full">
+      <table
+        id="user-reporting-access-table"
+        class="usa-table usa-table--borderless width-full"
+      >
         <thead>
           <tr>
             <th

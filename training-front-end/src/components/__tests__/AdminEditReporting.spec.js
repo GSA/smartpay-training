@@ -94,8 +94,8 @@ describe('AdminAgencySelect', async () => {
   })
 
   it("adds/removes agency when user marks check boxes", async () => {
-    const props = {user: users[0]}
-    const wrapper = mount(AdminEditReporting, {props})
+    const props = { user: users[0] }
+    const wrapper = mount(AdminEditReporting, { props })
 
     const agencySelect = wrapper.find('select')
     await agencySelect.setValue(20)
@@ -103,17 +103,18 @@ describe('AdminAgencySelect', async () => {
     const checkbox = wrapper.find('input[type="checkbox"]')
 
     await checkbox.setChecked()
-    let table_rows = wrapper.findAll('tr')
-    expect(table_rows.length).toBe(7)
+    let table_rows = wrapper.findAll('#user-reporting-access-table tr')
+    expect(table_rows.length).toBe(4)
     expect(table_rows[3].text()).toContain("Enfield Tennis Academy")
     
     await checkbox.setChecked(false)
-    table_rows = wrapper.findAll('tr')
+    table_rows = wrapper.findAll('#user-reporting-access-table tr')
     expect(table_rows.length).toBe(3)
   })
+
   it("adds agency without bureau when user marks check boxes", async () => {
-    const props = {user: users[0]}
-    const wrapper = mount(AdminEditReporting, {props})
+    const props = { user: users[0] }
+    const wrapper = mount(AdminEditReporting, { props })
 
     const agencySelect = wrapper.find('select')
     await agencySelect.setValue(10)
@@ -121,8 +122,8 @@ describe('AdminAgencySelect', async () => {
     const checkbox = wrapper.find('input[type="checkbox"]')
 
     await checkbox.setChecked()
-    let table_rows = wrapper.findAll('tr')
-    expect(table_rows.length).toBe(7)
+    let table_rows = wrapper.findAll('#user-reporting-access-table tr')
+    expect(table_rows.length).toBe(4)
     expect(table_rows[3].text()).toContain("Ennet House")
   })
 })
