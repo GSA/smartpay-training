@@ -104,7 +104,7 @@ describe('AdminAgencySelect', async () => {
 
     await checkbox.setChecked()
     let table_rows = wrapper.findAll('#user-reporting-access-table tr')
-    expect(table_rows.length).toBe(4)
+    expect(table_rows.length).toBe(6)
     expect(table_rows[3].text()).toContain("Enfield Tennis Academy")
     
     await checkbox.setChecked(false)
