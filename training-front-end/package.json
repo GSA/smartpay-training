@@ -15,7 +15,9 @@
     "pa11y-ci": "npm run pa11y-ci:desktop && npm run pa11y-ci:mobile",
     "pa11y-ci:desktop": "pa11y-ci --config ./.pa11yci-desktop --sitemap http://localhost:8080/sitemap-0.xml   --sitemap-find \"^https://training.smartpay.gsa.gov/\" --sitemap-replace \"http://localhost:8080/\"",
     "pa11y-ci:mobile": "pa11y-ci --config ./.pa11yci-mobile --sitemap http://localhost:8080/sitemap-0.xml   --sitemap-find \"^https://training.smartpay.gsa.gov\" --sitemap-replace \"http://localhost:8080/\"",
-    "pa11y-ci:gh": "npx start-server-and-test serve http://localhost:8080 pa11y-ci"
+    "pa11y-ci:gh": "npx start-server-and-test serve http://localhost:8080 pa11y-ci",
+    "link-checker": "npx linkinator http://localhost:4321/ --config linkinator-config.json",
+    "link-checker:pipeline": "npx start-server-and-test serve http://localhost:8080 'npx linkinator http://localhost:8080 --config linkinator-config.json'"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.0.1",
@@ -51,7 +53,8 @@
     "jsdom": "^21.1.1",
     "pa11y-ci": "^3.0.1",
     "start-server-and-test": "^2.0.3",
-    "vitest": "^1.5.3"
+    "vitest": "^1.5.3",
+    "linkinator": "^6.0.5"
   },
   "overrides": {
     "glob-parent": "^5.1.2"
