@@ -51,13 +51,13 @@ describe('CertificateTable', async () => {
 
     const rowOne = rows[1].findAll('td')
     API_RESPONSE[0].cert_title
-    expect(rowOne[1].text()).toBe(API_RESPONSE[0].cert_title)
+    expect(rowOne[0].text()).toBe(API_RESPONSE[0].cert_title)
 
     const rowTwo = rows[2].findAll('td')
-    expect(rowTwo[1].text()).toBe(API_RESPONSE[1].cert_title)
+    expect(rowTwo[0].text()).toBe(API_RESPONSE[1].cert_title)
 
     const rowThree = rows[3].findAll('td')
-    expect(rowThree[1].text()).toBe(API_RESPONSE[2].cert_title)
+    expect(rowThree[0].text()).toBe(API_RESPONSE[2].cert_title)
   })
 
   it('displays formatted dates', async () => {
@@ -71,10 +71,10 @@ describe('CertificateTable', async () => {
     const rows = wrapper.findAll('tr') 
 
     const rowOne = rows[1].findAll('td')
-    expect(rowOne[2].text()).toBe('April 17, 2023')
+    expect(rowOne[1].text()).toBe('April 17, 2023')
 
     const rowTwo = rows[2].findAll('td')
-    expect(rowTwo[2].text()).toBe('April 25, 2023')
+    expect(rowTwo[1].text()).toBe('April 25, 2023')
   })
 
   it('displays formatted times', async () => {
@@ -88,10 +88,10 @@ describe('CertificateTable', async () => {
     const rows = wrapper.findAll('tr') 
 
     const rowOne = rows[1].findAll('td')
-    expect(rowOne[3].text()).toBe('3:02:02 PM')
+    expect(rowOne[2].text()).toBe('3:02:02 PM')
 
     const rowTwo = rows[2].findAll('td')
-    expect(rowTwo[3].text()).toBe('6:03:45 PM')
+    expect(rowTwo[2].text()).toBe('6:03:45 PM')
   })
 
   it('has links to certificate with cert type and id', async () => {
