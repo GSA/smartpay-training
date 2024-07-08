@@ -6,7 +6,7 @@ import USWDSComboBox from "./USWDSComboBox.vue";
 import {agencyList, bureauList, selectedAgencyId, setSelectedAgencyId} from '../stores/agencies'
 import {useStore} from '@nanostores/vue'
 import AdminEditUserDetails from "./AdminEditUserDetails.vue";
-import AdminEditUserCertificateTable from "./AdminEditUserCertificateTable.vue"
+import AdminViewUserCertificateTable from "./AdminViewUserCertificateTable.vue"
 
 const props = defineProps({
   user: {
@@ -255,7 +255,7 @@ function cancelUpdate() {
     <hr class="margin-bottom-5">
     <div>
       <div class="usa-prose">
-        <AdminEditUserCertificateTable 
+        <AdminViewUserCertificateTable 
           :user="props.user"
         />
       </div>

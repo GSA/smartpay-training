@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, vi} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import AdminEditUserCertificateTable from '../AdminEditUserCertificateTable.vue'
+import AdminViewUserCertificateTable from '../AdminViewUserCertificateTable.vue'
 
 const API_RESPONSE = [
   {
@@ -42,7 +42,7 @@ describe('CertificateTable', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true,  status:200, json: () => Promise.resolve(API_RESPONSE) })
     })
-    const wrapper = await mount(AdminEditUserCertificateTable, {
+    const wrapper = await mount(AdminViewUserCertificateTable, {
       props: { user }
     })
     await flushPromises()
@@ -64,7 +64,7 @@ describe('CertificateTable', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(API_RESPONSE) })
     })
-    const wrapper = await mount(AdminEditUserCertificateTable, {
+    const wrapper = await mount(AdminViewUserCertificateTable, {
       props: { user }
     })
     await flushPromises()
@@ -81,7 +81,7 @@ describe('CertificateTable', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(API_RESPONSE) })
     })
-    const wrapper = await mount(AdminEditUserCertificateTable, {
+    const wrapper = await mount(AdminViewUserCertificateTable, {
       props: { user }
     })
     await flushPromises()
@@ -98,7 +98,7 @@ describe('CertificateTable', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(API_RESPONSE) })
     })
-    const wrapper = await mount(AdminEditUserCertificateTable, {
+    const wrapper = await mount(AdminViewUserCertificateTable, {
       props: { user }
     })
     await flushPromises()
@@ -118,7 +118,7 @@ describe('CertificateTable', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve([]) })
     })
-    const wrapper = await mount(AdminEditUserCertificateTable, {
+    const wrapper = await mount(AdminViewUserCertificateTable, {
       props: { user }
     })
     await flushPromises()
