@@ -50,6 +50,7 @@ def cert_list_value():
         'certificate_type': 1
     }
 
+
 @pytest.fixture
 def admin_user():
     return {
@@ -58,9 +59,11 @@ def admin_user():
         'roles': ['Admin']
     }
 
+
 @pytest.fixture
 def adminJWT(admin_user):
     return jwt.encode(admin_user, settings.JWT_SECRET, algorithm="HS256")
+
 
 @pytest.fixture
 def fake_cert_repo():
