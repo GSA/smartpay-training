@@ -104,7 +104,7 @@ describe('AdminAgencySelect', async () => {
 
     await checkbox.setChecked()
     let table_rows = wrapper.findAll('tr')
-    expect(table_rows.length).toBe(4)
+    expect(table_rows.length).toBe(7)
     expect(table_rows[3].text()).toContain("Enfield Tennis Academy")
     
     await checkbox.setChecked(false)
@@ -122,7 +122,7 @@ describe('AdminAgencySelect', async () => {
 
     await checkbox.setChecked()
     let table_rows = wrapper.findAll('tr')
-    expect(table_rows.length).toBe(4)
+    expect(table_rows.length).toBe(7)
     expect(table_rows[3].text()).toContain("Ennet House")
   })
 })
