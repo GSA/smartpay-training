@@ -15,7 +15,7 @@
     'Purchase Training for Card/Account Holders and Approving Officials': 'smartpay-red-purchase-plain.svg',
     'Purchase Training For Program Coordinators': 'smartpay-red-purchase-plain.svg',
     'Fleet Training For Program Coordinators': 'smartpay-green-fleet-plain.svg',
-    'GSA SmartPay Program Certification (GSPC)': 'smartpay-green-fleet-plain.svg'
+    'GSA SmartPay Program Certification (GSPC)': 'gspc.svg'
   }
 
   const certificates = ref([]) 

@@ -10,7 +10,8 @@
         "/printable/printable/$",
         "http://www.energystar.gov/",
         "http://www.biopreferred.gov/BioPreferred/",
-        "https://www.gsaadvantage.gov/advantage/ws/main/start_page\\?store=ADVANTAGE"
+        "https://www.gsaadvantage.gov/advantage/ws/main/start_page\\?store=ADVANTAGE",
+        "https://www.congress.gov/bill/118th-congress/house-bill/2670"
     ],
     "verbosity": "debug"
 }
