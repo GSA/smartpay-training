@@ -2,6 +2,7 @@ from typing import List
 import pytest
 from training import models, schemas
 from training.repositories import UserRepository, AgencyRepository
+from datetime import datetime, timedelta
 
 
 def test_create(user_repo_empty: UserRepository, agency_repo_with_data: AgencyRepository):
@@ -44,6 +45,7 @@ def test_save(user_repo_empty: UserRepository, agency_repo_with_data: AgencyRepo
         email="newuser@example.com",
         name="New User",
         agency_id=agency_id,
+        created_by="New User"
     ))
     assert result.id
     retrieved_result = user_repo_empty.find_by_id(result.id)
@@ -85,13 +87,15 @@ def test_edit_user_for_reporting(user_repo_with_data: UserRepository, valid_user
     valid_user_id = valid_user_ids[0]
     valid_agency = user_repo_with_data._session.query(models.Agency).first()
     valid_agency_list = [valid_agency.id]
-    result = user_repo_with_data.edit_user_for_reporting(valid_user_id, valid_agency_list)
+    result = user_repo_with_data.edit_user_for_reporting(valid_user_id, valid_agency_list, "test_user")
     assert result is not None
     assert result.roles is not None and any(role.name == "Report" for role in result.roles)
     assert result.report_agencies is not None and any(agency.id == valid_agency.id for agency in result.report_agencies)
+    assert_within_one_minute(result.modified_on)
+    assert result.modified_by == "test_user"
 
 
-def test_invalid_edit_user_for_reporting(user_repo_with_data: UserRepository):
+def test_invalid_create(user_repo_with_data: UserRepository):
     invalid_user_id = 0
     invalid_agency_id_list = [0]
 
@@ -119,6 +123,12 @@ def test_get_users_by_email(user_repo_with_data: UserRepository, valid_user_ids:
         assert search_criteria in item.email
 
 
+def assert_within_one_minute(given_datetime):
+    current_datetime = datetime.now()
+    difference = abs(current_datetime - given_datetime)
+    assert difference < timedelta(minutes=1), f"The datetime {given_datetime} is not within one minute of the current time {current_datetime}"
+
+
 def test_update_user_passing(user_repo_with_data: UserRepository, agency_repo_with_data: AgencyRepository):
     agency_id = agency_repo_with_data.find_all()[0].id
     user_id = user_repo_with_data.find_all()[0]
@@ -128,11 +138,13 @@ def test_update_user_passing(user_repo_with_data: UserRepository, agency_repo_wi
         agency_id=agency_id,
     )
 
-    result = user_repo_with_data.update_user(user_id.id, updated_user)
+    result = user_repo_with_data.update_user(user_id.id, updated_user, "test_user")
     assert result is not None
     assert result.name == "Updated User"
     assert result.agency_id == agency_id
     assert result.email != "updateduser@example.com"
+    assert_within_one_minute(result.modified_on)
+    assert result.modified_by == "test_user"
 
 
 def test_update_user_invalid_user(user_repo_with_data: UserRepository):
@@ -144,4 +156,4 @@ def test_update_user_invalid_user(user_repo_with_data: UserRepository):
     )
 
     with pytest.raises(Exception):
-        user_repo_with_data.update_user(invalid_user_id, updated_user)
+        user_repo_with_data.update_user(invalid_user_id, updated_user, "test_user")

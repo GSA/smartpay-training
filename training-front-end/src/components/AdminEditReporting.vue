@@ -59,6 +59,27 @@ async function updateUser(successMessage) {
 function cancelUpdate() {
   editing.value = false;
 }
+
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return 'N/A';
+    }
+
+    //doing it this way to reduce dependancies 
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    return `${month} ${day}, ${year}`;
+  }
 </script>
 
 <template>
@@ -91,6 +112,20 @@ function cancelUpdate() {
       </div>
       <div class="tablet:grid-col">
         <dt class="font-sans-xs">
+          Created By
+        </dt>
+        <dd
+          id="user-email-value"
+          :aria-label="'Created By: ' + user.created_by"
+          class="margin-left-0 text-bold font-sans-sm"
+        >
+          {{ user.created_by }}
+        </dd>
+      </div>
+    </div>
+    <div class="grid-row grid-gap padding-top-2">
+      <div class="tablet:grid-col">
+        <dt class="font-sans-xs">
           Email
         </dt>
         <dd
@@ -99,6 +134,18 @@ function cancelUpdate() {
           class="margin-left-0 text-bold font-sans-sm"
         >
           {{ user.email }}
+        </dd>
+      </div>
+      <div class="tablet:grid-col">
+        <dt class="font-sans-xs">
+          Created On
+        </dt>
+        <dd
+          id="user-name-value"
+          :aria-label="'Created On: ' + formatDate(user.created_on)"
+          class="margin-left-0 text-bold font-sans-sm"
+        >
+          {{ formatDate(user.created_on) }}
         </dd>
       </div>
     </div>
@@ -117,6 +164,20 @@ function cancelUpdate() {
       </div>
       <div class="tablet:grid-col">
         <dt class="font-sans-xs">
+          Last Modified By
+        </dt>
+        <dd
+          id="user-email-value"
+          :aria-label="'Last Modified By: ' + user.modified_by"
+          class="margin-left-0 text-bold font-sans-sm"
+        >
+          {{ user.modified_by }}
+        </dd>
+      </div>
+    </div>
+    <div class="grid-row grid-gap padding-top-2">
+      <div class="tablet:grid-col">
+        <dt class="font-sans-xs">
           Sub-Agency, Organization, or Bureau
         </dt>
         <dd
@@ -125,6 +186,18 @@ function cancelUpdate() {
           class="margin-left-0 text-bold font-sans-sm"
         >
           {{ user.agency.bureau }}
+        </dd>
+      </div>
+      <div class="tablet:grid-col">
+        <dt class="font-sans-xs">
+          Last Modified On
+        </dt>
+        <dd
+          id="user-name-value"
+          :aria-label="'Last Modified On: ' + formatDate(user.modified_on)"
+          class="margin-left-0 text-bold font-sans-sm"
+        >
+          {{ formatDate(user.modified_on) }}
         </dd>
       </div>
     </div>

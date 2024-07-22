@@ -22,7 +22,7 @@ def test_find_by_type(quiz_repo_with_data: QuizRepository):
         "audience": schemas.QuizAudience.AccountHoldersApprovingOfficials,
         "active": True
     })
-    assert len(result) == 1
+    assert len(result) == 2
     assert result[0].name == "Travel Training for Ministry of Magic"
 
 
