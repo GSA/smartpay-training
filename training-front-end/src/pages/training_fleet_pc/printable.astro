@@ -21,7 +21,11 @@ const entries = await Promise.all(content_components)
     <div class="grid-container">
       <section class="usa-prose">
         
-        <button id="print_button" class="usa-button usa-button--outline" onclick="window.print()">
+        <button 
+          id="print_button"
+          class="usa-button usa-button--outline"
+          aria-label="print"
+          onclick="window.print()">
           <span class="display-block" aria-hidden="true">
           <PrintIcon /> Print Training
           </span>
