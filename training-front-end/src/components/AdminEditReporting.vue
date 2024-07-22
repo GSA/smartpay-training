@@ -116,7 +116,7 @@ function formatDate(dateStr) {
           Created By
         </dt>
         <dd
-          id="user-email-value"
+          id="user-created-by-value"
           :aria-label="'Created By: ' + user.created_by"
           class="margin-left-0 text-bold font-sans-sm"
         >
@@ -142,7 +142,7 @@ function formatDate(dateStr) {
           Created On
         </dt>
         <dd
-          id="user-name-value"
+          id="user-created-on-value"
           :aria-label="'Created On: ' + formatDate(user.created_on)"
           class="margin-left-0 text-bold font-sans-sm"
         >
@@ -168,7 +168,7 @@ function formatDate(dateStr) {
           Last Modified By
         </dt>
         <dd
-          id="user-email-value"
+          id="user-modified-by-value"
           :aria-label="'Last Modified By: ' + user.modified_by"
           class="margin-left-0 text-bold font-sans-sm"
         >
@@ -194,7 +194,7 @@ function formatDate(dateStr) {
           Last Modified On
         </dt>
         <dd
-          id="user-name-value"
+          id="user-modified-on-value"
           :aria-label="'Last Modified On: ' + formatDate(user.modified_on)"
           class="margin-left-0 text-bold font-sans-sm"
         >
