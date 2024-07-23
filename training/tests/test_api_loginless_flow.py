@@ -48,7 +48,7 @@ def fake_user_repo():
 @pytest.fixture
 def user_complete():
     return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3, "agency": {"name": 'test name', "id": 3, "bureau": None}, "roles": [],
-            "report_agencies": []}
+            "report_agencies": [], "created_on": "2024-07-19T13:46:23.004418", "created_by": "Stephen Dedalus"}
 
 
 @pytest.fixture
@@ -61,7 +61,9 @@ def authorized_complete():
         agency_id=3,
         agency=Agency(id=3, name='test name', bureau="test"),
         roles=[Role(id=1, name='Wizard')],
-        report_agencies=[]
+        report_agencies=[],
+        created_on="2024-07-19T13:46:23.004418",
+        created_by="Stephen Dedalus"
     )
 
 

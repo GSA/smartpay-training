@@ -71,7 +71,7 @@ def db_with_data(db: Session, testdata: dict):
         agency_ids.append(agency.id)
 
     for index, user in enumerate(testdata["users"]):
-        user = models.User(email=user["email"], name=user["name"], agency_id=agency_ids[index % 2])
+        user = models.User(email=user["email"], name=user["name"], agency_id=agency_ids[index % 2], created_by=user["created_by"])
         db.add(user)
         db.commit()
         db.refresh(user)
