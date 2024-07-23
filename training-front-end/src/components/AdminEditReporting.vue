@@ -62,25 +62,39 @@ function cancelUpdate() {
 }
 
 function formatDate(dateStr) {
-    const date = new Date(dateStr);
+  // Check if the string is null, undefined, or empty
+  if (!dateStr || dateStr.trim() === '') {
+    return 'N/A';
+  }  
+  
+  const date = new Date(dateStr);
 
-    // Check if the date is valid
-    if (isNaN(date.getTime())) {
-      return 'N/A';
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    return 'N/A';
+  }
+
+  //doing it this way to reduce dependancies 
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const month = monthNames[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  return `${month} ${day}, ${year}`;
+}
+
+  function formatString(str) {
+    // Check if the string is null, undefined, or empty
+    if (!str || str.trim() === '') {
+        return 'N/A';
     }
 
-    //doing it this way to reduce dependancies 
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
-    const month = monthNames[date.getMonth()];
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    return `${month} ${day}, ${year}`;
-  }
+    return str;
+}
 </script>
 
 <template>
@@ -169,10 +183,10 @@ function formatDate(dateStr) {
         </dt>
         <dd
           id="user-modified-by-value"
-          :aria-label="'Last Modified By: ' + user.modified_by"
+          :aria-label="'Last Modified By: ' + formatString(user.modified_by)"
           class="margin-left-0 text-bold font-sans-sm"
         >
-          {{ user.modified_by }}
+          {{ formatString(user.modified_by) }}
         </dd>
       </div>
     </div>
