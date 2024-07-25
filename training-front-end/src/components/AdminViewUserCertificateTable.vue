@@ -4,9 +4,17 @@
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
 
+  const props = defineProps({
+    user: {
+      type: Object,
+      required: true,
+    }
+  })
+
+
   const base_url = import.meta.env.BASE_URL
   const api_url = import.meta.env.PUBLIC_API_BASE_URL
-  const user = useStore(profile)
+  const adminUser = useStore(profile)
 
 
   const cert_icons = {
@@ -21,15 +29,16 @@
   const certificates = ref([]) 
  
   onMounted(async() => {
-      certificates.value = await fetch(`${api_url}/api/v1/certificates/`, {
+      certificates.value = await fetch(`${api_url}/api/v1/certificates/${props.user.id}`, {
         method: 'GET',
-        headers: {'Authorization': `Bearer ${user.value.jwt}`}
+        headers: {'Authorization': `Bearer ${adminUser.value.jwt}`}
       }
        ).then((r) => r.json())
     })
 
   const data_format = { year:"numeric", month:"long", day:"numeric"}
   const formatted_date = date => new Date(date).toLocaleDateString('en-US', data_format)
+  const formatted_time = date => new Date(date).toLocaleTimeString('en-US')
   const cert_img_src = cert => `${base_url}images/${cert_icons[cert]}`
 
 </script>
@@ -40,15 +49,21 @@
     class="usa-table usa-table--borderless width-full"
   >
     <caption>
-      <span class="font-sans-lg">Certificates</span>
+      <span class="font-sans-lg">View Certificates</span>
     </caption>
     <thead>
       <tr>
-        <th scope="col">
+        <th
+          scope="col"
+          style="padding-left: 0;"
+        >
           Certificate Name
         </th>
         <th scope="col">
           Date Earned
+        </th>
+        <th scope="col">
+          Time Earned
         </th>
         <th scope="col">
           Certificate
@@ -61,19 +76,27 @@
         :key="index"
       >
         <td>
-          <img
-            width="38.5"
-            height="24"
-            :src="cert_img_src(cert.cert_title)" 
-            class="text-middle margin-right-1" 
-            :style="{height:'1.5rem'}" 
-            aria-hidden="true" 
-            alt=""
-          >
-          {{ cert.cert_title }}
+          <div class="grid-row">
+            <div class="grid-col flex-auto">          
+              <img
+                width="38.5"
+                height="24"
+                :src="cert_img_src(cert.cert_title)" 
+                class="text-middle margin-right-1"
+                aria-hidden="true" 
+                alt=""
+              >
+            </div>
+            <div class="grid-col">
+              {{ cert.cert_title }}
+            </div>
+          </div>
         </td>
         <td>
           {{ formatted_date(cert.completion_date) }}
+        </td>
+        <td>
+          {{ formatted_time(cert.completion_date) }}
         </td>
         <td>
           <form
@@ -83,7 +106,7 @@
             <input 
               type="hidden"
               name="jwtToken"
-              :value="user.jwt"
+              :value="adminUser.jwt"
             >
             <button
               class="usa-button usa-button--unstyled"
@@ -100,7 +123,6 @@
     <h3>
       Certificates
     </h3>
-    <!--eslint-disable-next-line vue/max-attributes-per-line-->
-    You have not earned any certificates yet. <a :href="base_url" class="usa-link">Take a training</a> to earn a certificate.
+    User has not earned any certificates yet.
   </div>
 </template>

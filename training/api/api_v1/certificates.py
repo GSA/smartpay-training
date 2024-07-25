@@ -5,20 +5,37 @@ from training.repositories import CertificateRepository
 from training.api.deps import certificate_repository
 from training.services.certificate import Certificate
 from training.api.auth import JWTUser, user_from_form
+from training.api.auth import RequireRole
 
 
 router = APIRouter()
 
 
+@router.get("/certificates/{userId}", response_model=List[CertificateListValue])
+def get_certificates_by_userId(
+    userId: int,
+    user=Depends(RequireRole(["Admin"])),
+    repo: CertificateRepository = Depends(certificate_repository),
+):
+    '''
+    Returns a list of certificates for `userId`
+    '''
+    db_user_certificates = repo.get_all_certificates_by_userId(userId)
+
+    if db_user_certificates is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    return db_user_certificates
+
+
 @router.get("/certificates/", response_model=List[CertificateListValue])
-def get_certificates_by_userid(
+def get_certificates_by_user(
     repo: CertificateRepository = Depends(certificate_repository),
     user: dict[str, Any] = Depends(JWTUser())
 ):
     '''
-    Returns a list of certificates for `user`
+    Returns a list of certificates for current `user`
     '''
-    db_user_certificates = repo.get_all_certificates_by_userid(user["id"])
+    db_user_certificates = repo.get_all_certificates_by_userId(user["id"])
 
     if db_user_certificates is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

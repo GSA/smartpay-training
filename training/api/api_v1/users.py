@@ -37,9 +37,9 @@ def edit_user_for_reporting(
         user=Depends(RequireRole(["Admin"]))
 ):
     try:
-        updated_user = repo.edit_user_for_reporting(user_id, agency_id_list)
+        updated_user = repo.edit_user_for_reporting(user_id, agency_id_list, user['name'])
         logging.info(f"{user['email']} granted user {updated_user.email} reporting for agencies: {agency_id_list}")
-        return updated_user
+        return User.model_validate(updated_user)
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -109,7 +109,8 @@ def update_user_by_id(
         )
     try:
         logging.info(f"{user['email']} updated user {updated_user.email} user profile")
-        return repo.update_user(user_id, updated_user)
+        db_user = repo.update_user(user_id, updated_user, user["name"])
+        return User.model_validate(db_user)
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

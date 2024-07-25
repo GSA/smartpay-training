@@ -21,10 +21,13 @@ agencies:
 users:
   - email: test1@example.com
     name: Test One
+    created_by: Test One
   - email: test2@example.com
     name: Test Two
+    created_by: Test Two
   - email: test3@example.com
     name: Test Three
+    created_by: Test Three
     
 roles:
   - name: test role
