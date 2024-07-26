@@ -4,6 +4,7 @@ from training.repositories import AgencyRepository, UserRepository, QuizReposito
 from training.services import QuizService, GspcService
 from training.database import SessionLocal
 from sqlalchemy.orm import Session
+import logging
 
 
 def db() -> Generator[Session, None, None]:
@@ -15,7 +16,8 @@ def db() -> Generator[Session, None, None]:
     try:
         yield session
         session.commit()
-    except Exception:
+    except Exception as e:
+        logging.error(f"Error in DB session: {e}")
         session.rollback()
     finally:
         session.close()
