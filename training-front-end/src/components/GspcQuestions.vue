@@ -51,10 +51,14 @@
   }
 
   function previous_question(){
-    question_index.value -= 1
-    const state = { page: question_index.value }
-    const url = ""
-    history.pushState(state, "", url)
+    if (question_index.value > 0){
+      question_index.value -= 1
+      const state = { page: question_index.value }
+      const url = ""
+      history.pushState(state, "", url)
+    } else {
+      show_intro.value = true
+    }
   }
 
   function select_answer(event) {
@@ -115,7 +119,7 @@
         :disabled="!can_submit"
         @click="submit_quiz"
       >
-        Submit quiz
+        Submit
       </button>
       <!--display spinner along with submit button in one row for desktop-->
       <div
@@ -145,7 +149,6 @@
     </div>
     <br>
     <button
-      v-if="question_index"
       id="previous-button"
       type=""
       class="usa-button usa-button--outline"

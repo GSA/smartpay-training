@@ -58,16 +58,16 @@ describe('GspcQuestions', () => {
     expect(button.element.disabled).toBe(false)
   })
 
-  it('Previous button does not show on first question', async () => {
+  it('Previous button does show on first question', async () => {
     const wrapper = shallowMount(GspcQuestions, {
       props: { questions }
     })
 
     await startForm(wrapper)
 
-    // Assert that the previous button does not exist
+    // Assert that the previous button does exist
     const previousButton = wrapper.find('#previous-button');
-    expect(previousButton.exists()).toBe(false);
+    expect(previousButton.exists()).toBe(true);
   })
 
   it('navigates to the next question and back', async () => {

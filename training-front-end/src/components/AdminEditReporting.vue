@@ -41,6 +41,7 @@ function editUserAgencies(e, checked) {
     })
   } else {
     agencies.value = agencies.value.filter(agency => agency.id != e.id)
+    emit('save', props.user.id, agencies.value)
   }
 }
 
