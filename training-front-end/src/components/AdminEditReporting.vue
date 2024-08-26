@@ -12,7 +12,7 @@ const props = defineProps({
   user: {
     type: Object,
     required: true,
-  }
+  },
 })
 
 const editing = ref(false)
@@ -20,7 +20,19 @@ const editing = ref(false)
 // Copy to avoid modifying parent prop and allow cancelling edits 
 const agencies = ref([...props.user.report_agencies])
 
-const emit = defineEmits(['cancel', 'save', 'userUpdateSuccess'])
+watch(
+  () => props.user, 
+  (updatedUser) => {
+    if (updatedUser && updatedUser.report_agencies) {
+      agencies.value = [...updatedUser.report_agencies];
+    } else {
+      agencies.value = [];
+    }
+  },
+  { deep: true } // Ensures that nested changes within the user object are detected
+);
+
+const emit = defineEmits(['cancel', 'updateReportingAccess', 'userUpdateSuccess'])
 
 const agency_options = useStore(agencyList)
 const bureaus = useStore(bureauList)
@@ -41,7 +53,7 @@ function editUserAgencies(e, checked) {
     })
   } else {
     agencies.value = agencies.value.filter(agency => agency.id != e.id)
-    emit('save', props.user.id, agencies.value)
+    emit('updateReportingAccess', props.user.id, agencies.value)
   }
 }
 
@@ -268,7 +280,7 @@ function formatDate(dateStr) {
           <button
             id="update-user"
             class="usa-button usa-button--outline"
-            @click="$emit('save', user.id, agencies)"
+            @click="$emit('updateReportingAccess', user.id, agencies)"
           >
             Add Reporting Access
           </button>

@@ -13,7 +13,7 @@
   const PAGE_SIZE = 25
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  const report_url = `${base_url}/api/v1/users/`
+  const users_api = `${base_url}/api/v1/users/`
   const update_url = `${base_url}/api/v1/users/edit-user-for-reporting/`
 
   let currentPage = ref(0)
@@ -36,7 +36,7 @@
   async function search() {
     clearAlerts()
     noResults.value = false
-    const url = new URL(`${report_url}`)
+    const url = new URL(`${users_api}`)
     url.search = new URLSearchParams({searchText: searchTerm.value, page_number: currentPage.value + 1})
 
     try {
@@ -82,30 +82,53 @@
       }
       let updatedUser = await response.json()
       selectedUser.value.report_agencies = updatedUser.report_agencies
-      setCurrentUser(undefined)
-      setSelectedAgencyId(undefined)
+      updateUserSuccess("Updated users reporting access")
+      refreshSelectedUser()
     } catch (err){
       error.value = err
     }
   }
 
-  function setCurrentUser(e) {
+  async function refreshSelectedUser(){
+    if(!selectedUser.value){
+      return
+    }
+
+    const url = new URL(`${users_api}${selectedUser.value.id}`)
+
+    try {
+      const response = await fetch(
+        url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${user.value.jwt}`
+          }
+        }
+      )
+      if (! response.ok) {
+        const message = await response.text()
+        throw new Error(message)
+      }
+      selectedUser.value = await response.json()
+      console.log('Search Results:', selectedUser.value)
+    } catch (err) {
+      error.value = err
+    }
+  }
+
+  function setSelectedUser(e) {
     selectedUser.value = e
   }
 
   function cancelEdit(){
-    setCurrentUser(undefined)
+    setSelectedUser(undefined)
     setSelectedAgencyId(undefined)
   }
   
   async function updateUserSuccess(message) {
+    refreshSelectedUser()
     successMessage.value = message
     showSuccessMessage.value = true
-    cancelEdit()
-    currentPage.value = 0
-    numberOfResults.value = 0
-    searchTerm.value = ''
-    searchResults.value = []
   }
   
   function clearAlerts() {
@@ -182,7 +205,7 @@
         <AdminUserSearchTable 
           :number-of-results="numberOfResults"
           :search-results="searchResults" 
-          @select-item="setCurrentUser"
+          @select-item="setSelectedUser"
         />
         <USWDSPagination 
           :current-page="currentPage"
@@ -200,7 +223,7 @@
     <div v-else>
       <AdminEditReporting 
         :user="selectedUser"
-        @save="updateUserReports"
+        @update-reporting-access="updateUserReports"
         @cancel="cancelEdit"
         @user-update-success="updateUserSuccess"
       />
