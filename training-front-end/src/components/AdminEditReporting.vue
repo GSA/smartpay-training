@@ -12,7 +12,7 @@ const props = defineProps({
   user: {
     type: Object,
     required: true,
-  },
+  }
 })
 
 const editing = ref(false)
