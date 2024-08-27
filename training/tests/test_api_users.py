@@ -7,7 +7,7 @@ from training.config import settings
 from training.main import app
 from training.repositories import UserRepository
 from .factories import UserCreateSchemaFactory, UserSchemaFactory
-from training.schemas import UserSearchResult, Agency, Role
+from training.schemas import UserSearchResult, Agency, Role, User
 
 
 @pytest.fixture
@@ -66,6 +66,18 @@ def test_get_users(goodJWT, mock_user_repo: UserRepository):
     assert len(response.json()) == 2
     assert response.json()["total_count"] == 2
     assert response.json()["users"] == [user.model_dump() for user in users]
+
+
+@patch('training.config.settings', 'JWT_SECRET', 'super_secret')
+def test_get_user(goodJWT, mock_user_repo: UserRepository):
+    user = UserSchemaFactory.build(name="test name")
+    mock_user_repo.find_by_id.return_value = user
+    response = client.get(
+        "/api/v1/users/1",
+        headers={"Authorization": f"Bearer {goodJWT}"}
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["id"] == user.id
 
 
 def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
