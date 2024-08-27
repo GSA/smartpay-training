@@ -78,7 +78,7 @@ async function update_user_info() {
   }
 
   try{
-    let updatedUser = await adminRepository.updatedUser(props.userToEdit.id, user_data)
+    let updatedUser = await adminRepository.updateUser(props.userToEdit.id, user_data)
     is_saving.value = false
     show_spinner.value = false
     let successMessage = `Successfully updated ${updatedUser.email}`

@@ -29,7 +29,7 @@ const userSearch = async function(searchText, currentPage){
 
   const updateUserReports = async function(userId, agencyIds) {
     const agencies = agencyIds.map(a => a.id)
-    const url = new URL(`${users_api}/edit-user-for-reporting/`)
+    const url = new URL(`${users_api}edit-user-for-reporting/`)
     url.search = new URLSearchParams({user_id: userId})
 
     const response = await fetch(
@@ -93,6 +93,7 @@ const userSearch = async function(searchText, currentPage){
       }
       throw new Error("Error contacting server.")
     }
+    return await response.value.json()
   }
 
 export default {
