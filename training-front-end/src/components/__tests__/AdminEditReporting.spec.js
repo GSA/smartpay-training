@@ -80,8 +80,8 @@ describe('AdminAgencySelect', async () => {
     const update_button = wrapper.find('button[id="update-user"]')
     update_button.trigger('click')
 
-    expect(wrapper.emitted()['save'][0][0]).toEqual(users[0].id)
-    expect(wrapper.emitted()['save'][0][1]).toEqual([users[0].report_agencies[1]])
+    expect(wrapper.emitted()['updateReportingAccess'][0][0]).toEqual(users[0].id)
+    expect(wrapper.emitted()['updateReportingAccess'][0][1]).toEqual([users[0].report_agencies[1]])
   })
 
   it("emits cancel when cancel button is clicked", async () => {
