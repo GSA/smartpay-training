@@ -7,7 +7,7 @@ from training.config import settings
 from training.main import app
 from training.repositories import UserRepository
 from .factories import UserCreateSchemaFactory, UserSchemaFactory
-from training.schemas import UserSearchResult, Agency, Role, User
+from training.schemas import UserSearchResult, Agency, Role
 
 
 @pytest.fixture
