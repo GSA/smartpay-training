@@ -11,7 +11,6 @@ from training.main import app
 from training.schemas import UserCertificate, GspcCertificate, CertificateListValue
 from training.services.certificate import Certificate
 from training.api.api_v1.certificates import verify_certificate_is_valid, is_admin
-from starlette import status
 
 client = TestClient(app)
 
