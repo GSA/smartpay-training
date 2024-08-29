@@ -258,20 +258,25 @@ class TestCertificateAPI:
 
     def test_is_admin_with_admin_role(self):
         """Test when 'Admin' is in the roles list."""
-        user_roles = ["User", "Admin", "Editor"]
-        assert is_admin(user_roles) is True
+        user = {"roles": ["User", "Admin", "Editor"]}
+        assert is_admin(user) is True
 
     def test_is_admin_without_admin_role(self):
         """Test when 'Admin' is not in the roles list."""
-        user_roles = ["User", "Editor"]
-        assert is_admin(user_roles) is False
+        user = {"roles": ["User", "Editor"]}
+        assert is_admin(user) is False
 
-    def test_is_admin_empty_list(self):
+    def test_is_admin_empty_roles(self):
         """Test when the roles list is empty."""
-        user_roles = []
-        assert is_admin(user_roles) is False
+        user = {"roles": []}
+        assert is_admin(user) is False
 
-    def test_is_admin_none(self):
+    def test_is_admin_roles_is_none(self):
         """Test when the roles list is None."""
-        user_roles = None
-        assert is_admin(user_roles) is False
+        user = {"roles": None}
+        assert is_admin(user) is False
+
+    def test_is_admin_roles_key_missing(self):
+        """Test when the roles key is missing from the dictionary."""
+        user = {}
+        assert is_admin(user) is False

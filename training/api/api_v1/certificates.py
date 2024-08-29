@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List, Any, Dict
 from fastapi import APIRouter, status, HTTPException, Depends, Response
 from training.schemas import UserCertificate, CertificateType, CertificateListValue
 from training.repositories import CertificateRepository
@@ -52,7 +52,7 @@ def get_certificate_by_type_and_id(
 ):
     pdf_bytes = None
     filename = ''
-    is_admin_user = is_admin(user["roles"])
+    is_admin_user = is_admin(user)
     user_id = user["id"]
 
     if (certType == CertificateType.QUIZ.value):
@@ -97,8 +97,10 @@ def verify_certificate_is_valid(cert: object, user_id: int, is_admin_user: bool)
         raise HTTPException(status_code=401, detail="Not Authorized")
 
 
-def is_admin(user_roles: List[str]):
-    if not user_roles:  # Handle None or empty list
+def is_admin(user: Dict[str, List[str]]) -> bool:
+    # Ensure that 'roles' is in the user dictionary and is a list
+    if 'roles' not in user or not isinstance(user['roles'], list):
         return False
 
-    return 'Admin' in user_roles
+    # Normalize roles to avoid case sensitivity issues
+    return 'Admin' in user['roles']
