@@ -68,6 +68,18 @@ def test_get_users(goodJWT, mock_user_repo: UserRepository):
     assert response.json()["users"] == [user.model_dump() for user in users]
 
 
+@patch('training.config.settings', 'JWT_SECRET', 'super_secret')
+def test_get_user(goodJWT, mock_user_repo: UserRepository):
+    user = UserSchemaFactory.build(name="test name")
+    mock_user_repo.find_by_id.return_value = user
+    response = client.get(
+        "/api/v1/users/1",
+        headers={"Authorization": f"Bearer {goodJWT}"}
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["id"] == user.id
+
+
 def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
     user = UserSchemaFactory.build(roles=[])
     mock_user_repo.create(user)

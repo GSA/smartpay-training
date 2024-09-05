@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List, Any, Dict
 from fastapi import APIRouter, status, HTTPException, Depends, Response
 from training.schemas import UserCertificate, CertificateType, CertificateListValue
 from training.repositories import CertificateRepository
@@ -52,11 +52,13 @@ def get_certificate_by_type_and_id(
 ):
     pdf_bytes = None
     filename = ''
+    is_admin_user = is_admin(user)
+    user_id = user["id"]
 
     if (certType == CertificateType.QUIZ.value):
         db_user_certificate = certificateRepo.get_certificate_by_id(id)
 
-        verify_certificate_is_valid(db_user_certificate, user["id"])
+        verify_certificate_is_valid(db_user_certificate, user_id, is_admin_user)
 
         pdf_bytes = certificateService.generate_pdf(
             db_user_certificate.quiz_name,
@@ -69,7 +71,7 @@ def get_certificate_by_type_and_id(
     elif (certType == CertificateType.GSPC.value):
         certificate = certificateRepo.get_gspc_certificate_by_id(id)
 
-        verify_certificate_is_valid(certificate, user["id"])
+        verify_certificate_is_valid(certificate, user_id, is_admin_user)
 
         pdf_bytes = certificateService.generate_gspc_pdf(
             certificate.user_name,
@@ -87,9 +89,18 @@ def get_certificate_by_type_and_id(
     return Response(pdf_bytes, headers=headers, media_type='application/pdf')
 
 
-def verify_certificate_is_valid(cert: object, user_id: int):
+def verify_certificate_is_valid(cert: object, user_id: int, is_admin_user: bool):
     if cert is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if cert.user_id != user_id:
+    if cert.user_id != user_id and not is_admin_user:
         raise HTTPException(status_code=401, detail="Not Authorized")
+
+
+def is_admin(user: Dict[str, List[str]]) -> bool:
+    # Ensure that 'roles' is in the user dictionary and is a list
+    if 'roles' not in user or not isinstance(user['roles'], list):
+        return False
+
+    # Normalize roles to avoid case sensitivity issues
+    return 'Admin' in user['roles']
