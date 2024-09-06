@@ -80,11 +80,25 @@ def get_users(
     '''
     Get/users is used to search users for admin portal
     currently search only support search by user name and email address, searchText is required field.
-    It may have additional search criteira in future, which will require logic update.
+    It may have additional search criteria in future, which will require logic update.
     page_number param is used to support UI pagination functionality.
     It returns UserSearchResult object with a list of users and total_count used for UI pagination
     '''
     return repo.get_users(searchText, page_number)
+
+
+@router.get("/users/{user_id}", response_model=User)
+def get_user(
+        user_id: int,
+        repo: UserRepository = Depends(user_repository),
+        user=Depends(RequireRole(["Admin"]))
+):
+    '''
+    Get/user is used to refresh user after edits for admin portal
+    It returns a User object
+    '''
+
+    return repo.find_by_id(user_id)
 
 
 @router.patch("/users/{user_id}", response_model=User)

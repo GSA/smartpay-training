@@ -7,9 +7,10 @@ import {useVuelidate} from "@vuelidate/core";
 import ValidatedSelect from "./ValidatedSelect.vue";
 import {useStore} from "@nanostores/vue";
 import {agencyList, bureauList, setSelectedAgencyId} from "../stores/agencies.js";
-import {profile} from "../stores/user.js";
 import USWDSAlert from "./USWDSAlert.vue";
 import SpinnerGraphic from "./SpinnerGraphic.vue";
+import { RepositoryFactory } from "./RepositoryFactory.vue";
+const adminRepository = RepositoryFactory.get('admin')
 
 const props = defineProps({
   userToEdit: {
@@ -17,8 +18,7 @@ const props = defineProps({
     required: true,
   }
 })
-const user = useStore(profile)
-const base_url = import.meta.env.PUBLIC_API_BASE_URL
+
 const {withMessage} = helpers
 const agency_options = useStore(agencyList)
 const bureaus = useStore(bureauList)
@@ -62,8 +62,7 @@ onBeforeMount(async () => {
 })
 
 async function update_user_info() {
-  error.value = ref()
-  show_error.value = false
+  clearErrors()
   const isFormValid = await v_all_info$.value.$validate()
 
   if (!isFormValid) {
@@ -72,60 +71,29 @@ async function update_user_info() {
   is_saving.value = true
   show_spinner.value = true
 
-  // When user has choosen a bureau use that id instead of the agency
+  // When user has chosen a bureau use that id instead of the agency
   let {bureau_id, ...user_data} = user_input
   if (bureau_id) {
     user_data.agency_id = bureau_id
   }
 
-  const apiURL = new URL(`${base_url}/api/v1/users/${props.userToEdit.id}`)
-  let response = ref();
-  try {
-    response.value = await fetch(apiURL, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.value.jwt}`
-      },
-      body: JSON.stringify(user_data)
-    })
-  } catch (error) {
-    setError({
-      name: 'Server Error',
-      message: 'Sorry, we had an error connecting to the server.'
-    })
+  try{
+    let updatedUser = await adminRepository.updateUser(props.userToEdit.id, user_data)
     is_saving.value = false
     show_spinner.value = false
-    return
-  }
-  if (!response.value.ok) {
-    is_saving.value = false
-    show_spinner.value = false
-    if (response.value.status === 400) {
-      setError({
-        name: 'Unauthorized',
-        message: 'You are not authorized to edit profile.'
-      })
-      return
-    }
-    if (response.value.status === 403) {
-      setError({
-        name: 'Unauthorized',
-        message: "You can not update your own profile."
-      })
-      return
-    }
+    let successMessage = `Successfully updated ${updatedUser.email}`
+    emit('completeUserUpdate', successMessage)
+  } catch(err){
     setError({
-      name: 'Error',
-      message: "Error contacting server."
+      name: 'Response Error',
+      message: err
     })
-    return
   }
-  is_saving.value = false
-  show_spinner.value = false
-  let updatedUser = await response.value.json()
-  let successMessage = `Successfully updated ${updatedUser.email}`
-  emit('completeUserUpdate', successMessage)
+}
+
+function clearErrors(){
+  error.value = ref()
+  show_error.value = false
 }
 
 function setError(event) {

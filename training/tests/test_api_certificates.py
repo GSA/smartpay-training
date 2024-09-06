@@ -3,13 +3,14 @@ import jwt
 
 
 from unittest.mock import MagicMock
-from fastapi import status
+from fastapi import status, HTTPException
 from fastapi.testclient import TestClient
 from training.api.deps import certificate_repository
 from training.config import settings
 from training.main import app
 from training.schemas import UserCertificate, GspcCertificate, CertificateListValue
 from training.services.certificate import Certificate
+from training.api.api_v1.certificates import verify_certificate_is_valid, is_admin
 
 client = TestClient(app)
 
@@ -84,6 +85,11 @@ def fake_cert_service_repo():
 @pytest.fixture
 def goodJWT():
     return jwt.encode({'id': 1}, settings.JWT_SECRET, algorithm="HS256")
+
+
+class MockCertificate:
+    def __init__(self, user_id):
+        self.user_id = user_id
 
 
 class TestCertificateAPI:
@@ -219,3 +225,58 @@ class TestCertificateAPI:
             data={"jwtToken": goodJWT}
         )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_verify_certificate_is_valid_certificate_none(self):
+        """Test when the certificate is None, should raise 404 HTTPException."""
+        with pytest.raises(HTTPException) as exc_info:
+            verify_certificate_is_valid(cert=None, user_id=1, is_admin_user=False)
+        assert exc_info.value.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_verify_certificate_is_valid_user_not_authorized(self):
+        """Test when user_id does not match and is not an admin, should raise 401 HTTPException."""
+        cert = MockCertificate(user_id=2)
+        with pytest.raises(HTTPException) as exc_info:
+            verify_certificate_is_valid(cert=cert, user_id=1, is_admin_user=False)
+        assert exc_info.value.status_code == 401
+        assert exc_info.value.detail == "Not Authorized"
+
+    def test_verify_certificate_is_valid_user_authorized(self):
+        """Test when user_id matches, should not raise any exception."""
+        cert = MockCertificate(user_id=1)
+        try:
+            verify_certificate_is_valid(cert=cert, user_id=1, is_admin_user=False)
+        except HTTPException:
+            pytest.fail("HTTPException raised unexpectedly!")
+
+    def test_verify_certificate_is_valid_admin_user(self):
+        """Test when the user is an admin, should not raise any exception even if user_id does not match."""
+        cert = MockCertificate(user_id=2)
+        try:
+            verify_certificate_is_valid(cert=cert, user_id=1, is_admin_user=True)
+        except HTTPException:
+            pytest.fail("HTTPException raised unexpectedly!")
+
+    def test_is_admin_with_admin_role(self):
+        """Test when 'Admin' is in the roles list."""
+        user = {"roles": ["User", "Admin", "Editor"]}
+        assert is_admin(user) is True
+
+    def test_is_admin_without_admin_role(self):
+        """Test when 'Admin' is not in the roles list."""
+        user = {"roles": ["User", "Editor"]}
+        assert is_admin(user) is False
+
+    def test_is_admin_empty_roles(self):
+        """Test when the roles list is empty."""
+        user = {"roles": []}
+        assert is_admin(user) is False
+
+    def test_is_admin_roles_is_none(self):
+        """Test when the roles list is None."""
+        user = {"roles": None}
+        assert is_admin(user) is False
+
+    def test_is_admin_roles_key_missing(self):
+        """Test when the roles key is missing from the dictionary."""
+        user = {}
+        assert is_admin(user) is False
