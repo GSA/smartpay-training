@@ -97,10 +97,13 @@ class QuizService():
             quiz_completion_id=None
         )
 
+        responses_dict = submission.model_dump()
+
         result = self.quiz_completion_repo.create(QuizCompletionCreate(
             quiz_id=quiz_id,
             user_id=user_id,
             passed=grade.passed,
+            responses=responses_dict
         ))
 
         grade.quiz_completion_id = result.id
