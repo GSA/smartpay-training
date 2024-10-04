@@ -1,0 +1,4 @@
+﻿User-agent: *
+Disallow: /admin/
+
+Sitemap: https://training.smartpay.gsa.gov/sitemap-index.xml
