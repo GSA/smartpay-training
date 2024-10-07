@@ -6,3 +6,4 @@ __pycache__
 _site/
 node_modules
 .coverage
+.idea/workspace.xml

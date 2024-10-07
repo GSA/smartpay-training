@@ -48,7 +48,7 @@
         class="usa-link"
         href="mailto:gsa_smartpay@gsa.gov"
       >
-        contact the SmartPay team
+        contact the GSA SmartPay team
       </a> to gain access.
     </USWDSAlert>
   </section>

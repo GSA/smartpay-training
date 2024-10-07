@@ -12,7 +12,8 @@ def valid_quiz_completion_create(
     return schemas.QuizCompletionCreate(
         quiz_id=valid_quiz_ids[-1],
         user_id=valid_user_ids[-1],
-        passed=True
+        passed=True,
+        responses=dict([{'question_id': 0, 'response_ids': [1]}, {'question_id': 1, 'response_ids': [1]}, {'question_id': 2, 'response_ids': [2]}])
     )
 
 

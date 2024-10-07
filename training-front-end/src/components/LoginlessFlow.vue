@@ -46,6 +46,11 @@
     'linkDestinationText': {
       type: String,
       required: true
+    },
+    'parameters': {
+      type: String,
+      required: false,
+      default: ""
     }
   })
 
@@ -85,7 +90,7 @@
     unregisteredEmail.value = false
   })
 
-  /* Form validation for additional information if we allow registation here */
+  /* Form validation for additional information if we allow registration here */
   const showAdditionalFormFields = computed(() => props.allowRegistration && unregisteredEmail.value)
   const validations_all_info = {
     name: {
@@ -113,7 +118,10 @@
 
   function clearToken() {
     const url = new URL(window.location);
-    url.search = ''
+    //remove token from url
+    const params = new URLSearchParams(url.search);
+    params.delete('t')
+    url.search = params
     history.replaceState({}, '', url)
   }
 
@@ -150,7 +158,7 @@
 
     const apiURL = new URL(`${base_url}/api/v1/get-link`)
     let res
-    // When user has choosen a bureau use that id instead of the agency
+    // When user has chosen a bureau use that id instead of the agency
     let {bureau_id, ...user_data} = user_input
     if (bureau_id) {
       user_data.agency_id = bureau_id
@@ -161,7 +169,7 @@
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
           user: user_data,
-          dest: {page_id: props.pageId, title: props.title}
+          dest: {page_id: props.pageId, parameters: props.parameters, title: props.title}
         })
       })
     } catch (err) {
@@ -213,7 +221,7 @@
         <h2 class="usa-prose">
           Check your email
         </h2>
-        <p>We sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours.</p>
+        <p>We sent you an email at <b>{{ user_input.email }}</b> with a link to access {{ linkDestinationText }}. This link is only active for 24 hours. If you have not received the email within 15 minutes, please check your spam folder.</p>
 
         <p>Not the right email? <a href=".">Send another email</a></p>
       </div>
@@ -288,7 +296,7 @@
 
           We only obtain your information necessary to access this system. We collect information such as agency name and email address, to issue training certificates and for agency reporting management. We carefully protect your information and will not make it available to web tracking software for retention. We do not disclose, give, sell, or transfer any personal information about our visitors, unless required for law enforcement or statute.<br><br>
 
-          To access the GSA SmartPay training system, please use your business or work email only, and not a personal email address.
+          To access the GSA SmartPay® training system, please use your business or work email only, and not a personal email address.
         </USWDSAlert>
         <slot name="initial-greeting" />
 

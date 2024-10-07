@@ -1,18 +1,33 @@
 agencies:
   - name: Department of Mysteries
     bureau: null
+  - name: Other
+    bureau: null
+  - name: Department of Mysteries
+    bureau: Other
+  - name: Department of Mysteries
+    bureau: Time-Travel experiments
   - name: Department of Magical Law Enforcement
     bureau: null
   - name: Department of Magical Accidents and Catastrophes
     bureau: null
+  - name: Department of Mysteries
+    bureau: Terrible Poisons
+  - name: Department of Magical Law Enforcement
+    bureau: Zipper Spells
+  - name: Department of Magical Law Enforcement
+    bureau: Arrest Methods
 
 users:
   - email: test1@example.com
     name: Test One
+    created_by: Test One
   - email: test2@example.com
     name: Test Two
+    created_by: Test Two
   - email: test3@example.com
     name: Test Three
+    created_by: Test Three
     
 roles:
   - name: test role
@@ -82,3 +97,33 @@ quiz_submissions:
     responses:
       - question_id: 0
         response_ids: [0]
+
+gspc_submission:
+  valid_passing:
+    expiration_date: '2099-01-01'
+    responses:
+      responses:
+        - question_id: 0
+          question: 'question1'
+          response_id: 0
+          response: 'Yes'
+          correct: True
+        - question_id: 1
+          question: 'question2'
+          response_id: 0
+          response: 'Yes'
+          correct: True
+  valid_failing:
+    expiration_date: '2099-01-01'
+    responses:
+      responses:
+        - question_id: 0
+          question: 'question1'
+          response_id: 1
+          response: 'No'
+          correct: False
+        - question_id: 1
+          question: 'question2'
+          response_id: 0
+          response: 'Yes'
+          correct: True

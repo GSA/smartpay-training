@@ -2,9 +2,11 @@ name: Deploy to cloud.gov prod space
 
 on:
   push:
-    tags:
-      - release-*
-
+    branches:
+      - main
+    paths-ignore:
+      - training-front-end/**
+      
 jobs:
   deploy:
     uses: ./.github/workflows/deploy.yaml

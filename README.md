@@ -2,32 +2,31 @@
 
 This will be the quiz platform for GSA SmartPay training for card holders and AOs.
 
-## Getting Started
-
-### Environment Settings
-
-There are several configuration settings that are needed. See `.env_example` for a list of environment variables that we will need. The settings object in `training/config` will try to read these from a `.env` file (which should not be checked into GitHub).
-
-To make this work in development, create a file in the main directory called `.env` and include the variables from `.env_example`.
-
-
-### Backend Dev environment
-
-Create and activate a Python venv, then install dependencies for the FastAPI backend:
-
-```sh
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.dev.txt -r requirements.txt
+## Setting up for development and testing
+  
+### Environment variable settings
+This application requires several configuration settings that are pulled from a file called `.env`. We do not check this file into the Github repo. Instead, we provide a template at [`.env_example`](/.env_example).
+  
+You should create a new `.env` file locally in the root of the repository, copying the template and updating values per the instructions below.
+  
+#### Setting up email
+This application requires an SMTP service for sending confirmation emails when signing up for training. This means we need to provide corresponding variable values so that, when in development mode, we can receive test emails.
+ 
+We recommend using [Ethereal](https://ethereal.email/) to set up an easy to use, temporary, free email account. When you create an account there, Ethereal will provide you with a username, password, an SMTP address, and an SMTP port. You should update your copied `.env` file with the corresponding values (updating with the values Ethereal gets you):
+```config
+SMTP_SERVER="<etheral-smtp-server-address>"
+SMTP_PORT=<ethereal-smtp-server-port>
+  
+SMTP_PASSWORD="<ethereal-account-password>"
+SMTP_USER="<ethereal-account-email-address>"
 ```
-
-### Frontend dev environment
-
-Install NPM dependencies for the Vue frontend:
-
-```sh
-npm run build:frontend
+  
+#### Update the base url
+For development, we need to update the `BASE_URL` environment value so that confirmation emails link back to the locally running application. By default, our web application will be running locally at port `4321` when in development:
+```config
+BASE_URL="http://localhost:4321"
 ```
+**Note the lack of a trailing slash!**
 
 ### Service dependencies
 
@@ -44,15 +43,45 @@ This will start:
 * A local PostgreSQL database listening on port 5432
 * An Adminer instance listening on port 8432
 
-### Migrating the database schema
 
-Run the database migrations to build the database schema:
+### Python environment settings
+The backend uses Python and FastAPI. You will want to set up a virtual environment for installing python packages locally. To set one up and install the needed dependencies, run the following:
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.dev.txt -r requirements.txt
+```
+
+### Frontend environment settings
+The frontend is built using [Astro](https://astro.build/) and [Vue](https://vuejs.org/). These require an installation of Node. We recommend using one of the following development environments for Node:
+* [NVM](https://github.com/nvm-sh/nvm) -- The correct Node version is set automatically from this repo's `.nvmrc` file (Node LTS v18)
+* [nodeenv](https://pypi.org/project/nodeenv/), which is compatible with python's virtualenv. If you use this option, be sure to use the latest Node LTS version, which is `v18`.
+  
+  
+  
+Once you have a proper Node environment set up, you can install the frontend dependencies as follows:
+
+```sh
+npm run build:frontend
+```
+
+### Database setup and migrating the schema
+With your database service running in Docker (see [this section](#service-dependencies) for setting that up), you will need to run the necessary database migrations and seed the database with initial data.
+  
+**IMPORTANT**: If you have `postgres` already running locally on your machine as a service, you will want to disable it. The Docker version of the database runs at the default `postgres` port, but your local version will take priority and the scripts could fail if it's running. You'll know if you see errors about not having a user called `postgres` or similar.
+
+#### Running Migrations
+
+We use [Alembic](https://alembic.sqlalchemy.org/en/latest/) to run the database migrations. If you installed the python environment according to the earlier instructions, it should already be available to you.
+  
+To run the migrations:
 
 ```
 alembic upgrade head
 ```
 
-### Seeding the database
+#### Seeding the database
 
 To load seed data into PostgreSQL, run:
 
@@ -60,25 +89,60 @@ To load seed data into PostgreSQL, run:
 python -m training.database.seed
 ```
 
-### Run both the frontend and backend dev servers
+#### Importing training questions into the db
+In order to fully use the application in development, we will need to import the training quizzes into the database. However, _we do not commit that data to this repository_. You will need to contact the project maintainers to get access to the training quiz data sql dump file.
+  
+Once you have that file, you can run the following to import quiz data into the db:
+```
+# Assuming the dump file is named quiz-data-dump.sql
+psql -h localhost -p 5432 -U postgres -W postgres < /path/to/quiz-data-dump.sql
+```
+
+## Running in development
+First, be sure you have followed all the [instructions for setting up for development](#setting-up-for-development-and-testing).
+  
+To run both the python backend and the frontend at the same time, execute:
 
 ```sh
 npm run dev
 ```
 
 ## Testing
-
+Before attempting to run tests, be sure that you have followed all the [instructions for setting up for development](#setting-up-for-development-and-testing).
+  
+### Backend tests (python)
+  
 To run tests with code coverage checking:
 
-```
+```shell
 coverage run -m pytest
 ```
 
 To view the coverage report afterwards:
 
-```
+```shell
 coverage report
 ```
+  
+To run python tests showing the location of any skipped tests:
+```shell
+pytest -r fEs
+```
+
+### Frontend tests (node/javascript)
+To run the frontend tests, execute
+```shell
+cd training-frontend
+npm run test:coverage
+```
+
+## 🇺🇸 USWDS
+This site uses the [U.S. Web Design System (USWDS)](https://designsystem.digital.gov). To customize  USWDS styles you will need to edit the SASS components and styles in the `/sass` directory. Changes here will not be reflected in the site until you rebuild the css. To build the css, cd to the frontend project and run gulp:
+
+```
+npx gulp compile --gulpfile gulpfile.cjs
+```
+This will rebuild the static assests and place them in the `/public` directory. To learn more, visit USWDS [Getting started for developers  ](https://designsystem.digital.gov/documentation/getting-started-for-developers/).
 
 ## Deployment on cloud.gov
 

@@ -18,7 +18,7 @@ describe('Quiz', () => {
 
   it('renders initial view of first question', async () => {
     const wrapper = await mount(Quiz, {props})
-    const heading = wrapper.find('h3')
+    const heading = wrapper.find('legend')
     expect(heading.text()).toBe(quiz.content.questions[0].text)
   })
 
@@ -65,7 +65,7 @@ describe('Quiz', () => {
     button.trigger('click')
     await flushPromises()
 
-    const heading = wrapper.find('h3')
+    const heading = wrapper.find('legend')
     expect(heading.text()).toBe(quiz.content.questions[1].text)
 
     const labels = wrapper.findAll('label')
@@ -123,7 +123,7 @@ describe('Quiz', () => {
       button.trigger('click')
       await flushPromises()
     }
-    expect(wrapper.text()).toContain('GSA SmartPay® travel card/account')
+    expect(wrapper.text()).toContain('GSA SmartPay® Travel card/account')
   })
 
   it('should display acknowledgement box with langauge specific to Purchase card type', async () => {
@@ -136,7 +136,7 @@ describe('Quiz', () => {
       button.trigger('click')
       await flushPromises()
     }
-    expect(wrapper.text()).toContain('GSA SmartPay® purchase card/account')
+    expect(wrapper.text()).toContain('GSA SmartPay® Purchase card/account')
   })
 
   it('should display acknowledgement box with langauge specific to Fleet card type', async () => {
@@ -149,7 +149,7 @@ describe('Quiz', () => {
       button.trigger('click')
       await flushPromises()
     }
-    expect(wrapper.text()).toContain('GSA SmartPay® fleet card/account')
+    expect(wrapper.text()).toContain('GSA SmartPay® Fleet card/account')
   })
 
   it('should emit answers after quiz is submitted', async () => {

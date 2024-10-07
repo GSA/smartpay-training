@@ -5,12 +5,12 @@ import CertificateIndex from '@components/CertificateIndex.vue';
 
 const pageTitle = "Access Certificates";
 ---
-<BaseLayout title={pageTitle}>
+<BaseLayout title={pageTitle} description="Access past certificates for Card/Account Holders, Approving Officials, and Program Coordinators">
     <HeroTraining background_class='bg_smartpay_cool_grey'>
       Access Past Certificates
       <span slot="subheader">
           Card/Account Holders, Approving Officials, and Program Coordinators
       </span>
     </HeroTraining>
-    <CertificateIndex client:only />
+    <CertificateIndex client:only="vue" />
 </BaseLayout>

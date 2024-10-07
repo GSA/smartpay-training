@@ -10,7 +10,7 @@ from training.api.deps import quiz_repository, quiz_service
 
 router = APIRouter()
 
-''' Disabling for now
+''' disable quiz creation for security
 @router.post("/quizzes", response_model=Quiz, status_code=status.HTTP_201_CREATED)
 def create_quiz(quiz: QuizCreate, repo: QuizRepository = Depends(quiz_repository)):
     db_quiz = repo.create(quiz)

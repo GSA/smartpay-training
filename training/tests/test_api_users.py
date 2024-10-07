@@ -13,6 +13,7 @@ from training.schemas import UserSearchResult, Agency, Role
 @pytest.fixture
 def admin_user():
     return {
+        'id': 1,
         'name': 'Albus Dumbledore',
         'email': 'dumbledore@hogwarts.edu',
         'roles': ['Admin']
@@ -53,42 +54,30 @@ def test_create_user_duplicate(goodJWT, mock_user_repo: UserRepository):
 
 
 @patch('training.config.settings', 'JWT_SECRET', 'super_secret')
-def test_get_users_all(goodJWT, mock_user_repo: UserRepository):
-    users = [UserSchemaFactory.build() for x in range(3)]
-    mock_user_repo.find_all.return_value = users
-    response = client.get(
-        "/api/v1/users",
-        headers={"Authorization": f"Bearer {goodJWT}"}
-    )
-    assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == 3
-
-
-@patch('training.config.settings', 'JWT_SECRET', 'super_secret')
-def test_get_users_by_agency(goodJWT, mock_user_repo: UserRepository):
-    users = [UserSchemaFactory.build(agency_id=2) for x in range(5)]
-    mock_user_repo.find_by_agency.return_value = users
-    response = client.get(
-        "/api/v1/users?agency_id=2",
-        headers={"Authorization": f"Bearer {goodJWT}"}
-    )
-    assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == 5
-
-
-@patch('training.config.settings', 'JWT_SECRET', 'super_secret')
-def test_search_users_by_name(goodJWT, mock_user_repo: UserRepository):
+def test_get_users(goodJWT, mock_user_repo: UserRepository):
     users = [UserSchemaFactory.build(name="test name") for x in range(2)]
     user_search_result = UserSearchResult(users=users, total_count=2)
-    mock_user_repo.search_users_by_name.return_value = user_search_result
+    mock_user_repo.get_users.return_value = user_search_result
     response = client.get(
-        "/api/v1/users/search-users-by-name/test?page_number=1",
+        "/api/v1/users?searchText=test&page_number=1",
         headers={"Authorization": f"Bearer {goodJWT}"}
     )
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == 2
     assert response.json()["total_count"] == 2
     assert response.json()["users"] == [user.model_dump() for user in users]
+
+
+@patch('training.config.settings', 'JWT_SECRET', 'super_secret')
+def test_get_user(goodJWT, mock_user_repo: UserRepository):
+    user = UserSchemaFactory.build(name="test name")
+    mock_user_repo.find_by_id.return_value = user
+    response = client.get(
+        "/api/v1/users/1",
+        headers={"Authorization": f"Bearer {goodJWT}"}
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["id"] == user.id
 
 
 def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
@@ -102,7 +91,7 @@ def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
     mock_user_repo.edit_user_for_reporting.return_value = user
     user_id = user.id
     URL = f"/api/v1/users/edit-user-for-reporting?user_id={user_id}"
-    response = client.put(
+    response = client.patch(
         URL,
         json=[3],
         headers={"Authorization": f"Bearer {goodJWT}"}
@@ -110,3 +99,33 @@ def test_edit_user_for_reporting(mock_user_repo: UserRepository, goodJWT: str):
     assert response.status_code == status.HTTP_200_OK
     assert role.model_dump() in response.json()["roles"]
     assert agency.model_dump() in response.json()["report_agencies"]
+
+
+def test_edit_user_details(mock_user_repo: UserRepository, goodJWT: str):
+    updated_user = UserSchemaFactory.build()
+    updated_user.name = "some name"
+    updated_user.agency_id = 1
+    mock_user_repo.update_user.return_value = updated_user
+    user_id = updated_user.id
+    URL = f"/api/v1/users/{user_id}"
+    response = client.patch(
+        URL,
+        json=updated_user.model_dump(),
+        headers={"Authorization": f"Bearer {goodJWT}"}
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["name"] == updated_user.name
+    assert response.json()["agency_id"] == updated_user.agency_id
+
+
+def test_edit_user_details_same_user(mock_user_repo: UserRepository, goodJWT: str):
+    updated_user = UserSchemaFactory.build()
+    mock_user_repo.update_user.return_value = updated_user
+    user_id = 1
+    URL = f"/api/v1/users/{user_id}"
+    response = client.patch(
+        URL,
+        json=updated_user.model_dump(),
+        headers={"Authorization": f"Bearer {goodJWT}"}
+    )
+    assert response.status_code == status.HTTP_403_FORBIDDEN

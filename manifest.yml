@@ -15,3 +15,5 @@ applications:
         parameters:
           redirect_uri: ((oauth_redirect_uri))
           allowpublic: true
+    env:
+      NUM_WORKERS: ((num_workers))
