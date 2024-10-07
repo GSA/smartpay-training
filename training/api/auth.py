@@ -165,7 +165,7 @@ def user_from_form(jwtToken: Annotated[str, Form()], request: Request):
     There are places in the front-end where we want to download a file, but we also
     need to authenticate the user. We cannot pass a JWT with a simple html <a>, so instead
     use a form to POST the request. The form can then include the JWT as in input. This
-    function is used to decode and validate the JWT in that case. See: "/certificate/{id}"
+    function is used to decode and validate the JWT in that case. See: "/certificate/{certType}/{id}"
     for an example.
     '''
     try:

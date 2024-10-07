@@ -34,3 +34,6 @@ jobs:
 
       - name: Run pa11y 
         run: npm run pa11y-ci:gh 
+
+      - name: Run broken link checker 
+        run: npm run link-checker:pipeline 

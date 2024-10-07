@@ -1,7 +1,7 @@
 redis==4.4.4
-fastapi==0.101.0
+fastapi==0.109.1
 uvicorn[standard]==0.23.2
-gunicorn==21.2.0
+gunicorn==22.0.0
 pyjwt[crypto]==2.6.0
 cfenv==0.5.3
 SQLAlchemy==2.0.5.post1
@@ -10,6 +10,4 @@ alembic==1.10.2
 PyMuPDF==1.21.1
 pydantic-settings==2.0.2
 email-validator==2.0.0.post2
-python-multipart==0.0.6
-structlog==23.1.0
-asgi-correlation-id==4.2.0
+python-multipart==0.0.7

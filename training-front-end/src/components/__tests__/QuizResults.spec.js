@@ -16,7 +16,8 @@ describe("QuizResults", () => {
   it('displays passing result', async () => {
     const wrapper = mount(QuizResults, {props: {quiz, quizResults: passing_result, userSelections}})
     expect(wrapper.text()).toContain('You passed the quiz!')
-    expect(wrapper.text()).toContain('You got 2 of 2 questions correct, for a total score of 100%, which meets the 75% or higher requirement to pass.')
+    expect(wrapper.text()).toContain('You got 2 of 2 questions correct, for a total score of 100%, which meets the 75% or higher requirement to pass. Your ' +
+        'certificate has been emailed to you. Or, you may download your certificate below.')
   })
 
   it('displays checkmark on passing result', async () => {

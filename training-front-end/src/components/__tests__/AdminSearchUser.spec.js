@@ -65,7 +65,7 @@ describe('AdminAgencySelect', async () => {
     const updateFetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(users[0])})
     })
-    await adminReporting.vm.$emit('save', "1", [{id: 10}])
+    await adminReporting.vm.$emit('updateReportingAccess', "1", [{id: 10}])
 
     expect(updateFetchSpy).nthCalledWith(1, expect.any(URL), {
       body: '[10]',
@@ -75,6 +75,8 @@ describe('AdminAgencySelect', async () => {
         'Content-Type': 'application/json'
       },
     })
+    //Ensure it stayed on User Profile
+    expect(wrapper.text()).toContain('User Profile');
   })
 
   it('allows user to cancel update', async () => {
@@ -118,7 +120,7 @@ describe('AdminAgencySelect', async () => {
     linkElements[1].trigger('click')
 
     expect(fetchSpy).toBeCalledTimes(2)
-    expect(fetchSpy.mock.lastCall[0].search).toBe('?name=Steeply&page_number=2')
+    expect(fetchSpy.mock.lastCall[0].search).toBe('?searchText=Steeply&page_number=2')
   })
 
   it('displays no results message', async () => {
@@ -191,7 +193,7 @@ describe('AdminAgencySelect', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: false, status:403, text: () => Promise.resolve('Office of Unspecified Services is not a real agency')})
     })
-    await adminReporting.vm.$emit('save', "1", [{id: 10}])
+    await adminReporting.vm.$emit('updateReportingAccess', "1", [{id: 10}])
 
     await flushPromises()
     const alert = await wrapper.find('[data-test="alert-container"]')

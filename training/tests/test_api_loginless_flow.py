@@ -48,7 +48,7 @@ def fake_user_repo():
 @pytest.fixture
 def user_complete():
     return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3, "agency": {"name": 'test name', "id": 3, "bureau": None}, "roles": [],
-            "report_agencies": []}
+            "report_agencies": [], "created_on": "2024-07-19T13:46:23.004418", "created_by": "Stephen Dedalus"}
 
 
 @pytest.fixture
@@ -61,7 +61,9 @@ def authorized_complete():
         agency_id=3,
         agency=Agency(id=3, name='test name', bureau="test"),
         roles=[Role(id=1, name='Wizard')],
-        report_agencies=[]
+        report_agencies=[],
+        created_on="2024-07-19T13:46:23.004418",
+        created_by="Stephen Dedalus"
     )
 
 
@@ -80,7 +82,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "unknown_page_id", "title": "Doesn't Exist"}
+                "dest": {"page_id": "unknown_page_id", "title": "Doesn't Exist", "parameters": ""}
             }
         )
         fake_cache.set.assert_not_called()
@@ -93,7 +95,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         fake_user_repo.find_by_email.assert_called_with('test@example.com')
@@ -109,7 +111,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "auth_route", "title": "Non public but authorized page"}
+                "dest": {"page_id": "auth_route", "title": "Non public but authorized page", "parameters": ""}
             }
         )
         fake_user_repo.find_by_email.assert_called_with(authorized_complete.email)
@@ -124,7 +126,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "auth_route_two", "title": "Only for Lizard Men"}
+                "dest": {"page_id": "auth_route_two", "title": "Only for Lizard Men", "parameters": ""}
             }
         )
         fake_user_repo.find_by_email.assert_called_with(authorized_complete.email)
@@ -139,7 +141,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         fake_cache.set.assert_called_with(TempUser.model_validate(user_complete))
@@ -155,7 +157,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         assert logging.error.called_once()
@@ -172,7 +174,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         assert logging.error.called_once()
@@ -188,7 +190,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         assert response.status_code == 201
@@ -204,7 +206,29 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
+            }
+        )
+
+        send_email.assert_called_with(
+            name=user_complete['name'],
+            to_email=user_complete['email'],
+            link=url,
+            training_title='Public Page'
+        )
+
+    @patch('training.api.api_v1.loginless_flow.send_email')
+    def test_complete_user_send_email_with_url_params(self, send_email, user_complete, fake_user_repo):
+        '''Should send email with the token and url params in the link after setting the cache'''
+        send_email.return_value = "email response"
+        fake_user_repo.find_by_email.return_value = user_complete
+        url = f"{settings.BASE_URL}/some_path/?params=params&t=123_some_token_1bc"
+
+        client.post(
+            "/api/v1/get-link",
+            json={
+                "user": user_complete,
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": "params=params"}
             }
         )
 
