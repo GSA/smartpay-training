@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
-import {remarkHeadingId} from 'remark-custom-heading-id';
+import { remarkHeadingId } from 'remark-custom-heading-id';
 import mdx from '@astrojs/mdx';
 import vue from "@astrojs/vue";
-import uswds_links from "./src/plugins/uswds_links";
+import { processLinksPlugin } from "./src/plugins/uswds_links";
 
 import sitemap from "@astrojs/sitemap";
 
@@ -14,6 +14,7 @@ export default defineConfig({
   outDir: '../_site',
   markdown: {
     remarkPlugins: [remarkHeadingId],
-    rehypePlugins: [uswds_links]
-  }
+    rehypePlugins: [processLinksPlugin]
+  },
+  trailingSlash: 'always',
 });

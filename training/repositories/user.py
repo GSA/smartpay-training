@@ -1,8 +1,9 @@
-from sqlalchemy import nullsfirst
+from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
 from training.schemas import UserQuizCompletionReportData, UserSearchResult
 from .base import BaseRepository
+from datetime import datetime
 
 
 class UserRepository(BaseRepository[models.User]):
@@ -11,7 +12,7 @@ class UserRepository(BaseRepository[models.User]):
         super().__init__(session, models.User)
 
     def create(self, user: schemas.UserCreate) -> models.User:
-        return self.save(models.User(email=user.email.lower(), name=user.name, agency_id=user.agency_id))
+        return self.save(models.User(email=user.email.lower(), name=user.name, agency_id=user.agency_id, created_by=user.name))
 
     def find_by_email(self, email: str) -> models.User | None:
         return self._session.query(models.User).filter(models.User.email == email.lower()).first()
@@ -19,7 +20,7 @@ class UserRepository(BaseRepository[models.User]):
     def find_by_agency(self, agency_id: int) -> list[models.User]:
         return self._session.query(models.User).filter(models.User.agency_id == agency_id).all()
 
-    def edit_user_for_reporting(self, user_id: int, report_agencies_list: list[int]) -> models.User:
+    def edit_user_for_reporting(self, user_id: int, report_agencies_list: list[int], modified_by: str) -> models.User:
         # edit_user_for_reporting allow admin to assign report role and associate report agencies to specific user
         db_user = self._session.query(models.User).filter(models.User.id == user_id).first()
         if db_user is None:
@@ -47,6 +48,8 @@ class UserRepository(BaseRepository[models.User]):
                 db_user.report_agencies.append(agency)
             else:
                 raise ValueError("invalid agency associated with this user")
+        db_user.modified_by = modified_by
+        db_user.modified_on = datetime.now()
         self._session.commit()
         return db_user
 
@@ -66,12 +69,30 @@ class UserRepository(BaseRepository[models.User]):
         else:
             raise ValueError("Invalid Report User")
 
-    def get_users(self, name: str, page_number: int) -> UserSearchResult:
-        # current UI only support search by user name, and it is required field.
-        if (name and name.strip() != '' and page_number > 0):
-            count = self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).count()
+    def get_users(self, searchText: str, page_number: int) -> UserSearchResult:
+        # current UI only support search by user name and email. The search field it is required field.
+        if (searchText and searchText.strip() != '' and page_number > 0):
+            count = self._session.query(models.User).filter(or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).count()
             page_size = 25
             offset = (page_number - 1) * page_size
-            search_results = self._session.query(models.User).filter(models.User.name.ilike(f"%{name}%")).limit(page_size).offset(offset).all()
+            search_results = self._session.query(models.User).filter(
+                or_(models.User.name.ilike(f"%{searchText}%"), models.User.email.ilike(f"%{searchText}%"))).limit(page_size).offset(offset).all()
             user_search_result = UserSearchResult(users=search_results, total_count=count)
             return user_search_result
+
+    def update_user(self, user_id: int, user: schemas.UserUpdate, modified_by: str) -> models.User:
+        """
+        Updates user name and agency values
+        :param user_id: User's ID to update
+        :param user: User object with updated values
+        :return: Updated User object
+        """
+        db_user = self.find_by_id(user_id)
+        if db_user is None:
+            raise ValueError("invalid user id")
+        db_user.name = user.name
+        db_user.agency_id = user.agency_id
+        db_user.modified_by = modified_by
+        db_user.modified_on = datetime.now()
+        self._session.commit()
+        return db_user

@@ -38,7 +38,7 @@ export async function exit() {
     'You have successfully exited.',
     'success'
   )
-  window.location.replace(`${import.meta.env.BASE_URL}exit`)
+  window.location.replace(`${import.meta.env.BASE_URL}exit/`)
 }
 
 function set_warn_before_exit() {

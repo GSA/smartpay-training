@@ -9,12 +9,12 @@ const { id, pages, training_category, quiz_title } = Astro.props;
         <li class="usa-sidenav__item">
           <a 
             class={id === page.id ? 'usa-current' : null } 
-            href={`${import.meta.env.BASE_URL}${training_category}/${page.slug}`}
+            href={`${import.meta.env.BASE_URL}${training_category}/${page.slug}/`}
           >{page.data.title}
           </a>
         </li>))}
         <li class="usa-sidenav__item">
-          <a href={`${import.meta.env.BASE_URL}quiz/${training_category}`}
+          <a href={`${import.meta.env.BASE_URL}quiz/${training_category}/`}
           >QUIZ: {quiz_title}</a>
         </li>
     </ul>

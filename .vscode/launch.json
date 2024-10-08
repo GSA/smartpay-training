@@ -1,0 +1,31 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "compounds": [
+    {
+        "name": "Client+Server",
+        "configurations": [ "Python Debugger", "Astro" ]
+    }
+],
+  "configurations": [
+    {
+      "name": "Python Debugger",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["training.main:app", "--reload"],
+      "jinja": true,
+      "cwd": "${workspaceFolder}/training",
+      "console": "integratedTerminal",
+      "env": {"PYTHONPATH" : "${workspaceRoot}"},
+    },
+    {
+      "command": "npm run dev:frontend",
+      "name": "Astro",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}

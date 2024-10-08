@@ -3,5 +3,27 @@
     "editor.tabSize": 2,
     "files.associations": {
       "*.mdx": "markdown"
-  }
+  },
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./alembic",
+    "-p",
+    "*test.py"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": [
+    "training"
+  ],
+  "cSpell.words": [
+    "fastapi",
+    "GSPC",
+    "Loginless",
+    "nanostores",
+    "pydantic",
+    "sqlalchemy",
+    "USWDS",
+    "Vuelidate"
+  ]
 }
