@@ -1,10 +1,11 @@
 import pytest
+import jwt
 from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 from training.main import app
 from training.api.api_v1.loginless_flow import page_lookup
 from training.data import UserCache
-from training.schemas import User, TempUser, Role, Agency
+from training.schemas import User, TempUser, Role, Agency, UserCreate, UserJWT
 from training.api.deps import user_repository
 from training.config import settings
 
@@ -46,8 +47,8 @@ def fake_user_repo():
 
 @pytest.fixture
 def user_complete():
-    return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3, "agency": {"name": 'test name', "id": 3}, "roles": [],
-            "report_agencies": []}
+    return {"name": "Stephen Dedalus", "email": "test@example.com", "agency_id": 3, "agency": {"name": 'test name', "id": 3, "bureau": None}, "roles": [],
+            "report_agencies": [], "created_on": "2024-07-19T13:46:23.004418", "created_by": "Stephen Dedalus"}
 
 
 @pytest.fixture
@@ -60,11 +61,19 @@ def authorized_complete():
         agency_id=3,
         agency=Agency(id=3, name='test name', bureau="test"),
         roles=[Role(id=1, name='Wizard')],
-        report_agencies=[]
+        report_agencies=[],
+        created_on="2024-07-19T13:46:23.004418",
+        created_by="Stephen Dedalus"
     )
 
 
 class TestAuth:
+    def test_page_lookup(self):
+        '''Should return a dict of keys with paths and required roles'''
+        page_dict = page_lookup()
+        assert all('path' in sub_dict for sub_dict in page_dict.values())
+        assert all(isinstance(sub_dict['required_roles'], list) for sub_dict in page_dict.values())
+
     def test_unknown_page(self, fake_cache, fake_user_repo):
         '''Should return a http 400 when the requests asks to be forwarded to unknown page '''
         fake_user_repo.find_by_email.return_value = None
@@ -73,7 +82,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "unknown_page_id", "title": "Doesn't Exist"}
+                "dest": {"page_id": "unknown_page_id", "title": "Doesn't Exist", "parameters": ""}
             }
         )
         fake_cache.set.assert_not_called()
@@ -86,7 +95,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         fake_user_repo.find_by_email.assert_called_with('test@example.com')
@@ -102,7 +111,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "auth_route", "title": "Non public but authorized page"}
+                "dest": {"page_id": "auth_route", "title": "Non public but authorized page", "parameters": ""}
             }
         )
         fake_user_repo.find_by_email.assert_called_with(authorized_complete.email)
@@ -117,7 +126,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": {"email": "test@example.com"},
-                "dest": {"page_id": "auth_route_two", "title": "Only for Lizard Men"}
+                "dest": {"page_id": "auth_route_two", "title": "Only for Lizard Men", "parameters": ""}
             }
         )
         fake_user_repo.find_by_email.assert_called_with(authorized_complete.email)
@@ -132,10 +141,44 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         fake_cache.set.assert_called_with(TempUser.model_validate(user_complete))
+
+    @patch('training.api.api_v1.loginless_flow.send_email')
+    @patch('training.api.api_v1.loginless_flow.logging')
+    def test_complete_user_sent_cache_fails(self, logging, send_email, user_complete, fake_cache, fake_user_repo):
+        '''Should log an error and fail when cache fails.'''
+        send_email.return_value = "email response"
+        fake_user_repo.find_by_email.return_value = user_complete
+        fake_cache.set.side_effect = ValueError("whoops")
+        response = client.post(
+            "/api/v1/get-link",
+            json={
+                "user": user_complete,
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
+            }
+        )
+        assert logging.error.called_once()
+        assert response.status_code == 500
+
+    @patch('training.api.api_v1.loginless_flow.send_email')
+    @patch('training.api.api_v1.loginless_flow.logging')
+    def test_user_email_failure(self, logging, send_email, user_complete, fake_user_repo):
+        '''Should log and fail if email fails'''
+        send_email.side_effect = ValueError('whoops')
+        fake_user_repo.find_by_email.return_value = user_complete
+
+        response = client.post(
+            "/api/v1/get-link",
+            json={
+                "user": user_complete,
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
+            }
+        )
+        assert logging.error.called_once()
+        assert response.status_code == 500
 
     @patch('training.api.api_v1.loginless_flow.send_email')
     def test_complete_user_http_201(self, send_email, user_complete, fake_user_repo):
@@ -147,7 +190,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
         assert response.status_code == 201
@@ -163,7 +206,7 @@ class TestAuth:
             "/api/v1/get-link",
             json={
                 "user": user_complete,
-                "dest": {"page_id": "open_route", "title": "Public Page"}
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": ""}
             }
         )
 
@@ -173,3 +216,75 @@ class TestAuth:
             link=url,
             training_title='Public Page'
         )
+
+    @patch('training.api.api_v1.loginless_flow.send_email')
+    def test_complete_user_send_email_with_url_params(self, send_email, user_complete, fake_user_repo):
+        '''Should send email with the token and url params in the link after setting the cache'''
+        send_email.return_value = "email response"
+        fake_user_repo.find_by_email.return_value = user_complete
+        url = f"{settings.BASE_URL}/some_path/?params=params&t=123_some_token_1bc"
+
+        client.post(
+            "/api/v1/get-link",
+            json={
+                "user": user_complete,
+                "dest": {"page_id": "open_route", "title": "Public Page", "parameters": "params=params"}
+            }
+        )
+
+        send_email.assert_called_with(
+            name=user_complete['name'],
+            to_email=user_complete['email'],
+            link=url,
+            training_title='Public Page'
+        )
+
+    @patch('training.api.api_v1.loginless_flow.logging')
+    def test_get_user_from_token_cache_fail(self, logging, fake_cache):
+        '''Should fail with server error if setting the redis cache fails'''
+        token = "some_token"
+        fake_cache.get.side_effect = ValueError("whoops")
+
+        response = client.get(
+            f"/api/v1/get-user/{token}"
+        )
+        logging.error.assert_called_once()
+        assert response.status_code == 500
+
+    def test_get_user_from_token_not_in_cache(self, fake_cache):
+        '''Should return 404 if the token does not exist in the cache'''
+        token = "some_token"
+        fake_cache.get.return_value = None
+
+        response = client.get(
+            f"/api/v1/get-user/{token}"
+        )
+        assert response.status_code == 404
+
+    def test_get_user_creates_new_user(self, fake_cache, fake_user_repo, user_complete, authorized_complete):
+        '''Should create a user in the database if they don't exist'''
+        token = "some_token"
+        fake_cache.get.return_value = UserCreate.model_validate(user_complete)
+        fake_user_repo.create.return_value = authorized_complete
+        fake_user_repo.find_by_email.return_value = None
+
+        client.get(
+            f"/api/v1/get-user/{token}"
+        )
+        assert fake_user_repo.create.called_once_with(user_complete)
+
+    def test_get_user_returns_user(self, fake_cache, fake_user_repo, user_complete, authorized_complete):
+        '''Should return the user and JWT'''
+        token = "some_token"
+        fake_cache.get.return_value = UserCreate.model_validate(user_complete)
+        fake_user_repo.find_by_email.return_value = authorized_complete
+
+        response = client.get(
+            f"/api/v1/get-user/{token}"
+        )
+        user = response.json()['user']
+        decoded_user = jwt.decode(response.json()['jwt'], settings.JWT_SECRET, algorithms=["HS256"])
+
+        assert response.status_code == 200
+        assert user == UserJWT.model_validate(authorized_complete).model_dump()
+        assert decoded_user == UserJWT.model_validate(authorized_complete).model_dump()

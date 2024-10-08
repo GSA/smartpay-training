@@ -1,4 +1,10 @@
 ---
+/*
+This is training site home page. 
+It uses BaseLayout (banner,header, menu nav, footer), Hero (top section underneath the menu nav), GlobalMessage (alert message) and TrainingAccounts (main section) components
+card_holders and cooridinators provide data for the individual training card.
+category_card_holder and category_program are used to set for headers, it also used to set up aria-label for individual card links for accessiblity
+*/
 import BaseLayout from '@layouts/BaseLayout.astro';
 import TrainingAccounts from '@components/TrainingAccounts.astro';
 import Hero from '@components/Hero.astro';
@@ -7,38 +13,40 @@ import GlobalMessage from '@components/GlobalMessage.vue'
 const pageTitle = "GSA Training";
 
 const card_holders = [
-        {"header":"Travel Training", "img_src":"images/smartpay-blue-travel-plain.svg", "text":"Learn about the basics about your role and responsibility as a card/account holder, the Federal Travel Regulations (FTR), and other government travel policies.","training_link_text":"Access the travel training","training_link_name":"training_travel/", "quiz_link_name":"quiz/training_travel/"},
-        {"header":"Purchase Training", "img_src":"images/smartpay-red-purchase-plain.svg", "text":"Learn about the basics about your role and responsibility as a card/account holder, the Federal Travel Regulations (FTR), and other government travel policies.","training_link_text":"Access the purchase training","training_link_name":"training_purchase/","quiz_link_name":"quiz/training_purchase/"}
+        {"header":"Travel Training", "img_src":"images/smartpay-blue-travel-plain.svg", "text":"Learn about your role and responsibilities as a GSA SmartPay Travel card/account holder or Approving Official and review important policies/procedures.","training_link_text":"Access the travel training","training_link_name":"training_travel/", "quiz_link_name":"quiz/training_travel/"},
+        {"header":"Purchase Training", "img_src":"images/smartpay-red-purchase-plain.svg", "text":"Learn about your role and responsibilities as a GSA SmartPay Purchase card/account holder or Approving Official and review important policies/procedures.","training_link_text":"Access the purchase training","training_link_name":"training_purchase/","quiz_link_name":"quiz/training_purchase/"}
     ]
 
 const coordinators = [
-        {"header":"Travel Training", "img_src":"images/smartpay-blue-travel-plain.svg", "text":"Learn about the basics about your role and responsibility as a card/account holder, the Federal Travel Regulations (FTR), and other government travel policies.","training_link_text":"Access the travel training","training_link_name":"training_travel_pc/", "quiz_link_name":"quiz/training_travel_pc/"},
-        {"header":"Purchase Training", "img_src":"images/smartpay-red-purchase-plain.svg", "text":"Learn about the basics about your role and responsibility as a card/account holder, the Federal Travel Regulations (FTR), and other government travel policies.","training_link_text":"Access the purchase training","training_link_name":"training_purchase_pc/","quiz_link_name":"quiz/training_purchase_pc/"},
-        {"header":"Fleet Training", "img_src":"images/smartpay-green-fleet-plain.svg", "text":"Learn about the basics about your role and responsibility as a card/account holder, the Federal Travel Regulations (FTR), and other government travel policies.","training_link_text":"Access the fleet training","training_link_name":"training_fleet_pc/","quiz_link_name":"quiz/training_fleet_pc/"}      
+        {"header":"Travel Training", "img_src":"images/smartpay-blue-travel-plain.svg", "text":"Learn about your role and responsibilities as a GSA SmartPay Travel Agency/Organization Program Coordinator and review important policies/procedures.","training_link_text":"Access the travel training","training_link_name":"training_travel_pc/", "quiz_link_name":"quiz/training_travel_pc/"},
+        {"header":"Purchase Training", "img_src":"images/smartpay-red-purchase-plain.svg", "text":"Learn about your role and responsibilities as a GSA SmartPay Purchase Agency/Organization Program Coordinator and review important policies/procedures.","training_link_text":"Access the purchase training","training_link_name":"training_purchase_pc/","quiz_link_name":"quiz/training_purchase_pc/"},
+        {"header":"Fleet Training", "img_src":"images/smartpay-green-fleet-plain.svg", "text":"Learn about your role and responsibilities as a GSA SmartPay Fleet Agency/Organization Program Coordinator and review important policies/procedures.","training_link_text":"Access the fleet training","training_link_name":"training_fleet_pc/","quiz_link_name":"quiz/training_fleet_pc/"}      
     ]
+const category_card_holder = "Card/Account Holders and Approving Officials";
+const category_program = "Program Coordinators";
 ---
-<BaseLayout title={pageTitle}>
+<BaseLayout title={pageTitle} description="We offer GSA SmartPay training to all agency card/account holders, approving officials, and program coordinators.">
     <Hero>
-        Complete Your GSA SmartPay Training
+        GSA SmartPay® Training
         <span slot="subheader">
-            We offer SmartPay training to all agency card/account holders, approving officials, and program coordinators. 
+            We offer GSA SmartPay training to all agency card/account holders, approving officials, and program coordinators. 
         </span>
     </Hero>
 
     <div class="grid-container" data-test="pre-submit">
-      <GlobalMessage client:only/>
+      <GlobalMessage client:only="vue"/>
 
         <h2>Select Your Training Course</h2>
         <p>
           Each training course takes approximately 45 minutes to complete and is worth 1 CLP. To receive credit and your certificate, you must pass your quiz with a score of 75% or higher.
         </p>
         <h3>
-          Training for Card/Account Holders and Approving Officials
+          Training for {category_card_holder}
         </h3>
-        <TrainingAccounts items={card_holders} />
+        <TrainingAccounts items={card_holders} category = {category_card_holder}/>
         <h3>
-            Training for Program Coordinators
+            Training for {category_program}
           </h3>
-        <TrainingAccounts items={coordinators} />
+        <TrainingAccounts items={coordinators} category = {category_program} />
     </div>
 </BaseLayout>

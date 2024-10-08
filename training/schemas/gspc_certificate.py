@@ -2,11 +2,10 @@ from datetime import datetime
 from pydantic import ConfigDict, BaseModel
 
 
-class UserCertificate(BaseModel):
-    id: int
+class GspcCertificate(BaseModel):
     user_id: int
     user_name: str
-    quiz_id: int
-    quiz_name: str
+    agency: str
+    certification_expiration_date: str
     completion_date: datetime
     model_config = ConfigDict(from_attributes=True)

@@ -1,6 +1,7 @@
 env: prod
-memory: 4G
+memory: 512mb
 instances: 2
 oauth_redirect_uri:
   - https://training.smartpay.gsa.gov
   - https://training.smartpay.gsa.gov/auth_callback
+num_workers: 4

@@ -12,5 +12,6 @@ class QuizCompletionRepository(BaseRepository[models.QuizCompletion]):
         return self.save(models.QuizCompletion(
             quiz_id=quiz_completion.quiz_id,
             user_id=quiz_completion.user_id,
-            passed=quiz_completion.passed
+            passed=quiz_completion.passed,
+            responses=quiz_completion.responses
         ))

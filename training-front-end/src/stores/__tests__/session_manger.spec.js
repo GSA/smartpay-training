@@ -79,7 +79,7 @@ describe('Manage Session', () => {
     
     vi.advanceTimersByTime(SESSION_TIME_OUT)
 
-    expect(setMock).toHaveBeenCalledWith(`${import.meta.env.BASE_URL}exit`)
+    expect(setMock).toHaveBeenCalledWith(`${import.meta.env.BASE_URL}exit/`)
   })
 
   it('does not clear the user before the session_time_out completes', async () => {

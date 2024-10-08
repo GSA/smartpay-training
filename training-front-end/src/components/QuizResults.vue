@@ -13,6 +13,7 @@
 
     const { accordion } = USWDS;
     const api_base = import.meta.env.PUBLIC_API_BASE_URL
+    const certTypeQuiz = 1
 
     const props = defineProps({
       'quiz':{
@@ -29,7 +30,7 @@
 
     const result_string = computed(() => `${props.quizResults.correct_count} of ${props.quizResults.question_count}`)
     const percentage = computed(() => (props.quizResults.percentage * 100).toFixed(0))
-    const quiz_certificate_url = computed(() => `${api_base}/api/v1/certificate/${props.quizResults.quiz_completion_id}`)
+    const quiz_certificate_url = computed(() => `${api_base}/api/v1/certificate/${certTypeQuiz}/${props.quizResults.quiz_completion_id}`)
     function windowStateListener() {
       window.location = import.meta.env.BASE_URL
     }
@@ -52,7 +53,8 @@
         </h2>
       </div>
       <p>
-        You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which meets the 75% or higher requirement to pass.
+        You got <b>{{ result_string }}</b> questions correct, for a total score of <b>{{ percentage }}%</b>, which meets the 75% or higher requirement to pass. 
+        Your certificate has been emailed to you. Or, you may download your certificate below.
       </p>
       <form
         :action="quiz_certificate_url"

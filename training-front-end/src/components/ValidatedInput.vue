@@ -51,11 +51,11 @@
     </span>
     <input
       :id="name"
-      class="usa-input usa-input tablet:grid-col-8"
+      class="usa-input usa-input"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
       :value="modelValue"
-      :aria-describedby="error_id"
+      :aria-describedby="validator.$error? error_id: null"
       :readonly="readonly"
       @input="$emit('update:modelValue', $event.target.value)"
     >

@@ -5,26 +5,22 @@
   import USWDSPagination from "./USWDSPagination.vue";
   import USWDSAlert from './USWDSAlert.vue'
   import { setSelectedAgencyId} from '../stores/agencies'
-  import { useStore } from '@nanostores/vue'
-  import { profile} from '../stores/user'
-
-  const user = useStore(profile)
+  import { RepositoryFactory } from "./RepositoryFactory.vue";
+  const adminRepository = RepositoryFactory.get('admin')
 
   const PAGE_SIZE = 25
 
-  const base_url = import.meta.env.PUBLIC_API_BASE_URL
-  const report_url = `${base_url}/api/v1/users/search-users-by-name/`
-  const update_url = `${base_url}/api/v1/users/edit-user-for-reporting/`
-
-  const currentPage = ref(0)
-  const numberOfResults = ref(0)
+  let currentPage = ref(0)
+  let numberOfResults = ref(0)
   const numberOfPages = computed(() => Math.ceil(numberOfResults.value/PAGE_SIZE))
 
-  const searchTerm = ref('')
+  let searchTerm = ref('')
   const selectedUser = ref()
-  const searchResults = ref([])
+  let searchResults = ref([])
   const noResults = ref(false)
   const error = ref()
+  const showSuccessMessage = ref(false)
+  const successMessage = ref()
 
   async function setPage(page) {
     currentPage.value = page
@@ -32,23 +28,10 @@
   }
 
   async function search() {
+    clearAlerts()
     noResults.value = false
-    const url = new URL(`${report_url}${searchTerm.value}`)
-    url.search = new URLSearchParams({page_number: currentPage.value + 1})
     try {
-      const response = await fetch(
-        url, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${user.value.jwt}`
-          }
-        }
-      )
-      if (! response.ok) {
-        const message = await response.text()
-        throw new Error(message)
-      }
-      let search_results = await response.json()
+      let search_results = await adminRepository.userSearch(searchTerm.value, currentPage.value)
       searchResults.value = search_results.users
       numberOfResults.value = search_results.total_count
       noResults.value = search_results.total_count === 0
@@ -58,40 +41,47 @@
   }
  
   async function updateUserReports(userId, agencyIds) {
-    const agencies = agencyIds.map(a => a.id)
-    const url = new URL(update_url)
-    url.search = new URLSearchParams({user_id: userId})
     try {
-      const response = await fetch(
-        url, { 
-          method: "PUT", 
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user.value.jwt}` 
-          },
-          body:  JSON.stringify(agencies) 
-        }
-      )
-      if (!response.ok) {
-        const message = await response.text()
-        throw new Error(message)
-      }
-      let updatedUser = await response.json()
+      let updatedUser = await adminRepository.updateUserReports(userId, agencyIds)
       selectedUser.value.report_agencies = updatedUser.report_agencies
-      setCurrentUser(undefined)
-      setSelectedAgencyId(undefined)
+      updateUserSuccess("Updated users reporting access")
+      refreshSelectedUser()
     } catch (err){
       error.value = err
     }
   }
 
-  function setCurrentUser(e) {
+  async function refreshSelectedUser(){
+    if(!selectedUser.value){
+      return
+    }
+
+    try{
+      selectedUser.value = await adminRepository.getUser(selectedUser.value.id)
+    } catch (err) {
+      error.value = err
+    }
+  }
+
+  function setSelectedUser(e) {
     selectedUser.value = e
   }
 
   function cancelEdit(){
-    setCurrentUser(undefined)
+    setSelectedUser(undefined)
     setSelectedAgencyId(undefined)
+  }
+  
+  async function updateUserSuccess(message) {
+    refreshSelectedUser()
+    successMessage.value = message
+    showSuccessMessage.value = true
+  }
+  
+  function clearAlerts() {
+    error.value = undefined
+    successMessage.value = undefined
+    showSuccessMessage.value = false
   }
 </script>
 
@@ -104,6 +94,14 @@
     >
       {{ error.message }}
     </USWDSAlert>
+    <USWDSAlert
+      v-if="showSuccessMessage"
+      status="success"
+      class="usa-alert--slim"
+      :has-heading="false"
+    >
+      {{ successMessage }}
+    </USWDSAlert>
     <div 
       v-if="!selectedUser"
       class="grid-row"
@@ -115,7 +113,7 @@
           class="tablet:grid-col-8"
         >
           <label for="search-field">
-            Name
+            Name or Email
           </label>
           <div 
             id="gnHint"
@@ -138,6 +136,7 @@
             <button 
               class="usa-button"
               type="submit"
+              :disabled="!searchTerm"
             >
               <span class="usa-search__submit-text">
                 Search
@@ -153,7 +152,7 @@
         <AdminUserSearchTable 
           :number-of-results="numberOfResults"
           :search-results="searchResults" 
-          @select-item="setCurrentUser"
+          @select-item="setSelectedUser"
         />
         <USWDSPagination 
           :current-page="currentPage"
@@ -171,8 +170,9 @@
     <div v-else>
       <AdminEditReporting 
         :user="selectedUser"
-        @save="updateUserReports"
+        @update-reporting-access="updateUserReports"
         @cancel="cancelEdit"
+        @user-update-success="updateUserSuccess"
       />
     </div>
   </div>

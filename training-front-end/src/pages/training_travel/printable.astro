@@ -11,8 +11,8 @@ const content_components = pages.map(async entry => (
 
 const entries = await Promise.all(content_components)
 ---
-<BaseLayout title="Training Travel">
-  <HeroTraining>
+<BaseLayout title="Travel Training" description="View and print the full Travel Training for Card/Account Holders and Approving Officials.">
+  <HeroTraining background_class = "color-sp-travel-medium">
     <span slot="subheader">Card / Account Holders and Approving Officials Travel Training</span>
     Travel Training
   </HeroTraining>
@@ -21,14 +21,17 @@ const entries = await Promise.all(content_components)
     <div class="grid-container">
       <section class="usa-prose">
         
-        <button id="print_button" class="usa-button usa-button--outline" onclick="window.print()">
+        <button id="print_button"
+          class="usa-button usa-button--outline"
+          aria-label="print"
+          onclick="window.print()">
           <span class="display-block" aria-hidden="true">
           <PrintIcon /> Print Training
           </span>
         </button>
 
         {entries.map(item => (  
-          <div style="page-break-after: auto;">
+          <div  class="usa-prose" style="page-break-after: auto;">
             <h1 class="text-primary">{item.data.title}</h1> 
             <item.Content />
           </div>
