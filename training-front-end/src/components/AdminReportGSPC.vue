@@ -4,8 +4,6 @@
 
   async function downloadGspcReport() {
     let response = await AdminRepository.downloadGspcReport()
-    console.log('first')
-    console.log(response)
     let blob = await response.blob();
     ReportUtilities.downloadBlobAsFile(blob, 'GspcCompletionReport.csv')
   }
