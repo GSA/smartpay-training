@@ -8,14 +8,33 @@ import { profile } from '../../stores/user';
 // Mocking the ReportUtilities module
 vi.mock('../ReportUtilities.vue', () => ({
   default: {
-    downloadBlobAsFile: vi.fn(), // Mock the method here
+    downloadBlobAsFile: vi.fn(), // Mock this method to do nothing
   },
 }));
+
+const agency_api = [
+  { 'id': 1, 'name': 'General Services Administration', 'bureaus': []},
+  { 'id': 2, 
+    'name': 'Department of the Treasury', 
+    'bureaus': [
+      {'id': 3, 'name': 'United States Mint'},
+      {'id': 4, 'name': 'Financial Crimes Enforcement'}
+    ]
+  },
+  { 'id': 5, 'name': 'Department of the Interior', 'bureaus': []}
+]
 
 describe('AdminReport01.vue', () => {
   let wrapper;
 
   beforeEach(async () => {
+      // Reset all mocks before each test
+      vi.clearAllMocks();
+
+      vi.spyOn(global, 'fetch').mockImplementation(() => {
+        return Promise.resolve({ok: true, status:200, json: () => Promise.resolve(agency_api) })
+      })
+
     // Set the profile mock with Admin role
     profile.set({ name: 'Amelia Sedley', jwt: 'some-token-value', roles: ['Admin'] });
 
