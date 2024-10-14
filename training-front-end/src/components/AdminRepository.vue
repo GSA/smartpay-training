@@ -96,11 +96,44 @@ const userSearch = async function(searchText, currentPage){
     return await response.value.json()
   }
 
+  const downloadGspcReport = async function(){
+    const response = await fetch(`${base_url}/api/v1/gspc/download-gspc-completion-report`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${user.value.jwt}` },
+      });
+
+    if (!response.ok) {
+        const message = await response.text()
+        throw new Error(message)
+      }
+
+    return await response //needs to be returned as raw not json
+  }
+
+  const downloadReport01 = async function(filterData){
+    const response = await fetch(`${base_url}/api/v1/users/download-admin-user-quiz-completion-report`, {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${user.value.jwt}`,
+          'Content-Type': 'application/json'  // Include the correct header
+        },
+        body: JSON.stringify(filterData)
+      });
+    if (!response.ok) {
+        const message = await response.text()
+        throw new Error(message)
+      }
+
+    return await response //needs to be returned as raw not json
+  }
+
 export default {
   userSearch,
   updateUserReports,
   getUser,
   updateUser,
+  downloadGspcReport,
+  downloadReport01
 }
 
 </script>

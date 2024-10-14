@@ -157,3 +157,87 @@ def test_update_user_invalid_user(user_repo_with_data: UserRepository):
 
     with pytest.raises(Exception):
         user_repo_with_data.update_user(invalid_user_id, updated_user, "test_user")
+
+
+def test_get_report_01_no_filters(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data without any filters applied.
+    """
+    report_filter = schemas.Report01Filter()
+    results = user_repo_with_data.get_report_01(report_filter)
+    assert len(results) > 0  # Check that we get results back
+    assert all(isinstance(result, schemas.UserQuizCompletionReportData) for result in results)  # Verify type
+
+
+def test_get_report_01_filter_by_agency(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data with agency filter.
+    """
+    agency_id = 1  # "Department of Mysteries"
+    report_filter = schemas.Report01Filter(agency_id=agency_id)
+    results = user_repo_with_data.get_report_01(report_filter)
+
+    assert len(results) > 0
+    assert all(result.agency == "Department of Mysteries" for result in results)
+
+
+def test_get_report_01_filter_by_bureau(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data with bureau filter.
+    """
+    bureau_id = 2  # Assuming bureau_id of 2 corresponds to a specific bureau
+    report_filter = schemas.Report01Filter(bureau_id=bureau_id)
+    results = user_repo_with_data.get_report_01(report_filter)
+
+    assert len(results) > 0
+    assert all(result.bureau == "Time-Travel experiments" for result in results)
+
+
+def test_get_report_01_filter_by_date_range(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data with completion date range filter.
+    """
+    start_date = datetime(2023, 1, 1)
+    end_date = datetime(2024, 12, 31)
+    report_filter = schemas.Report01Filter(completion_date_start=start_date, completion_date_end=end_date)
+    results = user_repo_with_data.get_report_01(report_filter)
+
+    assert len(results) > 0
+    for result in results:
+        assert start_date <= result.completion_date <= end_date
+
+
+def test_get_report_01_filter_by_quiz_name(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data by filtering with specific quiz names.
+    """
+    quiz_names = ["Travel Training for Ministry of Magic"]
+    report_filter = schemas.Report01Filter(quiz_names=quiz_names)
+    results = user_repo_with_data.get_report_01(report_filter)
+
+    assert len(results) > 0
+    assert all(result.quiz in quiz_names for result in results)
+
+
+def test_get_report_01_combined_filters(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data using a combination of filters.
+    """
+    agency_id = 1
+    start_date = datetime(2023, 1, 1)
+    end_date = datetime(2024, 12, 31)
+    quiz_names = ["Travel Training for Ministry of Magic"]
+
+    report_filter = schemas.Report01Filter(
+        agency_id=agency_id,
+        completion_date_start=start_date,
+        completion_date_end=end_date,
+        quiz_names=quiz_names
+    )
+
+    results = user_repo_with_data.get_report_01(report_filter)
+    assert len(results) > 0
+    for result in results:
+        assert result.agency == "Department of Mysteries"
+        assert start_date <= result.completion_date <= end_date
+        assert result.quiz in quiz_names

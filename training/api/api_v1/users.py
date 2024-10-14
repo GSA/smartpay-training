@@ -3,11 +3,12 @@ from io import StringIO
 import logging
 from training.api.auth import RequireRole
 from fastapi import APIRouter, status, HTTPException, Response, Depends, Query
-from training.schemas import User, UserCreate, UserSearchResult, UserUpdate
+from training.schemas import User, UserCreate, UserSearchResult, UserUpdate, Report01Filter
 from training.repositories import UserRepository
 from training.api.deps import user_repository
 from training.api.auth import user_from_form
 from typing import Annotated
+
 
 router = APIRouter()
 
@@ -67,6 +68,35 @@ def download_report_csv(user=Depends(user_from_form), repo: UserRepository = Dep
         writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y %H:%M:%S")])  # noqa 501
 
     headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingQuizCompletionReport.csv"'}
+    return Response(output.getvalue(), headers=headers, media_type='application/csv')
+
+
+@router.post("/users/download-admin-user-quiz-completion-report")
+def download_admin_report_csv(
+    filter_info: Report01Filter,
+    repo: UserRepository = Depends(user_repository),
+    user=Depends(RequireRole(["Admin"])
+                 )):
+    '''
+    Returns a report of all quiz_completions based on the pasted in filter_info.
+    '''
+    try:
+        results = repo.get_report_01(filter_info)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unable to process"
+        )
+    output = StringIO()
+    writer = csv.writer(output)
+
+    # header row
+    writer.writerow(['Full Name', 'Email Address', 'Agency', 'Bureau', 'Quiz Name', 'Quiz Completion Date and Time'])
+    for item in results:
+        # data row
+        writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y %H:%M:%S")])  # noqa 501
+
+    headers = {'Content-Disposition': 'attachment; filename="Report01.csv"'}
     return Response(output.getvalue(), headers=headers, media_type='application/csv')
 
 

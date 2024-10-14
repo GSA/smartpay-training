@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroTraining from '@components/HeroTraining.astro';
+import AdminReport01 from '@components/AdminReport01.vue';
+import AuthRequired from '@components/AuthRequired.vue';
+
+const pageTitle = "Report01";
+---
+<BaseLayout title={pageTitle} description="Report01">
+    <HeroTraining background_class='bg_smartpay_cool_grey'>
+      Report01
+    </HeroTraining>
+    <AuthRequired client:only>
+      <AdminReport01 client:only />
+    </AuthRequired>
+</BaseLayout>
