@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onErrorCaptured, reactive, watch, toRaw } from "vue"
+  import { ref, onErrorCaptured, reactive, watch } from "vue"
   import { useStore } from '@nanostores/vue'
   import { profile} from '../stores/user'
   import { computed } from "vue"

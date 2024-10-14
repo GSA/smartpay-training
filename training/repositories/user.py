@@ -70,7 +70,7 @@ class UserRepository(BaseRepository[models.User]):
         else:
             raise ValueError("Invalid Report User")
 
-    def get_report_01(self, filter: Report01Filter) -> list[UserQuizCompletionReportData]:        
+    def get_report_01(self, filter: Report01Filter) -> list[UserQuizCompletionReportData]:
         report_data = namedtuple("ReportData", ["name", "email", "agency", "bureau", "quiz", "completion_date"])
 
         # Build the query
