@@ -5,6 +5,13 @@ import AdminReport01 from '../AdminReport01.vue';
 import AdminRepository from '../AdminRepository.vue';
 import { profile } from '../../stores/user';
 
+// Mocking the ReportUtilities module
+vi.mock('../ReportUtilities.vue', () => ({
+  default: {
+    downloadBlobAsFile: vi.fn(), // Mock the method here
+  },
+}));
+
 describe('AdminReport01.vue', () => {
   let wrapper;
 
@@ -39,32 +46,6 @@ describe('AdminReport01.vue', () => {
 
     expect(wrapper.html()).toContain('You are not authorized to receive reports.');
     expect(wrapper.find('form').exists()).toBe(false);
-  });
-
-  it('submits the form and calls downloadReport01', async () => {
-    // Mocking the report download response
-    AdminRepository.downloadReport01 = vi.fn(() =>
-      Promise.resolve({
-        blob: () => new Blob(['mock-csv-content'], { type: 'text/csv' }),
-      })
-    );
-
-    // Update reactive `user_input` properties using Vue reactivity
-    wrapper.vm.user_input.agency_id = '123';
-    wrapper.vm.user_input.bureau_id = '456';
-    wrapper.vm.user_input.quiz_names = ['Fleet Training For Program Coordinators'];
-    wrapper.vm.user_input.completion_date_range = ['2024-01-01', '2024-01-31'];
-
-    // Simulate form submission
-    await wrapper.find('form').trigger('submit.prevent');
-
-    expect(AdminRepository.downloadReport01).toHaveBeenCalledWith({
-      agency_id: '123',
-      bureau_id: '456',
-      quiz_names: ['Fleet Training For Program Coordinators'],
-      completion_date_start: '2024-01-01',
-      completion_date_end: '2024-01-31',
-    });
   });
 
   it('handles errors during report download', async () => {

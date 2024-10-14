@@ -68,7 +68,6 @@
     showSuccessMessage.value = false
 
     try {
-      console.log(user_input.completion_date_range)
       const dates = formatDateToYYYYMMDD(user_input.completion_date_range)
       const model = {
         'agency_id': user_input.agency_id || null,
