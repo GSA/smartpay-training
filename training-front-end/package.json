@@ -41,7 +41,7 @@
   "devDependencies": {
     "@uswds/compile": "^1.1.0",
     "@uswds/uswds": "^3.8.2",
-    "@vitejs/plugin-vue": "^4.1.0",
+    "@vitejs/plugin-vue": "^4.6.2",
     "@vitest/coverage-v8": "^1.5.3",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/test-utils": "^2.3.2",
@@ -53,7 +53,7 @@
     "jsdom": "^21.1.1",
     "pa11y-ci": "^3.0.1",
     "start-server-and-test": "^2.0.3",
-    "vitest": "^1.5.3",
+    "vitest": "^1.6.0",
     "linkinator": "^6.0.5"
   },
   "overrides": {
