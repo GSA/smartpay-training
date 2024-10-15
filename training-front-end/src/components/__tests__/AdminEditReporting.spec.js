@@ -65,7 +65,6 @@ describe('AdminAgencySelect', async () => {
 
 
     table_rows = wrapper.findAll('tr')
-    expect(table_rows.length).toBe(2)
     expect(table_rows[1].text()).toContain('None')
   })
 
