@@ -1,6 +1,7 @@
 ---
 import GSALogo from '../assets/images/gsa-smartpay-training-logo.svg'
 import closeIcon from '../assets/images/usa-icons/close.svg'
+import searchIcon from "../assets/images/usa-icons/search--white.svg"
 ---
 <header class="usa-header usa-header--extended">
     <div class="usa-navbar">
@@ -67,8 +68,31 @@ import closeIcon from '../assets/images/usa-icons/close.svg'
           <li class="usa-nav__primary-item">
             <a href={`${import.meta.env.BASE_URL}certificates/`} class="usa-nav-link"><span>Access Past Certificates</span></a>
           </li>
-          
         </ul>
+        <div class="usa-nav__secondary">
+          <section aria-label="Search component">
+            <form class="usa-search usa-search--small" role="search" action="https://search.usa.gov/search" accept-charset="UTF-8" method="get">
+              <input type="hidden" name="affiliate" id="affiliate" value="gsa_smartpay_training" autocomplete="off" />
+              <label class="usa-sr-only" for="query">Search</label>
+              <input
+                  class="usa-input"
+                  id="query"
+                  autocomplete="off"
+                  type="search"
+                  name="query"
+              />
+              <button class="usa-button" type="submit">
+                <img
+                    width="48"
+                    height="48"
+                    src={searchIcon.src}
+                    class="usa-search__submit-icon"
+                    alt="Search"
+                />
+              </button>
+            </form>
+          </section>
+        </div>
       </div>
     </nav>
     </header>
