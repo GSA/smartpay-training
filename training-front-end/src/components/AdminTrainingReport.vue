@@ -76,9 +76,9 @@
         'completion_date_end': dates[1] || null,
         'quiz_names': user_input.quiz_names || null
       }
-      let response = await AdminRepository.downloadReport01(model)
+      let response = await AdminRepository.downloadTrainingReport(model)
       const blob = await response.blob();
-      ReportUtilities.downloadBlobAsFile(blob, 'Report01.csv')
+      ReportUtilities.downloadBlobAsFile(blob, 'SmartPayTrainingReport.csv')
       showSuccessMessage.value = true
 
     } catch (error) {
@@ -107,8 +107,13 @@
     class="usa-prose"
   >
     <div class="padding-top-4 padding-bottom-4 grid-container">
-      <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2>
-      <p>Nulla fermentum urna nec risus aliquet bibendum eu at enim. Vestibulum fermentum odio at dolor ultricies bibendum. Nulla finibus et arcu et blandit. Sed tempor odio ut felis dignissim interdum. Suspendisse tristique diam massa, id faucibus nunc mattis fringilla. Ut luctus imperdiet elit sollicitudin dictum. Duis volutpat malesuada aliquet. Duis id tellus facilisis nisi mattis tincidunt id a nulla. Sed ligula arcu, egestas id erat et, condimentum vulputate tortor. Donec hendrerit suscipit mattis. Nulla eget velit eu erat interdum lobortis. Vivamus scelerisque nisl quis finibus malesuada. </p>
+      <h2>Enter Report Parameters</h2>
+      <p>
+        The GSA SmartPay Training Report has no required parameters. 
+      </p>
+      <p>
+        <b>Note:</b> If a report is generated with an individual completing multiple trainings, each training will be listed separately on the report.
+      </p>
       <form
         ref="form"
         class="usa-form usa-form--large margin-bottom-3"

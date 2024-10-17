@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { mount, flushPromises  } from '@vue/test-utils'
 import { vi } from 'vitest';
-import AdminReport01 from '../AdminReport01.vue';
+import AdminTrainingReport from '../AdminTrainingReport.vue';
 import AdminRepository from '../AdminRepository.vue';
 import { profile } from '../../stores/user';
 
@@ -24,7 +24,7 @@ const agency_api = [
   { 'id': 5, 'name': 'Department of the Interior', 'bureaus': []}
 ]
 
-describe('AdminReport01.vue', () => {
+describe('AdminTrainingReport.vue', () => {
   let wrapper;
 
   beforeEach(async () => {
@@ -38,7 +38,7 @@ describe('AdminReport01.vue', () => {
     // Set the profile mock with Admin role
     profile.set({ name: 'Amelia Sedley', jwt: 'some-token-value', roles: ['Admin'] });
 
-    wrapper = await mount(AdminReport01, {
+    wrapper = await mount(AdminTrainingReport, {
       global: {
         stubs: {
           // Stub child components that are not essential for the test
@@ -53,7 +53,7 @@ describe('AdminReport01.vue', () => {
   });
 
   it('renders the form when the user is an Admin', () => {
-    expect(wrapper.html()).toContain('Lorem ipsum dolor sit amet, consectetur adipiscing elit');
+    expect(wrapper.html()).toContain('Enter Report Parameters');
     expect(wrapper.find('form').exists()).toBe(true);
   });
 
@@ -68,7 +68,7 @@ describe('AdminReport01.vue', () => {
   });
 
   it('handles errors during report download', async () => {
-    AdminRepository.downloadReport01 = vi.fn(() => Promise.reject(new Error('Failed to download')));
+    AdminRepository.downloadTrainingReport = vi.fn(() => Promise.reject(new Error('Failed to download')));
 
     await wrapper.find('form').trigger('submit.prevent');
 
@@ -76,7 +76,7 @@ describe('AdminReport01.vue', () => {
   });
 
   it('shows a success message after a successful report download', async () => {
-    AdminRepository.downloadReport01 = vi.fn(() =>
+    AdminRepository.downloadTrainingReport = vi.fn(() =>
       Promise.resolve({
         blob: () => new Blob(['mock-csv-content'], { type: 'text/csv' }),
       })
@@ -94,7 +94,7 @@ describe('AdminReport01.vue', () => {
 
   it('displays a spinner while the report is loading', async () => {
     const downloadPromise = new Promise(() => {}); // Mock a pending download
-    AdminRepository.downloadReport01 = vi.fn(() => downloadPromise);
+    AdminRepository.downloadTrainingReport = vi.fn(() => downloadPromise);
 
     await wrapper.find('form').trigger('submit.prevent');
 

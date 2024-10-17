@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 
 
-class Report01Filter(BaseModel):
+class AdminSmartPayTrainingReportFilter(BaseModel):
     agency_id: Optional[int] = None
     bureau_id: Optional[int] = None
     completion_date_start: Optional[datetime] = None

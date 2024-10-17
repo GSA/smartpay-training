@@ -22,9 +22,9 @@ describe('AdminRepository', async () => {
     global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     const filterData = { }; // sample filter data
-    const result = await AdminRepository.downloadReport01(filterData);
+    const result = await AdminRepository.downloadTrainingReport(filterData);
 
-    expect(fetch).toHaveBeenCalledWith(`${base_url}/api/v1/users/download-admin-user-quiz-completion-report`, {
+    expect(fetch).toHaveBeenCalledWith(`${base_url}/api/v1/users/download-admin-smartpay-training-report`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${user.value.jwt}`,
@@ -44,7 +44,7 @@ describe('AdminRepository', async () => {
 
     const filterData = { quizId: 123 };
 
-    await expect(AdminRepository.downloadReport01(filterData)).rejects.toThrow(mockErrorMessage);
+    await expect(AdminRepository.downloadTrainingReport(filterData)).rejects.toThrow(mockErrorMessage);
     expect(fetch).toHaveBeenCalled();
   });
 });

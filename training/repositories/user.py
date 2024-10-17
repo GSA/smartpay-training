@@ -1,7 +1,7 @@
 from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
-from training.schemas import UserQuizCompletionReportData, UserSearchResult, Report01Filter
+from training.schemas import UserQuizCompletionReportData, UserSearchResult, AdminSmartPayTrainingReportFilter
 from .base import BaseRepository
 from datetime import datetime
 from collections import namedtuple
@@ -70,7 +70,7 @@ class UserRepository(BaseRepository[models.User]):
         else:
             raise ValueError("Invalid Report User")
 
-    def get_report_01(self, filter: Report01Filter) -> list[UserQuizCompletionReportData]:
+    def get_admin_smartpay_training_report(self, filter: AdminSmartPayTrainingReportFilter) -> list[UserQuizCompletionReportData]:
         report_data = namedtuple("ReportData", ["name", "email", "agency", "bureau", "quiz", "completion_date"])
 
         # Build the query
@@ -90,7 +90,7 @@ class UserRepository(BaseRepository[models.User]):
             .filter(models.QuizCompletion.passed)
         )
 
-        # Dynamically add filters based on the properties of the Report01Filter
+        # Dynamically add filters based on the properties of the AdminSmartPayTrainingReportFilter
         if filter.agency_id is not None:
             query = query.filter(models.User.agency_id == filter.agency_id)
 

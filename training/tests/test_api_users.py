@@ -134,7 +134,7 @@ def test_edit_user_details_same_user(mock_user_repo: UserRepository, adminJWT: s
 
 
 @patch('training.config.settings', 'JWT_SECRET', 'super_secret')
-def test_download_admin_report_csv(adminJWT):
+def test_get_admin_smartpay_training_report(adminJWT):
     mock_report_data = [
         UserQuizCompletionReportData(
             name='John Doe',
@@ -151,16 +151,16 @@ def test_download_admin_report_csv(adminJWT):
     }
 
     # Mock the repo and RequireRole dependencies
-    with patch('training.repositories.UserRepository.get_report_01', return_value=mock_report_data):
+    with patch('training.repositories.UserRepository.get_admin_smartpay_training_report', return_value=mock_report_data):
 
         response = client.post(
-            "/api/v1/users/download-admin-user-quiz-completion-report",
+            "/api/v1/users/download-admin-smartpay-training-report",
             json=mock_filter_info,
             headers={"Authorization": f"Bearer {adminJWT}"}
         )
 
         assert response.status_code == 200
-        assert response.headers['Content-Disposition'] == 'attachment; filename="Report01.csv"'
+        assert response.headers['Content-Disposition'] == 'attachment; filename="SmartPayTrainingReport.csv"'
 
         # Check if the response body contains correct CSV content
         csv_output = StringIO(response.text)

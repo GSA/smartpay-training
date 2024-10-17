@@ -110,12 +110,12 @@ const userSearch = async function(searchText, currentPage){
     return await response //needs to be returned as raw not json
   }
 
-  const downloadReport01 = async function(filterData){
-    const response = await fetch(`${base_url}/api/v1/users/download-admin-user-quiz-completion-report`, {
+  const downloadTrainingReport = async function(filterData){
+    const response = await fetch(`${base_url}/api/v1/users/download-admin-smartpay-training-report`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${user.value.jwt}`,
-          'Content-Type': 'application/json'  // Include the correct header
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(filterData)
       });
@@ -133,7 +133,7 @@ export default {
   getUser,
   updateUser,
   downloadGspcReport,
-  downloadReport01
+  downloadTrainingReport
 }
 
 </script>
