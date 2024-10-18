@@ -147,7 +147,7 @@
         <div class="tablet:grid-col-12">
           <USWDSAlert
             v-if="error"
-            class="tablet:grid-col-8"
+            class="tablet:grid-col-12"
             status="error"
             :heading="error.name"
           >

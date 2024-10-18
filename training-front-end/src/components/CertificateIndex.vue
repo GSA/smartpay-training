@@ -31,8 +31,8 @@
       <div class="tablet:grid-col-12">
         <USWDSAlert
           v-if="error"
-          class="tablet:grid-col-8"
-          status="warning"
+          class="tablet:grid-col-12"
+          status="error"
           :heading="error.name"
         >
           {{ error.message }}

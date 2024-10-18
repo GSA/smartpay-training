@@ -45,7 +45,7 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   }
   if (!res.ok) {
     clearUser()
-    const e = new Error('This link is either expired or is invalid. Links to training are only valid for 24 hours. Please request a new link with the form below.')
+    const e = new Error('This link has expired or is invalid. Links are only valid for 24 hours. Please fill out the form below to request a new link.')
     e.name = "Invalid Link"
     throw e
   }
