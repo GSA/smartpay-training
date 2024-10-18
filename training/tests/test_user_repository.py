@@ -157,3 +157,39 @@ def test_update_user_invalid_user(user_repo_with_data: UserRepository):
 
     with pytest.raises(Exception):
         user_repo_with_data.update_user(invalid_user_id, updated_user, "test_user")
+
+
+def test_get_admin_smartpay_training_report_no_filters(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data without any filters applied.
+    """
+    report_filter = schemas.AdminSmartPayTrainingReportFilter()
+    results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
+    assert len(results) > 0  # Check that we get results back
+    assert all(isinstance(result, schemas.UserQuizCompletionReportData) for result in results)  # Verify type
+
+
+def test_get_admin_smartpay_training_report_filter_by_date_range(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data with completion date range filter.
+    """
+    start_date = datetime(2023, 1, 1)
+    end_date = datetime(2024, 12, 31)
+    report_filter = schemas.AdminSmartPayTrainingReportFilter(completion_date_start=start_date, completion_date_end=end_date)
+    results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
+
+    assert len(results) > 0
+    for result in results:
+        assert start_date <= result.completion_date <= end_date
+
+
+def test_get_admin_smartpay_training_report_filter_by_quiz_name(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data by filtering with specific quiz names.
+    """
+    quiz_names = ["Travel Training for Ministry of Magic"]
+    report_filter = schemas.AdminSmartPayTrainingReportFilter(quiz_names=quiz_names)
+    results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
+
+    assert len(results) > 0
+    assert all(result.quiz in quiz_names for result in results)

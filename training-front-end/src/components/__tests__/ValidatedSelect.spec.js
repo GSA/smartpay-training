@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mount } from '@vue/test-utils';
-import ValidatedSelect from '../ValidatedSelect.vue';
+import ValidatedSelect from '../form-components/ValidatedSelect.vue';
 
 describe('ValidatedSelect', () => {
   it('renders properly', () => {
@@ -17,7 +17,8 @@ describe('ValidatedSelect', () => {
           { id: 1, name: 'Option 1' },
           { id: 2, name: 'Option 2' },
           { id: 3, name: 'Option 3' }
-        ]
+        ],
+        required: true
       }
     })
 

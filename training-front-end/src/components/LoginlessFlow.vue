@@ -14,8 +14,8 @@
   import { profile, getUserFromToken } from '../stores/user'
   import { bureauList, agencyList, setSelectedAgencyId} from '../stores/agencies'
   import { useStore } from '@nanostores/vue'
-  import ValidatedInput from './ValidatedInput.vue';
-  import ValidatedSelect from './ValidatedSelect.vue';
+  import ValidatedInput from './form-components/ValidatedInput.vue';
+  import ValidatedSelect from './form-components/ValidatedSelect.vue';
   import USWDSAlert from './USWDSAlert.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, requiredIf, email, helpers } from '@vuelidate/validators';
@@ -248,6 +248,7 @@
             label="Email Address"
             name="email"
             :readonly="true"
+            :required="true"
           />
           <ValidatedInput
             v-model="user_input.name"
@@ -255,6 +256,7 @@
             :validator="v_all_info$.name"
             label="Full Name"
             name="name"
+            :required="true"
           />
           <ValidatedSelect
             v-model="user_input.agency_id"
@@ -263,6 +265,7 @@
             :options="agency_options"
             label="Agency / organization"
             name="agency"
+            :required="true"
           />
           <ValidatedSelect
             v-if="bureaus.length"
@@ -272,6 +275,7 @@
             :options="bureaus"
             label="Sub-Agency, Organization, or Bureau"
             name="bureau"
+            :required="true"
           />
           <input
             class="usa-button"
@@ -314,6 +318,7 @@
             label="Email Address"
             name="email"
             :error-message="v_email$.email.$message"
+            :required="true"
           />
           <div class="grid-row">
             <div class="grid-col tablet:grid-col-3 ">

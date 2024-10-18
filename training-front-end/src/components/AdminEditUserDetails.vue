@@ -1,10 +1,10 @@
 ﻿<script setup>
 
-import ValidatedInput from "./ValidatedInput.vue";
+import ValidatedInput from "./form-components/ValidatedInput.vue";
 import {onBeforeMount, reactive, ref, watch} from "vue";
 import {helpers, required, requiredIf} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
-import ValidatedSelect from "./ValidatedSelect.vue";
+import ValidatedSelect from "./form-components/ValidatedSelect.vue";
 import {useStore} from "@nanostores/vue";
 import {agencyList, bureauList, setSelectedAgencyId} from "../stores/agencies.js";
 import USWDSAlert from "./USWDSAlert.vue";
@@ -127,6 +127,7 @@ function setError(event) {
           :validator="v_all_info$.name"
           label="Full Name"
           name="name"
+          :required="true"
         />
       </div>
       <div class="tablet:grid-col">
@@ -154,6 +155,7 @@ function setError(event) {
           :options="agency_options"
           label="Agency / organization"
           name="agency"
+          :required="true"
         />
       </div>
       <div class="tablet:grid-col">
@@ -165,6 +167,7 @@ function setError(event) {
           :options="bureaus"
           label="Sub-Agency, Organization, or Bureau"
           name="bureau"
+          :required="true"
         />
       </div>
     </div>
