@@ -66,7 +66,7 @@
       @input="$emit('update:modelValue', $event.target.value)"
     >
       <option
-        disabled
+        :disabled="required ? '' : disabled"
         value=""
         selected
       >
