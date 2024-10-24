@@ -1,6 +1,8 @@
 <script setup>
-  import { onMounted } from 'vue';
-  import USWDS from "@uswds/uswds/js";
+import { onMounted } from 'vue';
+import USWDS from "@uswds/uswds/js";
+import FormLabel from "./form-components/FormLabel.vue";
+
   const { comboBox } = USWDS;
 
   defineProps({
@@ -20,24 +22,50 @@
     label: {
       type: String,
       required: true
-    }
+    },
+    'required': {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    'validator': {
+      type: Object,
+      required: false,
+      default: {}
+    },
   })
   const emit = defineEmits(['update:modelValue'])
   onMounted(() => {
-    comboBox.init()
+    comboBox.init();
+    
   })
   function selected(event) {
     emit('update:modelValue', event.target.value)
   }
 </script>
 <template>
-  <label
-    class="usa-label"
-    :for="name"
+  <div
+      class="usa-form-group"
+      :class="{ 'usa-form-group--error':validator.$error}"
   >
-    {{ label }}
-  </label>
-  <div class="usa-combo-box">
+    <FormLabel
+        :id="`${name}-label`"
+        :for="`${name}`"
+        :value="`${ label }`"
+        :required="required"
+    />
+    <span v-if="validator.$error">
+      <span
+          v-for="error in validator.$errors"
+          :id="error_id"
+          :key="error.$property"
+          class="usa-error-message"
+          role="alert"
+      >
+        {{ error.$message }}
+      </span>
+    </span>
+  <div class="usa-combo-box" :data-default-value="modelValue">
     <!-- uswds changes the select element in such a way that neither onblur or oninput work -->
     <!-- eslint-disable-next-line vuejs-accessibility/no-onchange -->
     <select 
@@ -55,5 +83,6 @@
         {{ item.name }}
       </option>
     </select>
+  </div>
   </div>
 </template>

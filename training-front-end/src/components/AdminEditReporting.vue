@@ -263,6 +263,7 @@ function formatDate(dateStr) {
           :items="agency_options"
           label="Select agency or organization user should receive reports for?"
           name="agency"
+          :required="true"
         />
 
         <div

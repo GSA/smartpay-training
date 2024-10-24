@@ -5,13 +5,13 @@
   import { computed } from "vue"
   import { bureauList, agencyList, setSelectedAgencyId} from '../stores/agencies'
   import USWDSAlert from './USWDSAlert.vue'
-  import ValidatedSelect from './form-components/ValidatedSelect.vue';
   import ValidatedDateRangePicker from "./form-components/ValidatedDateRangePicker.vue"
   import { useVuelidate } from '@vuelidate/core';
   import SpinnerGraphic from './SpinnerGraphic.vue'
   import ValidatedCheckboxGroup from "./form-components/ValidatedCheckboxGroup.vue"
   import ReportUtilities from './ReportUtilities.vue';
   import AdminRepository from './AdminRepository.vue';
+  import USWDSComboBox from "./USWDSComboBox.vue";
 
   const error = ref()
   const user = useStore(profile)
@@ -134,20 +134,20 @@
           name="Quiz type(s)"
           legend="Quiz type(s)"
         />
-        <ValidatedSelect
+        <USWDSComboBox
           v-model="user_input.agency_id"
           client:load
           :validator="v_all_info$.agency_id"
-          :options="agency_options"
+          :items="agency_options"
           label="Agency / organization"
           name="Agency"
         />
-        <ValidatedSelect
+        <USWDSComboBox
           v-if="bureaus.length"
           v-model="user_input.bureau_id"
           client:load
           :validator="v_all_info$.bureau_id"
-          :options="bureaus"
+          :items="bureaus"
           label="Sub-agency, organization, or bureau"
           name="Bureau"
         />
