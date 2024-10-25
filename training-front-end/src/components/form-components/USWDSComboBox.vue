@@ -1,11 +1,11 @@
 <script setup>
-import {onMounted} from 'vue';
+import {computed, onMounted} from 'vue';
 import USWDS from "@uswds/uswds/js";
 import FormLabel from "./FormLabel.vue";
 
 const {comboBox} = USWDS;
 
-defineProps({
+const props = defineProps({
   'modelValue': {
     type: String,
     required: false,
@@ -43,6 +43,8 @@ onMounted(() => {
 function selected(event) {
   emit('update:modelValue', event.target.value)
 }
+
+var error_id = computed(() => props.name + '-input-error-message')
 </script>
 <template>
   <div 
