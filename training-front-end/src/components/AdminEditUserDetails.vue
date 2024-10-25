@@ -9,7 +9,7 @@ import {agencyList, bureauList, setSelectedAgencyId} from "../stores/agencies.js
 import USWDSAlert from "./USWDSAlert.vue";
 import SpinnerGraphic from "./SpinnerGraphic.vue";
 import { RepositoryFactory } from "./RepositoryFactory.vue";
-import USWDSComboBox from "./USWDSComboBox.vue";
+import USWDSComboBox from "./form-components/USWDSComboBox.vue";
 const adminRepository = RepositoryFactory.get('admin')
 
 const props = defineProps({

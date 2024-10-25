@@ -11,7 +11,7 @@
   import ValidatedCheckboxGroup from "./form-components/ValidatedCheckboxGroup.vue"
   import ReportUtilities from './ReportUtilities.vue';
   import AdminRepository from './AdminRepository.vue';
-  import USWDSComboBox from "./USWDSComboBox.vue";
+  import USWDSComboBox from "./form-components/USWDSComboBox.vue";
 
   const error = ref()
   const user = useStore(profile)

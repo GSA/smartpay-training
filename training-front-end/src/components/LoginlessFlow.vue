@@ -19,7 +19,7 @@
   import { useVuelidate } from '@vuelidate/core';
   import { required, requiredIf, email, helpers } from '@vuelidate/validators';
   import SpinnerGraphic from './SpinnerGraphic.vue'
-  import USWDSComboBox from "./USWDSComboBox.vue";
+  import USWDSComboBox from "./form-components/USWDSComboBox.vue";
 
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL

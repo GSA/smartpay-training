@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted} from 'vue';
 import USWDS from "@uswds/uswds/js";
-import FormLabel from "./form-components/FormLabel.vue";
+import FormLabel from "./FormLabel.vue";
 
 const {comboBox} = USWDS;
 
