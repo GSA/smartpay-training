@@ -4,12 +4,12 @@ import ValidatedInput from "./form-components/ValidatedInput.vue";
 import {onBeforeMount, reactive, ref, watch} from "vue";
 import {helpers, required, requiredIf} from "@vuelidate/validators";
 import {useVuelidate} from "@vuelidate/core";
-import ValidatedSelect from "./form-components/ValidatedSelect.vue";
 import {useStore} from "@nanostores/vue";
 import {agencyList, bureauList, setSelectedAgencyId} from "../stores/agencies.js";
 import USWDSAlert from "./USWDSAlert.vue";
 import SpinnerGraphic from "./SpinnerGraphic.vue";
 import { RepositoryFactory } from "./RepositoryFactory.vue";
+import USWDSComboBox from "./form-components/USWDSComboBox.vue";
 const adminRepository = RepositoryFactory.get('admin')
 
 const props = defineProps({
@@ -48,10 +48,10 @@ const validations_all_info = {
     required: withMessage('Please enter your full name', required)
   },
   agency_id: {
-    required: withMessage('Please enter your agency', required),
+    required: withMessage('Please select your agency', required),
   },
   bureau_id: {
-    requiredIf: withMessage('Please enter your Sub-Agency, Organization, or Bureau', requiredIf(() => bureaus.value.length)),
+    requiredIf: withMessage('Please select your Sub-Agency, Organization, or Bureau', requiredIf(() => bureaus.value.length)),
   }
 }
 const v_all_info$ = useVuelidate(validations_all_info, user_input)
@@ -149,26 +149,28 @@ function setError(event) {
     </div>
     <div class="grid-row grid-gap">
       <div class="tablet:grid-col">
-        <ValidatedSelect
+        <USWDSComboBox
           v-model="user_input.agency_id"
           client:load
           :validator="v_all_info$.agency_id"
-          :options="agency_options"
+          :items="agency_options"
           label="Agency / organization"
           name="agency"
           :required="true"
+          :model-value="user_input.agency_id"
         />
       </div>
       <div class="tablet:grid-col">
-        <ValidatedSelect
+        <USWDSComboBox
           v-if="bureaus.length"
           v-model="user_input.bureau_id"
           client:load
           :validator="v_all_info$.bureau_id"
-          :options="bureaus"
+          :items="bureaus"
           label="Sub-Agency, Organization, or Bureau"
           name="bureau"
           :required="true"
+          :model-value="user_input.bureau_id"
         />
       </div>
     </div>

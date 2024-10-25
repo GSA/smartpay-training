@@ -15,11 +15,11 @@
   import { bureauList, agencyList, setSelectedAgencyId} from '../stores/agencies'
   import { useStore } from '@nanostores/vue'
   import ValidatedInput from './form-components/ValidatedInput.vue';
-  import ValidatedSelect from './form-components/ValidatedSelect.vue';
   import USWDSAlert from './USWDSAlert.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, requiredIf, email, helpers } from '@vuelidate/validators';
   import SpinnerGraphic from './SpinnerGraphic.vue'
+  import USWDSComboBox from "./form-components/USWDSComboBox.vue";
 
 
   const base_url = import.meta.env.PUBLIC_API_BASE_URL
@@ -258,21 +258,21 @@
             name="name"
             :required="true"
           />
-          <ValidatedSelect
+          <USWDSComboBox
             v-model="user_input.agency_id"
             client:load
             :validator="v_all_info$.agency_id"
-            :options="agency_options"
+            :items="agency_options"
             label="Agency / organization"
             name="agency"
             :required="true"
           />
-          <ValidatedSelect
+          <USWDSComboBox
             v-if="bureaus.length"
             v-model="user_input.bureau_id"
             client:load
             :validator="v_all_info$.bureau_id"
-            :options="bureaus"
+            :items="bureaus"
             label="Sub-Agency, Organization, or Bureau"
             name="bureau"
             :required="true"
