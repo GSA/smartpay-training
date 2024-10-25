@@ -91,11 +91,10 @@ class UserRepository(BaseRepository[models.User]):
         )
 
         # Dynamically add filters based on the properties of the AdminSmartPayTrainingReportFilter
-        if filter.agency_id is not None:
-            query = query.filter(models.User.agency_id == filter.agency_id)
-
         if filter.bureau_id is not None:
-            query = query.filter(models.Agency.bureau_id == filter.bureau_id)
+            query = query.filter(models.User.agency_id == filter.bureau_id)
+        elif filter.agency_id is not None:
+            query = query.filter(models.User.agency_id == filter.agency_id)
 
         if filter.completion_date_start is not None:
             query = query.filter(models.QuizCompletion.submit_ts >= filter.completion_date_start)
