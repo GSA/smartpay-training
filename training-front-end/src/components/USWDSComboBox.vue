@@ -1,47 +1,48 @@
 <script setup>
-import { onMounted } from 'vue';
+import {onMounted} from 'vue';
 import USWDS from "@uswds/uswds/js";
 import FormLabel from "./form-components/FormLabel.vue";
 
-  const { comboBox } = USWDS;
+const {comboBox} = USWDS;
 
-  defineProps({
-    'modelValue': {
-      type: String,
-      required: false,
-      default: undefined
-    },
-    items: {
-      type: Array,
-      required: true
-    },
-    name: {
-      type:String,
-      required: true
-    },
-    label: {
-      type: String,
-      required: true
-    },
-    'required': {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    'validator': {
-      type: Object,
-      required: false,
-      default: {}
-    },
-  })
-  const emit = defineEmits(['update:modelValue'])
-  onMounted(() => {
-    comboBox.init();
-    
-  })
-  function selected(event) {
-    emit('update:modelValue', event.target.value)
+defineProps({
+  'modelValue': {
+    type: String,
+    required: false,
+    default: undefined
+  },
+  items: {
+    type: Array,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  label: {
+    type: String,
+    required: true
+  },
+  'required': {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  'validator': {
+    type: Object,
+    required: false,
+    default: () => ({})
   }
+})
+const emit = defineEmits(['update:modelValue'])
+onMounted(() => {
+  comboBox.init();
+
+})
+
+function selected(event) {
+  emit('update:modelValue', event.target.value)
+}
 </script>
 <template>
   <div
@@ -65,24 +66,24 @@ import FormLabel from "./form-components/FormLabel.vue";
         {{ error.$message }}
       </span>
     </span>
-  <div class="usa-combo-box" :data-default-value="modelValue">
-    <!-- uswds changes the select element in such a way that neither onblur or oninput work -->
-    <!-- eslint-disable-next-line vuejs-accessibility/no-onchange -->
-    <select 
-      :id="name"
-      class="usa-select" 
-      :name="name"
-      :value="modelValue"
-      @change="selected"
-    >
-      <option 
-        v-for="item in items" 
-        :key="item.id"
-        :value="item.id"
+    <div class="usa-combo-box" :data-default-value="modelValue">
+      <!-- uswds changes the select element in such a way that neither onblur or oninput work -->
+      <!-- eslint-disable-next-line vuejs-accessibility/no-onchange -->
+      <select
+          :id="name"
+          class="usa-select"
+          :name="name"
+          :value="modelValue"
+          @change="selected"
       >
-        {{ item.name }}
-      </option>
-    </select>
-  </div>
+        <option
+            v-for="item in items"
+            :key="item.id"
+            :value="item.id"
+        >
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
