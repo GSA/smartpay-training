@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import USWDSComboBox from "../form-components/USWDSComboBox.vue";
 
 describe('USWDSComboBox', () => {
-    it('renders properly', () => {
+    it('renders properly when required', () => {
         const wrapper = mount(USWDSComboBox, {
             props: {
                 modelValue: '',
@@ -24,6 +24,30 @@ describe('USWDSComboBox', () => {
 
         expect(wrapper.find('.usa-form-group').exists()).toBe(true)
         expect(wrapper.find('.usa-label').text()).toBe('Test Agency (*Required)')
+        expect(wrapper.findAll('option').length).toBe(3)
+    })
+
+    it('renders properly when optional', () => {
+        const wrapper = mount(USWDSComboBox, {
+            props: {
+                modelValue: '',
+                validator: {
+                    $error: false,
+                    $errors: []
+                },
+                name: 'testAgency',
+                label: 'Test Agency',
+                items: [
+                    { id: 1, name: 'Option 1' },
+                    { id: 2, name: 'Option 2' },
+                    { id: 3, name: 'Option 3' }
+                ],
+                required: false
+            }
+        })
+
+        expect(wrapper.find('.usa-form-group').exists()).toBe(true)
+        expect(wrapper.find('.usa-label').text()).toBe('Test Agency (optional)')
         expect(wrapper.findAll('option').length).toBe(3)
     })
 
