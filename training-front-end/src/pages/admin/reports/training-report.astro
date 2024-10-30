@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroTraining from '@components/HeroTraining.astro';
+import AdminTrainingReport from '@components/AdminTrainingReport.vue';
+import AuthRequired from '@components/AuthRequired.vue';
+
+const pageTitle = "GSA SmartPay® Training Report";
+---
+<BaseLayout title={pageTitle} description="GSA SmartPay Training Report">
+    <HeroTraining background_class='bg_smartpay_cool_grey'>
+      GSA SmartPay® Training Report
+    </HeroTraining>
+    <AuthRequired client:only>
+      <AdminTrainingReport client:only />
+    </AuthRequired>
+</BaseLayout>

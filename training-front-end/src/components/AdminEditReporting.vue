@@ -2,7 +2,7 @@
 import {computed, reactive, ref, watch} from "vue"
 import AdminAgencySelect from "./AdminAgencySelect.vue";
 import DeleteIcon from "./icons/DeleteIcon.vue";
-import USWDSComboBox from "./USWDSComboBox.vue";
+import USWDSComboBox from "./form-components/USWDSComboBox.vue";
 import {agencyList, bureauList, selectedAgencyId, setSelectedAgencyId} from '../stores/agencies'
 import {useStore} from '@nanostores/vue'
 import AdminEditUserDetails from "./AdminEditUserDetails.vue";
@@ -263,6 +263,7 @@ function formatDate(dateStr) {
           :items="agency_options"
           label="Select agency or organization user should receive reports for?"
           name="agency"
+          :required="true"
         />
 
         <div

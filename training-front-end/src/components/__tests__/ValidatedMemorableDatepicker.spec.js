@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mount } from '@vue/test-utils';
-import ValidatedDatepicker from '../ValidatedDatepicker.vue';
+import ValidatedDatepicker from '../form-components/ValidatedMemorableDatepicker.vue';
 
 describe('ValidatedDatepicker', () => {
   it('renders properly', async () => {

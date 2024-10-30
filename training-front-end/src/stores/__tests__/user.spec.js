@@ -47,7 +47,7 @@ describe('getUserFromToken', () => {
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: false, status:404})
     })
-    await expect(getUserFromToken(base_url, param_token)).rejects.toThrowError('This link is either expired');
+    await expect(getUserFromToken(base_url, param_token)).rejects.toThrowError('This link has expired or is invalid. Links are only valid for 24 hours. Please fill out the form below to request a new link.');
   })
   
   it('throws an error when there is a server error', async () => {

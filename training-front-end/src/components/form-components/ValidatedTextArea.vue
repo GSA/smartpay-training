@@ -1,20 +1,18 @@
 <script setup>
   import {computed} from 'vue'
+  import FormLabel from "./FormLabel.vue"
+
   const props = defineProps({
+    'label': {
+      type: String,
+      required: true
+    },
     'modelValue': {
       type: String,
-      required: false,
+      required: true,
       default: undefined
     },
-    'validator': {
-      type: Object,
-      required: true
-    },
     'name': {
-      type: String,
-      required: true
-    },
-    'label': {
       type: String,
       required: true
     },
@@ -22,7 +20,16 @@
       type: Boolean,
       required: false,
       default: false
-    }
+    },
+    'required': {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    'validator': {
+      type: Object,
+      required: true
+    },
   })
 
   defineEmits(['update:modelValue'])
@@ -34,10 +41,12 @@
     class="usa-form-group"
     :class="{ 'usa-form-group--error':validator.$error}"
   >
-    <label
-      class="usa-label"
-      :for="name"
-    >{{ label }} <span class="text-secondary-dark">(*Required)</span></label>
+    <FormLabel
+      :id="`${name}-label`"
+      :for="`${name}`"
+      :value="`${ props.label }`"
+      :required="props.required"
+    />
     <span v-if="validator.$error">
       <span
         v-for="error in validator.$errors"
@@ -49,15 +58,16 @@
         {{ error.$message }}
       </span>
     </span>
-    <input
+    <textarea
       :id="name"
-      class="usa-input usa-input"
+      :value="modelValue"
+      class="usa-textarea tablet:grid-col-12"
       :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
-      :value="modelValue"
       :aria-describedby="validator.$error? error_id: null"
       :readonly="readonly"
+      rows="10"
       @input="$emit('update:modelValue', $event.target.value)"
-    >
+    />
   </div>    
 </template>
