@@ -1,34 +1,40 @@
 <script setup>
-  import {computed , reactive, watch} from 'vue'  
+  import {computed , reactive, watch} from 'vue'
+  import FormLegend from './FormLegend.vue';
   
   const props = defineProps({
-    'modelValue': {
-      type: Date,
-      required: false,
-      default: undefined
-    },
-    'validator': {
-      type: Object,
-      required: true
-    },
-    'name': {
-      type: String,
-      required: true
-    },
-    'label': {
-      type: String,
-      required: true
-    },
     'hintText': {
       type: String,
       required: false,
       default: ''
     },
+    'label': {
+      type: String,
+      required: true
+    },
+    'modelValue': {
+      type: Date,
+      required: false,
+      default: undefined
+    },
+    'name': {
+      type: String,
+      required: true
+    },
+    'required': {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    'validator': {
+      type: Object,
+      required: true
+    },
   });
-
+  
   const options = [
-      { txt: '- Select -', value: ""},
-      { txt: '01 - January', value: 0 },
+    { txt: '- Select -', value: ""},
+    { txt: '01 - January', value: 0 },
       { txt: '02 - February', value: 1 },
       { txt: '03 - March', value: 2 },
       { txt: '04 - April', value: 3 },
@@ -89,10 +95,10 @@
     :class="{ 'usa-form-group--error':validator.$error}"
   >
     <fieldset class="usa-fieldset">
-      <legend class="usa-legend">
-        {{ label }}
-        <span class="text-secondary-dark">(*Required)</span>
-      </legend>
+      <FormLegend
+        :value="`${ props.label }`"
+        :required="props.required"
+      />
       <span 
         v-if="hintText !== ''"
         id="mdHint"

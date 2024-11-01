@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
-import ValidatedTextArea from "../ValidatedTextArea.vue";
+import ValidatedTextArea from "../form-components/ValidatedTextArea.vue";
 
 describe('ValidatedTextArea', () => {
   it('renders properly', () => {
@@ -12,7 +12,8 @@ describe('ValidatedTextArea', () => {
           $errors: []
         },
         name: 'testName',
-        label: 'Test Label'
+        label: 'Test Label',
+        required: true
       }
     })
 

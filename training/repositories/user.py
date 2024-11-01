@@ -1,9 +1,10 @@
 from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
-from training.schemas import UserQuizCompletionReportData, UserSearchResult
+from training.schemas import UserQuizCompletionReportData, UserSearchResult, AdminSmartPayTrainingReportFilter
 from .base import BaseRepository
 from datetime import datetime
+from collections import namedtuple
 
 
 class UserRepository(BaseRepository[models.User]):
@@ -68,6 +69,62 @@ class UserRepository(BaseRepository[models.User]):
             return results
         else:
             raise ValueError("Invalid Report User")
+
+    def get_admin_smartpay_training_report(self, filter: AdminSmartPayTrainingReportFilter) -> list[UserQuizCompletionReportData]:
+        report_data = namedtuple("ReportData", ["name", "email", "agency", "bureau", "quiz", "completion_date"])
+
+        # Build the query
+        query = (
+            self._session.query(
+                models.User.name,
+                models.User.email,
+                models.Agency.name,
+                models.Agency.bureau,
+                models.Quiz.name,
+                models.QuizCompletion.submit_ts
+            )
+            .select_from(models.User)
+            .join(models.Agency)
+            .join(models.QuizCompletion)
+            .join(models.Quiz)
+            .filter(models.QuizCompletion.passed)
+        )
+
+        # Dynamically add filters based on the properties of the AdminSmartPayTrainingReportFilter
+        if filter.bureau_id is not None:
+            query = query.filter(models.User.agency_id == filter.bureau_id)
+        elif filter.agency_id is not None:
+            query = query.filter(models.User.agency_id == filter.agency_id)
+
+        if filter.completion_date_start is not None:
+            query = query.filter(models.QuizCompletion.submit_ts >= filter.completion_date_start)
+
+        if filter.completion_date_end is not None:
+            query = query.filter(models.QuizCompletion.submit_ts <= filter.completion_date_end)
+
+        if filter.quiz_names:
+            query = query.filter(models.Quiz.name.in_(filter.quiz_names))
+
+        raw_results = query.order_by(
+            models.Agency.name.asc(),
+            nullsfirst(models.Agency.bureau.asc()),
+            models.QuizCompletion.submit_ts.desc()
+        ).all()
+
+        # Map the results to the Pydantic model using the `ReportData` namedtuple
+        result = [
+            UserQuizCompletionReportData(
+                name=row.name,
+                email=row.email,
+                agency=row.agency,
+                bureau=row.bureau,
+                quiz=row.quiz,
+                completion_date=row.completion_date
+            )
+            for row in map(report_data._make, raw_results)
+        ]
+
+        return result
 
     def get_users(self, searchText: str, page_number: int) -> UserSearchResult:
         # current UI only support search by user name and email. The search field it is required field.
