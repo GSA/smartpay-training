@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@uswds/compile": "^1.1.0",
-    "@uswds/uswds": "^3.9.0",
+    "@uswds/uswds": "^3.10.0",
     "@vitejs/plugin-vue": "^4.6.2",
     "@vitest/coverage-v8": "^2.1.2",
     "@vue/cli-plugin-eslint": "^5.0.8",
