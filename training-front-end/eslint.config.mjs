@@ -84,7 +84,5 @@ export default [...compat.extends("eslint:recommended", "plugin:@typescript-esli
                 some: ["id"],
             },
         }],
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": "error",
     },
 }];
