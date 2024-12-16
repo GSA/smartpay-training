@@ -172,7 +172,7 @@
           dest: {page_id: props.pageId, parameters: props.parameters, title: props.title}
         })
       })
-    } catch (err) {
+    } catch {
       showFedWarning.value = false
       isLoading.value = false
       showSpinner.value = false

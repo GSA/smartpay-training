@@ -10,7 +10,7 @@ const pageTitle = "Reports";
     <HeroTraining background_class='bg_smartpay_cool_grey'>
       Admin Reports
     </HeroTraining>
-    <AuthRequired client:only>
-      <AdminReportIndex client:only />
+    <AuthRequired client:only="vue">
+      <AdminReportIndex client:only="vue" />
     </AuthRequired>
 </BaseLayout>

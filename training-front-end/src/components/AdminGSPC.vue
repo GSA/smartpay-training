@@ -115,7 +115,7 @@
       showSpinner.value = false
       emit('endLoading')
     
-    } catch (err) {
+    } catch {
       isLoading.value = false
       showSpinner.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
