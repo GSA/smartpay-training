@@ -73,7 +73,6 @@ class UserRepository(BaseRepository[models.User]):
             .join(models.QuizCompletion)
             .join(models.Quiz)
             .filter(models.QuizCompletion.passed)
-            .order_by(models.Agency.name.asc(), nullsfirst(models.Agency.bureau.asc()), models.QuizCompletion.submit_ts.desc()).all()
         )
         
         if report_user and report_user.report_agencies:
