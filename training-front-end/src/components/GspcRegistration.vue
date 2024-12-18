@@ -93,7 +93,7 @@
         },
         body: JSON.stringify({'responses':{'responses': user_answers}, 'expiration_date': expirationDate}) 
       })
-    } catch(e) {
+    } catch {
       const err = new Error("There was a problem connecting with the server")
       err.name = "Server Error"
       setError(err)

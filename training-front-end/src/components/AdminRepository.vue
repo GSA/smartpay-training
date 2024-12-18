@@ -80,7 +80,7 @@ const userSearch = async function(searchText, currentPage){
         },
         body: JSON.stringify(userData)
       })
-    } catch (error) {
+    } catch {
         throw new Error('Sorry, we had an error connecting to the server.')
       }
     

@@ -36,7 +36,7 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   let res
   try {
     res = await fetch(url)
-  } catch(err) {
+  } catch {
     // THis would indicate an API problem
     // What to tell the user here?
     const e = new Error("Sorry, we had an error connecting to the server.")
@@ -65,7 +65,7 @@ export const getUserFromTokenExchange = action(profile, 'getUserFromTokenExchang
         "Authorization": `Bearer ${uaa_token}`
       }
     })
-  } catch(err) {
+  } catch {
     throw new Error(
       "We were unable to log you in (exchange error).",
       { name: "Server Error" }

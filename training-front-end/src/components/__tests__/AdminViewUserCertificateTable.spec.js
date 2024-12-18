@@ -50,7 +50,6 @@ describe('CertificateTable', async () => {
     expect(rows.length).toBe(API_RESPONSE.length + 1)
 
     const rowOne = rows[1].findAll('td')
-    API_RESPONSE[0].cert_title
     expect(rowOne[0].text()).toBe(API_RESPONSE[0].cert_title)
 
     const rowTwo = rows[2].findAll('td')
