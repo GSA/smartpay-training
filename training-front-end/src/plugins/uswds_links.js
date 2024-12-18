@@ -13,7 +13,7 @@ export function processLinksPlugin() {
         let domain;
         try {
           domain = new URL(properties.href)
-        } catch(e) {
+        } catch {
           // Exceptions will be raised with relative links
           // these will all be local, so ignore
           return
