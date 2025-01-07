@@ -21,8 +21,8 @@ const isReportUser = computed(() => user.value.roles.includes('Report'))
 const agency_options = useStore(agencyList)
 const bureaus = useStore(bureauList)
 const report_agencies = user.value.report_agencies
-let filteredAgencyOptions = ref([])
-let filteredBureauOptions = ref([])
+let filteredAgencyOptions
+let filteredBureauOptions
 
 filteredAgencyOptions = computed(() => {
   return agency_options.value.filter((agency) => report_agencies.map(x => x.name).includes(agency.name))
@@ -101,9 +101,9 @@ async function downloadReport() {
 
 </script>
 <template>
-  <section
-      v-if="isReportUser"
-      class="usa-prose"
+  <section 
+    v-if="isReportUser"
+    class="usa-prose"
   >
     <div class="padding-top-4 padding-bottom-4 grid-container">
       <h2>Download Your Report</h2>
@@ -115,64 +115,64 @@ async function downloadReport() {
         <b>Note:</b> If a report is generated with an individual completing multiple trainings, each training will be listed separately on the report.
       </p>
       <form
-          ref="form"
-          class="usa-form usa-form--large margin-bottom-3"
-          data-test="report-form"
-          @submit.prevent="downloadReport"
+        ref="form"
+        class="usa-form usa-form--large margin-bottom-3"
+        data-test="report-form"
+        @submit.prevent="downloadReport"
       >
         <ValidatedDateRangePicker
-            v-model="user_input.completion_date_range"
-            client:load
-            :validator="v_all_info$.completion_date_range"
-            label="Completion date range"
-            name="Completion date range"
+          v-model="user_input.completion_date_range"
+          client:load
+          :validator="v_all_info$.completion_date_range"
+          label="Completion date range"
+          name="Completion date range"
         />
         <ValidatedCheckboxGroup
-            v-model="user_input.quiz_names"
-            :options="quiz_names_options"
-            :validator="v_all_info$.quiz_names"
-            name="Quiz type(s)"
-            legend="Quiz type(s)"
-            class="margin-top-4"
+          v-model="user_input.quiz_names"
+          :options="quiz_names_options"
+          :validator="v_all_info$.quiz_names"
+          name="Quiz type(s)"
+          legend="Quiz type(s)"
+          class="margin-top-4"
         />
         <USWDSComboBox
-            v-model="user_input.agency_id"
-            client:load
-            :validator="v_all_info$.agency_id"
-            :items="filteredAgencyOptions"
-            label="Agency / organization"
-            name="Agency"
+          v-model="user_input.agency_id"
+          client:load
+          :validator="v_all_info$.agency_id"
+          :items="filteredAgencyOptions"
+          label="Agency / organization"
+          name="Agency"
         />
         <USWDSComboBox
-            v-if="filteredBureauOptions.length"
-            v-model="user_input.bureau_id"
-            client:load
-            :validator="v_all_info$.bureau_id"
-            :items="filteredBureauOptions"
-            label="Sub-agency, organization, or bureau"
-            name="Bureau"
+          v-if="filteredBureauOptions.length"
+          v-model="user_input.bureau_id"
+          client:load
+          :validator="v_all_info$.bureau_id"
+          :items="filteredBureauOptions"
+          label="Sub-agency, organization, or bureau"
+          name="Bureau"
         />
         <input
-            class="usa-button"
-            type="submit"
-            value="Submit"
-            :disabled="isLoading"
-            data-test="submit"
+          class="usa-button"
+          type="submit"
+          value="Submit"
+          :disabled="isLoading"
+          data-test="submit"
         >
         <div>
           <USWDSAlert
-              v-if="error"
-              status="error"
-              class="usa-alert--slim"
-              :has-heading="false"
+            v-if="error"
+            status="error"
+            class="usa-alert--slim"
+            :has-heading="false"
           >
             {{ error }}
           </USWDSAlert>
           <USWDSAlert
-              v-if="showSuccessMessage"
-              status="success"
-              class="usa-alert--slim"
-              :has-heading="false"
+            v-if="showSuccessMessage"
+            status="success"
+            class="usa-alert--slim"
+            :has-heading="false"
           >
             Report has been generated.
           </USWDSAlert>
@@ -180,34 +180,32 @@ async function downloadReport() {
         <div class="grid-row grid-gap margin-top-3">
           <!--display spinner along with submit button in one row for desktop-->
           <div
-              v-if="showSpinner"
-              class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
+            v-if="showSpinner"
+            class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
           >
             <SpinnerGraphic />
           </div>
         </div>
         <!--display spinner under submit button for mobile view-->
         <div
-            v-if="showSpinner"
-            class="tablet:display-none margin-top-1 text-center"
+          v-if="showSpinner"
+          class="tablet:display-none margin-top-1 text-center"
         >
           <SpinnerGraphic />
         </div>
       </form>
     </div>
-
-
   </section>
   <section v-else>
     <USWDSAlert
-        status="error"
-        class="usa-alert"
-        heading="You are not authorized to receive reports."
+      status="error"
+      class="usa-alert"
+      heading="You are not authorized to receive reports."
     >
       Your email account is not authorized to access training reports. If you should be authorized, you can
       <a
-          class="usa-link"
-          href="mailto:gsa_smartpay@gsa.gov"
+        class="usa-link"
+        href="mailto:gsa_smartpay@gsa.gov"
       >
         contact the GSA SmartPay team
       </a> to gain access.
