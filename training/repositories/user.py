@@ -6,6 +6,7 @@ from .base import BaseRepository
 from datetime import datetime
 from collections import namedtuple
 
+
 class UserRepository(BaseRepository[models.User]):
 
     def __init__(self, session: Session):
@@ -73,7 +74,7 @@ class UserRepository(BaseRepository[models.User]):
             .join(models.Quiz)
             .filter(models.QuizCompletion.passed)
         )
-        
+
         if report_user and report_user.report_agencies:
             # Dynamically add filters based on the properties of the SmartPayTrainingReportFilter
             if filter.bureau_id is not None:
@@ -83,13 +84,13 @@ class UserRepository(BaseRepository[models.User]):
             else:
                 allowed_agency_ids = [obj.id for obj in report_user.report_agencies]
                 query = query.filter(models.User.agency_id.in_(allowed_agency_ids))
-    
+
             if filter.completion_date_start is not None:
                 query = query.filter(models.QuizCompletion.submit_ts >= filter.completion_date_start)
-    
+
             if filter.completion_date_end is not None:
                 query = query.filter(models.QuizCompletion.submit_ts <= filter.completion_date_end)
-    
+
             if filter.quiz_names:
                 query = query.filter(models.Quiz.name.in_(filter.quiz_names))
 
@@ -111,7 +112,7 @@ class UserRepository(BaseRepository[models.User]):
                 )
                 for row in map(report_data._make, raw_results)
             ]
-            
+
             return result
         else:
             raise ValueError("Invalid Report User")
