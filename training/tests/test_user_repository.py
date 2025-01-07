@@ -163,7 +163,7 @@ def test_get_admin_smartpay_training_report_no_filters(user_repo_with_data: User
     """
     Test fetching report data without any filters applied.
     """
-    report_filter = schemas.AdminSmartPayTrainingReportFilter()
+    report_filter = schemas.SmartPayTrainingReportFilter()
     results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
     assert len(results) > 0  # Check that we get results back
     assert all(isinstance(result, schemas.UserQuizCompletionReportData) for result in results)  # Verify type
@@ -175,7 +175,7 @@ def test_get_admin_smartpay_training_report_filter_by_date_range(user_repo_with_
     """
     start_date = datetime(2023, 1, 1)
     end_date = datetime(2024, 12, 31)
-    report_filter = schemas.AdminSmartPayTrainingReportFilter(completion_date_start=start_date, completion_date_end=end_date)
+    report_filter = schemas.SmartPayTrainingReportFilter(completion_date_start=start_date, completion_date_end=end_date)
     results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
 
     assert len(results) > 0
@@ -188,7 +188,7 @@ def test_get_admin_smartpay_training_report_filter_by_quiz_name(user_repo_with_d
     Test fetching report data by filtering with specific quiz names.
     """
     quiz_names = ["Travel Training for Ministry of Magic"]
-    report_filter = schemas.AdminSmartPayTrainingReportFilter(quiz_names=quiz_names)
+    report_filter = schemas.SmartPayTrainingReportFilter(quiz_names=quiz_names)
     results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
 
     assert len(results) > 0
