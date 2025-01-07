@@ -1,14 +1,11 @@
 import csv
 from io import StringIO
 import logging
-from typing import Any
 from training.api.auth import RequireRole
 from fastapi import APIRouter, status, HTTPException, Response, Depends, Query
 from training.schemas import User, UserCreate, UserSearchResult, UserUpdate, SmartPayTrainingReportFilter
 from training.repositories import UserRepository
 from training.api.deps import user_repository
-from training.api.auth import user_from_form
-from training.api.auth import JWTUser
 from typing import Annotated
 
 

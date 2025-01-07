@@ -6,7 +6,6 @@ from .base import BaseRepository
 from datetime import datetime
 from collections import namedtuple
 
-
 class UserRepository(BaseRepository[models.User]):
 
     def __init__(self, session: Session):
