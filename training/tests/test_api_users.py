@@ -218,4 +218,3 @@ def test_get_smartpay_training_report(reportJWT):
         lines = csv_output.readlines()
         assert lines[0].strip() == 'Full Name,Email Address,Agency,Bureau,Quiz Name,Quiz Completion Date and Time'
         assert lines[1].strip() == 'John Doe,john.doe@example.com,Agency X,Bureau Y,Sample Quiz,10/11/2024 12:00:00'
-    
