@@ -1,5 +1,5 @@
 <script setup>
-import {computed, reactive, ref, watch} from "vue"
+import { computed, reactive, ref, watch} from "vue"
 import { useStore } from '@nanostores/vue'
 import { useVuelidate } from "@vuelidate/core";
 import { profile } from '../stores/user' 
@@ -10,7 +10,7 @@ import USWDSComboBox from "./form-components/USWDSComboBox.vue";
 import {agencyList, bureauList, setSelectedAgencyId} from "../stores/agencies.js";
 import ReportRepository from "./ReportRepository.vue";
 import ReportUtilities from "./ReportUtilities.vue";
-import SpinnerGraphic from "@components/SpinnerGraphic.vue";
+import SpinnerGraphic from "./SpinnerGraphic.vue";
 
 const error = ref()
 const showSuccessMessage = ref(false)
@@ -68,7 +68,7 @@ const v_all_info$ = useVuelidate(validation_info, user_input)
 
 //format dates from uswds standard to the format needed for backend 
 const formatDateToYYYYMMDD = (dates) => {
-  return dates ? dates.map(date => (date ? new Date(date).toISOString().split('T')[0] : null)) : [];
+  return dates ? dates.map(date => (date ? new Date(date).toISOString() : null)) : [];
 };
 
 async function downloadReport() {
