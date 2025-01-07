@@ -92,12 +92,12 @@ def db_with_data(db: Session, testdata: dict):
         quiz_ids.append(quiz.id)
 
     quiz_completion_pass = models.QuizCompletion(user_id=user_ids[-1], quiz_id=quiz_ids[-1], passed=True,
-                                                 submit_ts = datetime(2024, 1, 24))
+                                                 submit_ts=datetime(2024, 1, 24))
     db.add(quiz_completion_pass)
     db.commit()
 
     quiz_completion_fail = models.QuizCompletion(user_id=user_ids[-1], quiz_id=quiz_ids[-1], passed=False,
-                                                 submit_ts = datetime(2024, 1, 24))
+                                                 submit_ts=datetime(2024, 1, 24))
     db.add(quiz_completion_fail)
     db.commit()
     for role in testdata["roles"]:
