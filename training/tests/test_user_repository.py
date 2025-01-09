@@ -4,7 +4,7 @@ import pytest
 from training import models, schemas
 from training.repositories import UserRepository, AgencyRepository
 from datetime import datetime, timedelta
-from training.schemas import Agency, Role, AgencyCreate
+from training.schemas import Agency, AgencyCreate
 from training.tests.factories import UserSchemaFactory
 
 
