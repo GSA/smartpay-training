@@ -218,7 +218,7 @@ def test_get_smartpay_training_report_no_filters(user_repo_with_data: UserReposi
 
 def test_get_smartpay_training_report_with_filter_by_quiz_name(user_repo_with_data: UserRepository, agency_repo_with_data: AgencyRepository):
     """
-    Test fetching report data without any filters applied.
+    Test fetching report data with filters applied.
     """
     valid_agency = agency_repo_with_data.find_by_name(AgencyCreate(name="Department of Mysteries"))
     mock_user = UserSchemaFactory.build(roles=[])
@@ -237,7 +237,7 @@ def test_get_smartpay_training_report_with_filter_by_quiz_name(user_repo_with_da
 
 def test_get_smartpay_training_report_with_filter_by_date_range(user_repo_with_data: UserRepository, agency_repo_with_data: AgencyRepository):
     """
-    Test fetching report data without any filters applied.
+    Test fetching report data with filters applied.
     """
     valid_agency = agency_repo_with_data.find_by_name(AgencyCreate(name="Department of Mysteries"))
     mock_user = UserSchemaFactory.build(roles=[])
@@ -258,7 +258,7 @@ def test_get_smartpay_training_report_with_filter_by_date_range(user_repo_with_d
 
 def test_get_smartpay_training_report_with_no_report_agencies(user_repo_with_data: UserRepository):
     """
-    Test fetching report data without any filters applied.
+    Test fetching report data with no reporting agency for user
     """
     mock_user = UserSchemaFactory.build(roles=[])
     mock_user.report_agencies = []
