@@ -4,9 +4,9 @@ import pytest
 from training import models, schemas
 from training.repositories import UserRepository, AgencyRepository
 from datetime import datetime, timedelta
-
 from training.schemas import Agency, Role, AgencyCreate
 from training.tests.factories import UserSchemaFactory
+
 
 def test_create(user_repo_empty: UserRepository, agency_repo_with_data: AgencyRepository):
     agency_id = agency_repo_with_data.find_all()[0].id
