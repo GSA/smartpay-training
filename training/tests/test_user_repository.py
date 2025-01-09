@@ -1,6 +1,5 @@
 from typing import List
 from unittest.mock import patch
-from venv import logger
 
 import pytest
 from training import models, schemas
