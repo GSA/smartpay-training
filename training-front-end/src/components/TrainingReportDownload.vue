@@ -93,10 +93,10 @@ async function downloadReport() {
 
   } catch (error) {
     setError(error)
+  } finally {
+    isLoading.value = false
+    showSpinner.value = false
   }
-
-  isLoading.value = false
-  showSpinner.value = false
 }
 
 </script>
