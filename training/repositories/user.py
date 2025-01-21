@@ -1,5 +1,3 @@
-from gc import is_finalized
-
 from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
