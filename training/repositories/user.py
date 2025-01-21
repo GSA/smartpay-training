@@ -1,3 +1,5 @@
+from gc import is_finalized
+
 from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
@@ -80,7 +82,13 @@ class UserRepository(BaseRepository[models.User]):
             if filter.bureau_id is not None:
                 query = query.filter(models.User.agency_id == filter.bureau_id)
             elif filter.agency_id is not None:
-                query = query.filter(models.User.agency_id == filter.agency_id)
+                # if agency is selected and not the bureau, return all records associated to agency/bureau the user has access to
+                all_agencies = self._session.query(models.Agency).all()
+                selected_agency = [agency for agency in all_agencies if agency.id == filter.agency_id][0]
+                selected_agency_bureaus_ids = [agency.id for agency in all_agencies if agency.name == selected_agency.name]
+                allowed_agency_ids = [obj.id for obj in report_user.report_agencies]
+                filter_agencies = [x for x in allowed_agency_ids if x in selected_agency_bureaus_ids]
+                query = query.filter(models.User.agency_id.in_(filter_agencies))
             else:
                 allowed_agency_ids = [obj.id for obj in report_user.report_agencies]
                 query = query.filter(models.User.agency_id.in_(allowed_agency_ids))
