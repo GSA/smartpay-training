@@ -71,7 +71,7 @@ class Settings(BaseSettings):
     SMTP_STARTTLS: bool | None = None
     SMTP_SSL_TLS: bool | None = None
 
-    EMAIL_FROM: EmailStr = "smartpay-noreply@gsa.gov"
+    EMAIL_FROM: EmailStr = "smartpay_do_not_reply@gsa.gov"
     EMAIL_FROM_NAME: str = "GSA SmartPay"
     EMAIL_SUBJECT: str = "GSA SmartPay Training"
 
