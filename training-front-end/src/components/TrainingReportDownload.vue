@@ -97,6 +97,7 @@ async function downloadReport() {
     isLoading.value = false
     showSpinner.value = false
   }
+
 }
 
 </script>
