@@ -3,6 +3,7 @@ from pydantic import EmailStr
 from smtplib import SMTP
 from email.message import EmailMessage
 
+from training import models
 from training.config import settings
 from training.errors import SendEmailError
 
@@ -101,6 +102,27 @@ def send_gspc_invite_email(to_email: EmailStr, link: str) -> None:
             smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
         try:
             smtp.send_message(message)
+        except Exception as e:
+            raise SendEmailError from e
+        finally:
+            smtp.quit()
+
+
+def send_gspc_invite_emails(invites: list[models.GspcInvite]) -> None:
+    with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT) as smtp:
+        smtp.starttls()
+        if settings.SMTP_USER and settings.SMTP_PASSWORD:
+            smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
+        try:
+            for invite in invites:
+                link = f"{settings.BASE_URL}/gspc_registration/?gspcInviteId={invite.gspc_invite_id}"
+                body = GSPC_INVITE_EMAIL_TEMPLATE.substitute({"link": link})
+                message = EmailMessage()
+                message.set_content(body, subtype="html")
+                message["Subject"] = "Verify your GSA SmartPay Program Certification (GSPC) Coursework and Experience"
+                message["From"] = f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM}>"
+                message["To"] = invite.email
+                smtp.send_message(message)
         except Exception as e:
             raise SendEmailError from e
         finally:
