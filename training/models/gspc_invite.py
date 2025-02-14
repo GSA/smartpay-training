@@ -16,3 +16,15 @@ class GspcInvite(Base):
     second_invite_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     final_invite_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     completed_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "gspc_invite_id": str(self.gspc_invite_id) if self.gspc_invite_id else None,
+            "email": self.email,
+            "created_date": self.created_date.isoformat() if self.created_date else None,
+            "certification_expiration_date": self.certification_expiration_date.isoformat() if self.certification_expiration_date else None,
+            "second_invite_date": self.second_invite_date.isoformat() if self.second_invite_date else None,
+            "final_invite_date": self.final_invite_date.isoformat() if self.final_invite_date else None,
+            "completed_date": self.completed_date.isoformat() if self.completed_date else None
+        }
