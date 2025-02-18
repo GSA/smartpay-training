@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from training import models
 from datetime import datetime, date
 from .base import BaseRepository
+import time
 
 
 class GspcInviteRepository(BaseRepository[models.GspcInvite]):
@@ -29,11 +30,12 @@ class GspcInviteRepository(BaseRepository[models.GspcInvite]):
             )
             for email in emails
         ]
-        
+
         try:
-            # Insert 100 at a time
-            for batch in self.batch_iterator(invites, 100):
+            # Insert 50 at a time
+            for batch in self.batch_iterator(invites, 50):
                 self.bulk_save(batch)
+                time.sleep(1)
 
             return invites
 

@@ -1,4 +1,3 @@
-from datetime import time
 from itertools import islice
 from string import Template
 from typing import Iterator, List, NamedTuple
@@ -9,6 +8,7 @@ from email.message import EmailMessage
 
 from training.config import settings
 from training.errors import SendEmailError
+import time
 
 # We also use jinja template.
 # See: https://sabuhish.github.io/fastapi-mail/example/#using-jinja2-html-templates
@@ -146,19 +146,27 @@ def batch_iterator(items: List, batch_size: int) -> Iterator:
 
 def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) -> None:
     for batch in batch_iterator(email_messages, batch_size):
-        try:
-            with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT) as smtp:
-                smtp.starttls()
-                smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT, timeout=30) as smtp:
+                    smtp.starttls()
+                    smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
 
-                # Send messages in current batch
-                for message in batch:
-                    try:
-                        smtp.send_message(message)
-                    except Exception as e:
-                        # Log the error but continue with remaining messages
-                        print(f"Failed to send email to {message['To']}: {str(e)}")
-                smtp.quit()
+                    # Send messages in current batch
+                    for message in batch:
+                        try:
+                            smtp.send_message(message)
+                        except Exception as e:
+                            # Log the error but continue with remaining messages
+                            print(f"Failed to send email to {message['To']}: {str(e)}")
+                    smtp.quit()
 
-        except Exception as e:
-            raise SendEmailError(f"Batch email sending failed: {str(e)}") from e
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    # Wait with exponential backoff: 2, 4, 8 seconds...
+                    sleep_time = 2 ** attempt
+                    time.sleep(sleep_time)
+                else:
+                    # Log the error after all retries failed
+                    print(f"Failed to send batch after {max_retries} attempts: {str(e)}")
