@@ -1,3 +1,4 @@
+from datetime import time
 from itertools import islice
 from string import Template
 from typing import Iterator, List, NamedTuple
@@ -148,8 +149,7 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) 
         try:
             with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT) as smtp:
                 smtp.starttls()
-                if settings.SMTP_USER and settings.SMTP_PASSWORD:
-                    smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
+                smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
 
                 # Send messages in current batch
                 for message in batch:
@@ -158,6 +158,7 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) 
                     except Exception as e:
                         # Log the error but continue with remaining messages
                         print(f"Failed to send email to {message['To']}: {str(e)}")
+                smtp.quit()
 
         except Exception as e:
             raise SendEmailError(f"Batch email sending failed: {str(e)}") from e
