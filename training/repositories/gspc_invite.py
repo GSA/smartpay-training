@@ -29,13 +29,16 @@ class GspcInviteRepository(BaseRepository[models.GspcInvite]):
             )
             for email in emails
         ]
+        
+        try:
+            # Insert 100 at a time
+            for batch in self.batch_iterator(invites, 100):
+                self.bulk_save(batch)
 
-        # Insert 100 at a time
-        self.bulk_save(invites)
-        for batch in self.batch_iterator(invites, 100):
-            self.bulk_save(batch)
+            return invites
 
-        return invites
+        except Exception as e:
+            raise Exception(f"Batch insert failed: {str(e)}") from e
 
     def batch_iterator(items: List, batch_size: int) -> Iterator:
         """Create an iterator that yields batches of the specified size."""
