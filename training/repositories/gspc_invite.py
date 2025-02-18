@@ -1,3 +1,5 @@
+from itertools import islice
+from typing import Iterator, List
 import uuid
 from sqlalchemy.orm import Session
 from training import models
@@ -28,9 +30,20 @@ class GspcInviteRepository(BaseRepository[models.GspcInvite]):
             for email in emails
         ]
 
+        # Insert 100 at a time
         self.bulk_save(invites)
+        for batch in self.batch_iterator(invites, 100):
+            self.bulk_save(batch)
 
         return invites
+
+    def batch_iterator(items: List, batch_size: int) -> Iterator:
+        """Create an iterator that yields batches of the specified size."""
+        iterator = iter(items)
+        batch = list(islice(iterator, batch_size))
+        while batch:
+            yield batch
+            batch = list(islice(iterator, batch_size))
 
     def get_by_gspc_invite_id(self, gspc_invite_id: uuid.UUID) -> models.GspcInvite:
         """
