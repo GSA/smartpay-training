@@ -11,7 +11,8 @@
         "http://www.energystar.gov/",
         "http://www.biopreferred.gov/BioPreferred/",
         "https://www.gsaadvantage.gov/advantage/ws/main/start_page\\?store=ADVANTAGE",
-        "https://www.congress.gov/bill/118th-congress/house-bill/2670"
+        "https://www.congress.gov/bill/118th-congress/house-bill/2670",
+        "https://www.whitehouse.gov/wp-content/uploads/2019/08/Issuance-of-Revised-Appendix-B-to-OMB-Circular-A-123.pdf"
     ],
     "verbosity": "debug"
 }
