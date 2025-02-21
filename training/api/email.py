@@ -118,7 +118,7 @@ class InviteTuple(NamedTuple):
 
 
 def send_gspc_invite_emails(invites: list[InviteTuple]) -> None:
-    logging.info(f"Starting gspc invite job, number of invites:{invites.count}")
+    logging.info(f"Starting gspc invite job, number of invites:{len(invites)}")
     email_messages = [create_email_message(invite) for invite in invites]
     send_emails_in_batches(email_messages=email_messages, batch_size=10)
     logging.info("Finished gspc invite job")
