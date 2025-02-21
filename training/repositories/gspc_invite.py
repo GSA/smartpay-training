@@ -1,4 +1,5 @@
 from itertools import islice
+import logging
 from typing import Iterator, List
 import uuid
 from sqlalchemy.orm import Session
@@ -22,6 +23,7 @@ class GspcInviteRepository(BaseRepository[models.GspcInvite]):
 
     def bulk_create(self, emails: list[str], certification_expiration_date: date) -> list[models.GspcInvite]:
         """Bulk insert GspcInvite records for multiple emails."""
+        logging.info(f"Starting gspc bulk create, number of invites:{emails.count}")
         invites = [
             models.GspcInvite(
                 email=email,

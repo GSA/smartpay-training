@@ -1,4 +1,5 @@
 from itertools import islice
+import logging
 from string import Template
 from typing import Iterator, List, NamedTuple
 import uuid
@@ -117,12 +118,15 @@ class InviteTuple(NamedTuple):
 
 
 def send_gspc_invite_emails(invites: list[InviteTuple]) -> None:
+    logging.info(f"Starting gspc invite job, number of invites:{invites.count}")
     email_messages = [create_email_message(invite) for invite in invites]
     send_emails_in_batches(email_messages=email_messages, batch_size=10)
+    logging.info("Finished gspc invite job")
 
 
 def create_email_message(invite: InviteTuple) -> EmailMessage:
     """Create an EmailMessage object for a given invite."""
+    
     link = f"{settings.BASE_URL}/gspc_registration/?gspcInviteId={invite.gspc_invite_id}"
     body = GSPC_INVITE_EMAIL_TEMPLATE.substitute({"link": link})
 
