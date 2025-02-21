@@ -23,7 +23,7 @@ class GspcInviteRepository(BaseRepository[models.GspcInvite]):
 
     def bulk_create(self, emails: list[str], certification_expiration_date: date) -> list[models.GspcInvite]:
         """Bulk insert GspcInvite records for multiple emails."""
-        logging.info(f"Starting gspc bulk create, number of invites:{emails.count}")
+        logging.info(f"Starting gspc bulk create, number of invites:{len(emails)}")
         invites = [
             models.GspcInvite(
                 email=email,
@@ -35,7 +35,7 @@ class GspcInviteRepository(BaseRepository[models.GspcInvite]):
 
         try:
             # Insert 50 at a time
-            for batch in self.batch_iterator(invites, 50):
+            for batch in GspcInviteRepository.batch_iterator(invites, 50):
                 self.bulk_save(batch)
                 time.sleep(1)
 
