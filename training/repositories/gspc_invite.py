@@ -35,7 +35,7 @@ class GspcInviteRepository(BaseRepository[models.GspcInvite]):
 
         try:
             # Insert 50 at a time
-            for batch in self.batch_iterator(invites, 50):
+            for batch in GspcInviteRepository.batch_iterator(invites, 50):
                 self.bulk_save(batch)
                 time.sleep(1)
 
