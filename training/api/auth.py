@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Annotated
 from urllib.request import urlopen
 
@@ -29,6 +30,7 @@ class JWTUser(HTTPBearer):
 
         user = self.decode_jwt(credentials.credentials)
         if user is None:
+            JWTUser.log_invalid_jwt(credentials.credentials, request.url.path)
             raise HTTPException(status_code=403, detail="Invalid or expired token.")
         return user
 
@@ -38,20 +40,20 @@ class JWTUser(HTTPBearer):
         except InvalidTokenError:
             return
 
+    @staticmethod
+    def log_invalid_jwt(token: str, path: str):
+        try:
+            invalid_claim = jwt.decode(token, options={"verify_signature": False})
+            logging.info("Invalid token", extra={'decoded': invalid_claim, 'path': path})
+        except InvalidTokenError:
+            logging.warning("Unprocessable token", extra={'token': token, 'path': path})
 
-class UAAJWTUser(HTTPBearer):
+
+class UAAJWTUser(JWTUser):
     '''
     Represents a JWT issued by an OAuth server.
     Used as part of the Admin SecureAuth flow
     '''
-
-    async def __call__(self, request: Request):
-
-        credentials: HTTPAuthorizationCredentials | None = await super().__call__(request)
-        user = self.decode_jwt(credentials.credentials)
-        if user is None:
-            raise HTTPException(status_code=403, detail="Invalid or expired token.")
-        return user
 
     def decode_jwt(self, token: str):
         token_header = jwt.get_unverified_header(token)
@@ -59,6 +61,7 @@ class UAAJWTUser(HTTPBearer):
         jwk = self.get_jwks().get(key_id)
 
         if jwk is None:
+            logging.info("Unknown jwk", extra={'key_id': key_id})
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Unrecognized token."
@@ -88,6 +91,7 @@ class UAAJWTUser(HTTPBearer):
             jwks = json.load(res)
 
         if jwks.get("keys") is None:
+            logging.warning("Unable to get JSON Web keys from server")
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 detail="Unable to get required data from authentication server (public keys)."
@@ -118,6 +122,7 @@ class UAAJWTUser(HTTPBearer):
             jwks_endpoint_uri = data.get("jwks_uri")
 
         if jwks_endpoint_uri is None:
+            logging.warning("Unable to get jwks endpoint from server")
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 detail="Unable to get required data from authentication server (JWKS URI)."
@@ -144,15 +149,17 @@ class RequireRole:
         try:
             user_roles = user['roles']
         except KeyError:
+            logging.info("Unauthorized Access", extra={'user': user, 'required_roles': self.required_roles})
             raise HTTPException(status_code=401, detail="Not Authorized")
 
         if all(role in user_roles for role in self.required_roles):
             return user
         else:
+            logging.info("Unauthorized Access", extra={'user': user, 'required_roles': self.required_roles})
             raise HTTPException(status_code=401, detail="Not Authorized")
 
 
-def user_from_form(jwtToken: Annotated[str, Form()]):
+def user_from_form(jwtToken: Annotated[str, Form()], request: Request):
     '''
     This allows POST requests to send a token as part of form-encoded request.
     There are places in the front-end where we want to download a file, but we also
@@ -163,5 +170,6 @@ def user_from_form(jwtToken: Annotated[str, Form()]):
     '''
     try:
         return jwt.decode(jwtToken, settings.JWT_SECRET, algorithms=["HS256"])
-    except jwt.exceptions.InvalidTokenError:
+    except InvalidTokenError:
+        JWTUser.log_invalid_jwt(jwtToken, request.url.path)
         raise HTTPException(status_code=401, detail="Not Authorized")
