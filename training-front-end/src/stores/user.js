@@ -36,7 +36,7 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   let res
   try {
     res = await fetch(url)
-  } catch(err) {
+  } catch {
     // THis would indicate an API problem
     // What to tell the user here?
     const e = new Error("Sorry, we had an error connecting to the server.")
@@ -45,7 +45,7 @@ export const getUserFromToken = action(profile, 'getUserFromToken', async (store
   }
   if (!res.ok) {
     clearUser()
-    const e = new Error('This link is either expired or is invalid. Links to training are only valid for 24 hours. Please request a new link with the form below.')
+    const e = new Error('This link has expired or is invalid. Links are only valid for 24 hours. Please fill out the form below to request a new link.')
     e.name = "Invalid Link"
     throw e
   }
@@ -65,7 +65,7 @@ export const getUserFromTokenExchange = action(profile, 'getUserFromTokenExchang
         "Authorization": `Bearer ${uaa_token}`
       }
     })
-  } catch(err) {
+  } catch {
     throw new Error(
       "We were unable to log you in (exchange error).",
       { name: "Server Error" }

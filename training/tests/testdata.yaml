@@ -1,12 +1,14 @@
 agencies:
   - name: Department of Mysteries
     bureau: null
+    id: 1
   - name: Other
     bureau: null
   - name: Department of Mysteries
-    bureau: Other
+    bureau: Test
   - name: Department of Mysteries
     bureau: Time-Travel experiments
+    id: 2
   - name: Department of Magical Law Enforcement
     bureau: null
   - name: Department of Magical Accidents and Catastrophes
@@ -22,16 +24,19 @@ users:
   - email: test1@example.com
     name: Test One
     created_by: Test One
+    agency_id: 1
   - email: test2@example.com
     name: Test Two
     created_by: Test Two
+    agency_id: 2
   - email: test3@example.com
     name: Test Three
     created_by: Test Three
+    agency_id: 1
+    bureau: Terrible Poisons
     
 roles:
   - name: test role
-
 
 quizzes:
   - name: "Travel Training for Ministry of Magic"

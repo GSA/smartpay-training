@@ -1,43 +1,52 @@
 <script setup>
-  import {computed} from 'vue'  
-  
+  import {computed} from 'vue'
+  import FormLabel from "./FormLabel.vue"
+
   const props = defineProps({
+    'label': {
+      type: String,
+      required: true
+    },
     'modelValue': {
-      type: [String, Number],
+      type: String,
       required: false,
       default: undefined
-    },
-    'validator': {
-      type: Object,
-      required: true
     },
     'name': {
       type: String,
       required: true
     },
-    'label': {
-      type: String,
+    'readonly': {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    'required': {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    'validator': {
+      type: Object,
       required: true
     },
-    'options': {
-      type: Array,
-      required: true
-    }
   })
-  
-  defineEmits(['update:modelValue'])
 
+  defineEmits(['update:modelValue'])
   var error_id = computed(() => props.name + '-input-error-message')
 </script>
+
 <template>
   <div
     class="usa-form-group"
     :class="{ 'usa-form-group--error':validator.$error}"
   >
-    <label
-      class="usa-label"
+    <FormLabel
+      :id="`${name}-label`"
       :for="name"
-    >{{ label }} <span class="text-secondary-dark">(*Required)</span></label>
+      :value="props.label"
+      :required="props.required"
+    />
     <span v-if="validator.$error">
       <span
         v-for="error in validator.$errors"
@@ -49,28 +58,16 @@
         {{ error.$message }}
       </span>
     </span>
-
-    <select 
+    <input
       :id="name"
-      class="usa-select"
+      class="usa-input usa-input"
+      :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
       :name="name"
       :value="modelValue"
+      :aria-describedby="validator.$error? error_id: null"
+      :readonly="readonly"
+      :required="props.required"
       @input="$emit('update:modelValue', $event.target.value)"
     >
-      <option
-        disabled
-        value=""
-        selected
-      >
-        - Select -
-      </option>
-      <option
-        v-for="option in options"
-        :key="option.id"
-        :value="option.id"
-      >
-        {{ option.name }}
-      </option>
-    </select>
-  </div>
+  </div>    
 </template>

@@ -304,11 +304,11 @@ describe('Loginless', () => {
 
     const options = wrapper.findAll('option')
 
-    expect(options.length).toBe(4)  
-    expect(options[1].text()).toBe('General Services Administration')
-    expect(options[1].element.value).toBe('1')
-    expect(options[2].text()).toBe('Department of the Treasury')
-    expect(options[2].element.value).toBe('2')
+    expect(options.length).toBe(3)  
+    expect(options[0].text()).toBe('General Services Administration')
+    expect(options[0].element.value).toBe('1')
+    expect(options[1].text()).toBe('Department of the Treasury')
+    expect(options[1].element.value).toBe('2')
   })
 
   it('does not show bureau select when agency has none', async () => {
@@ -341,11 +341,11 @@ describe('Loginless', () => {
     const bureau_select = await wrapper.get('[name="bureau"]')
     const options = bureau_select.findAll('option')
 
-    expect(options.length).toBe(3)  
-    expect(options[1].text()).toBe('United States Mint')
-    expect(options[1].element.value).toBe('3')
-    expect(options[2].text()).toBe('Financial Crimes Enforcement')
-    expect(options[2].element.value).toBe('4')
+    expect(options.length).toBe(2)  
+    expect(options[0].text()).toBe('United States Mint')
+    expect(options[0].element.value).toBe('3')
+    expect(options[1].text()).toBe('Financial Crimes Enforcement')
+    expect(options[1].element.value).toBe('4')
   })
 
   it('sets uses the bureau when selected', async () => {

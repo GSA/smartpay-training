@@ -20,5 +20,5 @@ export const bureauList = computed(
   selectedAgencyId, 
   id => !id
     ? [] 
-    : agencyList.get().find(agency => agency.id == id ).bureaus 
+    : agencyList.get().find(agency => agency.id == id )?.bureaus 
   )

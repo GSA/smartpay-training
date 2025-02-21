@@ -13,13 +13,16 @@ export function processLinksPlugin() {
         let domain;
         try {
           domain = new URL(properties.href)
-        } catch(e) {
+        } catch {
           // Exceptions will be raised with relative links
           // these will all be local, so ignore
           return
         }
-
-        if (!(domain.hostname === 'gsa.gov' || domain.hostname === 'www.gsa.gov'|| domain.protocol === 'mailto:')) {
+        const internalHost = [
+          'gsa.gov',
+          'www.gsa.gov'
+        ]
+        if (!(internalHost.includes(domain.hostname) || domain.protocol === 'mailto:')) {
           properties.className += ' usa-link--external'
         }
 

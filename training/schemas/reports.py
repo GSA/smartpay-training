@@ -3,7 +3,30 @@ from pydantic import BaseModel, ConfigDict
 from training.schemas.user import UserBase
 
 
-class UserQuizCompletionReportData(UserBase):
+class UserQuizCompletionReportData(BaseModel):
+    name: str
+    email: str
+    agency: str
+    bureau: str | None = None
+    quiz: str
+    completion_date: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+    # Add a custom constructor that accepts positional arguments
+    def __init__(self, name, email, agency, bureau, quiz, completion_date, **kwargs):
+        # Use the super() to call the BaseModel's __init__ with the correct keyword arguments
+        super().__init__(
+            name=name,
+            email=email,
+            agency=agency,
+            bureau=bureau,
+            quiz=quiz,
+            completion_date=completion_date,
+            **kwargs
+        )
+
+
+class AdminUserQuizCompletionReportData(UserBase):
     agency: str
     bureau: str | None = None
     quiz: str

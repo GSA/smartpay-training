@@ -1,8 +1,11 @@
 from typing import List
+from unittest.mock import patch
 import pytest
 from training import models, schemas
 from training.repositories import UserRepository, AgencyRepository
 from datetime import datetime, timedelta
+from training.schemas import Agency, AgencyCreate
+from training.tests.factories import UserSchemaFactory
 
 
 def test_create(user_repo_empty: UserRepository, agency_repo_with_data: AgencyRepository):
@@ -157,3 +160,112 @@ def test_update_user_invalid_user(user_repo_with_data: UserRepository):
 
     with pytest.raises(Exception):
         user_repo_with_data.update_user(invalid_user_id, updated_user, "test_user")
+
+
+def test_get_admin_smartpay_training_report_no_filters(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data without any filters applied.
+    """
+    report_filter = schemas.SmartPayTrainingReportFilter()
+    results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
+    assert len(results) > 0  # Check that we get results back
+    assert all(isinstance(result, schemas.UserQuizCompletionReportData) for result in results)  # Verify type
+
+
+def test_get_admin_smartpay_training_report_filter_by_date_range(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data with completion date range filter.
+    """
+    start_date = datetime(2023, 1, 1)
+    end_date = datetime(2024, 12, 31)
+    report_filter = schemas.SmartPayTrainingReportFilter(completion_date_start=start_date, completion_date_end=end_date)
+    results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
+
+    assert len(results) > 0
+    for result in results:
+        assert start_date <= result.completion_date <= end_date
+
+
+def test_get_admin_smartpay_training_report_filter_by_quiz_name(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data by filtering with specific quiz names.
+    """
+    quiz_names = ["Travel Training for Ministry of Magic"]
+    report_filter = schemas.SmartPayTrainingReportFilter(quiz_names=quiz_names)
+    results = user_repo_with_data.get_admin_smartpay_training_report(report_filter)
+
+    assert len(results) > 0
+    assert all(result.quiz in quiz_names for result in results)
+
+
+def test_get_smartpay_training_report_no_filters(user_repo_with_data: UserRepository, agency_repo_with_data: AgencyRepository):
+    """
+    Test fetching report data without any filters applied.
+    """
+    valid_agency = agency_repo_with_data.find_by_name(AgencyCreate(name="Department of Mysteries"))
+    mock_user = UserSchemaFactory.build(roles=[])
+    agency = Agency(id=valid_agency.id, name=valid_agency.name)
+    mock_user.report_agencies.append(agency)
+
+    # Mock the repo and RequireRole dependencies
+    with patch('training.repositories.UserRepository.find_by_id', return_value=mock_user):
+
+        report_filter = schemas.SmartPayTrainingReportFilter()
+        results = user_repo_with_data.get_user_quiz_completion_report(report_filter, 1)
+        assert len(results) > 0  # Check that we get results back
+        assert all(isinstance(result, schemas.UserQuizCompletionReportData) for result in results)  # Verify type
+
+
+def test_get_smartpay_training_report_with_filter_by_quiz_name(user_repo_with_data: UserRepository, agency_repo_with_data: AgencyRepository):
+    """
+    Test fetching report data with filters applied.
+    """
+    valid_agency = agency_repo_with_data.find_by_name(AgencyCreate(name="Department of Mysteries"))
+    mock_user = UserSchemaFactory.build(roles=[])
+    agency = Agency(id=valid_agency.id, name=valid_agency.name)
+    mock_user.report_agencies.append(agency)
+
+    # Mock the repo and RequireRole dependencies
+    with patch('training.repositories.UserRepository.find_by_id', return_value=mock_user):
+
+        quiz_names = ["Travel Training for Ministry of Magic"]
+        report_filter = schemas.SmartPayTrainingReportFilter(quiz_names=quiz_names)
+        results = user_repo_with_data.get_user_quiz_completion_report(report_filter, 1)
+        assert len(results) > 0  # Check that we get results back
+        assert all(result.quiz in quiz_names for result in results)
+
+
+def test_get_smartpay_training_report_with_filter_by_date_range(user_repo_with_data: UserRepository, agency_repo_with_data: AgencyRepository):
+    """
+    Test fetching report data with filters applied.
+    """
+    valid_agency = agency_repo_with_data.find_by_name(AgencyCreate(name="Department of Mysteries"))
+    mock_user = UserSchemaFactory.build(roles=[])
+    agency = Agency(id=valid_agency.id, name=valid_agency.name)
+    mock_user.report_agencies.append(agency)
+
+    # Mock the repo and RequireRole dependencies
+    with patch('training.repositories.UserRepository.find_by_id', return_value=mock_user):
+
+        start_date = datetime(2023, 1, 1)
+        end_date = datetime(2024, 12, 31)
+        report_filter = schemas.SmartPayTrainingReportFilter(completion_date_start=start_date, completion_date_end=end_date)
+        results = user_repo_with_data.get_user_quiz_completion_report(report_filter, 1)
+        assert len(results) > 0  # Check that we get results back
+        for result in results:
+            assert start_date <= result.completion_date <= end_date
+
+
+def test_get_smartpay_training_report_with_no_report_agencies(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data with no reporting agency for user
+    """
+    mock_user = UserSchemaFactory.build(roles=[])
+    mock_user.report_agencies = []
+
+    # Mock the repo and RequireRole dependencies
+    with patch('training.repositories.UserRepository.find_by_id', return_value=mock_user):
+
+        report_filter = schemas.SmartPayTrainingReportFilter()
+        with pytest.raises(Exception):
+            user_repo_with_data.get_user_quiz_completion_report(report_filter, 1)

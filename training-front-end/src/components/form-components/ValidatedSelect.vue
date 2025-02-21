@@ -1,43 +1,51 @@
 <script setup>
   import {computed} from 'vue'
+  import FormLabel from "./FormLabel.vue"
+  
   const props = defineProps({
-    'modelValue': {
+    'label': {
       type: String,
-      required: true,
-      default: undefined
-    },
-    'validator': {
-      type: Object,
       required: true
+    },
+    'modelValue': {
+      type: [String, Number],
+      required: false,
+      default: undefined
     },
     'name': {
       type: String,
       required: true
     },
-    'label': {
-      type: String,
+    'options': {
+      type: Array,
       required: true
     },
-    'readonly': {
+    'required': {
       type: Boolean,
       required: false,
       default: false
-    }
+    },
+    'validator': {
+      type: Object,
+      required: true
+    },
   })
-
+  
   defineEmits(['update:modelValue'])
+
   var error_id = computed(() => props.name + '-input-error-message')
 </script>
-
 <template>
   <div
     class="usa-form-group"
     :class="{ 'usa-form-group--error':validator.$error}"
   >
-    <label
-      class="usa-label"
-      :for="name"
-    >{{ label }} <span class="text-secondary-dark">(*Required)</span></label>
+    <FormLabel
+      :id="`${name}-label`"
+      :for="`${name}`"
+      :value="`${ props.label }`"
+      :required="props.required"
+    />
     <span v-if="validator.$error">
       <span
         v-for="error in validator.$errors"
@@ -49,16 +57,28 @@
         {{ error.$message }}
       </span>
     </span>
-    <textarea
+
+    <select 
       :id="name"
-      :value="modelValue"
-      class="usa-textarea tablet:grid-col-12"
-      :class="{ 'usa-input--error':validator.$error, 'error-focus': validator.$error }"
+      class="usa-select"
       :name="name"
-      :aria-describedby="validator.$error? error_id: null"
-      :readonly="readonly"
-      rows="10"
+      :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-    />
-  </div>    
+    >
+      <option
+        :disabled="required ? '' : disabled"
+        value=""
+        selected
+      >
+        - Select -
+      </option>
+      <option
+        v-for="option in options"
+        :key="option.id"
+        :value="option.id"
+      >
+        {{ option.name }}
+      </option>
+    </select>
+  </div>
 </template>

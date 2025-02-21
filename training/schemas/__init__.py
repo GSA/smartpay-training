@@ -18,3 +18,4 @@ from .user_x_role import UserXRole
 from .report_user_x_agency import ReportUserXAgency
 from .role import Role, RoleCreate
 from .reports import UserQuizCompletionReportData, GspcCompletionReportData
+from .smartpay_training_report_filter import SmartPayTrainingReportFilter

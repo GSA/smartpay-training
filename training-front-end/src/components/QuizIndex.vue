@@ -50,7 +50,7 @@
         method: 'GET', 
         headers: {'Authorization': `Bearer ${user.value.jwt}`}
       })
-    } catch(e) {
+    } catch {
       const err = new Error("Sorry, a server error was encountered.")
       err.name = "Server Error!"
       setError(err)
@@ -105,7 +105,7 @@
         },
         body:  JSON.stringify( {'responses': user_answers}) 
       })
-    } catch(e) {
+    } catch {
       const err = new Error("There was a problem connecting with the server")
       err.name = "Server Error"
       setError(err)
@@ -147,7 +147,7 @@
         <div class="tablet:grid-col-12">
           <USWDSAlert
             v-if="error"
-            class="tablet:grid-col-8"
+            class="tablet:grid-col-12"
             status="error"
             :heading="error.name"
           >

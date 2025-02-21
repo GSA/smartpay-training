@@ -1,8 +1,8 @@
 <script setup>
   import { ref, reactive } from 'vue';
   import USWDSAlert from './USWDSAlert.vue'
-  import ValidatedTextArea from './ValidatedTextArea.vue';
-  import ValidatedDatePicker from './ValidatedDatepicker.vue';
+  import ValidatedTextArea from './form-components/ValidatedTextArea.vue';
+  import ValidatedMemorableDatepicker from './form-components/ValidatedMemorableDatepicker.vue';
   import { useVuelidate } from '@vuelidate/core';
   import { required, helpers } from '@vuelidate/validators';
   import SpinnerGraphic from './SpinnerGraphic.vue'
@@ -115,7 +115,7 @@
       showSpinner.value = false
       emit('endLoading')
     
-    } catch (err) {
+    } catch {
       isLoading.value = false
       showSpinner.value = false
       const e = new Error("Sorry, we had an error connecting to the server.")
@@ -147,14 +147,16 @@
         :validator="v_all_info$.emailAddresses"
         label="Email Addresses of GSA SmartPay Forum Attendees"
         name="email-list"
+        :required="true"
       />
-      <ValidatedDatePicker
+      <ValidatedMemorableDatepicker
         v-model="user_input.certificationExpirationDate"
         client:load
         :validator="v_all_info$.certificationExpirationDate"
         label="Certification Expiration Date"
         name="certification-expiration-date"
         hint-text="For example: January 19 2000"
+        :required="true"
       />
       <div>
         <USWDSAlert

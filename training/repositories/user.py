@@ -1,9 +1,10 @@
 from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
-from training.schemas import UserQuizCompletionReportData, UserSearchResult
+from training.schemas import UserQuizCompletionReportData, UserSearchResult, SmartPayTrainingReportFilter
 from .base import BaseRepository
 from datetime import datetime
+from collections import namedtuple
 
 
 class UserRepository(BaseRepository[models.User]):
@@ -53,21 +54,134 @@ class UserRepository(BaseRepository[models.User]):
         self._session.commit()
         return db_user
 
-    def get_user_quiz_completion_report(self, report_user_id: int) -> list[UserQuizCompletionReportData]:
+    def get_user_quiz_completion_report(self, filter: SmartPayTrainingReportFilter, report_user_id: int) -> list[UserQuizCompletionReportData]:
+        report_data = namedtuple("ReportData", ["name", "email", "agency", "bureau", "quiz", "completion_date"])
         report_user = self.find_by_id(report_user_id)
+
+        # Build the query
+        query = (
+            self._session.query(
+                models.User.name,
+                models.User.email,
+                models.Agency.name,
+                models.Agency.bureau,
+                models.Quiz.name,
+                models.QuizCompletion.submit_ts
+            )
+            .select_from(models.User)
+            .join(models.Agency)
+            .join(models.QuizCompletion)
+            .join(models.Quiz)
+            .filter(models.QuizCompletion.passed)
+        )
+
         if report_user and report_user.report_agencies:
-            allowed_agency_ids = [obj.id for obj in report_user.report_agencies]
-            results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"),
-                                           models.Agency.name.label("agency"), models.Agency.bureau.label("bureau"),
-                                           models.Quiz.name.label("quiz"), models.QuizCompletion.submit_ts.label("completion_date"))
-                       .select_from(models.User)
-                       .join(models.Agency)
-                       .join(models.QuizCompletion)
-                       .join(models.Quiz).filter(models.QuizCompletion.passed, models.User.agency_id.in_(allowed_agency_ids))
-                       .order_by(models.Agency.name.asc(), nullsfirst(models.Agency.bureau.asc()), models.QuizCompletion.submit_ts.desc()).all())
-            return results
+            # Dynamically add filters based on the properties of the SmartPayTrainingReportFilter
+            if filter.bureau_id is not None:
+                query = query.filter(models.User.agency_id == filter.bureau_id)
+            elif filter.agency_id is not None:
+                # if agency is selected and not the bureau, return all records associated to agency/bureau the user has access to
+                all_agencies = self._session.query(models.Agency).all()
+                selected_agency = [agency for agency in all_agencies if agency.id == filter.agency_id][0]
+                selected_agency_bureaus_ids = [agency.id for agency in all_agencies if agency.name == selected_agency.name]
+                allowed_agency_ids = [obj.id for obj in report_user.report_agencies]
+                filter_agencies = [x for x in allowed_agency_ids if x in selected_agency_bureaus_ids]
+                query = query.filter(models.User.agency_id.in_(filter_agencies))
+            else:
+                allowed_agency_ids = [obj.id for obj in report_user.report_agencies]
+                query = query.filter(models.User.agency_id.in_(allowed_agency_ids))
+
+            if filter.completion_date_start is not None:
+                query = query.filter(models.QuizCompletion.submit_ts >= filter.completion_date_start)
+
+            if filter.completion_date_end is not None:
+                query = query.filter(models.QuizCompletion.submit_ts <= filter.completion_date_end)
+
+            if filter.quiz_names:
+                query = query.filter(models.Quiz.name.in_(filter.quiz_names))
+
+            raw_results = query.order_by(
+                models.Agency.name.asc(),
+                nullsfirst(models.Agency.bureau.asc()),
+                models.QuizCompletion.submit_ts.desc()
+            ).all()
+
+            # Map the results to the Pydantic model using the `ReportData` namedtuple
+            result = [
+                UserQuizCompletionReportData(
+                    name=row.name,
+                    email=row.email,
+                    agency=row.agency,
+                    bureau=row.bureau,
+                    quiz=row.quiz,
+                    completion_date=row.completion_date
+                )
+                for row in map(report_data._make, raw_results)
+            ]
+
+            return result
         else:
             raise ValueError("Invalid Report User")
+
+    def get_admin_smartpay_training_report(self, filter: SmartPayTrainingReportFilter) -> list[UserQuizCompletionReportData]:
+        report_data = namedtuple("ReportData", ["name", "email", "agency", "bureau", "quiz", "completion_date"])
+
+        # Build the query
+        query = (
+            self._session.query(
+                models.User.name,
+                models.User.email,
+                models.Agency.name,
+                models.Agency.bureau,
+                models.Quiz.name,
+                models.QuizCompletion.submit_ts
+            )
+            .select_from(models.User)
+            .join(models.Agency)
+            .join(models.QuizCompletion)
+            .join(models.Quiz)
+            .filter(models.QuizCompletion.passed)
+        )
+
+        # Dynamically add filters based on the properties of the SmartPayTrainingReportFilter
+        if filter.bureau_id is not None:
+            query = query.filter(models.User.agency_id == filter.bureau_id)
+        elif filter.agency_id is not None:
+            # if agency is selected and not the bureau, return all records associated to agency/bureau
+            all_agencies = self._session.query(models.Agency).all()
+            selected_agency = [agency for agency in all_agencies if agency.id == filter.agency_id][0]
+            selected_agency_bureaus_ids = [agency.id for agency in all_agencies if agency.name == selected_agency.name]
+            query = query.filter(models.User.agency_id.in_(selected_agency_bureaus_ids))
+
+        if filter.completion_date_start is not None:
+            query = query.filter(models.QuizCompletion.submit_ts >= filter.completion_date_start)
+
+        if filter.completion_date_end is not None:
+            query = query.filter(models.QuizCompletion.submit_ts <= filter.completion_date_end)
+
+        if filter.quiz_names:
+            query = query.filter(models.Quiz.name.in_(filter.quiz_names))
+
+        raw_results = query.order_by(
+            models.Agency.name.asc(),
+            nullsfirst(models.Agency.bureau.asc()),
+            models.QuizCompletion.submit_ts.desc()
+        ).all()
+
+        # Map the results to the Pydantic model using the `ReportData` namedtuple
+        result = [
+            UserQuizCompletionReportData(
+                name=row.name,
+                email=row.email,
+                agency=row.agency,
+                bureau=row.bureau,
+                quiz=row.quiz,
+                completion_date=row.completion_date
+            )
+            for row in map(report_data._make, raw_results)
+        ]
+
+        return result
 
     def get_users(self, searchText: str, page_number: int) -> UserSearchResult:
         # current UI only support search by user name and email. The search field it is required field.
