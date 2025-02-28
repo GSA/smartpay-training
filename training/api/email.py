@@ -118,7 +118,7 @@ class InviteTuple(NamedTuple):
 
 
 def send_gspc_invite_emails(invites: list[InviteTuple]) -> None:
-    logging.info(f"Starting gspc invite job, number of invites:{invites.count}")
+    logging.info(f"Starting gspc invite job, number of invites:{len(invites)}")
     email_messages = [create_email_message(invite) for invite in invites]
     send_emails_in_batches(email_messages=email_messages, batch_size=10)
     logging.info("Finished gspc invite job")
@@ -155,7 +155,10 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) 
             try:
                 with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT, timeout=30) as smtp:
                     smtp.starttls()
-                    smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
+                    if settings.SMTP_USER and settings.SMTP_PASSWORD:
+                        smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
+
+                    logging.info(f"Sending emails with account: {str(settings.SMTP_USER)}")
 
                     # Send messages in current batch
                     for message in batch:
@@ -163,7 +166,7 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) 
                             smtp.send_message(message)
                         except Exception as e:
                             # Log the error but continue with remaining messages
-                            print(f"Failed to send email to {message['To']}: {str(e)}")
+                            logging.error(f"Failed to send email to {message['To']}: {str(e)}")
                     smtp.quit()
 
             except Exception as e:
@@ -173,4 +176,5 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) 
                     time.sleep(sleep_time)
                 else:
                     # Log the error after all retries failed
-                    print(f"Failed to send batch after {max_retries} attempts: {str(e)}")
+                    logging.error(f"Failed to send batch after {max_retries} attempts: {str(e)}")
+
