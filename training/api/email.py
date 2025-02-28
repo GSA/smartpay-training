@@ -118,10 +118,20 @@ class InviteTuple(NamedTuple):
 
 
 def send_gspc_invite_emails(invites: list[InviteTuple], app_settings: Settings) -> None:
+    """Background task designed to do a bulk send of GSPC invite emails"""
+    # Start timer to track how long the job takes
+    start_time = time.time()
     logging.info(f"Starting gspc invite job, number of invites:{len(invites)}")
+
     email_messages = [create_email_message(invite, app_settings) for invite in invites]
-    send_emails_in_batches(email_messages=email_messages, batch_size=10, app_settings=app_settings)
-    logging.info("Finished gspc invite job")
+    send_emails_in_batches(email_messages=email_messages, batch_size=25, app_settings=app_settings)
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    # Format time as minutes and seconds for better readability
+    minutes = int(execution_time // 60)
+    seconds = int(execution_time % 60)
+    logging.info(f"Finished gspc invite job. Total execution time: {minutes} minutes and {seconds} seconds for {len(invites)} emails")
 
 
 def create_email_message(invite: InviteTuple, app_settings: Settings) -> EmailMessage:
@@ -149,8 +159,10 @@ def batch_iterator(items: List, batch_size: int) -> Iterator:
 
 
 def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int, app_settings: Settings) -> None:
+    """Chunks the list into batches and attempts to send each back of emails."""
     for batch in batch_iterator(email_messages, batch_size):
         max_retries = 3
+        # Attempt to trigger email batch, retries on failure
         for attempt in range(max_retries):
             try:
                 with SMTP(app_settings.SMTP_SERVER, port=app_settings.SMTP_PORT, timeout=30) as smtp:
@@ -158,22 +170,18 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int, 
                     if app_settings.SMTP_USER and app_settings.SMTP_PASSWORD:
                         smtp.login(user=app_settings.SMTP_USER, password=app_settings.SMTP_PASSWORD)
 
-                    logging.info(f"Sending emails with account: {str(app_settings.SMTP_PASSWORD)}")
-
                     # Send messages in current batch
                     for message in batch:
-                        try:
-                            smtp.send_message(message)
-                        except Exception as e:
-                            # Log the error but continue with remaining messages
-                            logging.error(f"Failed to send email to {message['To']}: {str(e)}")
+                        smtp.send_message(message)
                     smtp.quit()
-
+                break  # Exit retry loop if successful
             except Exception as e:
                 if attempt < max_retries - 1:
-                    # Wait with exponential backoff: 2, 4, 8 seconds...
-                    sleep_time = 2 ** attempt
+                    # Wait with backoff: 1, 2, 4 seconds...
+                    sleep_time = 1 * (attempt + 1)
                     time.sleep(sleep_time)
+                # Log the error after all retries failed
                 else:
-                    # Log the error after all retries failed
-                    logging.error(f"Failed to send batch after {max_retries} attempts: {str(e)}")
+                    # Extract all email addresses from the batch and join them with commas
+                    addresses_list = ", ".join([message['To'] for message in batch])
+                    logging.error(f"Failed to send batch after {max_retries} attempts: {str(e)}. Addresses: {addresses_list}")
