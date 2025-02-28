@@ -7,7 +7,7 @@ from pydantic import EmailStr
 from smtplib import SMTP
 from email.message import EmailMessage
 
-from training.config import settings
+from training.config import settings, Settings
 from training.errors import SendEmailError
 import time
 
@@ -117,23 +117,23 @@ class InviteTuple(NamedTuple):
     email: str
 
 
-def send_gspc_invite_emails(invites: list[InviteTuple]) -> None:
+def send_gspc_invite_emails(invites: list[InviteTuple], app_settings: Settings) -> None:
     logging.info(f"Starting gspc invite job, number of invites:{len(invites)}")
-    email_messages = [create_email_message(invite) for invite in invites]
-    send_emails_in_batches(email_messages=email_messages, batch_size=10)
+    email_messages = [create_email_message(invite, app_settings) for invite in invites]
+    send_emails_in_batches(email_messages=email_messages, batch_size=10, app_settings=app_settings)
     logging.info("Finished gspc invite job")
 
 
-def create_email_message(invite: InviteTuple) -> EmailMessage:
+def create_email_message(invite: InviteTuple, app_settings: Settings) -> EmailMessage:
     """Create an EmailMessage object for a given invite."""
-    
-    link = f"{settings.BASE_URL}/gspc_registration/?gspcInviteId={invite.gspc_invite_id}"
+
+    link = f"{app_settings.BASE_URL}/gspc_registration/?gspcInviteId={invite.gspc_invite_id}"
     body = GSPC_INVITE_EMAIL_TEMPLATE.substitute({"link": link})
 
     message = EmailMessage()
     message.set_content(body, subtype="html")
     message["Subject"] = "Verify your GSA SmartPay Program Certification (GSPC) Coursework and Experience"
-    message["From"] = f"{settings.EMAIL_FROM_NAME} <{settings.EMAIL_FROM}>"
+    message["From"] = f"{app_settings.EMAIL_FROM_NAME} <{app_settings.EMAIL_FROM}>"
     message["To"] = invite.email
 
     return message
@@ -148,17 +148,17 @@ def batch_iterator(items: List, batch_size: int) -> Iterator:
         batch = list(islice(iterator, batch_size))
 
 
-def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) -> None:
+def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int, app_settings: Settings) -> None:
     for batch in batch_iterator(email_messages, batch_size):
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                with SMTP(settings.SMTP_SERVER, port=settings.SMTP_PORT, timeout=30) as smtp:
+                with SMTP(app_settings.SMTP_SERVER, port=app_settings.SMTP_PORT, timeout=30) as smtp:
                     smtp.starttls()
-                    if settings.SMTP_USER and settings.SMTP_PASSWORD:
-                        smtp.login(user=settings.SMTP_USER, password=settings.SMTP_PASSWORD)
+                    if app_settings.SMTP_USER and app_settings.SMTP_PASSWORD:
+                        smtp.login(user=app_settings.SMTP_USER, password=app_settings.SMTP_PASSWORD)
 
-                    logging.info(f"Sending emails with account: {str(settings.SMTP_USER)}")
+                    logging.info(f"Sending emails with account: {str(app_settings.SMTP_PASSWORD)}")
 
                     # Send messages in current batch
                     for message in batch:
@@ -177,4 +177,3 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int) 
                 else:
                     # Log the error after all retries failed
                     logging.error(f"Failed to send batch after {max_retries} attempts: {str(e)}")
-

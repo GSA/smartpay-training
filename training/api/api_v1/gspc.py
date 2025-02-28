@@ -1,6 +1,4 @@
-from dataclasses import asdict
 from typing import Any
-import logging
 import csv
 from io import StringIO
 from fastapi import APIRouter, status, HTTPException, Response, Depends
@@ -12,6 +10,7 @@ from training.api.email import InviteTuple, send_gspc_invite_emails
 from training.api.auth import RequireRole
 from training.api.auth import JWTUser
 from fastapi import BackgroundTasks
+from training.config import settings
 
 
 router = APIRouter()
@@ -38,7 +37,8 @@ async def gspc_admin_invite(
         entities_data = [InviteTuple(entity.gspc_invite_id, entity.email) for entity in entities]
 
         # Add email sending to background tasks
-        background_tasks.add_task(send_gspc_invite_emails, invites=entities_data)
+        # note: passing in settings as the task looses the current app context once triggered
+        background_tasks.add_task(send_gspc_invite_emails, invites=entities_data, app_settings=settings)
 
         # Return object with both list for success and failure messages
         return gspcInvite
