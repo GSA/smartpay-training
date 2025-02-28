@@ -173,7 +173,7 @@
           class="usa-alert--slim"
           :has-heading="false"
         >
-          Emails successfully sent to {{ successCount }} people.
+          Emails sending to {{ successCount }} people.
         </USWDSAlert>
       </div>
       <div class="grid-row grid-gap margin-top-3">
