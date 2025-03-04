@@ -1,7 +1,7 @@
 from sqlalchemy import nullsfirst, or_
 from sqlalchemy.orm import Session
 from training import models, schemas
-from training.schemas import UserQuizCompletionReportData, UserSearchResult, SmartPayTrainingReportFilter
+from training.schemas import UserQuizCompletionReportData, UserSearchResult, SmartPayTrainingReportFilter, AdminUsersRolesReportData
 from .base import BaseRepository
 from datetime import datetime
 from collections import namedtuple
@@ -210,3 +210,14 @@ class UserRepository(BaseRepository[models.User]):
         db_user.modified_on = datetime.now()
         self._session.commit()
         return db_user
+
+    def get_admin_user_roles_report_data(self) -> list[AdminUsersRolesReportData]:
+        """
+         Retrieves users and roles report data
+         :return: List of AdminUsersRolesReportData
+        """
+        results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"),
+                                       'Y', 'Y')
+                   .select_from(models.User)).all()
+        return results
+    
