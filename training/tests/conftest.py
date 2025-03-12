@@ -13,6 +13,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import (AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository,
                                    CertificateRepository, RoleRepository, GspcCompletionRepository)
+from training.repositories.gspc_invite import GspcInviteRepository
 from training.schemas import AgencyCreate, RoleCreate, UserCertificate, GspcCertificate
 from training.services import QuizService
 from training.config import settings
@@ -367,6 +368,22 @@ def gspc_completion_repo_with_data(db_with_data: Session) -> Generator[GspcCompl
 
 
 @pytest.fixture
+def gspc_invite_repo_with_data(db_with_data: Session) -> Generator[GspcInviteRepository, None, None]:
+    '''
+    Provides a GspcInviteRepository injected with a populated database.
+    '''
+    yield GspcInviteRepository(session=db_with_data)
+
+
+@pytest.fixture
+def gspc_invite_repo_without_data(db: Session) -> Generator[GspcInviteRepository, None, None]:
+    '''
+    Provides a GspcInviteRepository injected with a populated database.
+    '''
+    yield GspcInviteRepository(session=db)
+
+
+@pytest.fixture
 def valid_gspc_certificate() -> Generator[schemas.GspcCertificate, None, None]:
     '''
     Provides a GspcCertificate schema object.
@@ -379,6 +396,8 @@ def valid_gspc_certificate() -> Generator[schemas.GspcCertificate, None, None]:
         'completion_date': '2023-08-21T22:59:36'
     }
     yield GspcCertificate.model_validate(testdata)
+
+
 
 
 @pytest.fixture

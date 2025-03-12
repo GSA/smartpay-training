@@ -53,6 +53,9 @@ class GspcService():
             gspc_invite_id=gspc_invite.gspc_invite_id
         ))
 
+        # mark invite as completed pass or fail
+        self.gspc_invite_repo.set_completion_date(gspc_invite.id)
+
         if (passed):
             try:
                 user = self.user_repo.find_by_id(user_id)
@@ -64,9 +67,7 @@ class GspcService():
                 )
 
                 self.email_certificate(user.name, user.email, pdf_bytes)
-                logging.info(f"Sent confirmation email to {user.email} for passing training quiz")
-
-                self.gspc_invite_repo.set_completion_date(gspc_invite.id)
+                logging.info(f"Sent confirmation email to {user.email} for passing training quiz") 
             except Exception as e:
                 logging.error("Error sending quiz confirmation mail", e)
                 raise
