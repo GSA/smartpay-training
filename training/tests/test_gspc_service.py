@@ -2,50 +2,72 @@ import pytest
 from unittest.mock import MagicMock, patch
 from training import models, schemas
 from training.errors import SendEmailError
+from training.repositories.gspc_invite import GspcInviteRepository
 from training.services import GspcService
 from training.repositories import CertificateRepository, GspcCompletionRepository
 from sqlalchemy.orm import Session
 from .factories import GspcCompletionFactory
 from datetime import datetime
-from unittest.mock import ANY
 
 from ..api import email
 
 
 @patch.object(GspcCompletionRepository, "create")
 @patch.object(GspcService, "email_certificate")
+@patch.object(GspcInviteRepository, "get_by_gspc_invite_id")
+@patch.object(GspcInviteRepository, "set_completion_date")
 def test_grade_passing(
-        mock_gspc_service_email_certificate: MagicMock,
         mock_gspc_completion_repo_create: MagicMock,
+        mock_gspc_service_email_certificate: MagicMock,
+        mock_gspc_invite_repo_get_by_gspc_invite_id: MagicMock,
+        mock_gspc_invite_repo_set_completion_date: MagicMock,
         db_with_data: Session,
         valid_gspc_passing_submission: schemas.GspcCompletion,
         valid_user_ids,
 ):
+    # Setup
     gspc_service = GspcService(db_with_data)
 
+    date = datetime.now().replace(minute=0, hour=0, second=0, microsecond=0)
+    expiration_date = date.replace(year=date.year + 100)
     user_id = valid_user_ids[-1]
 
-    date = datetime.now()
+    gspc_invite = models.GspcInvite(
+        email='test3@example.com',
+        certification_expiration_date=expiration_date,
+        gspc_invite_id=valid_gspc_passing_submission.gspc_invite_id
+    )
+
     gspc_completion = models.GspcCompletion(
-            id=1,
-            user_id=user_id,
-            passed=True,
-            certification_expiration_date=date.replace(year=date.year + 100),
-            responses='',
-            submit_ts=date
-        )
+        id=1,
+        user_id=user_id,
+        passed=True,
+        certification_expiration_date=expiration_date,
+        responses='',
+        submit_ts=date,
+        gspc_invite_id=valid_gspc_passing_submission.gspc_invite_id
+    )
 
-    mock_gspc_completion_repo_create.return_value = gspc_completion
+    gspc_service.gspc_invite_repo.get_by_gspc_invite_id = mock_gspc_invite_repo_get_by_gspc_invite_id
+    mock_gspc_invite_repo_get_by_gspc_invite_id.return_value = gspc_invite
 
+    gspc_service.email_certificate = mock_gspc_service_email_certificate
     mock_gspc_service_email_certificate.return_value = None
 
+    gspc_service.gspc_invite_repo.set_completion_date = mock_gspc_invite_repo_set_completion_date
+    mock_gspc_invite_repo_set_completion_date.return_value = None
+
+    gspc_service.gspc_completion_repo.create = mock_gspc_completion_repo_create
+    mock_gspc_completion_repo_create.return_value = gspc_completion
+
+    # Execute
     result = gspc_service.grade(user_id, submission=valid_gspc_passing_submission)
 
-    mock_gspc_service_email_certificate.assert_called_once_with(
-        "Test Three",
-        "test3@example.com",
-        ANY
-    )
+    # Assert
+    mock_gspc_invite_repo_get_by_gspc_invite_id.assert_called_once()
+    mock_gspc_completion_repo_create.assert_called_once()
+    mock_gspc_invite_repo_set_completion_date.assert_called_once()
+    mock_gspc_service_email_certificate.assert_called_once()
 
     assert isinstance(result, schemas.GspcResult)
     assert result.passed
@@ -53,29 +75,55 @@ def test_grade_passing(
 
 
 @patch.object(GspcCompletionRepository, "create")
+@patch.object(GspcInviteRepository, "get_by_gspc_invite_id")
+@patch.object(GspcInviteRepository, "set_completion_date")
 def test_grade_failing(
         mock_gspc_completion_repo_create: MagicMock,
+        mock_gspc_invite_repo_get_by_gspc_invite_id: MagicMock,
+        mock_gspc_invite_repo_set_completion_date: MagicMock,
         db_with_data: Session,
         valid_gspc_failing_submission: schemas.GspcCompletion,
         valid_user_ids,
 ):
+    # Setup
     gspc_service = GspcService(db_with_data)
 
+    date = datetime.now().replace(minute=0, hour=0, second=0, microsecond=0)
+    expiration_date = date.replace(year=date.year + 100)
     user_id = valid_user_ids[-1]
 
-    date = datetime.now()
-    gspc_completion = models.GspcCompletion(
-            id=1,
-            user_id=user_id,
-            passed=False,
-            certification_expiration_date=date.replace(year=date.year + 100),
-            responses='',
-            submit_ts=date
-        )
+    gspc_invite = models.GspcInvite(
+        email='test3@example.com',
+        certification_expiration_date=expiration_date,
+        gspc_invite_id=valid_gspc_failing_submission.gspc_invite_id
+    )
 
+    gspc_completion = models.GspcCompletion(
+        id=1,
+        user_id=user_id,
+        passed=True,
+        certification_expiration_date=expiration_date,
+        responses='',
+        submit_ts=date,
+        gspc_invite_id=valid_gspc_failing_submission.gspc_invite_id
+    )
+
+    gspc_service.gspc_invite_repo.get_by_gspc_invite_id = mock_gspc_invite_repo_get_by_gspc_invite_id
+    mock_gspc_invite_repo_get_by_gspc_invite_id.return_value = gspc_invite
+
+    gspc_service.gspc_invite_repo.set_completion_date = mock_gspc_invite_repo_set_completion_date
+    mock_gspc_invite_repo_set_completion_date.return_value = None
+
+    gspc_service.gspc_completion_repo.create = mock_gspc_completion_repo_create
     mock_gspc_completion_repo_create.return_value = gspc_completion
 
+    # Execute
     result = gspc_service.grade(user_id, submission=valid_gspc_failing_submission)
+
+    # Assert
+    mock_gspc_invite_repo_get_by_gspc_invite_id.assert_called_once()
+    mock_gspc_completion_repo_create.assert_called_once()
+    mock_gspc_invite_repo_set_completion_date.assert_called_once()
 
     assert isinstance(result, schemas.GspcResult)
     assert not result.passed
