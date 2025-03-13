@@ -132,7 +132,7 @@ const userSearch = async function(searchText, currentPage){
     return await response.json()
   }
 
-  const sendGspcFollowUps = async function(emailAddresses, certificationExpirationDate){
+  const sendGspcFollowUps = async function(){
     const apiURL = new URL(`${gspc_api}send-follow-ups`)
     let response = await fetch(apiURL, {
         method: 'POST',

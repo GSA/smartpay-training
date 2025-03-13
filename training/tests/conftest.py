@@ -398,8 +398,6 @@ def valid_gspc_certificate() -> Generator[schemas.GspcCertificate, None, None]:
     yield GspcCertificate.model_validate(testdata)
 
 
-
-
 @pytest.fixture
 def valid_gspc_passing_submission(testdata: dict) -> Generator[schemas.GspcSubmission, None, None]:
     '''

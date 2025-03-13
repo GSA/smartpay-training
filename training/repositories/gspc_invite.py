@@ -2,7 +2,7 @@ from itertools import islice
 import logging
 from typing import Iterator, List
 import uuid
-from sqlalchemy import case, desc, nullslast
+from sqlalchemy import desc, nullslast
 from sqlalchemy.orm import Session
 from training import models
 from datetime import datetime, date, timedelta

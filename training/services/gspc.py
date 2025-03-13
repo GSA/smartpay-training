@@ -67,7 +67,7 @@ class GspcService():
                 )
 
                 self.email_certificate(user.name, user.email, pdf_bytes)
-                logging.info(f"Sent confirmation email to {user.email} for passing training quiz") 
+                logging.info(f"Sent confirmation email to {user.email} for passing training quiz")
             except Exception as e:
                 logging.error("Error sending quiz confirmation mail", e)
                 raise

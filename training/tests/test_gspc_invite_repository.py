@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta, date
 import uuid
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from training.repositories import GspcInviteRepository
-from sqlalchemy.orm import Session
 from training import models
 
 
@@ -23,7 +22,7 @@ def test_create(gspc_invite_repo_with_data: GspcInviteRepository):
     email = "test@example.gov"
     expiration_date = date(2099, 1, 1)
     result = gspc_invite_repo_with_data.create(email, expiration_date)
-    
+
     # Assert
     assert result.email == email
     assert result.certification_expiration_date == expiration_date
@@ -138,7 +137,7 @@ def test_get_invites_for_final_follow_up(gspc_invite_repo_without_data: GspcInvi
 
     # Create mock invites that match criteria
     mock_invites = [
-        # valid 
+        # valid
         models.GspcInvite(
             id=1,
             email="test1@example.gov",
@@ -148,7 +147,7 @@ def test_get_invites_for_final_follow_up(gspc_invite_repo_without_data: GspcInvi
             second_invite_date=current_time - timedelta(days=2),
             completed_date=None
         ),
-        # invalid hasnt had second invite
+        # invalid hasn't had second invite
         models.GspcInvite(
             id=2,
             email="test2@example.gov",
