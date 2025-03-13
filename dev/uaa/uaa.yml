@@ -37,7 +37,7 @@ scim:
   users:
     - paul|wombat|paul@uaa.test|Paul|Smith|openid
     - stefan|wallaby|stefan@uaa.test|Stefan|Schmidt|openid
-    
+
 oauth:
   user:
     authorities:
