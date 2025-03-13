@@ -58,7 +58,7 @@ GSPC_JOB_COMPLETION_TEMPLATE = Template('''
 <p>Hello,</p>
 
 <p>
-The GSPC Job has completed any failed emails are noted below. 
+The GSPC Job has completed any failed emails are noted below.
 </p>
 <p>
 $failures

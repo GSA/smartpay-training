@@ -1,12 +1,11 @@
-from datetime import datetime
 from typing import Any
 import csv
 from io import StringIO
 from fastapi import APIRouter, status, HTTPException, Response, Depends
 from training.schemas import GspcInvite, GspcResult, GspcSubmission
 from training.services import GspcService
-from training.repositories import GspcInviteRepository, GspcCompletionRepository
-from training.api.deps import gspc_invite_repository, gspc_completion_repository, gspc_service
+from training.repositories import GspcInviteRepository
+from training.api.deps import gspc_invite_repository, gspc_service
 from training.api.email import GspcEmailVersion, InviteTuple, send_gspc_invite_emails
 from training.api.auth import RequireRole
 from training.api.auth import JWTUser
@@ -45,7 +44,7 @@ async def gspc_admin_invite(
         return gspcInvite
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, 
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="emails or expiration date"
         )
 
@@ -101,7 +100,11 @@ def download_report_csv(
     writer = csv.writer(output)
 
     # header row
-    writer.writerow(['Invited Email', 'Unique Identifier', 'Invitation Sent Date and Time', 'Follow-up Email Sent Date and Time', 'Final Email Sent Date and Time', 'Registered Email', 'Name', 'Agency', 'Bureau', 'Passed', 'Registration Completion Date and Time'])
+    writer.writerow(['Invited Email', 'Unique Identifier', 'Invitation Sent Date and Time',
+                     'Follow-up Email Sent Date and Time', 'Final Email Sent Date and Time',
+                     'Registered Email', 'Name',
+                     'Agency', 'Bureau',
+                     'Passed', 'Registration Completion Date and Time'])
 
     dateStrFormat = "%m/%d/%Y %H:%M:%S"
     for item in results:
