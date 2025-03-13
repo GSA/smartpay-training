@@ -88,34 +88,32 @@ def test_get_invites_for_second_follow_up(gspc_invite_repo_without_data: GspcInv
     """Tests retrieving and updating invites eligible for second follow-up"""
     # Setup
     current_time = datetime.now()
+    certification_expiration_date = date(2099, 1, 1)
 
     # Create mock invites that match criteria
     mock_invites = [
         models.GspcInvite(
-            id=1,
             email="test1@example.gov",
             gspc_invite_id=uuid.uuid4(),
             created_date=current_time - timedelta(days=2),
-            certification_expiration_date=date(2099, 1, 1),
+            certification_expiration_date=certification_expiration_date,
             second_invite_date=None,
             completed_date=None
         ),
         models.GspcInvite(
-            id=2,
             email="test2@example.gov",
             gspc_invite_id=uuid.uuid4(),
             created_date=current_time - timedelta(days=3),
-            certification_expiration_date=date(2099, 1, 1),
+            certification_expiration_date=certification_expiration_date,
             second_invite_date=None,
             completed_date=None
         ),
         models.GspcInvite(
-            id=3,
             email="test1@example.gov",
             gspc_invite_id=uuid.uuid4(),
             created_date=current_time - timedelta(days=10),
             second_invite_date=current_time - timedelta(days=2),
-            certification_expiration_date=date(2099, 1, 1),
+            certification_expiration_date=certification_expiration_date,
             final_invite_date=None,
             completed_date=current_time
         ),
@@ -134,48 +132,45 @@ def test_get_invites_for_final_follow_up(gspc_invite_repo_without_data: GspcInvi
     """Tests retrieving and updating invites eligible for final follow-up"""
     # Setup
     current_time = datetime.now()
+    certification_expiration_date = date(2099, 1, 1)
 
     # Create mock invites that match criteria
     mock_invites = [
         # valid
         models.GspcInvite(
-            id=1,
             email="test1@example.gov",
             gspc_invite_id=uuid.uuid4(),
             created_date=current_time - timedelta(days=2),
-            certification_expiration_date=date(2099, 1, 1),
+            certification_expiration_date=certification_expiration_date,
             second_invite_date=current_time - timedelta(days=2),
             completed_date=None
         ),
         # invalid hasn't had second invite
         models.GspcInvite(
-            id=2,
             email="test2@example.gov",
             gspc_invite_id=uuid.uuid4(),
             created_date=current_time - timedelta(days=3),
-            certification_expiration_date=date(2099, 1, 1),
+            certification_expiration_date=certification_expiration_date,
             second_invite_date=None,
             completed_date=None
         ),
         # invalid completed
         models.GspcInvite(
-            id=3,
             email="test1@example.gov",
             gspc_invite_id=uuid.uuid4(),
             created_date=current_time - timedelta(days=10),
             second_invite_date=current_time - timedelta(days=2),
-            certification_expiration_date=date(2099, 1, 1),
+            certification_expiration_date=certification_expiration_date,
             final_invite_date=None,
             completed_date=current_time
         ),
         # invalid already sent final
         models.GspcInvite(
-            id=4,
             email="test1@example.gov",
             gspc_invite_id=uuid.uuid4(),
             created_date=current_time - timedelta(days=10),
             second_invite_date=current_time - timedelta(days=2),
-            certification_expiration_date=date(2099, 1, 1),
+            certification_expiration_date=certification_expiration_date,
             final_invite_date=current_time - timedelta(days=2),
             completed_date=None
         ),

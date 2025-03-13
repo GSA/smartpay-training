@@ -137,7 +137,8 @@ class TestGspc:
         assert "ValidEmail2@test.com" in emailList
 
     @patch('training.config.settings', 'JWT_SECRET', 'super_secret')
-    def test_gspc_invite_parses_invalid_emails(self, goodJWT, standard_payload):
+    @patch('training.api.api_v1.gspc.send_gspc_invite_emails')
+    def test_gspc_invite_parses_invalid_emails(self, gspc_admin_invite, goodJWT, standard_payload, fake_gspc_invite_repo):
         '''Given 2 invalid emails in a list of 4 it should return a list of 2 invalid emails'''
         response = post_gspc_invite(standard_payload, goodJWT)
 
