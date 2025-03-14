@@ -89,7 +89,7 @@
 
     // reset result messages 
     showSuccessMessage.value = false;
-    showSuccessMessage.value = false;
+    showFailedMessage.value = false;
 
     // validate form
     const validation = v_all_info$
