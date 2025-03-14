@@ -45,8 +45,8 @@
   const quizStarted = ref(false)
   const quizSubmitted = ref(false)
   const error = ref(props.error)
-  let redirectExpirationDateString = ""
-  let expirationDate = ""
+  let gspcInviteId = ""
+  let redirectGspcInviteIdString = ""
   const certTypeGspc = 2
 
   const questions = 
@@ -63,8 +63,8 @@
 
   onBeforeMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    expirationDate = urlParams.get('expirationDate')
-    redirectExpirationDateString = 'expirationDate=' + expirationDate
+    gspcInviteId = urlParams.get('gspcInviteId')
+    redirectGspcInviteIdString = 'gspcInviteId=' + gspcInviteId
   })
 
   function startLoading() {
@@ -91,7 +91,7 @@
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.value.jwt}`
         },
-        body: JSON.stringify({'responses':{'responses': user_answers}, 'expiration_date': expirationDate}) 
+        body: JSON.stringify({'responses':{'responses': user_answers}, 'gspc_invite_id': gspcInviteId}) 
       })
     } catch {
       const err = new Error("There was a problem connecting with the server")
@@ -101,8 +101,6 @@
     }
     if (!res.ok){
       // non 2xx response from server
-      // TODO: this could happen with an expired jwt
-      // should offer solution for user in that case.
       const e = new Error("There was a problem connecting with the server")
       e.name = "Server Error"
       setError(e)
@@ -145,7 +143,7 @@
               title="gspc_registration"
               :header="header"
               link-destination-text="the GSA SmartPay Program Certification (GSPC)"
-              :parameters="redirectExpirationDateString"
+              :parameters="redirectGspcInviteIdString"
               @start-loading="startLoading"
               @error="setError"
             >

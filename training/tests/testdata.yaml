@@ -106,6 +106,7 @@ quiz_submissions:
 gspc_submission:
   valid_passing:
     expiration_date: '2099-01-01'
+    gspc_invite_id: '55383009-B616-4ABF-A807-3585A716C5A6'
     responses:
       responses:
         - question_id: 0
@@ -120,6 +121,7 @@ gspc_submission:
           correct: True
   valid_failing:
     expiration_date: '2099-01-01'
+    gspc_invite_id: '55383009-B616-4ABF-A807-3585A716C5A6'
     responses:
       responses:
         - question_id: 0
