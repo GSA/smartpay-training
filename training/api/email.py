@@ -205,7 +205,7 @@ def send_emails_in_batches(email_messages: List[EmailMessage], batch_size: int, 
                     # Send messages in current batch
                     for message in batch:
                         smtp.send_message(message)
-                        logging.info(f"Sent GSPC email to {message["To"]}")
+                        logging.info(f"Sent GSPC email to {message['To']}")
                     smtp.quit()
                 break  # Exit retry loop if successful
             except Exception as e:
@@ -237,7 +237,7 @@ def send_gspc_completion_email(failed_emails: str, app_settings: Settings) -> No
             smtp.login(user=app_settings.SMTP_USER, password=app_settings.SMTP_PASSWORD)
         try:
             smtp.send_message(message)
-            logging.info(f"Sent GSPC Completion email to {message["To"]}")
+            logging.info(f"Sent GSPC Completion email to {message['To']}")
         except Exception as e:
             logging.error("Error sending GSPC Completion email", e)
             raise SendEmailError from e
