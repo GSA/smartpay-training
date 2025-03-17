@@ -176,24 +176,24 @@ def download_admin_users_roles_report_csv(
         repo: UserRepository = Depends(user_repository),
         user=Depends(RequireRole(["Admin"])
                      )):
-    '''
+    """
     Returns a report of all users with Admin and Reporting permissions.
-    '''
+    """
     try:
         results = repo.get_admin_user_roles_report_data()
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Unable to process"
+            detail="Unabl   e to process"
         )
     output = StringIO()
     writer = csv.writer(output)
 
     # header row
-    writer.writerow(['Full Name', 'Email Address', 'Admin Role', 'Report Role',])
+    writer.writerow(['Full Name', 'Email Address'])
     for item in results:
         # data row
-        writer.writerow([item.name, item.email, item.agency, item.bureau, item.quiz, item.completion_date.strftime("%m/%d/%Y %H:%M:%S")])  # noqa 501
+        writer.writerow([item.name, item.email])  # noqa 501
 
     headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingUsersRolesReport.csv"'}
     return Response(output.getvalue(), headers=headers, media_type='application/csv')

@@ -3,7 +3,7 @@ import AdminRepository from './AdminRepository.vue';
 import ReportUtilities from './ReportUtilities.vue';
 
 async function downloadAdminUserReport() {
-  let response = await AdminRepository.downloadGspcReport()
+  let response = await AdminRepository.downloadAdminUserReport();
   let blob = await response.blob();
   ReportUtilities.downloadBlobAsFile(blob, 'AdminUserReport.csv')
 }

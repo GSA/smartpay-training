@@ -48,6 +48,7 @@ class GspcCompletionReportData(BaseModel):
 class AdminUsersRolesReportData(BaseModel):
     name: str
     email: str
+    roles: str | None = None
     adminRole: str | None = None
     reportRole: str | None = None
         

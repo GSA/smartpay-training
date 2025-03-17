@@ -127,13 +127,28 @@ const userSearch = async function(searchText, currentPage){
     return await response //needs to be returned as raw not json
   }
 
+  const downloadAdminUserReport = async function(){
+    const response = await fetch(`${base_url}/api/v1/users/download-admin-users-roles-report`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${user.value.jwt}` },
+    });
+
+    if (!response.ok) {
+      const message = await response.text()
+      throw new Error(message)
+    }
+
+    return await response //needs to be returned as raw not json
+  }
+
 export default {
   userSearch,
   updateUserReports,
   getUser,
   updateUser,
   downloadGspcReport,
-  downloadTrainingReport
+  downloadTrainingReport,
+  downloadAdminUserReport
 }
 
 </script>

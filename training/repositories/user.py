@@ -1,4 +1,4 @@
-from sqlalchemy import nullsfirst, or_
+from sqlalchemy import nullsfirst, or_, case
 from sqlalchemy.orm import Session
 from training import models, schemas
 from training.schemas import UserQuizCompletionReportData, UserSearchResult, SmartPayTrainingReportFilter, AdminUsersRolesReportData
@@ -216,8 +216,27 @@ class UserRepository(BaseRepository[models.User]):
          Retrieves users and roles report data
          :return: List of AdminUsersRolesReportData
         """
-        results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"),
-                                       'Y', 'Y')
+        report_data = namedtuple("ReportData", ["name", "email"])
+        raw_results = (self._session.query(models.User.name.label("name"), models.User.email.label("email")
+                   #   case(
+                   #       ("Admin" in models.User.roles, 'Y'),
+                   #       else_= "N"
+                   #   ).label("adminRole"),
+                   #  case(
+                   #     ("Report" in models.User.roles, 'Y'),
+                   #     else_= "N"
+                   # ).label("reportRole")
+                                           )
                    .select_from(models.User)).all()
-        return results
+
+        result = [
+            AdminUsersRolesReportData(
+                name=row.name,
+                email=row.email
+                #adminRole=row.adminRole,
+                #reportRole=row.reportRole
+            )
+            for row in map(report_data._make, raw_results)
+        ]
+        return result
     
