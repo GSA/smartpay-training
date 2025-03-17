@@ -31,14 +31,15 @@ async def gspc_admin_invite(
         # Parse emails string into valid and invalid email list
         gspcInvite.parse()
 
-        entities = repo.bulk_create(emails=gspcInvite.valid_emails, certification_expiration_date=gspcInvite.certification_expiration_date)
+        if (len(gspcInvite.valid_emails) > 0):
+            entities = repo.bulk_create(emails=gspcInvite.valid_emails, certification_expiration_date=gspcInvite.certification_expiration_date)
 
-        # Explicitly load needed props into memory before passing to the background task
-        entities_data = [InviteTuple(entity.gspc_invite_id, entity.email, GspcEmailVersion.INITIAL) for entity in entities]
+            # Explicitly load needed props into memory before passing to the background task
+            entities_data = [InviteTuple(entity.gspc_invite_id, entity.email, GspcEmailVersion.INITIAL) for entity in entities]
 
-        # Add email sending to background tasks
-        # note: passing in settings as the background task looses the current app context once triggered
-        background_tasks.add_task(send_gspc_invite_emails, invites=entities_data, app_settings=settings)
+            # Add email sending to background tasks
+            # note: passing in settings as the background task looses the current app context once triggered
+            background_tasks.add_task(send_gspc_invite_emails, invites=entities_data, app_settings=settings)
 
         # Return object with both list for success and failure messages
         return gspcInvite
