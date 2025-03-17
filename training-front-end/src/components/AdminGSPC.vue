@@ -136,11 +136,11 @@
     const text = user_input.emailAddresses.trim();
     const lines = text.split(/\s+/);
     
-    // If it doesn't look like an Excel paste, just keep the original
     if (lines.length > 1) {
       user_input.emailAddresses = lines
-          .filter(line => line.trim() !== '')
-          .join(', ');
+        .filter(line => line.trim() !== '')
+        .map(line => line.replace(/,$/, '').trim()) // Remove trailing comma if it already exists
+        .join(', ');
     }
   }
 </script>
