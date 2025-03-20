@@ -184,16 +184,16 @@ def download_admin_users_roles_report_csv(
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Unabl   e to process"
+            detail="Unable to process"
         )
     output = StringIO()
     writer = csv.writer(output)
 
     # header row
-    writer.writerow(['Full Name', 'Email Address'])
+    writer.writerow(['Full Name', 'Email Address', 'Admin Role?'])
     for item in results:
         # data row
-        writer.writerow([item.name, item.email])  # noqa 501
+        writer.writerow([item.name, item.email, item.adminRole])  # noqa 501
 
     headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingUsersRolesReport.csv"'}
     return Response(output.getvalue(), headers=headers, media_type='application/csv')

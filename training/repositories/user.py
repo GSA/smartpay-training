@@ -218,22 +218,23 @@ class UserRepository(BaseRepository[models.User]):
         """
         report_data = namedtuple("ReportData", ["name", "email"])
         raw_results = (self._session.query(models.User.name.label("name"), models.User.email.label("email")
-                   #   case(
-                   #       ("Admin" in models.User.roles, 'Y'),
-                   #       else_= "N"
-                   #   ).label("adminRole"),
+                                            #case([("Admin" in models.User.roles, "Y")], else_= "N").label("adminRole")
+                    #   case(
+                    #       ("Admin" in models.User.roles, 'Y'),
+                    #       else_= "N"
+                    #   ).label("adminRole"),
                    #  case(
-                   #     ("Report" in models.User.roles, 'Y'),
-                   #     else_= "N"
-                   # ).label("reportRole")
-                                           )
-                   .select_from(models.User)).all()
+                    #     ("Report" in models.User.roles, 'Y'),
+                    #     else_= "N"
+                    # ).label("reportRole")
+                                            )
+                    .select_from(models.User)).all()        
+        print(raw_results)
 
         result = [
             AdminUsersRolesReportData(
                 name=row.name,
-                email=row.email
-                #adminRole=row.adminRole,
+                email=row.email,
                 #reportRole=row.reportRole
             )
             for row in map(report_data._make, raw_results)
