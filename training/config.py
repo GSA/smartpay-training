@@ -74,6 +74,7 @@ class Settings(BaseSettings):
     EMAIL_FROM: EmailStr = "smartpay_do_not_reply@gsa.gov"
     EMAIL_FROM_NAME: str = "GSA SmartPay"
     EMAIL_SUBJECT: str = "GSA SmartPay Training"
+    GSPC_MAILBOX: EmailStr = "smartpaygspc@gsa.gov"
 
     # These are normally parsed from VCAP_SERVICES in Cloud Foundry, but can
     # be overridden locally by using the .env file.

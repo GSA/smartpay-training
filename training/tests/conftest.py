@@ -13,6 +13,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import event
 from training.repositories import (AgencyRepository, UserRepository, QuizRepository, QuizCompletionRepository,
                                    CertificateRepository, RoleRepository, GspcCompletionRepository)
+from training.repositories.gspc_invite import GspcInviteRepository
 from training.schemas import AgencyCreate, RoleCreate, UserCertificate, GspcCertificate
 from training.services import QuizService
 from training.config import settings
@@ -364,6 +365,22 @@ def gspc_completion_repo_with_data(db_with_data: Session) -> Generator[GspcCompl
     Provides a GspcCompletionRepository injected with a populated database.
     '''
     yield GspcCompletionRepository(session=db_with_data)
+
+
+@pytest.fixture
+def gspc_invite_repo_with_data(db_with_data: Session) -> Generator[GspcInviteRepository, None, None]:
+    '''
+    Provides a GspcInviteRepository injected with a populated database.
+    '''
+    yield GspcInviteRepository(session=db_with_data)
+
+
+@pytest.fixture
+def gspc_invite_repo_without_data(db: Session) -> Generator[GspcInviteRepository, None, None]:
+    '''
+    Provides a GspcInviteRepository injected with a populated database.
+    '''
+    yield GspcInviteRepository(session=db)
 
 
 @pytest.fixture
