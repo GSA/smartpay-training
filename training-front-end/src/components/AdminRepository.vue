@@ -7,6 +7,7 @@ const user = useStore(profile)
 
 const base_url = import.meta.env.PUBLIC_API_BASE_URL
 const users_api = `${base_url}/api/v1/users/`
+const gspc_api = `${base_url}/api/v1/gspc/`
 
 const userSearch = async function(searchText, currentPage){
     const url = new URL(`${users_api}`)
@@ -107,7 +108,45 @@ const userSearch = async function(searchText, currentPage){
         throw new Error(message)
       }
 
-    return await response //needs to be returned as raw not json
+    return await response // needs to be returned as raw not json
+  }
+
+  const sendGspcInvites = async function(emailAddresses, certificationExpirationDate){
+    const apiURL = new URL(`${gspc_api}send-invites`)
+    let response = await fetch(apiURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${user.value.jwt}` },
+        body: JSON.stringify({
+          email_addresses: emailAddresses,
+          certification_expiration_date: certificationExpirationDate
+        })
+      });
+
+    if (!response.ok) {
+      if (response.status == 401) {
+        throw new Error("Unauthorized")
+      }
+      throw new Error("Error contacting server")
+    }
+
+    return await response.json()
+  }
+
+  const sendGspcFollowUps = async function(){
+    const apiURL = new URL(`${gspc_api}send-follow-ups`)
+    let response = await fetch(apiURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${user.value.jwt}` },
+      });
+
+    if (!response.ok) {
+      if (response.status == 401) {
+        throw new Error("Unauthorized")
+      }
+      throw new Error("Error contacting server")
+    }
+
+    return
   }
 
   const downloadTrainingReport = async function(filterData){
@@ -148,6 +187,8 @@ export default {
   updateUser,
   downloadGspcReport,
   downloadTrainingReport,
+  sendGspcInvites,
+  sendGspcFollowUps,
   downloadAdminUserReport
 }
 

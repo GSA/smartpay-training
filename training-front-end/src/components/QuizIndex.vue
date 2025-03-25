@@ -113,8 +113,6 @@
     }
     if (!res.ok){
       // non 2xx response from server
-      // TODO: this could happen with an expired jwt
-      // should offer solution for user in that case.
       const e = new Error("There was a problem connecting with the server")
       e.name = "Server Error"
       setError(e)
