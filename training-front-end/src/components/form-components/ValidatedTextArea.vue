@@ -32,7 +32,7 @@
     },
   })
 
-  defineEmits(['update:modelValue'])
+  defineEmits(['update:modelValue', 'update:paste'])
   var error_id = computed(() => props.name + '-input-error-message')
 </script>
 
@@ -67,6 +67,7 @@
       :aria-describedby="validator.$error? error_id: null"
       :readonly="readonly"
       rows="10"
+      @paste="$emit('update:paste', $event.target.value)"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </div>    

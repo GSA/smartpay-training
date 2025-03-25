@@ -1,5 +1,5 @@
 import logging
-from training.repositories import GspcCompletionRepository, UserRepository
+from training.repositories import GspcCompletionRepository, UserRepository, GspcInviteRepository
 from training.schemas import GspcSubmission, GspcResult, GspcCompletion
 from sqlalchemy.orm import Session
 from training.services import Certificate
@@ -28,6 +28,7 @@ CERTIFICATE_EMAIL_TEMPLATE = Template('''
 class GspcService():
     def __init__(self, db: Session):
         self.gspc_completion_repo = GspcCompletionRepository(db)
+        self.gspc_invite_repo = GspcInviteRepository(db)
         self.user_repo = UserRepository(db)
         self.certificate_service = Certificate()
 
@@ -39,15 +40,21 @@ class GspcService():
         :return: GspcResult model which includes the final result
         """
 
+        gspc_invite = self.gspc_invite_repo.get_by_gspc_invite_id(submission.gspc_invite_id)
+
         passed = all(question.correct for question in submission.responses.responses)
 
         responses_dict = submission.responses.model_dump()
         result = self.gspc_completion_repo.create(GspcCompletion(
             user_id=user_id,
             passed=passed,
-            certification_expiration_date=submission.expiration_date,
-            responses=responses_dict
+            certification_expiration_date=gspc_invite.certification_expiration_date,
+            responses=responses_dict,
+            gspc_invite_id=gspc_invite.gspc_invite_id
         ))
+
+        # mark invite as completed pass or fail
+        self.gspc_invite_repo.set_completion_date(gspc_invite.id)
 
         if (passed):
             try:
