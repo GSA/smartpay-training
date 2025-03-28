@@ -181,19 +181,20 @@ def download_admin_users_roles_report_csv(
     """
     try:
         results = repo.get_admin_user_roles_report_data()
-    except ValueError:
+    except Exception as e:
+        logging.error(f"Error generating admin user report: {e}")
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Unable to process"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Server Error"
         )
     output = StringIO()
     writer = csv.writer(output)
 
     # header row
-    writer.writerow(['Full Name', 'Email Address', 'Admin Role?'])
+    writer.writerow(['Full Name', 'Email Address', 'Assigned Agency', 'Assigned Bureau'])
     for item in results:
         # data row
-        writer.writerow([item.name, item.email, item.adminRole])  # noqa 501
+        writer.writerow([item.name, item.email, item.assignedAgency, item.assignedBureau])  # noqa 501
 
     headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingUsersRolesReport.csv"'}
     return Response(output.getvalue(), headers=headers, media_type='application/csv')

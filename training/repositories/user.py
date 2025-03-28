@@ -216,8 +216,9 @@ class UserRepository(BaseRepository[models.User]):
          Retrieves users and roles report data
          :return: List of AdminUsersRolesReportData
         """
-        report_data = namedtuple("ReportData", ["name", "email"])
-        raw_results = (self._session.query(models.User.name.label("name"), models.User.email.label("email")
+        report_data = namedtuple("ReportData", ["name", "email", "assignedAgency", "assignedBureau"])
+        raw_results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"), models.Agency.name.label("assignedAgency"),
+                                           models.Agency.bureau.label("assignedBureau")
                                             #case([("Admin" in models.User.roles, "Y")], else_= "N").label("adminRole")
                     #   case(
                     #       ("Admin" in models.User.roles, 'Y'),
@@ -228,14 +229,16 @@ class UserRepository(BaseRepository[models.User]):
                     #     else_= "N"
                     # ).label("reportRole")
                                             )
-                    .select_from(models.User)).all()        
+                    .join(models.Agency, models.User.agency_id == models.Agency.id)
+                       .filter(models.User.id == 682)).all()        
         print(raw_results)
 
         result = [
             AdminUsersRolesReportData(
                 name=row.name,
                 email=row.email,
-                #reportRole=row.reportRole
+                assignedAgency=row.assignedAgency,
+                assignedBureau=row.assignedBureau
             )
             for row in map(report_data._make, raw_results)
         ]
