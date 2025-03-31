@@ -191,10 +191,10 @@ def download_admin_users_roles_report_csv(
     writer = csv.writer(output)
 
     # header row
-    writer.writerow(['Full Name', 'Email Address', 'Assigned Agency', 'Assigned Bureau'])
+    writer.writerow(['Full Name', 'Email Address', 'Assigned Agency', 'Assigned Bureau', 'Admin?', 'Report?', 'Report Agency', 'Report Bureau(s)'])
     for item in results:
         # data row
-        writer.writerow([item.name, item.email, item.assignedAgency, item.assignedBureau])  # noqa 501
+        writer.writerow([item.name, item.email, item.assignedAgency, item.assignedBureau, item.adminRole, item.reportRole, item.reportAgency, item.reportBureau])  # noqa 501
 
     headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingUsersRolesReport.csv"'}
     return Response(output.getvalue(), headers=headers, media_type='application/csv')
