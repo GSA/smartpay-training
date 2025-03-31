@@ -24,9 +24,9 @@ async function downloadAdminUserReport() {
         </p>
       </div>
       <div class="usa-card__footer">
-        <button
-            class="usa-button"
-            @click="downloadAdminUserReport"
+        <button 
+          class="usa-button"
+          @click="downloadAdminUserReport"
         >
           Download Report
         </button>
