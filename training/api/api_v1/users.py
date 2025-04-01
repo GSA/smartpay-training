@@ -60,6 +60,7 @@ def download_smartpay_training_report_csv(
     :return: Returns a report of all quiz_completions based on the pasted in filter_info.
     '''
     try:
+        logging.info(f"{user['email']} downloaded the SmartPay Training report.")
         results = repo.get_user_quiz_completion_report(filter_info, user['id'])
     except ValueError:
         raise HTTPException(
@@ -90,6 +91,7 @@ def download_admin_smartpay_training_report_csv(
     Returns a report of all quiz_completions based on the pasted in filter_info.
     '''
     try:
+        logging.info(f"{user['email']} downloaded the SmartPay Training report.")
         results = repo.get_admin_smartpay_training_report(filter_info)
     except ValueError:
         raise HTTPException(
@@ -180,6 +182,7 @@ def download_admin_users_roles_report_csv(
     Returns a report of all users with Admin and Reporting permissions.
     """
     try:
+        logging.info(f"{user['email']} downloaded the SmartPay User Roles report.")
         results = repo.get_admin_user_roles_report_data()
     except Exception as e:
         logging.error(f"Error generating admin user report: {e}")
