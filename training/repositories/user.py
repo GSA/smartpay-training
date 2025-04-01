@@ -218,14 +218,14 @@ class UserRepository(BaseRepository[models.User]):
         """
         agency1 = aliased(models.Agency)
         agency2 = aliased(models.Agency)
-        
+    
         report_data = namedtuple("ReportData", ["name", "email", "assignedAgency", "assignedBureau", "adminRole", "reportRole", "reportAgency", "reportBureau"])
         raw_results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"), agency1.name.label("assignedAgency"),
                                            agency1.bureau.label("assignedBureau"),
-                                           func.max(case((models.Role.name == "Admin", "Y"), else_= "N")).label("adminRole"),
-                                           func.max(case((models.Role.name == "Report", "Y"), else_= "N")).label("reportRole"),
+                                           func.max(case((models.Role.name == "Admin", "Y"), else_="N")).label("adminRole"),
+                                           func.max(case((models.Role.name == "Report", "Y"), else_="N")).label("reportRole"),
                                            agency2.name.label("reportAgency"), func.string_agg(agency2.bureau, ', ').label("reportBureau")
-                                            )
+                                           )
                     .join(agency1, models.User.agency_id == agency1.id)
                     .join(models.UserXRole, models.User.id == models.UserXRole.user_id)
                     .join(models.Role, models.UserXRole.role_id == models.Role.id)
