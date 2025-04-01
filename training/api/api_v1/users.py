@@ -169,3 +169,32 @@ def update_user_by_id(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="invalid user id"
         )
+
+
+@router.post("/users/download-admin-users-roles-report")
+def download_admin_users_roles_report_csv(
+        repo: UserRepository = Depends(user_repository),
+        user=Depends(RequireRole(["Admin"])
+                     )):
+    """
+    Returns a report of all users with Admin and Reporting permissions.
+    """
+    try:
+        results = repo.get_admin_user_roles_report_data()
+    except Exception as e:
+        logging.error(f"Error generating admin user report: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Server Error"
+        )
+    output = StringIO()
+    writer = csv.writer(output)
+
+    # header row
+    writer.writerow(['Full Name', 'Email Address', 'Assigned Agency', 'Assigned Bureau', 'Admin', 'Report', 'Report Agency', 'Report Bureau(s)'])
+    for item in results:
+        # data row
+        writer.writerow([item.name, item.email, item.assignedAgency, item.assignedBureau, item.adminRole, item.reportRole, item.reportAgency, item.reportBureau])  # noqa 501
+
+    headers = {'Content-Disposition': 'attachment; filename="SmartPayTrainingUsersRolesReport.csv"'}
+    return Response(output.getvalue(), headers=headers, media_type='application/csv')

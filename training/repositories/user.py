@@ -1,7 +1,7 @@
-from sqlalchemy import nullsfirst, or_
-from sqlalchemy.orm import Session
+from sqlalchemy import nullsfirst, or_, case, func
+from sqlalchemy.orm import Session, aliased
 from training import models, schemas
-from training.schemas import UserQuizCompletionReportData, UserSearchResult, SmartPayTrainingReportFilter
+from training.schemas import UserQuizCompletionReportData, UserSearchResult, SmartPayTrainingReportFilter, AdminUsersRolesReportData
 from .base import BaseRepository
 from datetime import datetime
 from collections import namedtuple
@@ -210,3 +210,41 @@ class UserRepository(BaseRepository[models.User]):
         db_user.modified_on = datetime.now()
         self._session.commit()
         return db_user
+
+    def get_admin_user_roles_report_data(self) -> list[AdminUsersRolesReportData]:
+        """
+         Retrieves users and roles report data
+         :return: List of AdminUsersRolesReportData
+        """
+        agency1 = aliased(models.Agency)
+        agency2 = aliased(models.Agency)
+        
+        report_data = namedtuple("ReportData", ["name", "email", "assignedAgency", "assignedBureau", "adminRole", "reportRole", "reportAgency", "reportBureau"])
+        raw_results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"), agency1.name.label("assignedAgency"),
+                                           agency1.bureau.label("assignedBureau"),
+                                           func.max(case((models.Role.name == "Admin", "Y"), else_= "N")).label("adminRole"),
+                                           func.max(case((models.Role.name == "Report", "Y"), else_= "N")).label("reportRole"),
+                                           agency2.name.label("reportAgency"), func.string_agg(agency2.bureau, ', ').label("reportBureau")
+                                            )
+                    .join(agency1, models.User.agency_id == agency1.id)
+                    .join(models.UserXRole, models.User.id == models.UserXRole.user_id)
+                    .join(models.Role, models.UserXRole.role_id == models.Role.id)
+                    .join(models.ReportUserXAgency, models.User.id == models.ReportUserXAgency.user_id, isouter=True)
+                    .join(agency2, models.ReportUserXAgency.agency_id == agency2.id, isouter=True)
+                    .group_by(models.User.name, models.User.email, agency1.name, agency1.bureau, agency2.name)).all()
+
+        result = [
+            AdminUsersRolesReportData(
+                name=row.name,
+                email=row.email,
+                assignedAgency=row.assignedAgency,
+                assignedBureau=row.assignedBureau,
+                adminRole=row.adminRole,
+                reportRole=row.reportRole,
+                reportAgency=row.reportAgency,
+                reportBureau=row.reportBureau
+            )
+            for row in map(report_data._make, raw_results)
+        ]
+        return result
+    
