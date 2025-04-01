@@ -54,4 +54,4 @@ class AdminUsersRolesReportData(BaseModel):
     reportRole: str
     reportAgency: str | None = None
     reportBureau: str | None = None
-        
+       

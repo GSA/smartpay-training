@@ -218,7 +218,7 @@ class UserRepository(BaseRepository[models.User]):
         """
         agency1 = aliased(models.Agency)
         agency2 = aliased(models.Agency)
-    
+
         report_data = namedtuple("ReportData", ["name", "email", "assignedAgency", "assignedBureau", "adminRole", "reportRole", "reportAgency", "reportBureau"])
         raw_results = (self._session.query(models.User.name.label("name"), models.User.email.label("email"), agency1.name.label("assignedAgency"),
                                            agency1.bureau.label("assignedBureau"),
@@ -226,12 +226,12 @@ class UserRepository(BaseRepository[models.User]):
                                            func.max(case((models.Role.name == "Report", "Y"), else_="N")).label("reportRole"),
                                            agency2.name.label("reportAgency"), func.string_agg(agency2.bureau, ', ').label("reportBureau")
                                            )
-                    .join(agency1, models.User.agency_id == agency1.id)
-                    .join(models.UserXRole, models.User.id == models.UserXRole.user_id)
-                    .join(models.Role, models.UserXRole.role_id == models.Role.id)
-                    .join(models.ReportUserXAgency, models.User.id == models.ReportUserXAgency.user_id, isouter=True)
-                    .join(agency2, models.ReportUserXAgency.agency_id == agency2.id, isouter=True)
-                    .group_by(models.User.name, models.User.email, agency1.name, agency1.bureau, agency2.name)).all()
+                       .join(agency1, models.User.agency_id == agency1.id)
+                       .join(models.UserXRole, models.User.id == models.UserXRole.user_id)
+                       .join(models.Role, models.UserXRole.role_id == models.Role.id)
+                       .join(models.ReportUserXAgency, models.User.id == models.ReportUserXAgency.user_id, isouter=True)
+                       .join(agency2, models.ReportUserXAgency.agency_id == agency2.id, isouter=True)
+                       .group_by(models.User.name, models.User.email, agency1.name, agency1.bureau, agency2.name)).all()
 
         result = [
             AdminUsersRolesReportData(
@@ -247,4 +247,3 @@ class UserRepository(BaseRepository[models.User]):
             for row in map(report_data._make, raw_results)
         ]
         return result
-    
