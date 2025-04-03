@@ -4,6 +4,7 @@
   import { profile} from '../stores/user'
   import { computed } from "vue"
   import AdminReportDownload from "./AdminReportGSPC.vue";
+  import AdminUserReportDownload from "./AdminUserReport.vue"
   import USWDSAlert from './USWDSAlert.vue'
 
   const error = ref()
@@ -46,6 +47,7 @@
           </USWDSAlert>
           <ul class="usa-card-group">
             <AdminReportDownload />
+            <AdminUserReportDownload />
             <li class="usa-card tablet:grid-col-12">
               <div class="usa-card__container">
                 <div class="usa-card__header">

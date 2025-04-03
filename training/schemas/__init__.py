@@ -17,5 +17,5 @@ from .user_certificate import UserCertificate, CertificateType, CertificateListV
 from .user_x_role import UserXRole
 from .report_user_x_agency import ReportUserXAgency
 from .role import Role, RoleCreate
-from .reports import UserQuizCompletionReportData, GspcCompletionReportData
+from .reports import UserQuizCompletionReportData, GspcCompletionReportData, AdminUsersRolesReportData
 from .smartpay_training_report_filter import SmartPayTrainingReportFilter

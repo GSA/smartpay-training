@@ -43,3 +43,14 @@ class GspcCompletionReportData(BaseModel):
     passed: bool | None = None
     completionDate: datetime | None = None
     model_config = ConfigDict(from_attributes=True)
+
+
+class AdminUsersRolesReportData(BaseModel):
+    name: str
+    email: str
+    assignedAgency: str
+    assignedBureau: str | None = None
+    adminRole: str
+    reportRole: str
+    reportAgency: str | None = None
+    reportBureau: str | None = None
