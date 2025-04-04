@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 import csv
 from io import StringIO
@@ -95,6 +96,7 @@ def download_report_csv(
         user=Depends(RequireRole(["Admin"])),
         repo: GspcInviteRepository = Depends(gspc_invite_repository),
 ):
+    logging.info(f"{user['email']} downloaded the GSPC completion report.")
     results = repo.get_gspc_completion_report()
 
     output = StringIO()

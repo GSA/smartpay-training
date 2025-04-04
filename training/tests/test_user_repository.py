@@ -269,3 +269,12 @@ def test_get_smartpay_training_report_with_no_report_agencies(user_repo_with_dat
         report_filter = schemas.SmartPayTrainingReportFilter()
         with pytest.raises(Exception):
             user_repo_with_data.get_user_quiz_completion_report(report_filter, 1)
+
+
+def test_get_admin_user_roles_report_data(user_repo_with_data: UserRepository):
+    """
+    Test fetching report data for admin user roles report
+    """
+    results = user_repo_with_data.get_admin_user_roles_report_data()
+    assert len(results) > 0  # Check that we get results back
+    assert all(isinstance(result, schemas.AdminUsersRolesReportData) for result in results)  # Verify type

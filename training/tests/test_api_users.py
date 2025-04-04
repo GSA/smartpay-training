@@ -7,7 +7,7 @@ from training.config import settings
 from training.main import app
 from training.repositories import UserRepository
 from .factories import UserCreateSchemaFactory, UserSchemaFactory
-from training.schemas import UserSearchResult, Agency, Role, UserQuizCompletionReportData
+from training.schemas import UserSearchResult, Agency, Role, UserQuizCompletionReportData, AdminUsersRolesReportData
 from io import StringIO
 from datetime import datetime
 
@@ -218,3 +218,37 @@ def test_get_smartpay_training_report(reportJWT):
         lines = csv_output.readlines()
         assert lines[0].strip() == 'Full Name,Email Address,Agency,Bureau,Quiz Name,Quiz Completion Date and Time'
         assert lines[1].strip() == 'John Doe,john.doe@example.com,Agency X,Bureau Y,Sample Quiz,10/11/2024 12:00:00'
+
+
+@patch('training.config.settings', 'JWT_SECRET', 'super_secret')
+def test_get_admin_smartpay_user_roles_report(adminJWT):
+
+    mock_report_data = [
+        AdminUsersRolesReportData(
+            name='Luna Lovegood',
+            email='luna.lovegood@example.com',
+            assignedAgency='Agency Potter',
+            assignedBureau='Order of the Phoenix',
+            adminRole='Y',
+            reportRole='Y',
+            reportAgency='Hogwarts',
+            reportBureau='Diagon Alley'
+        )
+    ]
+
+    # Mock the repo and RequireRole dependencies
+    with patch('training.repositories.UserRepository.get_admin_user_roles_report_data', return_value=mock_report_data):
+
+        response = client.post(
+            "/api/v1/users/download-admin-users-roles-report",
+            headers={"Authorization": f"Bearer {adminJWT}"}
+        )
+
+        assert response.status_code == 200
+        assert response.headers['Content-Disposition'] == 'attachment; filename="SmartPayTrainingUsersRolesReport.csv"'
+
+        # Check if the response body contains correct CSV content
+        csv_output = StringIO(response.text)
+        lines = csv_output.readlines()
+        assert lines[0].strip() == 'Full Name,Email Address,Assigned Agency,Assigned Bureau,Admin,Report,Report Agency,Report Bureau(s)'
+        assert lines[1].strip() == 'Luna Lovegood,luna.lovegood@example.com,Agency Potter,Order of the Phoenix,Y,Y,Hogwarts,Diagon Alley'
