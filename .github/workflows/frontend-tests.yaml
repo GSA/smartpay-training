@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: 'npm'
+          cache: npm
           cache-dependency-path: training-front-end/package-lock.json
 
       - name: install dependencies
