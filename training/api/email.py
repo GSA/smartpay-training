@@ -239,7 +239,7 @@ def send_gspc_completion_email(failed_emails: str, app_settings: Settings) -> No
             smtp.send_message(message)
             logging.info(f"Sent GSPC Completion email to {message['To']}")
         except Exception as e:
-            logging.error("Error sending GSPC Completion email", e)
+            logging.error(f"Error sending GSPC Completion email: {str(e)}")
             raise SendEmailError from e
         finally:
             smtp.quit()
