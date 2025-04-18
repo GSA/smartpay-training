@@ -1,0 +1,46 @@
+name: Fortify On Demand Scan
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+
+
+jobs:
+  Fortify-AST-Scan:
+    # Use the appropriate runner for building your source code. Ensure dev tools required to build your code are present and configured appropriately (MSBuild, Python, etc).
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      # Check out source code
+      - name: Check Out Source Code
+        uses: actions/checkout@v4
+
+      # Java is required to run the various Fortify utilities. Ensuring proper version is installed on the runner.
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      # Perform SAST and optionally SCA scan via Fortify on Demand/Fortify Hosted/Software Security Center, then
+      # optionally export SAST results to the GitHub code scanning dashboard. In case further customization is
+      # required, you can use sub-actions like fortify/github-action/setup@v1 to set up the various Fortify tools
+      # and run them directly from within your pipeline; see https://github.com/fortify/github-action#readme for
+      # details.
+      - name: Run FoD SAST Scan
+        uses: fortify/github-action@v1.7
+        with:
+          sast-scan: true
+        env:
+          ### Required configuration when integrating with Fortify on Demand
+          FOD_URL: https://fed.fortifygov.com
+          FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
+          FOD_CLIENT_SECRET: ${{secrets.FOD_CLIENT_SECRET}}
+          DO_SETUP: true
+          SETUP_EXTRA_OPTS: --assessment-type "Static+"
+          DO_EXPORT: true                                # Export SAST results to GitHub code scanning dashboard
+          PACKAGE_EXTRA_OPTS: --exclude "/**/node_modules/"
