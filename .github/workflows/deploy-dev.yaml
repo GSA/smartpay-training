@@ -13,3 +13,5 @@ jobs:
     with:
       environment: dev
     secrets: inherit
+    permissions:
+      contents: read
