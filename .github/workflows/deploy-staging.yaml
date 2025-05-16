@@ -13,3 +13,5 @@ jobs:
     with:
       environment: staging
     secrets: inherit
+    permissions:
+      contents: read

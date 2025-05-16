@@ -13,3 +13,5 @@ jobs:
     with:
       environment: prod
     secrets: inherit
+    permissions:
+      contents: read

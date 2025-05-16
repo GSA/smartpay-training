@@ -12,6 +12,11 @@ jobs:
     defaults:
       run:
         working-directory: 'training-front-end'
+          
+    permissions:
+      contents: read
+      pull-requests: read
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

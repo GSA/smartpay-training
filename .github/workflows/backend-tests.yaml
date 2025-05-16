@@ -9,6 +9,10 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pull-requests: read
 
     strategy:
       matrix:
