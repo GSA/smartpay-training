@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, reactive } from 'vue';
+  import {ref, reactive, computed} from 'vue';
   import USWDSAlert from './USWDSAlert.vue'
   import ValidatedTextArea from './form-components/ValidatedTextArea.vue';
   import ValidatedMemorableDatepicker from './form-components/ValidatedMemorableDatepicker.vue';
@@ -7,10 +7,14 @@
   import { required, helpers } from '@vuelidate/validators';
   import SpinnerGraphic from './SpinnerGraphic.vue'
   import { RepositoryFactory } from "./RepositoryFactory.vue";
+  import { useStore } from "@nanostores/vue";
+  import { profile } from "../stores/user.js";
   
   const adminRepository = RepositoryFactory.get('admin')
   const { withMessage } = helpers
-  
+
+  const user = useStore(profile)
+  const isAdminUser = computed(() => user.value.roles.includes('Admin'))
   const showSuccessMessage = ref(false)
   const showFailedMessage = ref(false)
   const showFollowUpSuccessMessage = ref(false)
@@ -145,6 +149,10 @@
   }
 </script>
 <template>
+  <section
+      v-if="isAdminUser"
+      class="usa-prose"
+  >
   <div class="padding-top-4 padding-bottom-4 grid-container">
     <ul class="usa-card-group">
       <li class="usa-card tablet:grid-col-12">
@@ -308,6 +316,22 @@
       </li>
     </ul>
   </div>
+  </section>
+  <section v-else>
+    <USWDSAlert
+        status="error"
+        class="usa-alert"
+        heading="You are not authorized to GSPC."
+    >
+      Your email account is not authorized to access this page. If you should be authorized, you can
+      <a
+          class="usa-link"
+          href="mailto:gsa_smartpay@gsa.gov"
+      >
+        contact the GSA SmartPay team
+      </a> to gain access.
+    </USWDSAlert>
+  </section>
 </template>
 <style>
 .usa-textarea {

@@ -6,10 +6,14 @@
   import USWDSAlert from './USWDSAlert.vue'
   import { setSelectedAgencyId} from '../stores/agencies'
   import { RepositoryFactory } from "./RepositoryFactory.vue";
+  import {useStore} from "@nanostores/vue";
+  import {profile} from "../stores/user.js";
   const adminRepository = RepositoryFactory.get('admin')
 
   const PAGE_SIZE = 25
 
+  const user = useStore(profile)
+  const isAdminUser = computed(() => user.value.roles.includes('Admin'))
   let currentPage = ref(0)
   let numberOfResults = ref(0)
   const numberOfPages = computed(() => Math.ceil(numberOfResults.value/PAGE_SIZE))
@@ -89,6 +93,10 @@
 </script>
 
 <template>
+  <section
+      v-if="isAdminUser"
+      class="usa-prose"
+  >
   <div class="padding-top-4 padding-bottom-4 grid-container">
     <USWDSAlert
       v-if="error"
@@ -179,4 +187,20 @@
       />
     </div>
   </div>
+  </section>
+  <section v-else>
+    <USWDSAlert
+        status="error"
+        class="usa-alert"
+        heading="You are not authorized to user search."
+    >
+      Your email account is not authorized to access user search. If you should be authorized, you can
+      <a
+          class="usa-link"
+          href="mailto:gsa_smartpay@gsa.gov"
+      >
+        contact the GSA SmartPay team
+      </a> to gain access.
+    </USWDSAlert>
+  </section>
 </template>
