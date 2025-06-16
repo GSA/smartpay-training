@@ -198,17 +198,17 @@
   </section>
 
   <section v-else>
-    <USWDSAlert      
-      status="error"
-      class="usa-alert"
-      heading="You are not authorized to receive reports."
+    <USWDSAlert
+        status="error"
+        class="usa-alert"
+        heading="You are not authorized to access."
     >
-      Your email account is not authorized to access admin reports. If you should be authorized, you can 
+      Your email account is not authorized to access. If you should be authorized, you can contact the
       <a
-        class="usa-link"
-        href="mailto:gsa_smartpay@gsa.gov"
+          class="usa-link"
+          href="mailto:gsa_smartpay@gsa.gov"
       >
-        contact the GSA SmartPay team
+        GSA SmartPay team
       </a> to gain access.
     </USWDSAlert>
   </section>
