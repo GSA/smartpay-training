@@ -10,15 +10,20 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
 </script>
 <template>
   <section
-      v-if="isAdminUser"
-      class="usa-prose"
+    v-if="isAdminUser"
+    class="usa-prose"
   >
     <div class="padding-top-4 padding-bottom-4 grid-container">
       <ul class="usa-card-group">
         <li class="usa-card tablet:grid-col-6">
-          <div id="user-maintenance-card" class="usa-card__container">
+          <div 
+            id="user-maintenance-card"
+            class="usa-card__container"
+          >
             <div class="usa-card__header">
-              <h4 class="usa-card__heading">User Maintenance</h4>
+              <h4 class="usa-card__heading">
+                User Maintenance
+              </h4>
             </div>
             <div class="usa-card__body">
               <p>
@@ -26,16 +31,24 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
               </p>
             </div>
             <div class="usa-card__footer">
-              <a :href="`${base_url}admin/user_search/`" class="card_link usa-button">
+              <a 
+                :href="`${base_url}admin/user_search/`" 
+                class="card_link usa-button"
+              >
                 Search for users
               </a>
             </div>
           </div>
         </li>
         <li class="usa-card tablet:grid-col-6">
-          <div id="gspc-card" class="usa-card__container">
+          <div 
+            id="gspc-card" 
+            class="usa-card__container"
+          >
             <div class="usa-card__header">
-              <h4 class="usa-card__heading">GSA SmartPay® Program Certification Management</h4>
+              <h4 class="usa-card__heading">
+                GSA SmartPay® Program Certification Management
+              </h4>
             </div>
             <div class="usa-card__body">
               <p>
@@ -43,16 +56,24 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
               </p>
             </div>
             <div class="usa-card__footer">
-              <a :href="`${base_url}admin/gspc/`" class="card_link usa-button">
+              <a 
+                :href="`${base_url}admin/gspc/`" 
+                class="card_link usa-button"
+              >
                 Manage GSPC attendees
               </a>
             </div>
           </div>
         </li>
         <li class="usa-card tablet:grid-col-6">
-          <div id="system-reports-card" class="usa-card__container">
+          <div 
+            id="system-reports-card" 
+            class="usa-card__container"
+          >
             <div class="usa-card__header">
-              <h4 class="usa-card__heading">System Reports</h4>
+              <h4 class="usa-card__heading">
+                System Reports
+              </h4>
             </div>
             <div class="usa-card__body">
               <p>
@@ -60,7 +81,10 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
               </p>
             </div>
             <div class="usa-card__footer">
-              <a :href="`${base_url}admin/reports/`" class="card_link usa-button">
+              <a 
+                :href="`${base_url}admin/reports/`" 
+                class="card_link usa-button"
+              >
                 Reports
               </a>
             </div>
@@ -71,16 +95,16 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
   </section>
   <section v-else>
     <USWDSAlert
-        status="error"
-        class="usa-alert"
-        heading="You are not authorized to access."
+      status="error"
+      class="usa-alert"
+      heading="You are not authorized to access."
     >
       Your email account is not authorized to access. If you should be authorized, you can contact the
       <a
-          class="usa-link"
-          href="mailto:gsa_smartpay@gsa.gov"
+        class="usa-link"
+        href="mailto:gsa_smartpay@gsa.gov"
       >
-         GSA SmartPay team
+        GSA SmartPay team
       </a> to gain access.
     </USWDSAlert>
   </section>

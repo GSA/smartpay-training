@@ -149,91 +149,152 @@
   }
 </script>
 <template>
-  <section
-      v-if="isAdminUser"
-      class="usa-prose"
+  <section 
+    v-if="isAdminUser"
+    class="usa-prose"
   >
-  <div class="padding-top-4 padding-bottom-4 grid-container">
-    <ul class="usa-card-group">
-      <li class="usa-card tablet:grid-col-12">
-        <div class="usa-card__container">
-          <div class="usa-card__header">
-            <h2 class="usa-card__heading">
-              Send Invitations for GSA SmartPay Program Certification
-            </h2>
+    <div class="padding-top-4 padding-bottom-4 grid-container">
+      <ul class="usa-card-group">
+        <li class="usa-card tablet:grid-col-12">
+          <div class="usa-card__container">
+            <div class="usa-card__header">
+              <h2 class="usa-card__heading">
+                Send Invitations for GSA SmartPay Program Certification
+              </h2>
+            </div>
+            <div class="usa-card__body">
+              <p>
+                After the attendees finish the necessary coursework for the GSA SmartPay Program Certification (GSPC), as
+                stated in Smart Bulletin 22 during the GSA SmartPay Training Forum, you can use the form below to send
+                each attendee an email containing a link. This link will enable them to certify their hands-on experience
+                and obtain a PDF copy of their GSPC.
+              </p>
+              <p>
+                Please fill out the form below by entering the attendees' email addresses as a comma-separated list and
+                selecting an expiration date for their certificate. The expiration date should be three years from the
+                date of the GSA SmartPay Training Forum. This form will verify the entered email addresses and notify you
+                if any are invalid.
+              </p>
+              <form
+                ref="form"
+                class="usa-form usa-form--large margin-bottom-3"
+                data-test="gspc-form"
+                @submit.prevent="submitGspcInvites"
+              >
+                <ValidatedTextArea
+                  v-model="user_input.emailAddresses"
+                  client:load
+                  :validator="v_all_info$.emailAddresses"
+                  label="Email Addresses of GSA SmartPay Forum Attendees"
+                  name="email-list"
+                  :required="true"
+                  @update:paste="handlePaste"
+                />
+                <ValidatedMemorableDatepicker
+                  v-model="user_input.certificationExpirationDate"
+                  client:load
+                  :validator="v_all_info$.certificationExpirationDate"
+                  label="Certification Expiration Date"
+                  name="certification-expiration-date"
+                  hint-text="For example: January 19 2000"
+                  :required="true"
+                />
+                <div>
+                  <USWDSAlert
+                    v-if="showFailedMessage"
+                    status="error"
+                    class="usa-alert--slim"
+                    :has-heading="false"
+                  >
+                    Emails failed to send to: {{ failedEmailList }}
+                  </USWDSAlert>
+                  <USWDSAlert
+                    v-if="showSuccessMessage"
+                    status="success"
+                    class="usa-alert--slim"
+                    :has-heading="false"
+                  >
+                    Emails sending to {{ successCount }} people.
+                  </USWDSAlert>
+                </div>
+                <div class="grid-row grid-gap margin-top-3">
+                  <div class="grid-col">
+                    <input
+                      class="usa-button"
+                      type="submit"
+                      value="Send Invitations"
+                      :disabled="isLoading"
+                      data-test="submit"
+                    >
+                    <button
+                      id="cancel"
+                      type="button"
+                      class="usa-button usa-button--outline"
+                      :disabled="isLoading"
+                      @click="cancel"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <!--display spinner along with submit button in one row for desktop-->
+                  <div
+                    v-if="showSpinner"
+                    class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
+                  >
+                    <SpinnerGraphic />
+                  </div>
+                </div>
+                <!--display spinner under submit button for mobile view-->
+                <div
+                  v-if="showSpinner"
+                  class="tablet:display-none margin-top-1 text-center"
+                >
+                  <SpinnerGraphic />
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="usa-card__body">
-            <p>
-              After the attendees finish the necessary coursework for the GSA SmartPay Program Certification (GSPC), as
-              stated in Smart Bulletin 22 during the GSA SmartPay Training Forum, you can use the form below to send
-              each attendee an email containing a link. This link will enable them to certify their hands-on experience
-              and obtain a PDF copy of their GSPC.
-            </p>
-            <p>
-              Please fill out the form below by entering the attendees' email addresses as a comma-separated list and
-              selecting an expiration date for their certificate. The expiration date should be three years from the
-              date of the GSA SmartPay Training Forum. This form will verify the entered email addresses and notify you
-              if any are invalid.
-            </p>
-            <form
-              ref="form"
-              class="usa-form usa-form--large margin-bottom-3"
-              data-test="gspc-form"
-              @submit.prevent="submitGspcInvites"
-            >
-              <ValidatedTextArea
-                v-model="user_input.emailAddresses"
-                client:load
-                :validator="v_all_info$.emailAddresses"
-                label="Email Addresses of GSA SmartPay Forum Attendees"
-                name="email-list"
-                :required="true"
-                @update:paste="handlePaste"
-              />
-              <ValidatedMemorableDatepicker
-                v-model="user_input.certificationExpirationDate"
-                client:load
-                :validator="v_all_info$.certificationExpirationDate"
-                label="Certification Expiration Date"
-                name="certification-expiration-date"
-                hint-text="For example: January 19 2000"
-                :required="true"
-              />
+        </li>
+        <li class="usa-card tablet:grid-col-12">
+          <div class="usa-card__container">
+            <div class="usa-card__header">
+              <h2 class="usa-card__heading">
+                Send Follow Ups for GSA SmartPay Program Certification
+              </h2>
+            </div>
+            <div class="usa-card__body">
+              <p>
+                Sends out follow up GSPC invite emails to users who have
+                <ul>
+                  <li>Received the original GSPC invite within the last 6 months</li>
+                  <li>Hasn't already completed the GSPC survey</li>
+                  <li>Hasn't already received both follow up notifications</li>
+                  <li>Hasn't received the last GSPC email within 12 hours</li>
+                </ul>
+              </p>
+              <p>
+                The system will send the subsequent needed notification based on the last one received by the user.
+              </p>
               <div>
                 <USWDSAlert
-                  v-if="showFailedMessage"
-                  status="error"
-                  class="usa-alert--slim"
-                  :has-heading="false"
-                >
-                  Emails failed to send to: {{ failedEmailList }}
-                </USWDSAlert>
-                <USWDSAlert
-                  v-if="showSuccessMessage"
+                  v-if="showFollowUpSuccessMessage"
                   status="success"
                   class="usa-alert--slim"
                   :has-heading="false"
                 >
-                  Emails sending to {{ successCount }} people.
+                  Sending out GSPC follow up emails.
                 </USWDSAlert>
               </div>
               <div class="grid-row grid-gap margin-top-3">
                 <div class="grid-col">
-                  <input
-                    class="usa-button"
-                    type="submit"
-                    value="Send Invitations"
-                    :disabled="isLoading"
-                    data-test="submit"
-                  >
                   <button
-                    id="cancel"
+                    id="send-out-follow-ups"
                     type="button"
-                    class="usa-button usa-button--outline"
+                    class="usa-button"
                     :disabled="isLoading"
-                    @click="cancel"
+                    @click="sendGspcFollowUps"
                   >
-                    Cancel
+                    Send Out Follow Ups
                   </button>
                 </div>
                 <!--display spinner along with submit button in one row for desktop-->
@@ -244,89 +305,28 @@
                   <SpinnerGraphic />
                 </div>
               </div>
-              <!--display spinner under submit button for mobile view-->
               <div
                 v-if="showSpinner"
                 class="tablet:display-none margin-top-1 text-center"
               >
                 <SpinnerGraphic />
               </div>
-            </form>
-          </div>
-        </div>
-      </li>
-      <li class="usa-card tablet:grid-col-12">
-        <div class="usa-card__container">
-          <div class="usa-card__header">
-            <h2 class="usa-card__heading">
-              Send Follow Ups for GSA SmartPay Program Certification
-            </h2>
-          </div>
-          <div class="usa-card__body">
-            <p>
-              Sends out follow up GSPC invite emails to users who have
-              <ul>
-                <li>Received the original GSPC invite within the last 6 months</li>
-                <li>Hasn't already completed the GSPC survey</li>
-                <li>Hasn't already received both follow up notifications</li>
-                <li>Hasn't received the last GSPC email within 12 hours</li>
-              </ul>
-            </p>
-            <p>
-              The system will send the subsequent needed notification based on the last one received by the user.
-            </p>
-            <div>
-              <USWDSAlert
-                v-if="showFollowUpSuccessMessage"
-                status="success"
-                class="usa-alert--slim"
-                :has-heading="false"
-              >
-                Sending out GSPC follow up emails.
-              </USWDSAlert>
-            </div>
-            <div class="grid-row grid-gap margin-top-3">
-              <div class="grid-col">
-                <button
-                  id="send-out-follow-ups"
-                  type="button"
-                  class="usa-button"
-                  :disabled="isLoading"
-                  @click="sendGspcFollowUps"
-                >
-                  Send Out Follow Ups
-                </button>
-              </div>
-              <!--display spinner along with submit button in one row for desktop-->
-              <div
-                v-if="showSpinner"
-                class="display-none tablet:display-block tablet:grid-col-1 tablet:padding-top-3 tablet:margin-left-neg-1"
-              >
-                <SpinnerGraphic />
-              </div>
-            </div>
-            <div
-              v-if="showSpinner"
-              class="tablet:display-none margin-top-1 text-center"
-            >
-              <SpinnerGraphic />
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
   </section>
   <section v-else>
     <USWDSAlert
-        status="error"
-        class="usa-alert"
-        heading="You are not authorized to access."
+      status="error"
+      class="usa-alert"
+      heading="You are not authorized to access."
     >
       Your email account is not authorized to access. If you should be authorized, you can contact the
       <a
-          class="usa-link"
-          href="mailto:gsa_smartpay@gsa.gov"
+        class="usa-link"
+        href="mailto:gsa_smartpay@gsa.gov"
       >
         GSA SmartPay team
       </a> to gain access.

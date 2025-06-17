@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it} from "vitest";
+import {describe, expect, it} from "vitest";
 import {profile} from "../../stores/user.js";
 import {mount} from "@vue/test-utils";
 import AdminPanel from "../AdminPanel.vue";

@@ -199,14 +199,14 @@
 
   <section v-else>
     <USWDSAlert
-        status="error"
-        class="usa-alert"
-        heading="You are not authorized to access."
+      status="error"
+      class="usa-alert"
+      heading="You are not authorized to access."
     >
       Your email account is not authorized to access. If you should be authorized, you can contact the
       <a
-          class="usa-link"
-          href="mailto:gsa_smartpay@gsa.gov"
+        class="usa-link"
+        href="mailto:gsa_smartpay@gsa.gov"
       >
         GSA SmartPay team
       </a> to gain access.
