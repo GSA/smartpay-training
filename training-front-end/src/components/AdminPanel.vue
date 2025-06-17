@@ -2,7 +2,7 @@
 import {useStore} from "@nanostores/vue";
 import {profile} from "../stores/user.js";
 import {computed} from "vue";
-import USWDSAlert from "@components/USWDSAlert.vue";
+import USWDSAlert from "./USWDSAlert.vue";
 
 const base_url = import.meta.env.BASE_URL
 const user = useStore(profile)
@@ -16,7 +16,7 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
     <div class="padding-top-4 padding-bottom-4 grid-container">
       <ul class="usa-card-group">
         <li class="usa-card tablet:grid-col-6">
-          <div class="usa-card__container">
+          <div id="user-maintenance-card" class="usa-card__container">
             <div class="usa-card__header">
               <h4 class="usa-card__heading">User Maintenance</h4>
             </div>
@@ -33,7 +33,7 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
           </div>
         </li>
         <li class="usa-card tablet:grid-col-6">
-          <div class="usa-card__container">
+          <div id="gspc-card" class="usa-card__container">
             <div class="usa-card__header">
               <h4 class="usa-card__heading">GSA SmartPay® Program Certification Management</h4>
             </div>
@@ -50,7 +50,7 @@ const isAdminUser = computed(() => user.value.roles.includes('Admin'))
           </div>
         </li>
         <li class="usa-card tablet:grid-col-6">
-          <div class="usa-card__container">
+          <div id="system-reports-card" class="usa-card__container">
             <div class="usa-card__header">
               <h4 class="usa-card__heading">System Reports</h4>
             </div>
