@@ -6,10 +6,14 @@
   import USWDSAlert from './USWDSAlert.vue'
   import { setSelectedAgencyId} from '../stores/agencies'
   import { RepositoryFactory } from "./RepositoryFactory.vue";
+  import {useStore} from "@nanostores/vue";
+  import {profile} from "../stores/user.js";
   const adminRepository = RepositoryFactory.get('admin')
 
   const PAGE_SIZE = 25
 
+  const user = useStore(profile)
+  const isAdminUser = computed(() => user.value.roles.includes('Admin'))
   let currentPage = ref(0)
   let numberOfResults = ref(0)
   const numberOfPages = computed(() => Math.ceil(numberOfResults.value/PAGE_SIZE))
@@ -89,94 +93,114 @@
 </script>
 
 <template>
-  <div class="padding-top-4 padding-bottom-4 grid-container">
-    <USWDSAlert
-      v-if="error"
-      status="error"
-      :heading="error.name"
-    >
-      {{ error.message }}
-    </USWDSAlert>
-    <USWDSAlert
-      v-if="showSuccessMessage"
-      status="success"
-      class="usa-alert--slim"
-      :has-heading="false"
-    >
-      {{ successMessage }}
-    </USWDSAlert>
-    <div 
-      v-if="!selectedUser"
-      class="grid-row"
-    >
-      <div class="usa-prose tablet:grid-col-12">
-        <h3>Search for a user</h3>
-        <section
-          aria-label="Search component"
-          class="tablet:grid-col-8"
+  <section
+    v-if="isAdminUser"
+    class="usa-prose"
+  >
+    <div class="padding-top-4 padding-bottom-4 grid-container">
+      <USWDSAlert
+        v-if="error"
+        status="error"
+        :heading="error.name"
+      >
+        {{ error.message }}
+      </USWDSAlert>
+      <USWDSAlert
+        v-if="showSuccessMessage"
+        status="success"
+        class="usa-alert--slim"
+        :has-heading="false"
+      >
+        {{ successMessage }}
+      </USWDSAlert>
+      <div 
+        v-if="!selectedUser"
+        class="grid-row"
+      >
+        <div class="usa-prose tablet:grid-col-12">
+          <h3>Search for a user</h3>
+          <section
+            aria-label="Search component"
+            class="tablet:grid-col-8"
+          >
+            <label for="search-field">
+              Name or Email
+            </label>
+            <div 
+              id="gnHint"
+              class="usa-hint margin-bottom-1"
+            >
+              Full or partial
+            </div>
+            <form 
+              class="usa-search"
+              role="search"
+              @submit.prevent="search"
+            >
+              <input 
+                id="search-field"
+                v-model="searchTerm"
+                class="usa-input"
+                type="search"
+                name="search"
+              >
+              <button 
+                class="usa-button"
+                type="submit"
+                :disabled="!searchTerm"
+              >
+                <span class="usa-search__submit-text">
+                  Search
+                </span>
+              </button>
+            </form>
+          </section>
+        </div>
+        <div 
+          v-if="numberOfPages"
+          class="border-top-1px margin-top-6 tablet:grid-col-12"
         >
-          <label for="search-field">
-            Name or Email
-          </label>
-          <div 
-            id="gnHint"
-            class="usa-hint margin-bottom-1"
-          >
-            Full or partial
-          </div>
-          <form 
-            class="usa-search"
-            role="search"
-            @submit.prevent="search"
-          >
-            <input 
-              id="search-field"
-              v-model="searchTerm"
-              class="usa-input"
-              type="search"
-              name="search"
-            >
-            <button 
-              class="usa-button"
-              type="submit"
-              :disabled="!searchTerm"
-            >
-              <span class="usa-search__submit-text">
-                Search
-              </span>
-            </button>
-          </form>
-        </section>
+          <AdminUserSearchTable 
+            :number-of-results="numberOfResults"
+            :search-results="searchResults" 
+            @select-item="setSelectedUser"
+          />
+          <USWDSPagination 
+            :current-page="currentPage"
+            :number-of-pages="numberOfPages" 
+            @goto-page="setPage"
+          /> 
+        </div>
+        <div 
+          v-if="noResults"
+          class="margin-top-3"
+        >
+          Your search returned zero results.
+        </div>
       </div>
-      <div 
-        v-if="numberOfPages"
-        class="border-top-1px margin-top-6 tablet:grid-col-12"
-      >
-        <AdminUserSearchTable 
-          :number-of-results="numberOfResults"
-          :search-results="searchResults" 
-          @select-item="setSelectedUser"
+      <div v-else>
+        <AdminEditReporting 
+          :user="selectedUser"
+          @update-reporting-access="updateUserReports"
+          @cancel="cancelEdit"
+          @user-update-success="updateUserSuccess"
         />
-        <USWDSPagination 
-          :current-page="currentPage"
-          :number-of-pages="numberOfPages" 
-          @goto-page="setPage"
-        /> 
       </div>
-      <div 
-        v-if="noResults"
-        class="margin-top-3"
+    </div>
+  </section>
+  <section v-else>
+    <USWDSAlert
+      status="error"
+      class="usa-alert"
+      heading="You are not authorized to access."
+    >
+      Your email account is not authorized to access. If you should be authorized, you can contact the
+      <a
+        class="usa-link"
+        href="mailto:gsa_smartpay@gsa.gov"
       >
-        Your search returned zero results.
-      </div>
-    </div>
-    <div v-else>
-      <AdminEditReporting 
-        :user="selectedUser"
-        @update-reporting-access="updateUserReports"
-        @cancel="cancelEdit"
-        @user-update-success="updateUserSuccess"
-      />
-    </div>
-  </div>
+        GSA SmartPay team
+      </a> to gain access.
+    </USWDSAlert>
+  </section>
 </template>
