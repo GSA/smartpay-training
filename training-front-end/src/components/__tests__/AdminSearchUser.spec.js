@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, vi} from 'vitest'
+import {describe, it, expect, afterEach, vi, beforeEach} from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import AdminSearchUserVue from '../AdminSearchUser.vue'
 import AdminEditReporting  from  '../AdminEditReporting.vue'
@@ -9,10 +9,14 @@ import users from './fixtures/sample_users'
 import agencies from './fixtures/sample_agency_response'
 
 describe('AdminAgencySelect', async () => {
+  beforeEach(async () => {
+    // Set the profile mock with Admin role
+    profile.set({ name: 'Amelia Sedley', jwt: 'some-token-value', roles: ['Admin'] });
+  })
+  
   afterEach(() => {
     vi.restoreAllMocks()
     cleanStores()
-    profile.set({})
   })
   
   it('displays a search input', async () => {
@@ -41,7 +45,6 @@ describe('AdminAgencySelect', async () => {
   })
 
   it('updates with API when child component emits data', async () => {
-    profile.set({name:"Ortho Stice", jwt:"some-token-value"})
     let fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve({'total_count': 2, 'users':users}) })
     })
@@ -170,7 +173,6 @@ describe('AdminAgencySelect', async () => {
   })
 
   it('displays error on server failure during update', async () => {
-    profile.set({name:"Ortho Stice", jwt:"some-token-value"})
 
     vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({ok: true, status:200, json: () => Promise.resolve({'total_count': 2, 'users':users}) })

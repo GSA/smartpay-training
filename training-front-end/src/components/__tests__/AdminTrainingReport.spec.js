@@ -63,7 +63,7 @@ describe('AdminTrainingReport.vue', () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.html()).toContain('You are not authorized to receive reports.');
+    expect(wrapper.html()).toContain('You are not authorized to access.');
     expect(wrapper.find('form').exists()).toBe(false);
   });
 

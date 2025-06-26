@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import HeroTraining from '@components/HeroTraining.astro';
 import AuthRequired from '@components/AuthRequired.vue';
+import AdminPanel from '@components/AdminPanel.vue';
 
 const pageTitle = "Administrators Admin Panel";
 ---
@@ -14,60 +15,6 @@ const pageTitle = "Administrators Admin Panel";
     </span>
   </HeroTraining>
   <AuthRequired client:only="vue">
-    <div class="padding-top-4 padding-bottom-4 grid-container">
-      <ul class="usa-card-group">
-        <li class="usa-card tablet:grid-col-6">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-              <h4 class="usa-card__heading">User Maintenance</h4>
-            </div>
-            <div class="usa-card__body">
-              <p>
-                Allows administrators to search for users and view or manage their user permissions.
-              </p>
-            </div>         
-            <div class="usa-card__footer">
-                <a href={`${import.meta.env.BASE_URL}admin/user_search/`} class="card_link usa-button">
-                  Search for users
-                </a>
-            </div>
-          </div>
-        </li>
-        <li class="usa-card tablet:grid-col-6">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-              <h4 class="usa-card__heading">GSA SmartPay® Program Certification Management</h4>
-            </div>
-            <div class="usa-card__body">
-              <p>
-                Allows administrators to notify GSPC attendees to complete requirements and receive a certificate.
-              </p>
-            </div>
-            <div class="usa-card__footer">
-                <a href={`${import.meta.env.BASE_URL}admin/gspc/`} class="card_link usa-button">
-                  Manage GSPC attendees
-                </a>
-            </div>
-          </div>
-        </li>
-        <li class="usa-card tablet:grid-col-6">
-          <div class="usa-card__container">
-            <div class="usa-card__header">
-              <h4 class="usa-card__heading">System Reports</h4>
-            </div>
-            <div class="usa-card__body">
-              <p>
-                Allows administrators to download reports.
-              </p>
-            </div>
-            <div class="usa-card__footer">
-                <a href=`${import.meta.env.BASE_URL}admin/reports/` class="card_link usa-button">
-                  Reports
-                </a>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <AdminPanel client:only="vue" />
   </AuthRequired>
 </BaseLayout>
