@@ -1,5 +1,5 @@
 <script setup>
-import {computed, nextTick, onMounted, ref} from 'vue';
+import { ref } from 'vue';
 import FormLegend from './FormLegend.vue';
 
 const props = defineProps({
@@ -59,7 +59,10 @@ function handleCheckboxChange(){
         {{ error.$message }}
       </span>
     </span>
-    <button class="usa-button usa-button--hover margin-bottom-2" type="button" @click="checkAll">Select All</button>
+    <button class="usa-button usa-button--hover margin-bottom-2" type="button"
+            @click="checkAll">
+      Select All
+    </button>
     <div
       v-for="option in options"
       :key="option.value"
@@ -71,8 +74,8 @@ function handleCheckboxChange(){
         :value="option.value"
         class="usa-checkbox__input"
         :checked="localCheckedValues.includes(option.value)"
-        @change="handleCheckboxChange()"
         v-model="localCheckedValues"
+        @change="handleCheckboxChange()"
       >
       <label
         class="usa-checkbox__label"
