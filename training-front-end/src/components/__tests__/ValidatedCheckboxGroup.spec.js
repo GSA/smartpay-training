@@ -1,7 +1,6 @@
 import { mount } from '@vue/test-utils';
 import ValidatedCheckboxGroup from '../form-components/ValidatedCheckboxGroup.vue';
 import { describe, it, expect } from 'vitest';
-import {ref} from "vue";
 
 describe('ValidatedCheckboxGroup.vue', () => {
   it('renders options correctly', () => {
