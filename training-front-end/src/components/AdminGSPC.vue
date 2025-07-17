@@ -9,7 +9,8 @@
   import { RepositoryFactory } from "./RepositoryFactory.vue";
   import { useStore } from "@nanostores/vue";
   import { profile } from "../stores/user.js";
-  
+
+  const base_url = import.meta.env.BASE_URL
   const adminRepository = RepositoryFactory.get('admin')
   const { withMessage } = helpers
 
@@ -331,6 +332,7 @@
         GSA SmartPay team
       </a> to gain access.
     </USWDSAlert>
+    <p><a :href="base_url">Return to Home</a></p>
   </section>
 </template>
 <style>
