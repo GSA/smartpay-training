@@ -7,6 +7,7 @@
   import AdminUserReportDownload from "./AdminUserReport.vue"
   import USWDSAlert from './USWDSAlert.vue'
 
+  const base_url = import.meta.env.BASE_URL
   const error = ref()
   const user = useStore(profile)
   const isAdminUser = computed(() => user.value.roles.includes('Admin'))
@@ -90,5 +91,6 @@
         GSA SmartPay team
       </a> to gain access.
     </USWDSAlert>
+    <p><a :href="base_url">Return to Home</a></p>
   </section>
 </template>

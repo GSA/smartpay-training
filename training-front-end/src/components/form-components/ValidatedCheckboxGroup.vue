@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { ref } from 'vue';
 import FormLegend from './FormLegend.vue';
 
 const props = defineProps({
@@ -27,14 +27,20 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue']);
+const localCheckedValues = ref([]);
 
-// Create a computed property for two-way binding with v-model
-const localCheckedValues = computed({
-  get: () => props.modelValue,
-  set: (newValues) => {
-    emit('update:modelValue', newValues);
-  },
-});
+function checkAll(){
+   for (const option of props.options) {
+     if (!localCheckedValues.value.includes(option.value)) {
+       localCheckedValues.value.push(option.value)
+     }
+   }
+  emit('update:modelValue', localCheckedValues);
+}
+
+function handleCheckboxChange(){
+  emit('update:modelValue', localCheckedValues); // Emit updated values
+}
 </script>
 
 <template>
@@ -53,6 +59,11 @@ const localCheckedValues = computed({
         {{ error.$message }}
       </span>
     </span>
+    <button class="usa-button usa-button--hover margin-bottom-2"
+            type="button"
+            @click="checkAll">
+      Select All
+    </button>
     <div
       v-for="option in options"
       :key="option.value"
@@ -63,22 +74,13 @@ const localCheckedValues = computed({
         type="checkbox"
         :value="option.value"
         class="usa-checkbox__input"
+        v-model="localCheckedValues"
         :checked="localCheckedValues.includes(option.value)"
-        @change="(event) => {
-          if (event.target.checked) {
-            localCheckedValues.push(option.value); // Add the value if checked
-          } else {
-            const index = localCheckedValues.indexOf(option.value);
-            if (index > -1) {
-              localCheckedValues.splice(index, 1); // Remove the value if unchecked
-            }
-          }
-          emit('update:modelValue', localCheckedValues); // Emit updated values
-        }"
+        @change="handleCheckboxChange()"
       >
       <label
         class="usa-checkbox__label"
-        :for="option.value"
+        :for="option.value" 
       >
         {{ option.label }}
       </label>
