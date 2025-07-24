@@ -12,6 +12,7 @@
 
   const PAGE_SIZE = 25
 
+  const base_url = import.meta.env.BASE_URL
   const user = useStore(profile)
   const isAdminUser = computed(() => user.value.roles.includes('Admin'))
   let currentPage = ref(0)
@@ -202,5 +203,6 @@
         GSA SmartPay team
       </a> to gain access.
     </USWDSAlert>
+    <p><a :href="base_url">Return to Home</a></p>
   </section>
 </template>
