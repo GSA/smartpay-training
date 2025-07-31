@@ -64,14 +64,16 @@ function handleCheckboxChange(){
         {{ error.$message }}
       </span>
     </span>
-    <button class="usa-button usa-button--hover margin-bottom-2"
-            type="button"
-            @click="checkAll">
+    <button 
+        class="usa-button usa-button--hover margin-bottom-2"
+        type="button"
+        @click="checkAll">
       Select All
     </button>
-    <button class="usa-button usa-button--hover margin-bottom-2"
-            type="button"
-            @click="deselectAll">
+    <button 
+        class="usa-button usa-button--hover margin-bottom-2"
+        type="button"
+        @click="deselectAll">
       Deselect All
     </button>
     <div
@@ -83,8 +85,8 @@ function handleCheckboxChange(){
         :id="option.value"
         type="checkbox"
         :value="option.value"
-        class="usa-checkbox__input"
         v-model="localCheckedValues"
+        class="usa-checkbox__input"
         :checked="localCheckedValues.includes(option.value)"
         @change="handleCheckboxChange()"
       >
