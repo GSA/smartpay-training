@@ -38,6 +38,11 @@ function checkAll(){
   emit('update:modelValue', localCheckedValues);
 }
 
+function deselectAll(){
+  localCheckedValues.value = [];
+  emit('update:modelValue', localCheckedValues);
+}
+
 function handleCheckboxChange(){
   emit('update:modelValue', localCheckedValues); // Emit updated values
 }
@@ -63,6 +68,11 @@ function handleCheckboxChange(){
             type="button"
             @click="checkAll">
       Select All
+    </button>
+    <button class="usa-button usa-button--hover margin-bottom-2"
+            type="button"
+            @click="deselectAll">
+      Deselect All
     </button>
     <div
       v-for="option in options"
