@@ -89,7 +89,6 @@ function handleCheckboxChange(){
         type="checkbox"
         :value="option.value"
         class="usa-checkbox__input"
-        :checked="localCheckedValues.includes(option.value)"
         @change="handleCheckboxChange()"
       >
       <label
