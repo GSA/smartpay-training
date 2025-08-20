@@ -20,7 +20,7 @@
     "link-checker:pipeline": "npx start-server-and-test serve http://localhost:8080 'npx linkinator http://localhost:8080 --config linkinator-config.json'"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.2.3",
+    "@astrojs/mdx": "^4.3.4",
     "@astrojs/sitemap": "^3.1.5",
     "@astrojs/vue": "^5.0.9",
     "@nanostores/persistent": "^0.8.0",
@@ -28,7 +28,7 @@
     "@vuelidate/core": "^2.0.2",
     "@vuelidate/validators": "^2.0.2",
     "@vueuse/integrations": "^10.1.2",
-    "astro": "^5.6.1",
+    "astro": "^5.13.2",
     "focus-trap": "^7.4.1",
     "hast-util-select": "^5.0.5",
     "install": "^0.13.0",
