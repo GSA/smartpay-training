@@ -12,7 +12,7 @@ export async function getStaticPaths() {
   })
 }
 
-const { entry, pages, index } = Astro.props;
+const { entry, pages } = Astro.props;
 const { Content } = await entry.render();
 ---
 
@@ -32,7 +32,7 @@ const { Content } = await entry.render();
     "
   >
     <Content />
-    <TrainingLinks pages={pages} index={index}  training_category="training_purchase_pc"/>
+    <TrainingLinks pages={pages} index={entry.data.order}  training_category="training_purchase_pc"/>
 </div>
 </TrainingLayout>
 
