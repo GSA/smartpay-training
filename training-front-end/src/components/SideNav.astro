@@ -1,5 +1,6 @@
 ---
 const { id, pages, training_category, quiz_title } = Astro.props;
+pages.sort((a, b) => parseInt(a.data.order) - parseInt(b.data.order))
 ---
   
 
